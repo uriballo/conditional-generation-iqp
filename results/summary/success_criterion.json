@@ -1,0 +1,52 @@
+{
+  "passed": false,
+  "criterion": "Angle/complete must have lower median shell TVD and bitstring TVD than both conditional baselines for A and B separately.",
+  "comparisons": [
+    {
+      "condition": "A",
+      "metric": "shell_tvd",
+      "angle_complete": 0.12100986504569615,
+      "no_condition": 0.4031650238345797,
+      "basis_condition": 0.006631406999311335,
+      "passed": false
+    },
+    {
+      "condition": "A",
+      "metric": "bitstring_tvd",
+      "angle_complete": 0.35161818952862367,
+      "no_condition": 0.49688050449788834,
+      "basis_condition": 0.4053813938819333,
+      "passed": true
+    },
+    {
+      "condition": "B",
+      "metric": "shell_tvd",
+      "angle_complete": 0.07182239345970604,
+      "no_condition": 0.3273068865500075,
+      "basis_condition": 0.7220894504220345,
+      "passed": true
+    },
+    {
+      "condition": "B",
+      "metric": "bitstring_tvd",
+      "angle_complete": 0.2745568573752818,
+      "no_condition": 0.4618333952400262,
+      "basis_condition": 0.7777453229990048,
+      "passed": true
+    }
+  ],
+  "balanced_condition_medians": {
+    "angle_complete": {
+      "shell_tvd": 0.09635510272407699,
+      "bitstring_tvd": 0.31398794391995355
+    },
+    "no_condition_complete": {
+      "shell_tvd": 0.3651177489068798,
+      "bitstring_tvd": 0.4814863083998149
+    },
+    "basis_condition_complete": {
+      "shell_tvd": 0.3643938371332136,
+      "bitstring_tvd": 0.591563358440469
+    }
+  }
+}

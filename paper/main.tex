@@ -1,0 +1,564 @@
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[a4paper,margin=1.8cm,columnsep=0.65cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usetikzlibrary{arrows.meta,positioning,fit}
+
+\newtheorem{proposition}{Proposition}
+\newcommand{\bits}{\{0,1\}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\mmd}{\operatorname{MMD}}
+
+\title{\vspace{-1.2em}Classically Trainable Conditional Generation\\
+with Product-State IQP Circuits}
+\author{Anonymous authors}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Instantaneous quantum polynomial-time (IQP) Born machines admit classical
+training objectives based on efficiently estimated Pauli observables, but the
+standard construction is unconditional.
+We condition one shared IQP circuit by replacing its fixed input with a real
+product state whose rotation angles encode an external class token.
+We derive an unbiased Monte Carlo estimator for the resulting Pauli-$Z$
+expectations, bound its second moment, and show that its sampled objective
+supports ordinary backpropagation.
+An unbiased Conditional MMD objective trains 19-qubit models to represent two
+discrete Gaussian laws over Hamming weight.
+Across ten matched seeds, angle conditioning separates the two target laws and
+outperforms both controls after averaging over conditions, but it fails our
+stricter condition-wise criterion because the basis control specializes to one
+target. Exact bitstring evaluation also exposes substantial residual
+within-shell bias.
+The results establish a focused route to conditional, classically trained IQP
+generators without claiming hard sampling or quantum advantage for the tested
+circuits.
+\end{abstract}
+
+\section{Introduction}
+
+% Role: opening/task
+Quantum circuit Born machines model data by measuring a parameterized quantum
+state, making distribution learning a natural application of variational
+quantum algorithms \cite{cerezoVariationalQuantumAlgorithms2021}.
+IQP circuits are a particularly structured family: their commuting
+interactions are simple to describe \cite{nakataDiagonalQuantumCircuits2014,
+niCommutingQuantumCircuits2012}, while sampling hardness is supported only for
+appropriate asymptotic families and complexity assumptions
+\cite{bremnerAchievingQuantumSupremacy2017,
+marshallImprovedSeparationQuantum2024}.
+This separation has motivated a ``train classically, deploy on quantum''
+program in which Pauli observables are estimated classically during
+optimization, while sampling is delegated to a quantum circuit
+\cite{recio-armengolIQPoptFastOptimization2025,
+recio-armengolTrainClassicalDeploy2026}.
+
+% Role: challenge
+The standard IQP generative construction learns one output law from one fixed
+input state. Conditional generation instead requires a single parameterized
+model to represent a family $q_\theta(x\mid c)$ indexed by an external
+condition $c$. Giving each condition independent parameters would fit separate
+generators rather than test conditional control. The technical question is
+therefore whether the condition can modify the circuit while preserving the
+probabilistic estimator that makes IQP training attractive. This question also
+intersects broader limits on gradient measurement, expressivity, and
+trainability \cite{bowlesBackpropagationScalingParameterised2025,
+chinzeiTradeoffGradientMeasurement2025,
+rudolphTrainabilityBarriersOpportunities2024}.
+
+% Role: method
+We encode $c$ in a real product state
+$\bigotimes_i R_Y(\alpha_{c,i})|0\rangle$ and apply one shared $H D_Z H$ IQP
+circuit (Fig.~\ref{fig:circuit}). Product states remain computationally
+tractable after the first Hadamards: their measurement law factorizes and
+their amplitudes are products of local terms. Adapting the sampling argument
+of Van den Nest \cite{nestSimulatingQuantumComputers2010} yields an unbiased
+amplitude-ratio estimator with bounded second moment. Because its random
+reference strings do not depend on $\theta$, JAX differentiates the sampled
+MMD objective directly. We use a small-variance initialization and low-body
+biased multiscale kernels in light of recent IQP trainability analyses
+\cite{shenCharacterizingTrainabilityInstantaneous2026,
+herbstLimitsQuantumGenerative2025}.
+
+% Role: contributions/evidence
+Our contributions are threefold. First, we state and verify the product-state
+Pauli estimator and its backpropagated gradient. Second, we construct an
+unbiased, class-balanced Conditional MMD loss and validate that it detects
+label swaps invisible to pooled MMD. Third, we evaluate 19-qubit heavy-hex,
+lattice, and complete two-local ansatz families on two condition-indexed
+Gaussian Hamming-weight laws, using exact bitstring metrics and ten matched
+seeds. The topology study compares native families rather than fixed parameter
+counts; connectivity is operationally relevant to IQP implementations
+\cite{placidiImpactQubitConnectivity2026}, but no hardware or noise claim is
+made here.
+
+\subsection{Scope relative to prior IQP training}
+
+The classical simulation result behind this work estimates local observables,
+not samples from the full output distribution
+\cite{nestSimulatingQuantumComputers2010}. IQPopt turns that distinction into
+an optimization strategy by expressing distributional kernels through Pauli
+characters \cite{recio-armengolIQPoptFastOptimization2025}. We retain this
+observable interface but change the reference state. The relevant extension
+is not a new differentiation rule: once reference strings have been sampled,
+the estimator is a smooth elementary function of $\theta$, so the complete
+MMD estimate can be differentiated by ordinary reverse-mode automatic
+differentiation. The work is therefore about preserving an existing
+classical-training mechanism under conditional product-state inputs.
+
+The condition is deliberately excluded from $D_\theta$. Appending
+condition-specific diagonal gates would make it unclear whether the experiment
+learned a shared conditional mechanism or two parameter sets. Here one
+parameter vector must satisfy both target laws. Independent models are
+reported only as reference fits, while input states with no distinguishing
+condition and with computational-basis conditions serve as controlled
+ablations.
+
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+  x=1.13cm,y=0.58cm,
+  gate/.style={draw,rounded corners=1pt,minimum width=0.68cm,
+    minimum height=0.42cm,fill=blue!6},
+  phase/.style={draw,rounded corners=2pt,minimum width=2.25cm,
+    minimum height=2.05cm,fill=orange!8},
+  >=Latex
+]
+  \foreach \y/\lab in {2/0,1/\vdots,0/{n-1}} {
+    \draw (0,\y) node[left] {$|0\rangle_{\lab}$} -- (8.8,\y);
+  }
+  \node[gate] (r0) at (1,2) {$R_Y(\alpha_{c,0})$};
+  \node at (1,1) {$\vdots$};
+  \node[gate] (rn) at (1,0) {$R_Y(\alpha_{c,n-1})$};
+  \foreach \y in {0,2} {
+    \node[gate] at (2.55,\y) {$H$};
+    \node[gate] at (6.45,\y) {$H$};
+    \node[gate] at (8.05,\y) {$\mathsf{M}$};
+  }
+  \node at (2.55,1) {$\vdots$};
+  \node at (6.45,1) {$\vdots$};
+  \node at (8.05,1) {$\vdots$};
+  \node[phase] (d) at (4.5,1)
+    {$D_\theta=\displaystyle\prod_g e^{i\theta_g Z_g}$};
+  \draw[->,thick,blue!65!black] (1,-1.0) node[below] {condition $c$}
+    -- (r0.south);
+  \draw[->,thick,blue!65!black] (1,-1.0) -- (rn.south);
+  \node[above=0.18cm of d] {shared trainable parameters};
+  \node[draw,dashed,fit=(r0)(rn),inner sep=5pt,
+    label=above:{product-state encoding}] {};
+  \draw[->] (8.45,1) -- (9.15,1) node[right] {$x\sim q_\theta(\cdot\mid c)$};
+\end{tikzpicture}
+\caption{The condition changes only the initial product-state angles. The
+commuting diagonal block and all trainable parameters are shared across
+conditions. The experiment broadcasts one scalar angle over all qubits.}
+\label{fig:circuit}
+\end{figure*}
+
+\section{Conditional product-state IQP model}
+
+% Role: model definition
+For $n$ qubits, let $g\in\bits^n$ denote a Pauli mask,
+$Z_g=\prod_i Z_i^{g_i}$, and define
+\begin{equation}
+ D_\theta=\prod_{j=1}^{m}e^{i\theta_j Z_{g_j}},\qquad
+ U_\theta=H^{\otimes n}D_\theta H^{\otimes n}.
+\end{equation}
+The condition is represented by
+$|\psi_c\rangle=\bigotimes_iR_Y(\alpha_{c,i})|0\rangle$ and the model law is
+$q_\theta(x\mid c)=|\langle x|U_\theta|\psi_c\rangle|^2$.
+Only $\boldsymbol{\alpha}_c$ depends on $c$; $\theta$ and the generator set are
+shared. Our general estimator allows arbitrary real angle vectors, while the
+experiment uses $\alpha_A=0$ and $\alpha_B=\pi/4$ broadcast over all qubits.
+
+\subsection{Reference-state sampling}
+
+% Role: tractable module
+Write $|\phi_c\rangle=H^{\otimes n}|\psi_c\rangle$. Its local amplitudes are
+\begin{align}
+ \phi_{c,i}(0)
+ &=\frac{\cos(\alpha_{c,i}/2)+\sin(\alpha_{c,i}/2)}{\sqrt2},\\
+ \phi_{c,i}(1)
+ &=\frac{\cos(\alpha_{c,i}/2)-\sin(\alpha_{c,i}/2)}{\sqrt2}.
+\end{align}
+Consequently $\phi_c(z)=\prod_i\phi_{c,i}(z_i)$, so both sampling
+$z\sim|\phi_c(z)|^2$ and evaluating amplitudes take $O(n)$ local operations.
+This is the sole tractability property required from the encoding.
+
+\section{Classical estimation and Conditional MMD}
+
+\subsection{Pauli expectation estimator}
+
+% Role: estimator and guarantee
+For an observable mask $a\in\bits^n$, define the phase
+$\Phi_\theta(z)=\sum_j\theta_j(-1)^{g_j\cdot z}$. Sampling
+$z\sim|\phi_c(z)|^2$, set
+\begin{equation}
+ F_{a,c}(z)=
+ \frac{\phi_c(z\oplus a)^*}{\phi_c(z)^*}
+ e^{i[\Phi_\theta(z)-\Phi_\theta(z\oplus a)]},
+\label{eq:estimator}
+\end{equation}
+with zero-probability denominator events omitted.
+
+\begin{proposition}
+The real part of the sample mean of Eq.~\eqref{eq:estimator} is an unbiased
+estimator of
+$\langle\psi_c|U_\theta^\dagger Z_aU_\theta|\psi_c\rangle$.
+Moreover $\E|F_{a,c}|^2\leq1$, hence $S=O(\epsilon^{-2})$ samples suffice for
+constant-probability additive error $\epsilon$. Sampling and evaluating each
+contribution is polynomial in $n$ and the number of generators.
+\end{proposition}
+
+\begin{proof}
+Multiplying Eq.~\eqref{eq:estimator} by $|\phi_c(z)|^2$ cancels one amplitude
+ratio and summing over $z$ gives the computational-basis expansion of
+$\langle Z_a\rangle$. For the second moment,
+\begin{equation}
+\E|F_{a,c}|^2
+=\sum_{z:\phi_c(z)\neq0}|\phi_c(z\oplus a)|^2\leq1.
+\end{equation}
+The sample-complexity statement follows from the variance of a sample mean.
+Product structure gives the stated per-sample computational cost.
+\end{proof}
+
+% Role: gradient consequence
+Ordinary backpropagation applies because the reference samples are independent
+of $\theta$. Differentiation only multiplies a contribution by
+$i[\chi_{g_j}(z)-\chi_{g_j}(z\oplus a)]$, where
+$\chi_g(z)=(-1)^{g\cdot z}$; its magnitude is at most two. Thus automatic
+differentiation of the Monte Carlo estimate yields an unbiased gradient
+estimate without parameter-shift circuit evaluations.
+
+\subsection{Unbiased Conditional MMD}
+
+% Role: objective
+For binary strings we use
+$k_\sigma(x,y)=\exp[-d_H(x,y)/(2\sigma^2)]$. Its Fourier representation samples
+each bit of $a$ independently with probability
+\begin{equation}
+ p_\sigma=\frac{1-e^{-1/(2\sigma^2)}}{2},
+\end{equation}
+and writes MMD as an expectation of squared differences between target and
+model Pauli characters. We average $\sigma\in\{1,2,4\}$ rather than select one
+data-dependent bandwidth \cite{garreauLargeSampleAnalysis2018}. For target
+samples grouped by condition, the training objective is
+\begin{equation}
+\mathcal L(\theta)=\frac12\sum_{c\in\{A,B\}}
+\E_{\sigma,a}\!\left[
+  \big(\langle Z_a\rangle_{p_c}
+      -\langle Z_a\rangle_{q_\theta(\cdot|c)}\big)^2
+\right].
+\end{equation}
+We use U-statistics for both squared terms, making the finite target-sample and
+model Monte Carlo estimate unbiased. Negative stochastic values are therefore
+possible and are neither clipped nor square-rooted.
+
+\subsection{Why direct backpropagation is valid}
+
+Let $\widehat{\mathcal L}(\theta;\omega)$ denote one stochastic loss, where
+$\omega$ contains target minibatches, Fourier masks, and product-reference
+samples. Their sampling laws are independent of $\theta$. The estimator and
+its derivative are bounded for the finite generator set, so differentiation
+and expectation may be interchanged:
+\begin{equation}
+ \nabla_\theta\mathcal L(\theta)
+ =\nabla_\theta\E_\omega[\widehat{\mathcal L}(\theta;\omega)]
+ =\E_\omega[\nabla_\theta\widehat{\mathcal L}(\theta;\omega)].
+\end{equation}
+Thus we backpropagate through the sampled MMD exactly as in regular
+observable-trained IQP models. ``Unbiased'' refers to expectation over
+$\omega$; a single stochastic loss can be negative because its two squared
+terms are U-statistics. Taking a square root or clipping at zero would destroy
+this property and introduce a nondifferentiable boundary.
+
+\subsection{Finite-sample construction}
+
+For completeness, fix one condition, bandwidth, and Fourier mask. Given target
+strings $x_1,\ldots,x_R$, define
+$t_r=(-1)^{a\cdot x_r}$. Given independent product-reference samples
+$z_1,\ldots,z_S$, define $f_s=\operatorname{Re}F_{a,c}(z_s)$. We estimate the
+squared character discrepancy with
+\begin{align}
+ \widehat{\Delta}_{a,c}^{\,2}
+ ={}&\frac{1}{R(R-1)}\sum_{r\neq r'}t_rt_{r'}
+ +\frac{1}{S(S-1)}\sum_{s\neq s'}f_sf_{s'} \nonumber\\
+ &-\frac{2}{RS}\sum_{r,s}t_rf_s .
+\end{align}
+The three terms estimate the target square, model square, and cross product
+without diagonal self-products. Independence therefore gives
+$\E[\widehat{\Delta}_{a,c}^{\,2}]
+=(\langle Z_a\rangle_{p_c}-\langle Z_a\rangle_{q_c})^2$.
+The implementation averages independent instances over masks, bandwidths, and
+conditions. This explicit construction is also why a negative minibatch loss
+is not evidence of an invalid kernel: an unbiased estimate of a nonnegative
+quantity need not itself be nonnegative.
+
+Product-state sampling is vectorized over $z$, while the character table
+$(-1)^{g_j\cdot z}$ evaluates all commuting generators together. For each
+parameter, the derivative multiplier has magnitude at most two; combined with
+Proposition~1, its per-sample second moment is at most four. The chosen
+experimental angles keep every local reference amplitude nonzero. The
+estimator still covers limiting angles with zero amplitudes because such
+denominator events have zero sampling probability and the second-moment proof
+explicitly restricts to the support.
+
+\section{Experiments}
+
+\subsection{Targets, ansätze, and protocol}
+
+% Role: target design
+The two targets are distributions over 19-bit strings. Their total mass on
+weight $k$ is proportional to
+$\exp[-(k-\mu_c')^2/(2\sigma_t^2)]$, with
+$\sigma_t=\sqrt{19}/2$; mass is uniform among strings of the same weight. We
+numerically calibrate $\mu_c'$ after truncation to $k\in[0,19]$ so the exact
+means are $\E[K|A]=19/2$ and $\E[K|B]=19/4$. Each condition supplies 10,000
+training and 2,000 disjoint validation strings.
+
+More explicitly, if $\rho_c(k)$ is the normalized shell mass, then every
+string $x$ receives
+\begin{equation}
+ p_c(x)=\frac{\rho_c(|x|)}{\binom{19}{|x|}}.
+\end{equation}
+Thus the task requires a Gaussian-shaped binary distribution over Hamming
+weight and exact uniformity within each shell. The location $\mu_c'$ is found
+by one-dimensional root solving after truncation; $\sigma_t$ is the specified
+Gaussian width, while reported standard deviations are recomputed from the
+normalized discrete target itself. Samples are produced by drawing a shell
+from $\rho_c$ and then choosing a uniformly random subset of that size.
+
+% Role: architecture and optimization
+Every ansatz includes one independent $Z_i$ angle and one independent
+$Z_iZ_j$ angle per interaction edge. The distance-3 heavy-hex, corner-trimmed
+$4\times5$ lattice, and complete graphs have 39, 48, and 190 parameters,
+respectively. Adam runs for 2,000 steps with cosine decay from $10^{-2}$ to
+$10^{-3}$. Parameters are initialized as
+$\mathcal N(0,0.1^2/m)$, and ten matched seeds share data, minibatches,
+observable masks, and Monte Carlo keys across topologies. Calibration selected
+64 observables and 8,192 reference samples per bandwidth for training; exact
+small-system tests gave expectation RMSE $0.0085$.
+
+\subsection{Baselines, evaluation, and decision rule}
+
+All conditioning ablations use the 190-parameter complete graph. The
+no-condition control feeds $\alpha=\pi/8$ for both labels, so one output law
+must compromise between the targets. The basis control feeds
+$|0\rangle^{\otimes n}$ for $A$ and $|1\rangle^{\otimes n}$ for $B$.
+Two independent complete-graph models, trained only on $A$ or only on $B$ with
+the corresponding angle encodings, provide reference fits but are not
+conditional baselines.
+
+The basis control has an important exact restriction. Since
+$H^{\otimes n}X^{\otimes n}=Z^{\otimes n}H^{\otimes n}$ and $D_\theta$
+commutes with $Z^{\otimes n}$, its two output laws are bitwise complements:
+\begin{equation}
+ q_\theta(x\mid B)=q_\theta(x\oplus 1^n\mid A).
+\end{equation}
+It can therefore specialize to the symmetric target centered at $n/2$, but
+then its other Hamming-weight mean is also $n/2$ rather than $n/4$. This
+baseline tests whether continuous angle encoding does more than a discrete
+input flip; it is not expected to be uniformly weak.
+
+For a target $p$ and exact model law $q$, bitstring TVD is
+$\frac12\sum_x|p(x)-q(x)|$. Shell TVD applies the same definition after
+aggregating by $|x|$, and mean and standard-deviation errors compare the first
+two moments of that shell law. Exact model probabilities are obtained for all
+$2^{19}$ strings by applying a fast Walsh--Hadamard transform to
+$e^{i\Phi_\theta(z)}\phi_c(z)$; no Monte Carlo estimate enters these test
+metrics. Held-out Conditional MMD is reported only as an objective-space
+diagnostic.
+
+Before running the matrix, we fixed a strict success rule: for each condition
+separately, the complete angle-conditioned model must have lower median shell
+TVD than both conditioning controls, and bitstring TVD must show the same
+ordering. Results are summarized by median and interquartile range over ten
+seeds. A balanced average over conditions is informative but cannot override
+this condition-wise decision rule.
+
+\subsection{Results}
+
+% Role: empirical findings
+Table~\ref{tab:results} reports medians and interquartile ranges over ten seeds.
+The primary comparison uses exact enumeration of all $2^{19}$ outputs. Shell
+TVD measures the stated Gaussian-weight task; bitstring TVD additionally tests
+uniformity inside every shell.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\caption{Exact test metrics, median [interquartile range] over ten seeds.
+Lower is better. Values are inserted from the reproducible result summary.}
+\label{tab:results}
+\begin{tabular}{llrrrrr}
+\toprule
+Model & Condition & Parameters & Bitstring TVD & Shell TVD &
+Mean error & Std.\ error\\
+\midrule
+\input{../results/summary/results_table.tex}
+\end{tabular}
+\end{table*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.49\textwidth]{../results/summary/weight_fit.pdf}
+\includegraphics[width=0.49\textwidth]{../results/summary/comparisons.pdf}
+\caption{Left: target and representative complete-ansatz weight laws. Right:
+ten-seed topology and conditioning comparisons.}
+\label{fig:results}
+\end{figure*}
+
+\paragraph{Conditioning test.}
+The strict criterion fails. For condition $A$, complete angle conditioning
+reaches shell TVD $0.121$, compared with $0.403$ for no conditioning but
+$0.007$ for the basis control. Its bitstring TVD is nevertheless lower than
+both controls ($0.352$ versus $0.497$ and $0.405$). For condition $B$, angle
+conditioning wins on shell TVD ($0.072$ versus $0.327$ and $0.722$) and
+bitstring TVD ($0.275$ versus $0.462$ and $0.778$). All four required
+comparisons except the $A$ shell comparison pass. Averaged over conditions,
+the angle model has median shell and bitstring TVDs of about $0.096$ and
+$0.314$, substantially below either control, but these balanced summaries are
+descriptive rather than a post-hoc replacement for the criterion.
+
+\paragraph{Topology and sharing.}
+Topology rankings depend on the resolution of evaluation. The lattice has the
+best balanced shell TVD (about $0.085$), narrowly ahead of heavy-hex
+($0.088$) and complete ($0.096$), whereas the complete graph has the best
+balanced bitstring TVD ($0.314$ versus $0.397$ and $0.445$). Since the
+families contain 48, 39, and 190 parameters, respectively, this is not a
+connectivity-at-fixed-capacity experiment. Independent reference models obtain
+shell TVDs $0.018$ on $A$ and $0.036$ on $B$, showing a measurable cost to
+using one shared parameter vector. Their presence also guards against
+attributing every residual error to the estimator or optimizer.
+
+\paragraph{Distributional diagnosis.}
+The learned weight laws are substantially closer than the full bitstring laws:
+correct Hamming-weight histograms can coexist with nonuniform probability
+inside a shell. This is scientifically important because the target definition
+requires both. The independent edge parameters do not enforce permutation
+symmetry, and the low-body-biased MMD kernels emphasize coarse moments; the
+result is therefore a conditional proof of concept rather than complete
+distribution recovery. The complete angle model matches the target means
+closely (absolute errors $0.041$ and $0.036$), while its standard-deviation
+errors remain $0.598$ and $0.181$ for $A$ and $B$, respectively.
+
+\subsection{Estimator checks and reproducibility}
+
+We checked the estimator against exact six-qubit statevectors and verified
+automatic-differentiation gradients against finite differences. A separate
+brute-force small-system test forms the kernel U-statistic directly and
+compares both its stochastic value and backpropagated gradient with the
+Fourier-observable implementation. Twenty-repeat calibration selected the
+smallest tested expectation budget below RMSE $0.01$ and the smallest
+observable budget below 5\% MMD coefficient of variation. Training,
+validation, and exact evaluation are separate code paths; the final
+distribution metrics are recomputed from each best validation checkpoint.
+
+Matched randomness reduces variance in topology comparisons without making
+the ten runs identical: parameters are initialized independently for each
+seed, while data generation and stochastic estimator keys are shared across
+the models being compared. All target calibration, training, exact
+enumeration, aggregation, criterion auditing, and figure-generation scripts
+are included with machine-readable per-seed outputs.
+
+\section{Discussion and conclusion}
+
+% Role: interpretation
+Product-state conditioning extends the observable-training mechanism of IQP
+Born machines without introducing condition-specific trainable parameters.
+The estimator is classically efficient for the stated Pauli objective, and the
+experiment tests conditional control with exact distributional metrics. It
+does not meet the preregistered condition-wise success rule. The failure is
+diagnostic rather than ambiguous: the basis control's complement symmetry is
+exceptionally well matched to $A$ and fundamentally mismatched to $B$, while
+angle conditioning provides the much better balanced model.
+
+Three limitations shape the result. First, the topology comparison does not
+isolate connectivity from capacity: its families have different parameter
+counts. Second, the target is permutation symmetric but the parameterization
+is not, which helps explain the gap between shell and bitstring TVD. Third,
+hardware routing and noise are not simulated, and exact $2^{19}$ enumeration
+would not remain an evaluation strategy at large $n$.
+
+\subsection{What the failure reveals}
+
+The reference distribution seen by the diagonal circuit makes the effect of
+the encoding concrete:
+\begin{equation}
+ \Pr_{\phi_c}(z_i=1)
+ =|\phi_{c,i}(1)|^2
+ =\frac{1-\sin\alpha_{c,i}}{2}.
+\end{equation}
+Condition $A$ uses $\alpha_A=0$ and hence the uniform IQP reference law,
+whereas $B$ uses $\alpha_B=\pi/4$ and a biased product reference law. The
+primary and basis models therefore use exactly the same input for $A$; they
+differ in the second input and in the compromises imposed on their shared
+parameters. This explains why the basis result on $A$ is a serious control,
+not a comparison to an unrelated architecture. Its near-zero shell error says
+that the complete ansatz and optimizer can fit the central Gaussian when the
+second condition supplies no compatible requirement. Its $B$ failure follows
+from the exact complement constraint. The angle model gives up some $A$
+shell accuracy to move $B$ from the complementary mean $n/2$ toward $n/4$.
+
+The multiscale kernel also predicts which discrepancies will be easiest to
+learn. At $\sigma=1,2,4$, a Fourier mask includes each bit with probabilities
+approximately $0.197$, $0.059$, and $0.015$, corresponding at $n=19$ to
+expected mask weights $3.74$, $1.12$, and $0.29$. Training therefore
+emphasizes low-order characters. Those observables efficiently constrain
+coarse mass and moments but do not force equality among the
+$\binom{19}{k}$ strings within each shell. The exact TVD gap is consistent with
+this spectral bias. It should not be read as a defect hidden by Monte Carlo:
+the gap appears in complete enumeration after training.
+
+\subsection{Failure-directed next experiments}
+
+The most direct follow-up is to align the parameterization with the target
+symmetry. Tying all one-qubit generators and tying two-qubit generators by a
+graph automorphism orbit would remove arbitrary within-shell preferences and
+sharply reduce parameter count. A more flexible alternative is to randomize
+qubit permutations during training, retaining heterogeneous parameters while
+making asymmetry costly. Either intervention should be tested against the same
+bitstring TVD, since shell-only evaluation cannot establish the desired
+uniformity.
+
+A second experiment should capacity-match the topology families, for example
+by adding repeated sparse layers until their parameter counts are comparable.
+The present reversal---sparse graphs lead in shell TVD while the complete
+graph leads in bitstring TVD---could arise from connectivity, capacity, or
+optimization geometry. The current native-family study intentionally does not
+separate them.
+
+Finally, conditional generalization remains open. The estimator accepts
+arbitrary per-qubit real angles, but this experiment trains only two broadcast
+prototypes. Training on several angles and withholding intermediate values
+would test whether product-state geometry supports interpolation rather than
+two-point memorization. At larger $n$, exact TVD must give way to
+symmetry-aware shell tests, held-out characters of increasing weight, and
+carefully qualified sample-based two-sample tests; none alone is a replacement
+for the exact bitstring audit available here.
+
+% Role: claim boundary and future work
+Efficient training must also be distinguished from efficient classical
+sampling. Noise, anticoncentration, and verification create delicate trade-offs
+for IQP generative models
+\cite{bremnerAchievingQuantumSupremacy2017,
+herbstLimitsQuantumGenerative2025}; our 19-qubit exact evaluation provides no
+hardness evidence. Natural next steps are permutation-tied generators, richer
+condition vectors, and larger experiments whose evaluation avoids complete
+enumeration. Within its stated boundary, this work shows that changing the
+tractable initial state is enough to turn one shared IQP circuit into a
+classically trainable conditional generator.
+
+\clearpage
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+\end{document}
