@@ -1,63 +1,64 @@
-# Adversarial paper self-review
+# Adversarial self-review
 
-This review follows the five-dimension checklist in the
-`research-paper-writing` skill. “Scoped pass” means the paper states the
-limitation and does not make the stronger claim that would require new
-evidence.
+This review applies to the local coauthor draft of *Conditional Generation
+with Classically Trainable IQP Circuits*. The 1,020-fit Gaussian campaign and
+80-fit Curie--Weiss v3 campaign are complete and must not be rerun. No
+repository action submits or uploads the manuscript.
 
-## 1. Contribution
+## Executive verdict
 
-| Question | Status | Evidence or revision |
+The contribution is coherent and appropriately narrow: input-state
+conditioning adds conditional generation to an IQP model while preserving the
+observable estimator used for classical MMD training. Product inputs support
+the general second-moment result; the Curie--Weiss study uses a tractable
+spin-flip two-branch input. The draft does not claim the first conditional
+QCBM, universality, quantum advantage, thermal-state preparation, or optimizer
+guarantees.
+
+## Five-dimension review
+
+| Dimension | Status | Reviewer-facing check |
 |---|---|---|
-| New knowledge? | Pass | Extends the IQP amplitude-ratio Pauli estimator to arbitrary real product-state inputs and identifies a condition-only input seam. |
-| Meaningful failure case? | Pass | Tests whether one shared parameter vector can represent condition-indexed laws without condition-specific gates. |
-| Non-obvious technical idea? | Pass | Product amplitudes preserve sampling/evaluation, but require an amplitude-ratio estimator and second-moment argument. |
-| Surprising insight? | Pass | The basis control wins one shell comparison yet catastrophically fails the other because its outputs are exact complements. |
-| Clear novelty type? | Pass | Method extension, unbiased conditional objective, and a negative controlled experimental finding. |
+| Contribution | Pass | The Introduction distinguishes the formulation from prior conditional QCBMs and from the underlying trainable IQP construction. |
+| Writing clarity | Pass after proof | The main text has six sections and three figures; terminology is stable, and the preparation pipeline is not mislabeled as a strict IQP circuit. |
+| Experimental strength | Pass with bounded scope | Gaussian v1 and Curie--Weiss v3 are complete. The v2 capacity comparison and two symmetry screens are supplementary diagnostics. |
+| Evaluation completeness | Pass for the core campaigns | Profile and raw TVD, training and held-out conditions, paired seeds, and independent references are retained. |
+| Method soundness | Pass with limitations | The estimator result bounds the second moment. The evidence does not isolate ancilla causality or guarantee optimization. |
 
-## 2. Writing clarity
+## Claim--evidence audit
 
-| Question | Status | Evidence or revision |
+| Claim | Evidence | Status |
 |---|---|---|
-| Reproducible from paper? | Pass | Circuit, estimator, kernels, targets, topology sizes, budgets, optimizer, seeds, baselines, and metrics are stated. |
-| Key-module detail? | Pass | Product amplitudes, estimator, variance, gradient interchange, U-statistic behavior, and exact evaluation are described. |
-| Motivation explicit? | Pass | Each module is tied to shared conditioning or preservation of tractable observable training. |
-| Consistent terms/notation? | Pass | \(p_c\) is the target, \(q_\theta(\cdot\mid c)\) the shared model, and \(a,g,z\) have distinct roles. |
-| Paragraph focus? | Pass | Reverse outline in `outline.md` assigns one rhetorical role to each paragraph group. |
+| Product inputs preserve the declared classical training estimator. | Derivation plus finite estimator-consistency audit. | Supported; no optimization guarantee. |
+| Gaussian conditioning improves over no conditioning. | Twelve size--width cells, ten paired seeds, exact evaluation. | Supported in all 12 cells. |
+| One shared Gaussian circuit matches independent circuits. | Training-condition reference comparison. | Unsupported; the fidelity loss is reported. |
+| Denser condition coverage is more useful than more samples at existing conditions. | Matched fixed-per-condition and fixed-total tracks. | Supported descriptively; gains flatten after roughly five conditions. |
+| Curie--Weiss v3 conditioning tracks temperature response. | Frozen 80-fit v3 report and active v3 claim registry. | Supported for the finite eight-visible-spin system. |
+| Curie--Weiss v3 improves over no conditioning and has no resolved reference gap. | Paired v3 profile/raw effects and condition-specific references. | Supported for the preregistered aggregate comparisons; not a general equivalence claim. |
+| Ancillas cause the v3 improvement. | No v3 matched-capacity control. | Unsupported and prohibited. |
+| The v2 91-versus-92-phase comparison controls v3 capacity. | The diagnostic uses the v2 product input, not the v3 spin-flip input. | False; the result is labeled historical. |
+| Symmetry matching alone explains the exploratory gains. | Two post-core screens; radial arms receive unequal condition information. | Unsupported; screens are feasibility evidence only. |
 
-## 3. Experimental strength
+## Reproducibility and provenance
 
-| Question | Status | Evidence or revision |
-|---|---|---|
-| Meaningful baseline effects? | Pass | Exact TVD differences are large; all medians and IQRs use ten seeds. |
-| Strong absolute performance? | Scoped pass | Shell TVD is useful but bitstring TVD remains 0.27–0.49; the paper calls this incomplete recovery. |
-| Consistent across settings/metrics? | Scoped pass | The strict rule fails on condition-A shell TVD; the abstract and discussion say so directly. |
-| Strengths and failures honest? | Pass | Criterion failure, within-shell bias, sharing cost, and topology/capacity confounding are prominent. |
+- Gaussian execution source is sealed under
+  `results/gaussian-foundations-v1/evidence/execution-source-files` and checked
+  against recorded hashes.
+- Curie--Weiss v3 uses the spin-flip input and calibrated knot map selected in
+  development screens and frozen before production.
+- Active generated claims match the v3 campaign report; the v2 capacity
+  summary remains separately identified.
+- Exhaustive per-seed and per-condition outputs remain machine-readable.
+- Final handoff requires tests, lint, a clean build, checksum verification, and
+  visual inspection of every PDF page.
 
-## 4. Evaluation completeness
+## Remaining rejection risks
 
-| Question | Status | Evidence or revision |
-|---|---|---|
-| Key ablations? | Pass | Three native topologies, no condition, basis condition, and independent reference fits. |
-| Strong/fair baselines? | Pass for scoped claim | Conditioning controls use the same complete ansatz; independent models expose sharing cost. |
-| Standard/sufficient metrics? | Pass | Exact bitstring and shell TVD plus mean, standard-deviation, and held-out MMD diagnostics. |
-| Challenging scenarios? | Scoped pass | Two 19-bit synthetic laws isolate the mechanism but do not establish broad conditional generalization. |
-| Protocol documented? | Pass | Preregistered design and generated audit accompany machine-readable per-seed results. |
-
-## 5. Method-design soundness
-
-| Question | Status | Evidence or revision |
-|---|---|---|
-| Realistic practical setting? | Scoped pass | This is a controlled mechanism study; hardware/noise and large-scale verification are excluded. |
-| Hidden technical defects? | Pass | Estimator values and gradients are checked against exact statevectors and brute-force kernel U-statistics. |
-| Robust without per-case tuning? | Pass | One frozen estimator/training protocol is shared across models and seeds. |
-| Benefits versus complexity? | Pass | Conditioning adds only input angles; no condition-specific trainable parameters or differentiation machinery. |
-| Could net benefit be negative? | Scoped pass | Strict success fails, so the conclusion is conditional trainability and diagnostic insight—not superiority. |
-
-## Remaining experiments, not paper defects hidden by wording
-
-- Permutation-tied or permutation-augmented ansätze to address within-shell
-  bias.
-- Capacity-matched topology families.
-- Held-out angle interpolation and more than two conditions.
-- Noise-aware execution and scalable alternatives to exact TVD.
+1. Input-family selection used target-specific development evidence and is not
+   demonstrated to transfer without retuning.
+2. Raw-distribution errors remain materially larger than profile errors.
+3. Both core benchmarks are exchangeable, finite, and one-dimensional in the
+   condition.
+4. The radial-shell screen does not match condition information across arms.
+5. Final author metadata, contribution statements, and approval remain human
+   review items.

@@ -1,564 +1,547 @@
-\documentclass[10pt,twocolumn]{article}
-
-\usepackage[a4paper,margin=1.8cm,columnsep=0.65cm]{geometry}
-\usepackage{amsmath,amssymb,amsthm}
+\documentclass[a4paper,twocolumn,11pt,unpublished]{quantumarticle}
+\pdfoutput=1
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{booktabs}
+\usepackage{supertabular}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{microtype}
+\usepackage{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
-\usepackage{tikz}
 \usepackage{xcolor}
-\usetikzlibrary{arrows.meta,positioning,fit}
+\usepackage{quantikz}
 
 \newtheorem{proposition}{Proposition}
 \newcommand{\bits}{\{0,1\}}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\mmd}{\operatorname{MMD}}
+\newcommand{\TVD}{\operatorname{TVD}}
+\newcommand{\supp}{\operatorname{supp}}
+\makeatletter
+\newcommand{\tableinput}[1]{\@@input #1 }
+\makeatother
+\definecolor{paperblue}{HTML}{0072B2}
+\newenvironment{plainwidetext}{\par\onecolumngrid\vspace{4pt}}{%
+  \par\vspace{4pt}\twocolumngrid}
+\newcommand{\widefigurecaption}[2]{%
+  \refstepcounter{figure}\label{#2}%
+  \par\vspace{6pt}
+  \noindent\parbox{\textwidth}{\small Figure~\thefigure: #1}\par}
 
-\title{\vspace{-1.2em}Classically Trainable Conditional Generation\\
-with Product-State IQP Circuits}
-\author{Anonymous authors}
-\date{}
+\newif\ifgaussianresults
+\IfFileExists{generated/gaussian_claims.tex}{
+  \gaussianresultstrue
+  \input{generated/gaussian_claims}
+}{
+  \gaussianresultsfalse
+  \newcommand{\GaussianAtomicModels}{0}
+  \newcommand{\HeadlineProfileControl}{pending}
+  \newcommand{\HeadlineProfileBankGap}{pending}
+  \newcommand{\HeadlineProfileLookup}{pending}
+  \newcommand{\HeadlineProfileMixture}{pending}
+}
+
+\IfFileExists{generated/curie_weiss_ancilla_claims.tex}{
+  \input{generated/curie_weiss_ancilla_claims}
+}{
+  \newif\ifcurieweissancillaresults
+  \curieweissancillaresultsfalse
+}
+\IfFileExists{generated/curie_weiss_ancilla_effects.tex}{
+  \newcommand{\curieweissancillaeffects}{
+    \tableinput{generated/curie_weiss_ancilla_effects.tex}}
+}{\newcommand{\curieweissancillaeffects}{
+  \multicolumn{3}{c}{Generated after campaign completion.}\\}}
+\IfFileExists{generated/curie_weiss_ancilla_response.tex}{
+  \newcommand{\curieweissancillaresponse}{
+    \tableinput{generated/curie_weiss_ancilla_response.tex}}
+}{\newcommand{\curieweissancillaresponse}{
+  \multicolumn{6}{c}{Generated after campaign completion.}\\}}
+\IfFileExists{generated/curie_weiss_ancilla_all_rows.tex}{
+  \newcommand{\curieweissancillaallrows}{
+    \tableinput{generated/curie_weiss_ancilla_all_rows.tex}}
+}{\newcommand{\curieweissancillaallrows}{
+  \multicolumn{11}{c}{Generated after campaign completion.}\\}}
+\IfFileExists{generated/curie_weiss_ancilla_pilot.tex}{
+  \newcommand{\curieweissancillapilot}{
+    \tableinput{generated/curie_weiss_ancilla_pilot.tex}}
+}{\newcommand{\curieweissancillapilot}{
+  \multicolumn{4}{c}{Development evidence unavailable.}\\}}
+
+\IfFileExists{generated/capacity_control_claims.tex}{
+  \input{generated/capacity_control_claims}
+}{
+  \newif\ifcapacitycontrolresults
+  \capacitycontrolresultsfalse
+  \newcommand{\CapacityProfileHeldOut}{pending}
+  \newcommand{\CapacityRawHeldOut}{pending}
+  \newcommand{\CapacityProfileCritical}{pending}
+  \newcommand{\CapacityRawCritical}{pending}
+  \newcommand{\CapacityProfileCold}{pending}
+  \newcommand{\CapacityRawCold}{pending}
+}
+
+\newcommand{\campaignfigure}[3]{%
+  \begin{plainwidetext}
+  \noindent\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{gaussian_figures/#1.pdf}
+  \widefigurecaption{#2}{#3}
+  \end{minipage}
+  \end{plainwidetext}
+}
+\newcommand{\curieweissfigure}[3]{%
+  \begin{plainwidetext}
+  \noindent\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{curie_weiss_ancilla_figures/#1.pdf}
+  \widefigurecaption{#2}{#3}
+  \end{minipage}
+  \end{plainwidetext}
+}
+\newcommand{\symmetryfigure}[3]{%
+  \begin{plainwidetext}
+  \noindent\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{symmetry_figures/#1.pdf}
+  \widefigurecaption{#2}{#3}
+  \end{minipage}
+  \end{plainwidetext}
+}
+
+\title{Conditional Generation with Classically Trainable IQP Circuits}
+\author{Oriol Balló-Gimbernat}
+\email{oriol.ballo@eurecat.org}
+\affiliation{Eurecat, Centre Tecnològic de Catalunya, Barcelona, Spain}
+\affiliation{Centre de Visió per Computador (CVC), Barcelona, Spain}
+\affiliation{Universitat Autònoma de Barcelona (UAB), Barcelona, Spain}
+\author{Emiliano Tolotti}
+\email{emiliano.tolotti@unitn.it}
+\affiliation{Department of Information Engineering and Computer Science,
+University of Trento, Via Sommarive 9, 38123 Trento, Italy}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Instantaneous quantum polynomial-time (IQP) Born machines admit classical
-training objectives based on efficiently estimated Pauli observables, but the
-standard construction is unconditional.
-We condition one shared IQP circuit by replacing its fixed input with a real
-product state whose rotation angles encode an external class token.
-We derive an unbiased Monte Carlo estimator for the resulting Pauli-$Z$
-expectations, bound its second moment, and show that its sampled objective
-supports ordinary backpropagation.
-An unbiased Conditional MMD objective trains 19-qubit models to represent two
-discrete Gaussian laws over Hamming weight.
-Across ten matched seeds, angle conditioning separates the two target laws and
-outperforms both controls after averaging over conditions, but it fails our
-stricter condition-wise criterion because the basis control specializes to one
-target. Exact bitstring evaluation also exposes substantial residual
-within-shell bias.
-The results establish a focused route to conditional, classically trained IQP
-generators without claiming hard sampling or quantum advantage for the tested
-circuits.
+Conditional generative models represent families of distributions indexed by
+an input variable. Conditioning instantaneous quantum polynomial-time (IQP)
+Born machines is constrained by their diagonal commuting gates and by
+classical training's reliance on a tractable reference state. We introduce an
+input-state-conditioned IQP Born machine in which the condition changes only
+the prepared input, while a compiled IQP unitary and its phase vector are
+shared across the family. Classical training remains efficient
+provided the state entering the diagonal unitary supports efficient basis
+sampling and amplitude-ratio evaluation. For product inputs, the
+amplitude-ratio estimator has second
+moment bounded by one, allowing classical estimation of the Pauli characters
+of a Hamming-kernel maximum mean discrepancy loss. This does not imply
+efficient output sampling or guaranteed optimization.
+
+A 1,020-fit Gaussian campaign spans 8--19 qubits, three widths, and unseen
+conditions. Conditioning lowers profile error in every size--width cell, but
+circuits trained at individual conditions are usually more accurate. An 80-fit
+Curie--Weiss campaign tests a temperature-driven change from a central to a
+bimodal magnetization profile. A fixed 13-qubit circuit with five marginalized
+ancillas and a spin-flip-symmetric input follows this response and reduces
+held-out profile and raw error relative to no conditioning. In this campaign,
+the shared circuit matches or improves on condition-specific references,
+although the benchmark does not identify which architectural feature
+causes the improvement. Together, the campaigns show that input-state
+conditioning preserves the classical estimators and can express nontrivial
+conditional responses, while the cost of sharing depends on the target and
+input-state family.
 \end{abstract}
 
 \section{Introduction}
 
-% Role: opening/task
-Quantum circuit Born machines model data by measuring a parameterized quantum
-state, making distribution learning a natural application of variational
-quantum algorithms \cite{cerezoVariationalQuantumAlgorithms2021}.
-IQP circuits are a particularly structured family: their commuting
-interactions are simple to describe \cite{nakataDiagonalQuantumCircuits2014,
-niCommutingQuantumCircuits2012}, while sampling hardness is supported only for
-appropriate asymptotic families and complexity assumptions
-\cite{bremnerAchievingQuantumSupremacy2017,
-marshallImprovedSeparationQuantum2024}.
-This separation has motivated a ``train classically, deploy on quantum''
-program in which Pauli observables are estimated classically during
-optimization, while sampling is delegated to a quantum circuit
-\cite{recio-armengolIQPoptFastOptimization2025,
-recio-armengolTrainClassicalDeploy2026}.
+Conditional generative models learn $q_\theta(x\mid c)$, a family of output
+laws selected by a condition $c$. Quantum circuit Born machines represent
+discrete laws through measurement statistics and have been trained with
+likelihood-free objectives such as maximum mean discrepancy (MMD)
+\cite{liuDifferentiableLearning2018,benedettiGenerativeModeling2019,
+gaoQuantumGenerativeModels2018}. Earlier conditional QCBMs inject an external
+variable through repeated rotations or dedicated condition qubits
+\cite{kissConditionalBornMachine2022,zengConditionalQCBM2023}. They show that
+QCBMs can be conditional. Our question is narrower. Can conditioning be added
+to an IQP Born machine while preserving its classical training framework?
 
-% Role: challenge
-The standard IQP generative construction learns one output law from one fixed
-input state. Conditional generation instead requires a single parameterized
-model to represent a family $q_\theta(x\mid c)$ indexed by an external
-condition $c$. Giving each condition independent parameters would fit separate
-generators rather than test conditional control. The technical question is
-therefore whether the condition can modify the circuit while preserving the
-probabilistic estimator that makes IQP training attractive. This question also
-intersects broader limits on gradient measurement, expressivity, and
-trainability \cite{bowlesBackpropagationScalingParameterised2025,
-chinzeiTradeoffGradientMeasurement2025,
-rudolphTrainabilityBarriersOpportunities2024}.
+Classically trained IQP Born machines exploit a separation between observable
+estimation and output sampling. Selected Pauli observables, and therefore
+character-kernel MMD losses, can be estimated classically for a tractable
+reference state even though other IQP families are associated with conditional
+sampling-hardness results
+\cite{nestSimulatingQuantumComputers2011,
+recio-armengolIQPoptFastOptimization2025,
+recio-armengolTrainClassicalDeploy2026,bremnerAchievingQuantumSupremacy2017}.
+This paper uses \emph{classically trainable} only for the declared loss and
+gradient estimators. It does not claim classical access to the full output
+law.
 
-% Role: method
-We encode $c$ in a real product state
-$\bigotimes_i R_Y(\alpha_{c,i})|0\rangle$ and apply one shared $H D_Z H$ IQP
-circuit (Fig.~\ref{fig:circuit}). Product states remain computationally
-tractable after the first Hadamards: their measurement law factorizes and
-their amplitudes are products of local terms. Adapting the sampling argument
-of Van den Nest \cite{nestSimulatingQuantumComputers2010} yields an unbiased
-amplitude-ratio estimator with bounded second moment. Because its random
-reference strings do not depend on $\theta$, JAX differentiates the sampled
-MMD objective directly. We use a small-variance initialization and low-body
-biased multiscale kernels in light of recent IQP trainability analyses
-\cite{shenCharacterizingTrainabilityInstantaneous2026,
-herbstLimitsQuantumGenerative2025}.
+We encode $c$ in a classically tractable input state and then apply one fixed
+IQP unitary. A product input retains the factorized reference distribution used
+by the Pauli estimator; a non-product input remains usable whenever it supports
+exact basis sampling and amplitude ratios. Different input angles make the
+measured law depend on $c$.
+The ordered diagonal generators, learned phases, and compiled IQP gates do not
+change with the condition. Figure~\ref{fig:pipeline} shows this separation.
+Input-dependent rotations and their finite Fourier response are established in
+quantum circuit learning
+\cite{mitaraiQuantumCircuitLearning2018,schuldEffectDataEncoding2021,
+casasMultidimensionalFourier2023}; our contribution is the formulation that
+places this encoding inside the classically observable-trainable IQP setting.
 
-% Role: contributions/evidence
-Our contributions are threefold. First, we state and verify the product-state
-Pauli estimator and its backpropagated gradient. Second, we construct an
-unbiased, class-balanced Conditional MMD loss and validate that it detects
-label swaps invisible to pooled MMD. Third, we evaluate 19-qubit heavy-hex,
-lattice, and complete two-local ansatz families on two condition-indexed
-Gaussian Hamming-weight laws, using exact bitstring metrics and ten matched
-seeds. The topology study compares native families rather than fixed parameter
-counts; connectivity is operationally relevant to IQP implementations
-\cite{placidiImpactQubitConnectivity2026}, but no hardware or noise claim is
-made here.
+We validate the formulation in two cases. Gaussian Hamming-weight targets
+isolate translation and interpolation. Curie--Weiss targets change shape with
+inverse temperature and therefore test more than a moving peak. In both cases,
+a no-condition model measures whether the input encoding provides usable
+control, while independently trained circuits expose the accuracy cost of
+sharing one circuit. For Curie--Weiss, a visible-only model with nearly the
+same parameter count tests whether the ancilla result can be reproduced by
+higher-local visible phases.
 
-\subsection{Scope relative to prior IQP training}
-
-The classical simulation result behind this work estimates local observables,
-not samples from the full output distribution
-\cite{nestSimulatingQuantumComputers2010}. IQPopt turns that distinction into
-an optimization strategy by expressing distributional kernels through Pauli
-characters \cite{recio-armengolIQPoptFastOptimization2025}. We retain this
-observable interface but change the reference state. The relevant extension
-is not a new differentiation rule: once reference strings have been sampled,
-the estimator is a smooth elementary function of $\theta$, so the complete
-MMD estimate can be differentiated by ordinary reverse-mode automatic
-differentiation. The work is therefore about preserving an existing
-classical-training mechanism under conditional product-state inputs.
-
-The condition is deliberately excluded from $D_\theta$. Appending
-condition-specific diagonal gates would make it unclear whether the experiment
-learned a shared conditional mechanism or two parameter sets. Here one
-parameter vector must satisfy both target laws. Independent models are
-reported only as reference fits, while input states with no distinguishing
-condition and with computational-basis conditions serve as controlled
-ablations.
+The evidence is deliberately finite and descriptive. It concerns within-range
+interpolation, exchangeable targets, and the tested estimator budgets. We make
+no claim of universal conditional approximation, efficient classical output
+sampling, quantum advantage, thermal-state preparation, or a generally
+favorable optimization landscape. Recent IQP trainability analyses give
+further reason to keep the last boundary explicit
+\cite{shenCharacterizingTrainability2026}.
 
 \begin{figure*}[t]
-\centering
-\begin{tikzpicture}[
-  x=1.13cm,y=0.58cm,
-  gate/.style={draw,rounded corners=1pt,minimum width=0.68cm,
-    minimum height=0.42cm,fill=blue!6},
-  phase/.style={draw,rounded corners=2pt,minimum width=2.25cm,
-    minimum height=2.05cm,fill=orange!8},
-  >=Latex
-]
-  \foreach \y/\lab in {2/0,1/\vdots,0/{n-1}} {
-    \draw (0,\y) node[left] {$|0\rangle_{\lab}$} -- (8.8,\y);
-  }
-  \node[gate] (r0) at (1,2) {$R_Y(\alpha_{c,0})$};
-  \node at (1,1) {$\vdots$};
-  \node[gate] (rn) at (1,0) {$R_Y(\alpha_{c,n-1})$};
-  \foreach \y in {0,2} {
-    \node[gate] at (2.55,\y) {$H$};
-    \node[gate] at (6.45,\y) {$H$};
-    \node[gate] at (8.05,\y) {$\mathsf{M}$};
-  }
-  \node at (2.55,1) {$\vdots$};
-  \node at (6.45,1) {$\vdots$};
-  \node at (8.05,1) {$\vdots$};
-  \node[phase] (d) at (4.5,1)
-    {$D_\theta=\displaystyle\prod_g e^{i\theta_g Z_g}$};
-  \draw[->,thick,blue!65!black] (1,-1.0) node[below] {condition $c$}
-    -- (r0.south);
-  \draw[->,thick,blue!65!black] (1,-1.0) -- (rn.south);
-  \node[above=0.18cm of d] {shared trainable parameters};
-  \node[draw,dashed,fit=(r0)(rn),inner sep=5pt,
-    label=above:{product-state encoding}] {};
-  \draw[->] (8.45,1) -- (9.15,1) node[right] {$x\sim q_\theta(\cdot\mid c)$};
-\end{tikzpicture}
-\caption{The condition changes only the initial product-state angles. The
-commuting diagonal block and all trainable parameters are shared across
-conditions. The experiment broadcasts one scalar angle over all qubits.}
-\label{fig:circuit}
+  \centering
+  \begin{minipage}[c]{0.49\textwidth}
+    \textbf{a}\par\vspace{2mm}
+    \centering
+    \resizebox{\linewidth}{!}{%
+      \begin{quantikz}[row sep=0.38cm, column sep=0.40cm]
+        \lstick{$\ket{0}_1$}
+          & \gate[wires=3,
+              style={fill=paperblue!10,draw=paperblue,
+                rounded corners=3pt,line width=0.65pt,
+                inner xsep=5pt,inner ysep=1pt}]
+              {\begin{gathered}
+                \text{Tractable input state}\\[-1pt]
+                \displaystyle|\phi(c)\rangle
+              \end{gathered}}
+            \gategroup[wires=3,steps=1,
+              style={draw=none,inner xsep=0pt,inner ysep=0pt},
+              background,
+              label style={label position=below,anchor=north,
+                text=paperblue,yshift=-3pt}]{Conditioning}
+          & \gate{H}
+            \gategroup[wires=3,steps=3,
+              style={rounded corners=3pt,draw=black!55,line width=0.6pt,
+                dash pattern=on 3pt off 2.3pt,
+                inner xsep=-1pt,inner ysep=-1pt},
+              background,
+              label style={label position=above,anchor=south,
+                text=black!65,yshift=3pt}]{IQP Unitary}
+          & \gate[wires=3]{D_Z(\theta)} & \gate{H} & \meter{} & \rstick{$x_1$} \\
+        \lstick{$\ket{0}_i$}
+          &
+          & \gate{H} & & \gate{H} & \meter{} & \rstick{$x_i$} \\
+        \lstick{$\ket{0}_n$}
+          &
+          & \gate{H} & & \gate{H} & \meter{} & \rstick{$x_n$}
+      \end{quantikz}%
+    }
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.48\textwidth}
+    \textbf{b}\par\vspace{1mm}
+    \centering
+    \includegraphics[width=\linewidth]{gaussian_figures/fig1_pipeline_targets.pdf}
+  \end{minipage}
+  \caption{Input-state conditioning and the Gaussian target family.
+  (a) Conditioning prepares a classically tractable input state $\ket{\phi(c)}$
+  (a product state in the Gaussian experiment and a spin-flip two-branch state
+  in the Curie--Weiss experiment); the IQP unitary and phase vector are shared
+  across conditions.
+  (b) Five representative 19-qubit target profiles; probability is uniform
+  within each Hamming shell.}
+  \label{fig:pipeline}
 \end{figure*}
 
-\section{Conditional product-state IQP model}
+\section{Conditional IQP model}
+\label{sec:model}
 
-% Role: model definition
-For $n$ qubits, let $g\in\bits^n$ denote a Pauli mask,
-$Z_g=\prod_i Z_i^{g_i}$, and define
+Let $g_j\in\bits^n$ specify a diagonal Pauli string
+$Z_{g_j}=\bigotimes_i Z_i^{g_{j,i}}$. For a fixed ordered generator bank
+$G=(g_1,\ldots,g_m)$ and phases $\theta\in\mathbb R^m$, define
 \begin{equation}
- D_\theta=\prod_{j=1}^{m}e^{i\theta_j Z_{g_j}},\qquad
- U_\theta=H^{\otimes n}D_\theta H^{\otimes n}.
+ D_Z(\theta)=\prod_{j=1}^{m}\exp(i\theta_jZ_{g_j}).
 \end{equation}
-The condition is represented by
-$|\psi_c\rangle=\bigotimes_iR_Y(\alpha_{c,i})|0\rangle$ and the model law is
-$q_\theta(x\mid c)=|\langle x|U_\theta|\psi_c\rangle|^2$.
-Only $\boldsymbol{\alpha}_c$ depends on $c$; $\theta$ and the generator set are
-shared. Our general estimator allows arbitrary real angle vectors, while the
-experiment uses $\alpha_A=0$ and $\alpha_B=\pi/4$ broadcast over all qubits.
-
-\subsection{Reference-state sampling}
-
-% Role: tractable module
-Write $|\phi_c\rangle=H^{\otimes n}|\psi_c\rangle$. Its local amplitudes are
-\begin{align}
- \phi_{c,i}(0)
- &=\frac{\cos(\alpha_{c,i}/2)+\sin(\alpha_{c,i}/2)}{\sqrt2},\\
- \phi_{c,i}(1)
- &=\frac{\cos(\alpha_{c,i}/2)-\sin(\alpha_{c,i}/2)}{\sqrt2}.
-\end{align}
-Consequently $\phi_c(z)=\prod_i\phi_{c,i}(z_i)$, so both sampling
-$z\sim|\phi_c(z)|^2$ and evaluating amplitudes take $O(n)$ local operations.
-This is the sole tractability property required from the encoding.
-
-\section{Classical estimation and Conditional MMD}
-
-\subsection{Pauli expectation estimator}
-
-% Role: estimator and guarantee
-For an observable mask $a\in\bits^n$, define the phase
-$\Phi_\theta(z)=\sum_j\theta_j(-1)^{g_j\cdot z}$. Sampling
-$z\sim|\phi_c(z)|^2$, set
+The input-state-conditioned output law is
 \begin{equation}
- F_{a,c}(z)=
- \frac{\phi_c(z\oplus a)^*}{\phi_c(z)^*}
- e^{i[\Phi_\theta(z)-\Phi_\theta(z\oplus a)]},
-\label{eq:estimator}
+\begin{split}
+ q_\theta(x\mid c)=\Big|\langle x|H^{\otimes n}D_Z(\theta)H^{\otimes n}\\
+ {}\times\bigotimes_{i=1}^{n}R_Y(\alpha_i(c))|0\rangle\Big|^2.
+\end{split}
+\label{eq:model}
 \end{equation}
-with zero-probability denominator events omitted.
+The preparation rotations precede the IQP unitary, so the complete pipeline is
+not itself a strict IQP circuit. The deployment contract is instead precise:
+$D_Z(\theta)$, $G$, and $\theta$ are identical for every $c$. Only the
+input state changes.
 
-\begin{proposition}
-The real part of the sample mean of Eq.~\eqref{eq:estimator} is an unbiased
-estimator of
-$\langle\psi_c|U_\theta^\dagger Z_aU_\theta|\psi_c\rangle$.
-Moreover $\E|F_{a,c}|^2\leq1$, hence $S=O(\epsilon^{-2})$ samples suffice for
-constant-probability additive error $\epsilon$. Sampling and evaluating each
-contribution is polynomial in $n$ and the number of generators.
-\end{proposition}
-
-\begin{proof}
-Multiplying Eq.~\eqref{eq:estimator} by $|\phi_c(z)|^2$ cancels one amplitude
-ratio and summing over $z$ gives the computational-basis expansion of
-$\langle Z_a\rangle$. For the second moment,
+The Gaussian experiment uses a broadcast map
 \begin{equation}
-\E|F_{a,c}|^2
-=\sum_{z:\phi_c(z)\neq0}|\phi_c(z\oplus a)|^2\leq1.
+ \alpha_i(c)=\pi(0.35-0.70c),\qquad i=1,\ldots,n,
+ \label{eq:broadcast}
 \end{equation}
-The sample-complexity statement follows from the variance of a sample mean.
-Product structure gives the stated per-sample computational cost.
-\end{proof}
+and all one- and two-body diagonal generators, giving $m=n(n+1)/2$ learned
+phases. For an affine angle map, each output probability has finite Fourier
+support contained in signed sums of the encoding frequencies
+\cite{schuldEffectDataEncoding2021,casasMultidimensionalFourier2023}. This
+describes the available conditional response but does not imply universality.
 
-% Role: gradient consequence
-Ordinary backpropagation applies because the reference samples are independent
-of $\theta$. Differentiation only multiplies a contribution by
-$i[\chi_{g_j}(z)-\chi_{g_j}(z\oplus a)]$, where
-$\chi_g(z)=(-1)^{g\cdot z}$; its magnitude is at most two. Thus automatic
-differentiation of the Monte Carlo estimate yields an unbiased gradient
-estimate without parameter-shift circuit evaluations.
-
-\subsection{Unbiased Conditional MMD}
-
-% Role: objective
-For binary strings we use
-$k_\sigma(x,y)=\exp[-d_H(x,y)/(2\sigma^2)]$. Its Fourier representation samples
-each bit of $a$ independently with probability
+The Curie--Weiss model has eight visible qubits and $r=5$ ancillas. Its
+visible law is
 \begin{equation}
- p_\sigma=\frac{1-e^{-1/(2\sigma^2)}}{2},
+ q_\theta(x\mid\beta)=\sum_{z\in\bits^r}
+ \left|\langle x,z|H D_Z(\theta)H|\phi(\beta)\rangle\right|^2,
+ \label{eq:ancilla-model}
 \end{equation}
-and writes MMD as an expectation of squared differences between target and
-model Pauli characters. We average $\sigma\in\{1,2,4\}$ rather than select one
-data-dependent bandwidth \cite{garreauLargeSampleAnalysis2018}. For target
-samples grouped by condition, the training objective is
+where tensor powers of $H$ are implicit and $|\phi(\beta)\rangle$ is the
+spin-flip two-branch state
+$|p(\beta)\rangle^{\otimes n}+X^{\otimes n}|p(\beta)\rangle^{\otimes n}$ on all
+13 qubits, defined below. Tracing out the ancillas produces a
+mixed visible state with rank at most $2^r$ and raises the complete two-local
+generator count from 36 to 91. These are separate capacity changes. Pure
+visible states can already produce multimodal classical measurement laws and
+nonzero Shannon entropy, so ancilla marginalization is not necessary for
+either property.
+
+Two reference families clarify the sharing tradeoff. A \emph{no-condition}
+model receives the same neutral input for every target. A
+\emph{single-condition reference} trains an independent circuit for one
+condition. At unseen midpoints we also evaluate a target-aware choice between
+adjacent references and a target-blind equal or barycentric mixture. The
+references use more stored phases and optimization work than one shared model;
+they measure attainable fidelity rather than parameter-matched efficiency.
+
+\section{Classical MMD training}
+\label{sec:training}
+
+For the Hamming radial-basis kernel
+$k_\sigma(x,y)=\exp[-d_H(x,y)/(2\sigma^2)]$, draw a mask $a\in\bits^n$ with
+independent coordinates
 \begin{equation}
-\mathcal L(\theta)=\frac12\sum_{c\in\{A,B\}}
-\E_{\sigma,a}\!\left[
-  \big(\langle Z_a\rangle_{p_c}
-      -\langle Z_a\rangle_{q_\theta(\cdot|c)}\big)^2
-\right].
+ a_i\sim\operatorname{Bernoulli}(q_\sigma),\qquad
+ q_\sigma=\frac{1-e^{-1/(2\sigma^2)}}{2}.
+ \label{eq:mask-law}
 \end{equation}
-We use U-statistics for both squared terms, making the finite target-sample and
-model Monte Carlo estimate unbiased. Negative stochastic values are therefore
-possible and are neither clipped nor square-rooted.
-
-\subsection{Why direct backpropagation is valid}
-
-Let $\widehat{\mathcal L}(\theta;\omega)$ denote one stochastic loss, where
-$\omega$ contains target minibatches, Fourier masks, and product-reference
-samples. Their sampling laws are independent of $\theta$. The estimator and
-its derivative are bounded for the finite generator set, so differentiation
-and expectation may be interchanged:
+The kernel has the character representation
 \begin{equation}
- \nabla_\theta\mathcal L(\theta)
- =\nabla_\theta\E_\omega[\widehat{\mathcal L}(\theta;\omega)]
- =\E_\omega[\nabla_\theta\widehat{\mathcal L}(\theta;\omega)].
+ k_\sigma(x,y)=\E_a[(-1)^{a\cdot x}(-1)^{a\cdot y}],
+ \label{eq:character-kernel}
 \end{equation}
-Thus we backpropagate through the sampled MMD exactly as in regular
-observable-trained IQP models. ``Unbiased'' refers to expectation over
-$\omega$; a single stochastic loss can be negative because its two squared
-terms are U-statistics. Taking a square root or clipping at zero would destroy
-this property and introduce a nondifferentiable boundary.
+so MMD is an average of discrepancies between Pauli-$Z$ characters
+\cite{grettonKernelTwoSample2012}. Averaging the unbiased per-condition
+U-statistics gives the conditional training loss. Automatic differentiation
+of the sampled finite expression supplies phase gradients.
 
-\subsection{Finite-sample construction}
-
-For completeness, fix one condition, bandwidth, and Fourier mask. Given target
-strings $x_1,\ldots,x_R$, define
-$t_r=(-1)^{a\cdot x_r}$. Given independent product-reference samples
-$z_1,\ldots,z_S$, define $f_s=\operatorname{Re}F_{a,c}(z_s)$. We estimate the
-squared character discrepancy with
-\begin{align}
- \widehat{\Delta}_{a,c}^{\,2}
- ={}&\frac{1}{R(R-1)}\sum_{r\neq r'}t_rt_{r'}
- +\frac{1}{S(S-1)}\sum_{s\neq s'}f_sf_{s'} \nonumber\\
- &-\frac{2}{RS}\sum_{r,s}t_rf_s .
-\end{align}
-The three terms estimate the target square, model square, and cross product
-without diagonal self-products. Independence therefore gives
-$\E[\widehat{\Delta}_{a,c}^{\,2}]
-=(\langle Z_a\rangle_{p_c}-\langle Z_a\rangle_{q_c})^2$.
-The implementation averages independent instances over masks, bandwidths, and
-conditions. This explicit construction is also why a negative minibatch loss
-is not evidence of an invalid kernel: an unbiased estimate of a nonnegative
-quantity need not itself be nonnegative.
-
-Product-state sampling is vectorized over $z$, while the character table
-$(-1)^{g_j\cdot z}$ evaluates all commuting generators together. For each
-parameter, the derivative multiplier has magnitude at most two; combined with
-Proposition~1, its per-sample second moment is at most four. The chosen
-experimental angles keep every local reference amplitude nonzero. The
-estimator still covers limiting angles with zero amplitudes because such
-denominator events have zero sampling probability and the second-moment proof
-explicitly restricts to the support.
-
-\section{Experiments}
-
-\subsection{Targets, ansätze, and protocol}
-
-% Role: target design
-The two targets are distributions over 19-bit strings. Their total mass on
-weight $k$ is proportional to
-$\exp[-(k-\mu_c')^2/(2\sigma_t^2)]$, with
-$\sigma_t=\sqrt{19}/2$; mass is uniform among strings of the same weight. We
-numerically calibrate $\mu_c'$ after truncation to $k\in[0,19]$ so the exact
-means are $\E[K|A]=19/2$ and $\E[K|B]=19/4$. Each condition supplies 10,000
-training and 2,000 disjoint validation strings.
-
-More explicitly, if $\rho_c(k)$ is the normalized shell mass, then every
-string $x$ receives
+Product structure is sufficient for classical estimation, but it is not
+necessary. Write
+$\phi_c(z)=\langle z|H^{\otimes n}|\phi(c)\rangle$ for the state entering the
+diagonal unitary. Uniformly over $c$, the estimator requires a classical
+algorithm that can sample $z$ from $|\phi_c(z)|^2$ and evaluate the complex
+ratio
+$R_c(z,a)=\phi_c(z\oplus a)/\phi_c(z)$ to controlled precision in polynomial
+time. A sampling oracle alone is insufficient because each Monte Carlo draw
+must be assigned this ratio. Product states provide both operations by
+factorizing over qubits; sample-only implicit models and generic circuit states
+do not provide them without additional structure. Zero-amplitude strings are
+never sampled, so the ratio need only be defined on the support of
+$|\phi_c|^2$. Van den Nest's computationally tractable-state condition, which
+combines sampling with amplitude queries, is sufficient for these operations
+\cite{nestSimulatingQuantumComputers2011}. Sampling $z$ from
+$|\phi_c(z)|^2$ then gives
 \begin{equation}
- p_c(x)=\frac{\rho_c(|x|)}{\binom{19}{|x|}}.
+ \E_z\!\left[|R_c(z,a)|^2\right]
+ =\sum_{z:\phi_c(z)\ne0}|\phi_c(z\oplus a)|^2\leq1.
+ \label{eq:second-moment}
 \end{equation}
-Thus the task requires a Gaussian-shaped binary distribution over Hamming
-weight and exact uniformity within each shell. The location $\mu_c'$ is found
-by one-dimensional root solving after truncation; $\sigma_t$ is the specified
-Gaussian width, while reported standard deviations are recomputed from the
-normalized discrete target itself. Samples are produced by drawing a shell
-from $\rho_c$ and then choosing a uniformly random subset of that size.
+Therefore the relevant estimator has a bounded second moment and variance at
+most one. This is not a zero-variance result. It also does not guarantee that
+gradient-based optimization succeeds or scales favorably.
 
-% Role: architecture and optimization
-Every ansatz includes one independent $Z_i$ angle and one independent
-$Z_iZ_j$ angle per interaction edge. The distance-3 heavy-hex, corner-trimmed
-$4\times5$ lattice, and complete graphs have 39, 48, and 190 parameters,
-respectively. Adam runs for 2,000 steps with cosine decay from $10^{-2}$ to
-$10^{-3}$. Parameters are initialized as
-$\mathcal N(0,0.1^2/m)$, and ten matched seeds share data, minibatches,
-observable masks, and Monte Carlo keys across topologies. Calibration selected
-64 observables and 8,192 reference samples per bandwidth for training; exact
-small-system tests gave expectation RMSE $0.0085$.
+The Gaussian campaign samples 64 masks during training and 256 during
+validation. The Curie--Weiss campaign integrates all 256 visible masks,
+padded by identity on the ancillas. Both use 8,192 model samples in training,
+16,384 in validation, bandwidths $(1,2,4)$, and checkpoints selected by
+validation conditional MMD. Exact probabilities are enumerated only after
+checkpoint selection. The supplement gives the estimator derivation and a
+finite small-system consistency and resource audit.
 
-\subsection{Baselines, evaluation, and decision rule}
+\section{Gaussian-mixture experiments}
+\label{sec:gaussian}
 
-All conditioning ablations use the 190-parameter complete graph. The
-no-condition control feeds $\alpha=\pi/8$ for both labels, so one output law
-must compromise between the targets. The basis control feeds
-$|0\rangle^{\otimes n}$ for $A$ and $|1\rangle^{\otimes n}$ for $B$.
-Two independent complete-graph models, trained only on $A$ or only on $B$ with
-the corresponding angle encodings, provide reference fits but are not
-conditional baselines.
+The Gaussian target assigns a truncated discrete Gaussian to Hamming weight
+$w\in\{0,\ldots,n\}$ and spreads each shell mass uniformly over its
+$\binom nw$ strings. Its requested mean is $n(0.15+0.70c)$ and its nominal
+width is $s\sqrt n$, with $s\in\{0.35,0.50,0.75\}$. Profile TVD compares
+the target and generated Hamming-weight laws. Raw bitstring TVD records
+within-shell errors that profile TVD omits.
 
-The basis control has an important exact restriction. Since
-$H^{\otimes n}X^{\otimes n}=Z^{\otimes n}H^{\otimes n}$ and $D_\theta$
-commutes with $Z^{\otimes n}$, its two output laws are bitwise complements:
+The factorial study crosses $n\in\{8,12,16,19\}$, three widths, and ten paired
+seeds. Shared conditioned and no-condition circuits train at five values of
+$c$ and are evaluated at eight unseen odd-sixteenth coordinates. Five
+single-condition circuits per seed supply the references. Every fit uses
+2,000 Adam updates with cosine decay from 0.01 to 0.001. The factorial and
+condition-count studies contain \GaussianAtomicModels{} immutable fits.
+
+\ifgaussianresults
+Conditioning improves training-condition profile TVD over no conditioning in
+all 12 size--width cells. At $n=19,s=0.50$, the largest system at the
+middle width, the paired improvement is \HeadlineProfileControl{}. The
+independent-circuit fidelity gap is
+\HeadlineProfileBankGap{}, with positive values indicating that the separate
+circuits are more accurate. At unseen conditions, the target-aware
+adjacent-reference comparison is \HeadlineProfileLookup{} and the
+coordinate-weighted mixture comparison is \HeadlineProfileMixture{}.
+Across the complete surface, the adjacent reference is better in ten cells
+and mixed in two; the mixture is better in nine, mixed in one, and worse in
+two. Product-state conditioning therefore provides reliable control relative
+to no condition, but sharing one circuit has a measurable fidelity cost.
+\fi
+
+The condition-count study separates denser coverage from additional data at
+$n=19,s=0.50$. With a fixed number of samples per condition, mean held-out
+profile TVD falls from 0.382 at $K=2$ to 0.167 at $K=5$ and 0.160 at $K=9$.
+Holding total data fixed gives 0.382, 0.165, and 0.162 at the same grid sizes.
+The near agreement shows that covering the condition interval matters more
+than adding samples at conditions already present; improvement is small beyond
+$K=5$ on this task.
+
+\campaignfigure{fig2_headline_profiles}{Gaussian conditional control at
+$n=19,s=0.50$, the largest system at the middle width and the cell used for
+the condition-count study. Lines are ten-seed means and bands are deterministic
+95\% paired-bootstrap intervals. Training results compare the conditioned and
+no-condition models. Held-out results include adjacent single-condition
+references and their coordinate-weighted mixture. The complete 12-cell
+factorial appears in the supplement.}{fig:gaussian-headline}
+
+\section{Curie--Weiss experiments}
+\label{sec:curie-weiss}
+
+For spins $s_i\in\{-1,+1\}$, $M=\sum_i s_i$, and eight visible sites, the
+target law is
 \begin{equation}
- q_\theta(x\mid B)=q_\theta(x\oplus 1^n\mid A).
+ p_\beta(s)=Z_\beta^{-1}\exp\!\left(\frac{\beta M^2}{16}\right).
 \end{equation}
-It can therefore specialize to the symmetric target centered at $n/2$, but
-then its other Hamming-weight mean is also $n/2$ rather than $n/4$. This
-baseline tests whether continuous angle encoding does more than a discrete
-input flip; it is not expected to be uniformly weak.
+It is invariant under spin flip and qubit permutations. Increasing $\beta$
+changes the finite-size magnetization profile from central to bimodal. We use
+profile and raw bitstring TVD as co-primary metrics. The unseen $\beta=1$
+point is a finite-size crossover probe, not an estimate of critical scaling.
 
-For a target $p$ and exact model law $q$, bitstring TVD is
-$\frac12\sum_x|p(x)-q(x)|$. Shell TVD applies the same definition after
-aggregating by $|x|$, and mean and standard-deviation errors compare the first
-two moments of that shell law. Exact model probabilities are obtained for all
-$2^{19}$ strings by applying a fast Walsh--Hadamard transform to
-$e^{i\Phi_\theta(z)}\phi_c(z)$; no Monte Carlo estimate enters these test
-metrics. Held-out Conditional MMD is reported only as an objective-space
-diagnostic.
-
-Before running the matrix, we fixed a strict success rule: for each condition
-separately, the complete angle-conditioned model must have lower median shell
-TVD than both conditioning controls, and bitstring TVD must show the same
-ordering. Results are summarized by median and interquartile range over ten
-seeds. A balanced average over conditions is informative but cannot override
-this condition-wise decision rule.
-
-\subsection{Results}
-
-% Role: empirical findings
-Table~\ref{tab:results} reports medians and interquartile ranges over ten seeds.
-The primary comparison uses exact enumeration of all $2^{19}$ outputs. Shell
-TVD measures the stated Gaussian-weight task; bitstring TVD additionally tests
-uniformity inside every shell.
-
-\begin{table*}[t]
-\centering
-\footnotesize
-\caption{Exact test metrics, median [interquartile range] over ten seeds.
-Lower is better. Values are inserted from the reproducible result summary.}
-\label{tab:results}
-\begin{tabular}{llrrrrr}
-\toprule
-Model & Condition & Parameters & Bitstring TVD & Shell TVD &
-Mean error & Std.\ error\\
-\midrule
-\input{../results/summary/results_table.tex}
-\end{tabular}
-\end{table*}
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.49\textwidth]{../results/summary/weight_fit.pdf}
-\includegraphics[width=0.49\textwidth]{../results/summary/comparisons.pdf}
-\caption{Left: target and representative complete-ansatz weight laws. Right:
-ten-seed topology and conditioning comparisons.}
-\label{fig:results}
-\end{figure*}
-
-\paragraph{Conditioning test.}
-The strict criterion fails. For condition $A$, complete angle conditioning
-reaches shell TVD $0.121$, compared with $0.403$ for no conditioning but
-$0.007$ for the basis control. Its bitstring TVD is nevertheless lower than
-both controls ($0.352$ versus $0.497$ and $0.405$). For condition $B$, angle
-conditioning wins on shell TVD ($0.072$ versus $0.327$ and $0.722$) and
-bitstring TVD ($0.275$ versus $0.462$ and $0.778$). All four required
-comparisons except the $A$ shell comparison pass. Averaged over conditions,
-the angle model has median shell and bitstring TVDs of about $0.096$ and
-$0.314$, substantially below either control, but these balanced summaries are
-descriptive rather than a post-hoc replacement for the criterion.
-
-\paragraph{Topology and sharing.}
-Topology rankings depend on the resolution of evaluation. The lattice has the
-best balanced shell TVD (about $0.085$), narrowly ahead of heavy-hex
-($0.088$) and complete ($0.096$), whereas the complete graph has the best
-balanced bitstring TVD ($0.314$ versus $0.397$ and $0.445$). Since the
-families contain 48, 39, and 190 parameters, respectively, this is not a
-connectivity-at-fixed-capacity experiment. Independent reference models obtain
-shell TVDs $0.018$ on $A$ and $0.036$ on $B$, showing a measurable cost to
-using one shared parameter vector. Their presence also guards against
-attributing every residual error to the estimator or optimizer.
-
-\paragraph{Distributional diagnosis.}
-The learned weight laws are substantially closer than the full bitstring laws:
-correct Hamming-weight histograms can coexist with nonuniform probability
-inside a shell. This is scientifically important because the target definition
-requires both. The independent edge parameters do not enforce permutation
-symmetry, and the low-body-biased MMD kernels emphasize coarse moments; the
-result is therefore a conditional proof of concept rather than complete
-distribution recovery. The complete angle model matches the target means
-closely (absolute errors $0.041$ and $0.036$), while its standard-deviation
-errors remain $0.598$ and $0.181$ for $A$ and $B$, respectively.
-
-\subsection{Estimator checks and reproducibility}
-
-We checked the estimator against exact six-qubit statevectors and verified
-automatic-differentiation gradients against finite differences. A separate
-brute-force small-system test forms the kernel U-statistic directly and
-compares both its stochastic value and backpropagated gradient with the
-Fourier-observable implementation. Twenty-repeat calibration selected the
-smallest tested expectation budget below RMSE $0.01$ and the smallest
-observable budget below 5\% MMD coefficient of variation. Training,
-validation, and exact evaluation are separate code paths; the final
-distribution metrics are recomputed from each best validation checkpoint.
-
-Matched randomness reduces variance in topology comparisons without making
-the ten runs identical: parameters are initialized independently for each
-seed, while data generation and stochastic estimator keys are shared across
-the models being compared. All target calibration, training, exact
-enumeration, aggregation, criterion auditing, and figure-generation scripts
-are included with machine-readable per-seed outputs.
-
-\section{Discussion and conclusion}
-
-% Role: interpretation
-Product-state conditioning extends the observable-training mechanism of IQP
-Born machines without introducing condition-specific trainable parameters.
-The estimator is classically efficient for the stated Pauli objective, and the
-experiment tests conditional control with exact distributional metrics. It
-does not meet the preregistered condition-wise success rule. The failure is
-diagnostic rather than ambiguous: the basis control's complement symmetry is
-exceptionally well matched to $A$ and fundamentally mismatched to $B$, while
-angle conditioning provides the much better balanced model.
-
-Three limitations shape the result. First, the topology comparison does not
-isolate connectivity from capacity: its families have different parameter
-counts. Second, the target is permutation symmetric but the parameterization
-is not, which helps explain the gap between shell and bitstring TVD. Third,
-hardware routing and noise are not simulated, and exact $2^{19}$ enumeration
-would not remain an evaluation strategy at large $n$.
-
-\subsection{What the failure reveals}
-
-The reference distribution seen by the diagonal circuit makes the effect of
-the encoding concrete:
+Six training temperatures, $\{0.5,0.7,0.9,1.1,1.3,1.5\}$, alternate with
+five held-out midpoints. The production encoder is a broadcast piecewise
+linear map with anchors
 \begin{equation}
- \Pr_{\phi_c}(z_i=1)
- =|\phi_{c,i}(1)|^2
- =\frac{1-\sin\alpha_{c,i}}{2}.
+ \frac{\alpha(\beta)}{\pi}=(-0.14,-0.07,0,0.08,0.14)
 \end{equation}
-Condition $A$ uses $\alpha_A=0$ and hence the uniform IQP reference law,
-whereas $B$ uses $\alpha_B=\pi/4$ and a biased product reference law. The
-primary and basis models therefore use exactly the same input for $A$; they
-differ in the second input and in the compromises imposed on their shared
-parameters. This explains why the basis result on $A$ is a serious control,
-not a comparison to an unrelated architecture. Its near-zero shell error says
-that the complete ansatz and optimizer can fit the central Gaussian when the
-second condition supplies no compatible requirement. Its $B$ failure follows
-from the exact complement constraint. The angle model gives up some $A$
-shell accuracy to move $B$ from the complementary mean $n/2$ toward $n/4$.
+at $\beta=(0.5,0.9,1.0,1.2,1.5)$ and linear interpolation between them. We
+selected these knots using development screens at training temperatures and
+froze them before the 80 production fits. No production outcome was used to
+retune the map. The input state is the spin-flip two-branch superposition
+\begin{equation}
+ |\phi(\beta)\rangle\propto|p(\beta)\rangle^{\otimes n}+X^{\otimes n}|p(\beta)\rangle^{\otimes n},
+\end{equation}
+with $|p(\beta)\rangle=R_Y[\alpha(\beta)]|0\rangle$ on all 13 qubits. Its
+post-Hadamard amplitude depends only on the Hamming weight, so the exact
+reference sampling and amplitude ratios used in training remain classically
+tractable, while the two branches encode the $m\leftrightarrow-m$ symmetry of
+the zero-field target. This spin-flip-symmetric input follows the
+global-bitflip ansatz of Ref.~\cite{recio-armengolTrainClassicalDeploy2026}
+(Sec.~6 therein), here made condition-dependent through $\alpha(\beta)$.
 
-The multiscale kernel also predicts which discrepancies will be easiest to
-learn. At $\sigma=1,2,4$, a Fourier mask includes each bit with probabilities
-approximately $0.197$, $0.059$, and $0.015$, corresponding at $n=19$ to
-expected mask weights $3.74$, $1.12$, and $0.29$. Training therefore
-emphasizes low-order characters. Those observables efficiently constrain
-coarse mass and moments but do not force equality among the
-$\binom{19}{k}$ strings within each shell. The exact TVD gap is consistent with
-this spectral bias. It should not be read as a defect hidden by Monte Carlo:
-the gap appears in complete enumeration after training.
+Ten paired seeds produce ten conditioned models, ten no-condition controls,
+and sixty single-temperature references. All use five ancillas and one
+13-qubit complete two-local circuit with 91 phases and 2,000 updates. The exact eight-qubit
+visible marginal is evaluated after checkpoint selection. Conditions are
+averaged within seed before a 10,000-resample paired bootstrap.
 
-\subsection{Failure-directed next experiments}
+\ifcurieweissancillaresults
+The conditioned model improves profile TVD over no conditioning by
+\CWAncillaProfileControlTraining{} at training temperatures and
+\CWAncillaProfileControlHeldOut{} at held-out temperatures, and raw TVD by
+\CWAncillaRawControlTraining{} and \CWAncillaRawControlHeldOut{}. The effect
+is positive in the critical region $\beta\in\{0.9,1.0,1.1\}$
+(\CWAncillaProfileCritical{} profile, \CWAncillaRawCritical{} raw) and
+strongest in the cold region $\beta\in\{1.3,1.4,1.5\}$. The shared circuit
+matches the adjacent mixture (\CWAncillaProfileMixtureHeldOut{} profile,
+\CWAncillaRawMixtureHeldOut{} raw) and beats the target-aware adjacent oracle
+(\CWAncillaProfileOracleHeldOut{} profile, \CWAncillaRawOracleHeldOut{} raw).
+For this finite campaign, the two-branch input therefore yields a
+condition-dependent temperature response without a resolved fidelity loss
+relative to the condition-specific references.
+\fi
 
-The most direct follow-up is to align the parameterization with the target
-symmetry. Tying all one-qubit generators and tying two-qubit generators by a
-graph automorphism orbit would remove arbitrary within-shell preferences and
-sharply reduce parameter count. A more flexible alternative is to randomize
-qubit permutations during training, retaining heterogeneous parameters while
-making asymmetry costly. Either intervention should be tested against the same
-bitstring TVD, since shell-only evaluation cannot establish the desired
-uniformity.
+\curieweissfigure{curie_weiss_ancilla_temperature_response}{Curie--Weiss
+temperature response of the fixed 13-qubit model. The top row shows
+magnetization profiles at the hot endpoint, unseen $\beta=1$ midpoint, and
+cold endpoint. The bottom row reports response observables. Bands summarize
+ten matched seeds. Orange circles show the independently trained per-$\beta$
+IQP circuits at the six training temperatures; this reference is not defined
+at the five held-out temperatures.}
+{fig:curie-response}
 
-A second experiment should capacity-match the topology families, for example
-by adding repeated sparse layers until their parameter counts are comparable.
-The present reversal---sparse graphs lead in shell TVD while the complete
-graph leads in bitstring TVD---could arise from connectivity, capacity, or
-optimization geometry. The current native-family study intentionally does not
-separate them.
+\section{Discussion}
 
-Finally, conditional generalization remains open. The estimator accepts
-arbitrary per-qubit real angles, but this experiment trains only two broadcast
-prototypes. Training on several angles and withholding intermediate values
-would test whether product-state geometry supports interpolation rather than
-two-point memorization. At larger $n$, exact TVD must give way to
-symmetry-aware shell tests, held-out characters of increasing weight, and
-carefully qualified sample-based two-sample tests; none alone is a replacement
-for the exact bitstring audit available here.
+The experiments show what input-state conditioning buys and what it does
+not. One learned phase vector and one compiled IQP unitary respond to an
+external variable without condition-dependent diagonal gates. Across both
+benchmarks, this response improves over withholding the condition. Separate
+circuits remain more accurate in the Gaussian comparisons, while no such gap
+is resolved in the Curie--Weiss v3 campaign. The shared model therefore
+exchanges fidelity for fixed compiled structure, constant
+stored parameters, and constant optimization count as the condition grid
+grows.
 
-% Role: claim boundary and future work
-Efficient training must also be distinguished from efficient classical
-sampling. Noise, anticoncentration, and verification create delicate trade-offs
-for IQP generative models
-\cite{bremnerAchievingQuantumSupremacy2017,
-herbstLimitsQuantumGenerative2025}; our 19-qubit exact evaluation provides no
-hardness evidence. Natural next steps are permutation-tied generators, richer
-condition vectors, and larger experiments whose evaluation avoids complete
-enumeration. Within its stated boundary, this work shows that changing the
-tractable initial state is enough to turn one shared IQP circuit into a
-classically trainable conditional generator.
+Several limitations are structural. Both core targets use a one-dimensional
+condition and are exchangeable. Profile TVD ignores within-shell variation,
+which remains visible in raw TVD. The Curie--Weiss evidence covers eight
+visible spins, one target family, and within-range temperatures. Ancillas
+change both the visible-state rank and the interaction structure, and no
+matched-capacity control was run for the v3 spin-flip input. A historical v2
+control and two post-core symmetry screens are reported in the supplement as
+diagnostics, not as causal or confirmatory evidence for the v3 result.
 
-\clearpage
+The classical-training claim is equally bounded. Equation
+\eqref{eq:second-moment} controls the estimator's second moment, not the
+optimization landscape. Exact post-selection evaluation is exponential and
+is used only to audit these finite systems. We have not shown efficient
+classical sampling, quantum advantage, extrapolation, universal conditional
+expressivity, or thermal-state preparation.
+
+Within those limits, the formulation is a useful base for further work. It
+preserves the observable interface of classically trained IQP Born machines
+while adding a condition through a simple input-state preparation. The
+Gaussian campaign maps the sharing tradeoff over size, width, and condition
+density. The Curie--Weiss campaign shows that the same mechanism can follow a
+shape-changing family. Larger visible systems, nonexchangeable targets, and
+encodings chosen independently of target outcomes are the next tests.
+
+\section*{Data and code availability}
+
+The code, frozen campaign summaries, and manuscript sources are assembled in a
+local coauthor-review package. Public repository and archival identifiers will
+be added only after author approval. No upload or submission action is
+included.
+
+\begingroup
+\small
 \bibliographystyle{unsrtnat}
 \bibliography{references}
+\endgroup
+
+\clearpage
+\onecolumngrid
+\appendix
+\input{supplement}
 
 \end{document}

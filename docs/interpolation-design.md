@@ -51,18 +51,18 @@ the primary experiment.
 
 ## Metrics and frozen decision rule
 
-Exact enumeration over all \(2^{19}\) bitstrings provides shell TVD, bitstring
+Exact enumeration over all \(2^{19}\) bitstrings provides Hamming-weight profile TVD, bitstring
 TVD, mean error, and standard-deviation error. Held-out Conditional MMD is a
 secondary diagnostic.
 
-Shell and bitstring resolution are audited separately:
+Hamming-weight profile and bitstring resolution are audited separately:
 
 - **Continuous-conditioning test:** dense-grid interpolation must have lower
   median TVD than oracle adjacent-angle lookup at every held-out angle.
 - **Dense-supervision test:** the per-seed mean over held-out angles must have
   lower median TVD than endpoint-only interpolation.
 
-Both tests are reported independently for shell and bitstring TVD. Failure on
+Both tests are reported independently for Hamming-weight profile and bitstring TVD. Failure on
 one resolution is not overridden by success on the other or by an aggregate
 over both metrics.
 
