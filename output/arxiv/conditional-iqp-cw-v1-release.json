@@ -1,0 +1,19 @@
+{
+  "campaign_version": "gaussian_foundations_v1+curie_weiss_foundations_v1",
+  "canonical_pdf_sha256": "216c6dbd71513d19468934667e4f770eb791677086a24511b00313d908f26f48",
+  "completed_atomic_models": 1290,
+  "curie_weiss_models": 270,
+  "gaussian_models": 1020,
+  "schema_version": 1,
+  "source_archive_sha256": "537a444c3ec8d9f89dec966794929af00006859da693171d84054e811a6be21f",
+  "submission_performed": false,
+  "upload_blockers": [
+    "verified author names",
+    "verified affiliations",
+    "author contributions",
+    "competing interests",
+    "arXiv category and license",
+    "final human proof approval"
+  ],
+  "upload_ready": false
+}

@@ -1,4 +1,4 @@
-| Model | Condition | Params | Bitstring TVD | Shell TVD | Mean error | Std. error |
+| Model | Condition | Params | Bitstring TVD | Profile TVD | Mean error | Std. error |
 |---|---:|---:|---:|---:|---:|---:|
 | Angle / complete | A | 190 | 0.3516 [0.3385, 0.3565] | 0.1210 [0.1116, 0.1261] | 0.041 [0.026, 0.080] | 0.598 [0.535, 0.614] |
 | Angle / complete | B | 190 | 0.2746 [0.2712, 0.2826] | 0.0718 [0.0668, 0.0740] | 0.036 [0.017, 0.060] | 0.181 [0.168, 0.206] |

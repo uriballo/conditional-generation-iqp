@@ -1,0 +1,17 @@
+{
+  "campaign_version": "gaussian_foundations_v1",
+  "canonical_pdf_sha256": "242ea2563e41999c490cc21e8c943f659f30ae2b10df25129a757d9c2fc8e852",
+  "completed_atomic_models": 1020,
+  "schema_version": 1,
+  "source_archive_sha256": "4ad5aba672176050901a5ef16bba5a76c439ba68f78f31b799129c38d7b658c4",
+  "submission_performed": false,
+  "upload_blockers": [
+    "verified author names",
+    "verified affiliations",
+    "author contributions",
+    "competing interests",
+    "arXiv category and license",
+    "final human proof approval"
+  ],
+  "upload_ready": false
+}

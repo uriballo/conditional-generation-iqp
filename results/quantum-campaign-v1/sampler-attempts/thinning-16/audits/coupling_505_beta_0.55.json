@@ -1,0 +1,50 @@
+{
+  "archive": "results/quantum-campaign-v1/datasets/coupling_505_beta_0.55.npz",
+  "archive_sha256": "edacfd6400b67c03dd5d778e4cb5fb9f66437d18413ba5c71db2f548e0829724",
+  "beta": 0.55,
+  "burn_in_sweeps": 2000,
+  "coupling_seed": 505,
+  "global_spin_flip_on_retained_samples": true,
+  "n_chains": 8,
+  "passed": false,
+  "single_spin_proposals_per_sweep": 16,
+  "thinning_sweeps": 16,
+  "training_audit": {
+    "beta": 0.55,
+    "character_rmse": 0.011381480694087715,
+    "correlation_rmse": 0.008989800692741308,
+    "coupling_seed": 505,
+    "empirical_bitstring_tvd": 0.0653763016374993,
+    "energy_mean_z": 0.003541630939015715,
+    "failed_checks": [],
+    "magnetization_error": 0.022074999999999113,
+    "max_chain_energy_z": 0.04135794582683314,
+    "min_energy_ess": 510.12806052474224,
+    "n_chains": 8,
+    "passed": true,
+    "samples_per_chain": 625
+  },
+  "training_count": 5000,
+  "training_seed": 150508,
+  "training_sha256": "df361cb4f8f0ee1d396609757d68d099d38a5694afdee4b9820b3a9d0a97189c",
+  "validation_audit": {
+    "beta": 0.55,
+    "character_rmse": 0.010764582009347923,
+    "correlation_rmse": 0.010846338365892877,
+    "coupling_seed": 505,
+    "empirical_bitstring_tvd": 0.09228530036590069,
+    "energy_mean_z": 0.025177917116400127,
+    "failed_checks": [
+      "effective_sample_size"
+    ],
+    "magnetization_error": 0.0004999999999991118,
+    "max_chain_energy_z": 0.12466833907786384,
+    "min_energy_ess": 74.33690815471329,
+    "n_chains": 8,
+    "passed": false,
+    "samples_per_chain": 250
+  },
+  "validation_count": 2000,
+  "validation_seed": 150509,
+  "validation_sha256": "c57574fcdba97e6851ac1559323ab00f23ae94da7ab57dfae7e15def29bfbd9f"
+}
