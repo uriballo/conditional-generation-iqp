@@ -39,6 +39,22 @@ def test_interpolation_targets_have_requested_means_and_fixed_width():
         assert target.width == pytest.approx(sqrt(19) / 2)
 
 
+def test_width_scale_spreads_peaks_apart_relative_to_width():
+    angles = pi * np.asarray([0.0, 1 / 8, 1 / 4])
+    narrow = interpolation_targets(angles, width_scale=0.5)
+    wide = interpolation_targets(angles, width_scale=1.0)
+
+    for narrow_target, wide_target in zip(narrow, wide, strict=True):
+        assert narrow_target.width == pytest.approx(wide_target.width / 2)
+        assert narrow_target.actual_mean == pytest.approx(wide_target.actual_mean)
+    assert narrow[0].actual_std < wide[0].actual_std
+
+
+def test_width_scale_must_be_positive():
+    with pytest.raises(ValueError, match="width_scale"):
+        interpolation_targets(pi * np.asarray([0.0]), width_scale=0.0)
+
+
 def test_angle_dataset_and_broadcast_shapes():
     angles = pi * TRAIN_ANGLE_FRACTIONS
     samples = sample_angle_targets(angles, seed=7, n_samples=11)

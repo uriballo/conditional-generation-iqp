@@ -10,6 +10,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from journal_style import DOUBLE_COL_WIDTH, MM, apply_journal_style, save_figure
 
 from iqp_cond.exact import (
     enumerate_bitstrings,
@@ -267,7 +268,7 @@ def _metrics_markdown(
         "",
         "Median [interquartile range] of each seed's mean over four held-out angles.",
         "",
-        "| Method | Shell TVD | Bitstring TVD |",
+        "| Method | Profile TVD | Bitstring TVD |",
         "|---|---:|---:|",
     ]
     for method in ("dense", "nearest", "endpoint"):
@@ -300,7 +301,13 @@ def _plot(
     rows: list[dict[str, float | int | str]],
     output: Path,
 ) -> None:
-    figure, axes = plt.subplots(1, 3, figsize=(7.1, 2.35))
+    use_tex = apply_journal_style()
+    figure, axes = plt.subplots(
+        1,
+        3,
+        figsize=(DOUBLE_COL_WIDTH, 60 * MM),
+        layout="constrained",
+    )
     dense_points = defaultdict(list)
     target_means = {}
     for run in dense_runs:
@@ -314,7 +321,7 @@ def _plot(
         fractions,
         [target_means[value] for value in fractions],
         "o-",
-        color="#222222",
+        color="#000000",
         label="Target",
         markersize=3,
     )
@@ -334,17 +341,30 @@ def _plot(
         alpha=0.15,
     )
     for fraction in HELDOUT_ANGLE_FRACTIONS:
-        axes[0].axvline(fraction, color="#999999", alpha=0.15, linewidth=0.7)
-    axes[0].set_title("Conditional mean")
-    axes[0].set_xlabel(r"Angle $\alpha/\pi$")
-    axes[0].set_ylabel("Hamming weight")
-    axes[0].legend(frameon=False, fontsize=7)
+        axes[0].axvline(fraction, color="#999999", alpha=0.2, linewidth=0.7)
+    if use_tex:
+        axes[0].set_title(r"(a) Conditional Mean")
+        axes[0].set_xlabel(r"Angle $\alpha/\pi$")
+        axes[0].set_ylabel(r"Hamming Weight")
+    else:
+        axes[0].set_title("(a) Conditional Mean")
+        axes[0].set_xlabel("Angle alpha/pi")
+        axes[0].set_ylabel("Hamming Weight")
+    axes[0].legend(
+        frameon=True,
+        facecolor="white",
+        edgecolor="none",
+        framealpha=0.9,
+        fontsize=7.5,
+        loc="upper right",
+    )
+    axes[0].spines[["top", "right"]].set_visible(False)
 
     colors = {"dense": "#0072B2", "nearest": "#D55E00", "endpoint": "#009E73"}
     styles = {"dense": "o-", "nearest": "^--", "endpoint": "s:"}
-    for axis, metric, title in (
-        (axes[1], "shell_tvd", "Held-out shell TVD"),
-        (axes[2], "bitstring_tvd", "Held-out bitstring TVD"),
+    for axis, metric, title, panel_letter in (
+        (axes[1], "shell_tvd", "Held-Out Profile TVD", "(b)"),
+        (axes[2], "bitstring_tvd", "Held-Out Bitstring TVD", "(c)"),
     ):
         for method in ("dense", "nearest", "endpoint"):
             medians = []
@@ -372,16 +392,26 @@ def _plot(
                 capsize=2,
                 label=METHOD_LABELS[method].replace(" interpolation", ""),
             )
-        axis.set_title(title)
-        axis.set_xlabel(r"Held-out $\alpha/\pi$")
-        axis.grid(alpha=0.2)
-    axes[1].set_ylabel("TVD")
-    axes[2].legend(frameon=False, fontsize=6.5)
-    figure.tight_layout()
-    output.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(output, dpi=240, bbox_inches="tight")
-    figure.savefig(output.with_suffix(".pdf"), bbox_inches="tight")
-    plt.close(figure)
+        if use_tex:
+            axis.set_title(rf"{panel_letter} {title}")
+            axis.set_xlabel(r"Held-Out $\alpha/\pi$")
+        else:
+            axis.set_title(f"{panel_letter} {title}")
+            axis.set_xlabel("Held-Out alpha/pi")
+        axis.spines[["top", "right"]].set_visible(False)
+    axes[1].set_ylabel("Profile TVD")
+    axes[2].set_ylabel("Bitstring TVD")
+    axes[1].set_ylim(0.02, 0.25)
+    axes[2].set_ylim(0.30, 0.42)
+    axes[1].legend(
+        frameon=True,
+        facecolor="white",
+        edgecolor="none",
+        framealpha=0.9,
+        fontsize=7.5,
+        loc="upper left",
+    )
+    save_figure(figure, output)
 
 
 def main() -> None:

@@ -5,14 +5,32 @@ from __future__ import annotations
 import jax.numpy as jnp
 import numpy as np
 
+from .encoding import (
+    ANGLE_ENCODING,
+    block_post_hadamard_amplitudes,
+    is_block_encoding,
+    is_radial_encoding,
+    is_radial_shell_encoding,
+    is_two_block_encoding,
+    post_hadamard_amplitudes,
+    radial_shell_amplitudes,
+    two_block_shell_amplitudes,
+    two_branch_shell_amplitudes,
+)
+
 
 def enumerate_bitstrings(n_qubits: int) -> np.ndarray:
     """Enumerate bitstrings in little-endian integer order."""
-    if n_qubits < 1 or n_qubits > 24:
-        raise ValueError("n_qubits must be between 1 and 24")
+    if n_qubits < 1 or n_qubits > 30:
+        raise ValueError("n_qubits must be between 1 and 30")
     indices = np.arange(2**n_qubits, dtype=np.uint32)[:, None]
     shifts = np.arange(n_qubits, dtype=np.uint32)
     return ((indices >> shifts) & 1).astype(np.int8)
+
+
+def fwht(values: np.ndarray) -> np.ndarray:
+    """In-place-free Walsh-Hadamard transform in little-endian order."""
+    return _fwht(np.asarray(values, dtype=np.complex128))
 
 
 def _fwht(values: np.ndarray) -> np.ndarray:
@@ -33,12 +51,14 @@ def exact_iqp_probabilities(
     params: np.ndarray | jnp.ndarray,
     generators: np.ndarray | jnp.ndarray,
     angles: np.ndarray | jnp.ndarray,
+    encoding: str = ANGLE_ENCODING,
 ) -> np.ndarray:
     """Compute exact probabilities for ``RY -> H -> D_Z -> H``."""
     probabilities = exact_iqp_probabilities_many(
         params,
         generators,
         np.asarray(angles)[None, :],
+        encoding,
     )
     return probabilities[0]
 
@@ -47,6 +67,7 @@ def exact_iqp_probabilities_many(
     params: np.ndarray | jnp.ndarray,
     generators: np.ndarray | jnp.ndarray,
     angles: np.ndarray | jnp.ndarray,
+    encoding: str = ANGLE_ENCODING,
 ) -> np.ndarray:
     """Compute exact probabilities for several input-angle vectors."""
     params = np.asarray(params, dtype=np.float64)
@@ -60,33 +81,87 @@ def exact_iqp_probabilities_many(
     if angles.ndim != 2 or angles.shape[1] != n_qubits:
         raise ValueError("angles must have shape (n_conditions, n_qubits)")
 
-    bitstrings = enumerate_bitstrings(n_qubits)
-    phase = np.zeros(bitstrings.shape[0], dtype=np.float64)
+    indices = np.arange(2**n_qubits, dtype=np.uint32)
+    phase = np.zeros(2**n_qubits, dtype=np.float64)
     for theta, generator in zip(params, generators, strict=True):
         wires = np.flatnonzero(generator)
         if wires.size == 1:
-            character = 1.0 - 2.0 * bitstrings[:, wires[0]]
+            bit = (indices >> int(wires[0])) & 1
+            character = 1.0 - 2.0 * bit
         elif wires.size == 2:
-            character = 1.0 - 2.0 * np.bitwise_xor(
-                bitstrings[:, wires[0]],
-                bitstrings[:, wires[1]],
-            )
+            parity = ((indices >> int(wires[0])) ^ (indices >> int(wires[1]))) & 1
+            character = 1.0 - 2.0 * parity
         else:
-            parity = np.mod(bitstrings[:, wires].sum(axis=1), 2)
+            mask = 0
+            for w in wires:
+                mask |= (1 << int(w))
+            parity = np.bitwise_count(indices & mask) & 1
             character = 1.0 - 2.0 * parity
         phase += theta * character
 
     phase_factors = np.exp(1j * phase)
     probabilities = []
+    n_pairs = n_qubits // 2
     for condition_angles in angles:
-        cosine = np.cos(condition_angles / 2.0)
-        sine = np.sin(condition_angles / 2.0)
-        amp_zero = (cosine + sine) / np.sqrt(2.0)
-        amp_one = (cosine - sine) / np.sqrt(2.0)
-        reference = np.prod(
-            np.where(bitstrings == 0, amp_zero[None, :], amp_one[None, :]),
-            axis=1,
-        )
+        if is_radial_shell_encoding(encoding):
+            shell_amp = radial_shell_amplitudes(
+                jnp.asarray(condition_angles),
+                n_qubits,
+            )
+            weights = enumerate_bitstrings(n_qubits).sum(axis=1)
+            reference = np.asarray(shell_amp, dtype=np.complex128)[weights]
+        elif is_two_block_encoding(encoding):
+            m_a = n_qubits // 2
+            m_b = n_qubits - m_a
+            shell_a, shell_b = two_block_shell_amplitudes(
+                jnp.asarray(condition_angles),
+                m_a,
+                m_b,
+            )
+            bits = enumerate_bitstrings(n_qubits)
+            k_a = bits[:, :m_a].sum(axis=1)
+            k_b = bits[:, m_a:].sum(axis=1)
+            reference = (
+                np.asarray(shell_a, dtype=np.complex128)[k_a]
+                * np.asarray(shell_b, dtype=np.complex128)[k_b]
+            )
+        elif is_radial_encoding(encoding):
+            shell_amp = two_branch_shell_amplitudes(
+                jnp.asarray(condition_angles),
+                n_qubits,
+            )
+            weights = enumerate_bitstrings(n_qubits).sum(axis=1)
+            reference = np.asarray(shell_amp, dtype=np.complex128)[weights]
+        elif is_block_encoding(encoding):
+            block_amps, singleton = block_post_hadamard_amplitudes(
+                jnp.asarray(condition_angles),
+                encoding,
+            )
+            block_amps = np.asarray(block_amps[0], dtype=np.complex128)  # (n_pairs, 4)
+            if singleton is not None:
+                s_zero, s_one = singleton
+                reference = np.array([s_zero[0], s_one[0]], dtype=np.complex128)
+                start_k = n_pairs - 1
+            else:
+                reference = block_amps[n_pairs - 1]
+                start_k = n_pairs - 2
+            for k in range(start_k, -1, -1):
+                reference = np.outer(reference, block_amps[k]).ravel()
+        else:
+            amp_zero, amp_one = post_hadamard_amplitudes(
+                jnp.asarray(condition_angles),
+                encoding,
+            )
+            amp_zero_rev = amp_zero[::-1]
+            amp_one_rev = amp_one[::-1]
+            reference = np.array(
+                [amp_zero_rev[0], amp_one_rev[0]], dtype=np.complex128
+            )
+            for i in range(1, n_qubits):
+                reference = np.outer(
+                    reference, [amp_zero_rev[i], amp_one_rev[i]]
+                ).ravel()
+
         diagonal_state = reference * phase_factors
         final_state = _fwht(diagonal_state) / np.sqrt(2**n_qubits)
         condition_probabilities = np.abs(final_state) ** 2
@@ -122,3 +197,132 @@ def shell_probabilities(
         weights=probabilities,
         minlength=bitstrings.shape[1] + 1,
     )
+
+
+def generator_characters(generators: np.ndarray) -> np.ndarray:
+    """Return the ``(n_generators, 2**n)`` character matrix in numpy.
+
+    Character ``(m, z)`` is ``(-1)**(g_m . z)`` in little-endian order.
+    Callers that JIT must precompute this matrix once and pass it in as a
+    closure constant rather than a traced argument.
+    """
+    generators = np.asarray(generators, dtype=np.int8)
+    if generators.ndim != 2:
+        raise ValueError("generators must have shape (n_generators, n_qubits)")
+    bitstrings = enumerate_bitstrings(generators.shape[1])
+    parity = (bitstrings.astype(np.int8) @ generators.T) % 2
+    return np.where(parity == 0, 1.0, -1.0)
+
+
+def exact_iqp_probabilities_many_jax(
+    params: jnp.ndarray,
+    generators: jnp.ndarray,
+    angles: jnp.ndarray,
+    encoding: str = ANGLE_ENCODING,
+    characters: jnp.ndarray | None = None,
+) -> jnp.ndarray:
+    """JAX-differentiable exact probabilities for several input-angle vectors."""
+    params = jnp.asarray(params, dtype=jnp.float64)
+    generators = jnp.asarray(generators, dtype=jnp.int8)
+    angles = jnp.asarray(angles, dtype=jnp.float64)
+    if generators.ndim != 2:
+        raise ValueError("generators must have shape (n_generators, n_qubits)")
+    n_qubits = generators.shape[1]
+    if params.shape != (generators.shape[0],):
+        raise ValueError("params must have shape (n_generators,)")
+    if angles.ndim != 2 or angles.shape[1] != n_qubits:
+        raise ValueError("angles must have shape (n_conditions, n_qubits)")
+    if characters is None:
+        characters = jnp.asarray(generator_characters(generators))
+    characters = jnp.asarray(characters, dtype=jnp.float64)
+    phases = characters @ params
+    phase_factors = jnp.exp(1j * phases)
+
+    probabilities = []
+    n_pairs = n_qubits // 2
+    for condition_angles in angles:
+        if is_radial_shell_encoding(encoding):
+            shell_amp = radial_shell_amplitudes(condition_angles, n_qubits)
+            weights = jnp.asarray(
+                enumerate_bitstrings(n_qubits).sum(axis=1),
+                dtype=jnp.int32,
+            )
+            reference = shell_amp[weights].astype(jnp.complex128)
+        elif is_two_block_encoding(encoding):
+            m_a = n_qubits // 2
+            m_b = n_qubits - m_a
+            shell_a, shell_b = two_block_shell_amplitudes(condition_angles, m_a, m_b)
+            bits = enumerate_bitstrings(n_qubits)
+            k_a = jnp.asarray(bits[:, :m_a].sum(axis=1), dtype=jnp.int32)
+            k_b = jnp.asarray(bits[:, m_a:].sum(axis=1), dtype=jnp.int32)
+            reference = (
+                shell_a[k_a].astype(jnp.complex128)
+                * shell_b[k_b].astype(jnp.complex128)
+            )
+        elif is_radial_encoding(encoding):
+            shell_amp = two_branch_shell_amplitudes(condition_angles, n_qubits)
+            weights = jnp.asarray(
+                enumerate_bitstrings(n_qubits).sum(axis=1),
+                dtype=jnp.int32,
+            )
+            reference = shell_amp[weights].astype(jnp.complex128)
+        elif is_block_encoding(encoding):
+            block_amps, singleton = block_post_hadamard_amplitudes(
+                condition_angles,
+                encoding,
+            )
+            block_amps = block_amps[0]  # (n_pairs, 4)
+            if singleton is not None:
+                s_zero, s_one = singleton
+                reference = jnp.asarray([s_zero[0], s_one[0]], dtype=jnp.complex128)
+                start_k = n_pairs - 1
+            else:
+                reference = block_amps[n_pairs - 1]
+                start_k = n_pairs - 2
+            for k in range(start_k, -1, -1):
+                reference = jnp.outer(reference, block_amps[k]).ravel()
+        else:
+            amp_zero, amp_one = post_hadamard_amplitudes(condition_angles, encoding)
+            amp_zero = jnp.asarray(amp_zero, dtype=jnp.complex128)
+            amp_one = jnp.asarray(amp_one, dtype=jnp.complex128)
+            amp_zero_rev = amp_zero[::-1]
+            amp_one_rev = amp_one[::-1]
+            reference = jnp.asarray(
+                [amp_zero_rev[0], amp_one_rev[0]],
+                dtype=jnp.complex128,
+            )
+            for i in range(1, n_qubits):
+                reference = jnp.outer(
+                    reference,
+                    jnp.asarray(
+                        [amp_zero_rev[i], amp_one_rev[i]],
+                        dtype=jnp.complex128,
+                    ),
+                ).ravel()
+
+        diagonal_state = reference * phase_factors
+        final_state = _fwht_jax(diagonal_state) / jnp.sqrt(2**n_qubits)
+        condition_probabilities = jnp.abs(final_state) ** 2
+        probabilities.append(
+            condition_probabilities / condition_probabilities.sum(),
+        )
+    return jnp.stack(probabilities)
+
+
+def fwht_jax(values: jnp.ndarray) -> jnp.ndarray:
+    """JAX-differentiable Walsh-Hadamard transform on the last axis."""
+    values = jnp.asarray(values)
+    leading = values.shape[:-1]
+    size = values.shape[-1]
+    width = 1
+    while width < size:
+        values = values.reshape((*leading, -1, 2 * width))
+        left = values[..., :width]
+        right = values[..., width:]
+        values = jnp.concatenate([left + right, left - right], axis=-1)
+        width *= 2
+    return values.reshape((*leading, size))
+
+
+def _fwht_jax(values: jnp.ndarray) -> jnp.ndarray:
+    return fwht_jax(values)

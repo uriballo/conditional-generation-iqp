@@ -12,6 +12,7 @@ import jax.numpy as jnp
 import numpy as np
 
 from .ansatz import Ansatz, complete_ansatz, heavy_hex_ansatz, lattice_ansatz
+from .encoding import ANGLE_ENCODING
 from .exact import (
     enumerate_bitstrings,
     exact_iqp_probabilities,
@@ -31,6 +32,7 @@ class ModelSpec:
     ansatz: Ansatz
     condition_angles: np.ndarray
     target_indices: tuple[int, ...]
+    encoding: str = ANGLE_ENCODING
 
 
 def targets(n_qubits: int = 19) -> tuple[GaussianHammingTarget, ...]:
@@ -123,6 +125,7 @@ def evaluate(
             result.best_params,
             result.generators,
             result.condition_angles[local_index],
+            result.encoding,
         )
         target_probs = target.bitstring_probabilities(bitstrings)
         model_shells = shell_probabilities(model_probs, bitstrings)
@@ -158,6 +161,7 @@ def evaluate(
         config.validation_n_ops,
         config.validation_n_iqp_samples,
         jax.random.PRNGKey(result.seed + 2_000_000),
+        result.encoding,
     )
     return {
         "model_name": result.model_name,
@@ -189,6 +193,7 @@ def run_one(
         validation_data[list(spec.target_indices)],
         seed,
         config,
+        spec.encoding,
     )
     metrics = evaluate(result, spec.target_indices, validation_data, config)
     return result, metrics
@@ -213,6 +218,7 @@ def save_result(
         train_losses=result.train_losses,
         validation_steps=result.validation_steps,
         validation_losses=result.validation_losses,
+        encoding=np.asarray(result.encoding),
     )
     payload = dict(metrics)
     payload["training_config"] = asdict(config)

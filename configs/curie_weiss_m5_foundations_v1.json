@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "campaign_version": "curie_weiss_m5_foundations_v1",
+  "visible_qubits": 8,
+  "ancilla_rungs": [5],
+  "headline_ancillas": 5,
+  "optimizer_seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "target": {
+    "coupling": 1.0,
+    "field": 0.0,
+    "critical_inverse_temperature": 1.0,
+    "hamiltonian": "-M^2/(2n)"
+  },
+  "temperatures": {
+    "training": [0.5, 0.7, 0.9, 1.1, 1.3, 1.5],
+    "held_out": [0.6, 0.8, 1.0, 1.2, 1.4]
+  },
+  "condition_map": {
+    "normalized_coordinate": "beta-0.5",
+    "angle_intercept_pi": 0.35,
+    "angle_slope_pi": -0.7,
+    "ancilla_scheme": "broadcast_all",
+    "outcome_tuned": false
+  },
+  "datasets": {
+    "training_per_temperature": 10000,
+    "validation_per_temperature": 2000,
+    "held_out_draws": 0,
+    "sources": [
+      {"seed": 0, "path": "results/curie-weiss-foundations-v1/datasets/n8_seed0.npz", "sha256": "39ca47896d063c8be05c6f2ba3e08766d702911f6ed718b1891f8e4dc73a36a7"},
+      {"seed": 1, "path": "results/curie-weiss-foundations-v1/datasets/n8_seed1.npz", "sha256": "0879cf6284a87a75c36cef79a71b559781d53a8fe190adebbe1f68a628f5eb80"},
+      {"seed": 2, "path": "results/curie-weiss-foundations-v1/datasets/n8_seed2.npz", "sha256": "4c5725cd5514456f91c297794a98939d60fc30a05f90f83c5e11d659e99ca109"},
+      {"seed": 3, "path": "results/curie-weiss-foundations-v1/datasets/n8_seed3.npz", "sha256": "c021dbae0359e152512a863fe15753a7137de68c26d8fbb470e2dc8cd69cd3b7"},
+      {"seed": 4, "path": "results/curie-weiss-foundations-v1/datasets/n8_seed4.npz", "sha256": "65888114a2f1e1cec5866a34e5321d8a935149cf6315f71fb6c24c70f3750533"},
+      {"seed": 5, "path": "results/curie-weiss-foundations-v1/datasets/n8_seed5.npz", "sha256": "81ab6879fc5f9fe1ca0084280449249e4b4f0198741bc5ae0fc8bc7f5357535f"},
+      {"seed": 6, "path": "results/curie-weiss-foundations-v1/datasets/n8_seed6.npz", "sha256": "ab2bddc46794752bbebe276623b6f9d3e38fac62c873977b701b014e2e2eec76"},
+      {"seed": 7, "path": "results/curie-weiss-foundations-v1/datasets/n8_seed7.npz", "sha256": "9298cd9639e9b120ac0042c7e30639366e9738dfd5f8976e13b20609373671c5"},
+      {"seed": 8, "path": "results/curie-weiss-foundations-v1/datasets/n8_seed8.npz", "sha256": "4d566766f386b6dce2c961eab84ad93400e0b206579fcd773c9c499e05a19276"},
+      {"seed": 9, "path": "results/curie-weiss-foundations-v1/datasets/n8_seed9.npz", "sha256": "a159d43fbd88297875d5422e1edf9663d436e68d014977ef2fb6c10b083500b4"}
+    ]
+  },
+  "training": {
+    "optimizer": "adam_cosine_decay",
+    "updates": 2000,
+    "initial_learning_rate": 0.01,
+    "final_learning_rate": 0.001,
+    "total_target_minibatch": 450,
+    "reference_minibatch": 450,
+    "validation_interval": 25,
+    "checkpoint_rule": "lowest_validation_conditional_mmd",
+    "bandwidths": [1.0, 2.0, 4.0],
+    "visible_character_masks": 256,
+    "training_model_samples": 8192,
+    "validation_model_samples": 16384
+  },
+  "runtime_preflight": {
+    "updates": 100,
+    "compilation_cache": "fresh_temporary_directory",
+    "max_projected_seconds_per_model": 3600.0,
+    "max_peak_rss_bytes": 30064771072
+  },
+  "statistics": {
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20260815,
+    "confidence_level": 0.95,
+    "replication_unit": "optimizer_seed",
+    "performance_thresholds": null
+  },
+  "development_selection": {
+    "campaign_path": "results/curie-weiss-ancilla-pilot-v1/store",
+    "manifest_sha256": "739ad7b92101a1ae30c086da3f9f02a8f0841fde03e3783cc986720f18109327",
+    "tested_ancillas": [0, 1, 3],
+    "tested_seeds": [0, 1, 2],
+    "selected_ancillas": 5,
+    "selection_basis": "prospective_compute_capacity_compromise",
+    "optimization_claim": false
+  }
+}

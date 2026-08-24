@@ -7,9 +7,11 @@ import pennylane as qml
 import pytest
 
 from iqp_cond import (
+    SYMMETRIC_REUPLOAD_ENCODING,
     estimate_pauli_z,
     exact_iqp_probabilities,
     exact_iqp_probabilities_many,
+    post_hadamard_amplitudes,
 )
 
 
@@ -31,6 +33,31 @@ def _pennylane_expvals(params, generators, ops, angles):
     def circuit(theta):
         for wire, angle in enumerate(angles):
             qml.RY(angle, wires=wire)
+        for wire in range(n_qubits):
+            qml.Hadamard(wires=wire)
+        for value, generator in zip(theta, generators, strict=True):
+            wires = np.flatnonzero(generator).tolist()
+            if len(wires) == 1:
+                qml.RZ(-2.0 * value, wires=wires[0])
+            else:
+                qml.MultiRZ(-2.0 * value, wires=wires)
+        for wire in range(n_qubits):
+            qml.Hadamard(wires=wire)
+        return [qml.expval(_observable(mask)) for mask in ops]
+
+    return jnp.asarray(circuit(params))
+
+
+def _pennylane_reupload_expvals(params, generators, ops, angles):
+    n_qubits = generators.shape[1]
+    device = qml.device("default.qubit", wires=n_qubits)
+
+    @qml.qnode(device, interface="jax")
+    def circuit(theta):
+        for wire, angle in enumerate(angles):
+            qml.RY(angle / 2.0, wires=wire)
+            qml.RZ(jnp.pi / 2.0 * jnp.sin(4.0 * angle), wires=wire)
+            qml.RY(angle / 2.0, wires=wire)
         for wire in range(n_qubits):
             qml.Hadamard(wires=wire)
         for value, generator in zip(theta, generators, strict=True):
@@ -146,3 +173,57 @@ def test_autodiff_gradient_matches_exact_pennylane():
     actual = jax.grad(estimated_objective)(params)
     expected = jax.grad(exact_objective)(params)
     assert actual == pytest.approx(np.asarray(expected), abs=0.025)
+
+
+def test_symmetric_reupload_matches_angle_encoding_at_training_endpoints():
+    angles = jnp.array(
+        [[0.0, 0.0], [jnp.pi / 4.0, jnp.pi / 4.0]],
+        dtype=jnp.float64,
+    )
+
+    angle_amplitudes = post_hadamard_amplitudes(angles)
+    reupload_amplitudes = post_hadamard_amplitudes(
+        angles,
+        SYMMETRIC_REUPLOAD_ENCODING,
+    )
+
+    assert reupload_amplitudes[0] == pytest.approx(angle_amplitudes[0])
+    assert reupload_amplitudes[1] == pytest.approx(angle_amplitudes[1])
+
+
+def test_symmetric_reupload_estimator_and_exact_probabilities_match_pennylane():
+    params = jnp.array([0.17, -0.31, 0.27])
+    generators = jnp.array(
+        [[1, 0], [0, 1], [1, 1]],
+        dtype=jnp.float64,
+    )
+    ops = jnp.array([[1, 0], [0, 1], [1, 1]], dtype=jnp.float64)
+    angles = jnp.array([0.19, 0.61], dtype=jnp.float64)
+    expected = _pennylane_reupload_expvals(
+        params,
+        np.asarray(generators),
+        np.asarray(ops),
+        angles,
+    )
+
+    estimate = estimate_pauli_z(
+        params,
+        generators,
+        ops,
+        angles,
+        jax.random.PRNGKey(21),
+        80_000,
+        SYMMETRIC_REUPLOAD_ENCODING,
+    )
+    tolerance = jnp.maximum(5.0 * estimate.standard_errors[0], 0.012)
+    assert jnp.all(jnp.abs(estimate.values[0] - expected) <= tolerance)
+
+    probabilities = exact_iqp_probabilities(
+        params,
+        generators,
+        angles,
+        SYMMETRIC_REUPLOAD_ENCODING,
+    )
+    bitstrings = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
+    characters = 1 - 2 * ((bitstrings @ np.asarray(ops).T) % 2)
+    assert probabilities @ characters == pytest.approx(np.asarray(expected))

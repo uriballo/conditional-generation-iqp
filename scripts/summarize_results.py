@@ -9,6 +9,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from journal_style import DOUBLE_COL_WIDTH, MM, apply_journal_style, save_figure
 
 DISPLAY_NAMES = {
     "angle_heavy_hex": "Angle / heavy-hex",
@@ -60,7 +61,7 @@ def summary_table(rows: list[dict[str, object]]) -> str:
     for row in rows:
         grouped[(row["model_name"], row["condition"])].append(row)
     lines = [
-        "| Model | Condition | Params | Bitstring TVD | Shell TVD | "
+        "| Model | Condition | Params | Bitstring TVD | Profile TVD | "
         "Mean error | Std. error |",
         "|---|---:|---:|---:|---:|---:|---:|",
     ]
@@ -82,20 +83,14 @@ def summary_table(rows: list[dict[str, object]]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def latex_table(rows: list[dict[str, object]]) -> str:
-    """Return compact LaTeX rows for the paper table."""
+def latex_table(
+    rows: list[dict[str, object]],
+    order: list[str],
+) -> str:
+    """Return compact LaTeX rows for a paper table."""
     grouped = defaultdict(list)
     for row in rows:
         grouped[(row["model_name"], row["condition"])].append(row)
-    order = [
-        "angle_heavy_hex",
-        "angle_lattice",
-        "angle_complete",
-        "no_condition_complete",
-        "basis_condition_complete",
-        "separate_a_complete",
-        "separate_b_complete",
-    ]
     lines = []
     for model_name in order:
         keys = [key for key in grouped if key[0] == model_name]
@@ -112,6 +107,31 @@ def latex_table(rows: list[dict[str, object]]) -> str:
                 f"{shell[0]:.3f} [{shell[1]:.3f},{shell[2]:.3f}] & "
                 f"{mean[0]:.2f} [{mean[1]:.2f},{mean[2]:.2f}] & "
                 f"{std[0]:.2f} [{std[1]:.2f},{std[2]:.2f}] \\\\",
+            )
+        if keys:
+            lines.append(r"\addlinespace[1pt]")
+    return "\n".join([*lines[:-1], r"\bottomrule"]) + "\n"
+
+
+def compact_latex_table(
+    rows: list[dict[str, object]],
+    order: list[str],
+) -> str:
+    """Return median-only rows sized for a one-column appendix table."""
+    grouped = defaultdict(list)
+    for row in rows:
+        grouped[(row["model_name"], row["condition"])].append(row)
+    lines = []
+    for model_name in order:
+        keys = [key for key in grouped if key[0] == model_name]
+        for _, condition in sorted(keys):
+            group = grouped[(model_name, condition)]
+            bit = _median_iqr([item["bitstring_tvd"] for item in group])[0]
+            profile = _median_iqr([item["shell_tvd"] for item in group])[0]
+            model_label = DISPLAY_NAMES[model_name].replace("Angle / ", "")
+            lines.append(
+                f"{model_label} & {condition} & {group[0]['n_parameters']} & "
+                f"{profile:.3f} & {bit:.3f}" + r" \\",
             )
         if keys:
             lines.append(r"\addlinespace[1pt]")
@@ -237,19 +257,41 @@ def _best_representative(
 
 
 def plot_weight_fit(rows: list[dict[str, object]], output: Path) -> None:
-    """Plot target and representative angle-complete Hamming-weight laws."""
+    """Plot target, conditional output, and the shared no-condition compromise."""
+    use_tex = apply_journal_style()
     representative = _best_representative(rows, "angle_complete")
-    figure, axes = plt.subplots(1, 2, figsize=(7.1, 2.55), sharey=True)
-    for axis, condition in zip(axes, ("A", "B"), strict=True):
+    no_condition = _best_representative(rows, "no_condition_complete")
+    figure, axes = plt.subplots(
+        1,
+        2,
+        figsize=(DOUBLE_COL_WIDTH, 60 * MM),
+        sharey=True,
+        layout="constrained",
+    )
+    for axis, condition, panel_letter in zip(
+        axes,
+        ("A", "B"),
+        ("(a)", "(b)"),
+        strict=True,
+    ):
         row = representative[condition]
         weights = np.arange(len(row["target_shell_probabilities"]))
         axis.plot(
             weights,
             row["target_shell_probabilities"],
             "o-",
-            color="#222222",
+            color="#000000",
             label="Target",
             linewidth=1.5,
+            markersize=3,
+        )
+        axis.plot(
+            weights,
+            no_condition[condition]["model_shell_probabilities"],
+            "^:",
+            color="#D55E00",
+            label="No-condition compromise",
+            linewidth=1.3,
             markersize=3,
         )
         axis.plot(
@@ -261,58 +303,60 @@ def plot_weight_fit(rows: list[dict[str, object]], output: Path) -> None:
             linewidth=1.5,
             markersize=3,
         )
-        axis.set_title(f"Condition {condition}")
-        axis.set_xlabel("Hamming weight")
+        if use_tex:
+            axis.set_title(rf"{panel_letter} Condition {condition}")
+            axis.set_xlabel(r"Hamming Weight")
+        else:
+            axis.set_title(f"{panel_letter} Condition {condition}")
+            axis.set_xlabel("Hamming Weight")
         axis.set_xticks([0, 4, 8, 12, 16, 19])
-        axis.grid(alpha=0.2)
-    axes[0].set_ylabel("Probability mass")
+        axis.spines[["top", "right"]].set_visible(False)
+    axes[0].set_ylabel("Probability Mass")
     axes[0].legend(frameon=False, fontsize=8)
-    figure.tight_layout()
-    output.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(output, dpi=240, bbox_inches="tight")
-    figure.savefig(output.with_suffix(".pdf"), bbox_inches="tight")
-    plt.close(figure)
+    save_figure(figure, output)
 
 
 def plot_comparisons(rows: list[dict[str, object]], output: Path) -> None:
-    """Plot seed distributions for topology and conditioning comparisons."""
-    figure, axes = plt.subplots(1, 2, figsize=(7.1, 2.7))
-    comparisons = (
-        (
-            axes[0],
-            ["angle_heavy_hex", "angle_lattice", "angle_complete"],
-            "Topology families",
-        ),
-        (
-            axes[1],
-            [
-                "angle_complete",
-                "no_condition_complete",
-                "basis_condition_complete",
-            ],
-            "Conditioning ablation",
-        ),
+    """Compare conditioning controls and separate-model capacity references."""
+    use_tex = apply_journal_style()
+    figure, axes = plt.subplots(
+        1,
+        2,
+        figsize=(DOUBLE_COL_WIDTH, 60 * MM),
+        layout="constrained",
     )
-    for axis, models, title in comparisons:
+    models = [
+        "angle_complete",
+        "no_condition_complete",
+        "basis_condition_complete",
+        "separate_a_complete",
+        "separate_b_complete",
+    ]
+    labels = ["Angle", "No condition", "Basis", "Separate A", "Separate B"]
+    for axis, metric, title, panel_letter in zip(
+        axes,
+        ("shell_tvd", "bitstring_tvd"),
+        ("Hamming-weight profile", "Full bitstring law"),
+        ("(a)", "(b)"),
+        strict=True,
+    ):
         data = []
-        labels = []
         for model in models:
             per_seed = defaultdict(list)
             for row in rows:
                 if row["model_name"] == model:
-                    per_seed[row["seed"]].append(row["shell_tvd"])
+                    per_seed[row["seed"]].append(row[metric])
             data.append([np.mean(values) for values in per_seed.values()])
-            labels.append(DISPLAY_NAMES[model].replace("Angle / ", ""))
         axis.boxplot(data, tick_labels=labels, showfliers=False)
-        axis.set_title(title)
-        axis.set_ylabel("Mean condition shell TVD")
-        axis.tick_params(axis="x", rotation=18)
-        axis.grid(axis="y", alpha=0.2)
-    figure.tight_layout()
-    output.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(output, dpi=240, bbox_inches="tight")
-    figure.savefig(output.with_suffix(".pdf"), bbox_inches="tight")
-    plt.close(figure)
+        if use_tex:
+            axis.set_title(rf"{panel_letter} {title}")
+            axis.set_ylabel(r"TVD (lower is better)")
+        else:
+            axis.set_title(f"{panel_letter} {title}")
+            axis.set_ylabel("TVD (lower is better)")
+        axis.tick_params(axis="x", rotation=15)
+        axis.spines[["top", "right"]].set_visible(False)
+    save_figure(figure, output)
 
 
 def main() -> None:
@@ -341,7 +385,28 @@ def main() -> None:
     args.output.mkdir(parents=True, exist_ok=True)
     table = summary_table(rows)
     (args.output / "metrics.md").write_text(table)
-    (args.output / "results_table.tex").write_text(latex_table(rows))
+    main_order = [
+        "angle_complete",
+        "no_condition_complete",
+        "basis_condition_complete",
+        "separate_a_complete",
+        "separate_b_complete",
+    ]
+    topology_order = ["angle_heavy_hex", "angle_lattice", "angle_complete"]
+    complete_order = [
+        "angle_heavy_hex",
+        "angle_lattice",
+        *main_order,
+    ]
+    (args.output / "results_table.tex").write_text(latex_table(rows, main_order))
+    (args.output / "topology_table.tex").write_text(latex_table(rows, topology_order))
+    (args.output / "complete_table.tex").write_text(latex_table(rows, complete_order))
+    (args.output / "compact_controls_table.tex").write_text(
+        compact_latex_table(rows, main_order),
+    )
+    (args.output / "compact_topology_table.tex").write_text(
+        compact_latex_table(rows, topology_order),
+    )
     required_models = {
         "angle_complete",
         "no_condition_complete",

@@ -179,3 +179,21 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Local agent and OS state
+.DS_Store
+.pi/
+tmp/
+
+# LaTeX build products (the canonical review PDF is under output/pdf/)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+paper/main.pdf
+
+# Rebuilt local handoff bundle
+output/author-review/

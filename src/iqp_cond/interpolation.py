@@ -12,6 +12,7 @@ import jax.numpy as jnp
 import numpy as np
 
 from .ansatz import complete_ansatz
+from .encoding import ANGLE_ENCODING
 from .exact import (
     enumerate_bitstrings,
     exact_iqp_probabilities_many,
@@ -38,9 +39,17 @@ def target_mean_for_angle(n_qubits: int, angle: float) -> float:
 def interpolation_targets(
     scalar_angles: np.ndarray,
     n_qubits: int = 19,
+    width_scale: float = 1.0,
 ) -> tuple[GaussianHammingTarget, ...]:
-    """Construct the Gaussian targets assigned to scalar encoding angles."""
-    width = sqrt(n_qubits) / 2.0
+    """Construct the Gaussian targets assigned to scalar encoding angles.
+
+    ``width_scale`` shrinks the peak width (default ``1.0`` keeps the
+    canonical width ``sqrt(n_qubits)/2``); smaller scales spread the peaks
+    apart relative to their width.
+    """
+    if width_scale <= 0.0:
+        raise ValueError("width_scale must be positive")
+    width = width_scale * sqrt(n_qubits) / 2.0
     return tuple(
         GaussianHammingTarget.create(
             n_qubits,
@@ -67,13 +76,18 @@ def sample_angle_targets(
     seed: int,
     n_samples: int,
     n_qubits: int = 19,
+    width_scale: float = 1.0,
 ) -> np.ndarray:
     """Sample an aligned target dataset for each supplied angle."""
     rng = np.random.default_rng(seed)
     return np.stack(
         [
             target.sample(rng, n_samples)
-            for target in interpolation_targets(scalar_angles, n_qubits)
+            for target in interpolation_targets(
+                scalar_angles,
+                n_qubits,
+                width_scale,
+            )
         ],
     )
 
@@ -85,7 +99,7 @@ def _weight_moments(shells: np.ndarray) -> tuple[float, float]:
     return mean, sqrt(max(variance, 0.0))
 
 
-def _point_metrics(
+def point_metrics(
     angle: float,
     role: str,
     target: GaussianHammingTarget,
@@ -121,6 +135,7 @@ def _point_metrics(
 def run_interpolation(
     seed: int,
     config: TrainingConfig,
+    encoding: str = ANGLE_ENCODING,
 ) -> tuple[TrainingResult, dict[str, object]]:
     """Train on five angles and evaluate four interleaved held-out angles."""
     n_qubits = 19
@@ -145,14 +160,20 @@ def run_interpolation(
         2_000,
         n_qubits,
     )
+    model_name = (
+        "interpolation_complete"
+        if encoding == ANGLE_ENCODING
+        else f"interpolation_{encoding}_complete"
+    )
     result = train(
-        "interpolation_complete",
+        model_name,
         ansatz,
         broadcast_angles(train_angles, n_qubits),
         training_data,
         validation_data,
         seed,
         config,
+        encoding,
     )
 
     all_angles = np.concatenate([train_angles, heldout_angles])
@@ -163,6 +184,7 @@ def run_interpolation(
         result.best_params,
         result.generators,
         broadcast_angles(all_angles, n_qubits),
+        encoding,
     )
     points = []
     for angle, role, target, model_probs in zip(
@@ -173,7 +195,7 @@ def run_interpolation(
         strict=True,
     ):
         target_probs = target.bitstring_probabilities(bitstrings)
-        point = _point_metrics(
+        point = point_metrics(
             float(angle),
             role,
             target,
@@ -212,9 +234,11 @@ def run_interpolation(
         config.validation_n_ops,
         config.validation_n_iqp_samples,
         jax.random.PRNGKey(seed + 3_000_000),
+        encoding,
     )
     metrics = {
         "model_name": result.model_name,
+        "encoding": encoding,
         "topology": result.topology,
         "seed": seed,
         "n_parameters": int(result.generators.shape[0]),
@@ -249,6 +273,7 @@ def save_interpolation_result(
         train_losses=result.train_losses,
         validation_steps=result.validation_steps,
         validation_losses=result.validation_losses,
+        encoding=np.asarray(result.encoding),
     )
     payload = dict(metrics)
     payload["training_config"] = asdict(config)
