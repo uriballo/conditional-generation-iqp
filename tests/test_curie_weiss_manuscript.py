@@ -4,41 +4,49 @@ ROOT = Path(__file__).parents[1]
 
 
 def _curie_section(text: str) -> str:
-    start = text.index(r"\section{Curie--Weiss experiments}")
-    end = text.index(r"\section{Discussion}", start)
+    start = text.index(r"\section{Experimental setup}")
+    end = text.index(r"\section{Results}", start)
     return text[start:end]
 
 
-def test_active_manuscript_uses_only_the_fixed_r5_v3_campaign():
+def test_experimental_setup_declares_curie_ancilla_mechanism_controls():
     main = (ROOT / "paper" / "main.tex").read_text()
     supplement = (ROOT / "paper" / "supplement.tex").read_text()
     section = _curie_section(main)
-    assert r"\ifcurieweissancillaresults" in main
-    assert "80 production fits" in section
-    assert "eight visible sites" in section
-    assert "13-qubit" in section
-    assert "five ancillas" in section
-    assert r"r\in\{0,1,3,5,7,9\}" not in section
-    assert "profile and raw bitstring TVD as co-primary metrics" in section
+    normalized = " ".join(section.split())
+    assert r"n\in\{8,12,16\}" in section
+    assert r"r\in\{1,3,5\}" in section
+    assert "complete graph on all $n+r$ qubits" in section
+    assert "removes every visible--ancilla edge" in normalized
+    assert "distinct three-qubit diagonal generators" in section
+    assert "isolates the effect of the visible input rank" in section
+    assert "No-condition controls are evaluated at $r=0$ and $r=5$" in section
     assert "symmetry-tied" not in main + supplement
     assert "symmetry-aligned" not in main + supplement
-    assert "270" not in main + supplement
-    assert "n=12" not in section and "n=16" not in section
-    assert "curie_weiss_figures" not in main + supplement
-    assert "curie_weiss_ancilla_figures" in main
-    assert "spin-flip two-branch" in section
-    assert "Curie--Weiss v3 campaign" in main
-    assert "matched-capacity control" not in section.lower()
+    assert "The ancilla analysis tests the three paired differences" in normalized
 
 
-def test_curie_claims_are_gated_and_v2_capacity_result_is_supplementary():
+def test_signed_field_study_is_equivariant_and_outcome_neutral():
+    main = (ROOT / "paper" / "main.tex").read_text()
+    section = _curie_section(main)
+    assert r"p_{\beta,h}(x)" in section
+    assert r"\ket{\phi_{\mathrm{eq}}(h)}" in section
+    assert r"q_\theta(\bar x\mid-h)=q_\theta(x\mid h)" in section
+    assert r"\epsilon_{\mathrm{eq}}(h)" in section
+    assert "trained on the same nonnegative fields" in section
+    assert "trained on both signs" in section
+    assert "incorrectly imposes" in section
+    assert "We separated model development from confirmation" in section
+
+
+def test_confirmatory_protocol_and_historical_results_are_separated():
     main = (ROOT / "paper" / "main.tex").read_text()
     supplement = (ROOT / "paper" / "supplement.tex").read_text()
-    assert "generated/curie_weiss_ancilla_claims.tex" in main
-    assert r"\ifcurieweissancillaresults" in main
-    assert "80-fit\nCurie--Weiss campaign" in main
+    section = _curie_section(main)
+    assert "ten fresh optimizer seeds" in section
+    assert "including negative and mixed comparisons" in section
+    assert "performance_thresholds_applied" not in section
     assert "curieweissancillaeffects" in supplement
-    assert "generated/capacity_control_claims.tex" in main
     assert r"\ifcapacitycontrolresults" in supplement
     assert "Historical v2 matched-capacity diagnostic" in supplement
     assert "not a matched control for the v3" in supplement
