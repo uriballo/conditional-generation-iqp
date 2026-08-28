@@ -150,8 +150,11 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
                 style="italic",
             )
         else:
-            ax.fill_between(x, 0, cell["target"], step="mid", color="0.82", alpha=0.65)
-            ax.step(x, cell["target"], where="mid", color="0.15", lw=1.0, ls="--")
+            # Connect values at the bin centres with straight segments.  This
+            # keeps the discrete 16-bin result intact while avoiding the
+            # blocky staircase rendering used for histogram edges.
+            ax.fill_between(x, 0, cell["target"], color="0.82", alpha=0.65)
+            ax.plot(x, cell["target"], color="0.15", lw=1.0, ls="--")
             for family, line_color in (
                 ("conditioned_iqp", OKABE_ITO_COLORS[0]),
                 ("no_condition_iqp", "0.45"),
@@ -164,19 +167,18 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
                         x,
                         lo,
                         hi,
-                        step="mid",
                         color=OKABE_ITO_COLORS[0],
                         alpha=0.14,
                         linewidth=0,
                     )
-                ax.step(
+                ax.plot(
                     x,
                     med,
-                    where="mid",
                     color=line_color,
                     lw=1.1,
                     ls="--" if family == "no_condition_iqp" else "-",
                     marker="o" if family == "conditioned_iqp" else None,
+                    markersize=2.5 if family == "conditioned_iqp" else None,
                 )
             # ``n`` remains part of the summary for programmatic coverage checks;
             # it is intentionally not printed in the manuscript-style figure.
