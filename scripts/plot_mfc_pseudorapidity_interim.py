@@ -103,13 +103,16 @@ def summarize(runs: list[Mapping[str, Any]]) -> dict[int, dict[str, Any]]:
 def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
     apply_journal_style()
     fig, axes = plt.subplots(
-        1,
         5,
-        figsize=(DOUBLE_COL_WIDTH, 3.0),
+        1,
+        figsize=(DOUBLE_COL_WIDTH, 5.8),
         sharey=True,
+        sharex=True,
         layout="constrained",
     )
-    blue, vermillion = OKABE_ITO_COLORS[:2]
+    axes = np.atleast_1d(axes)
+    blue = OKABE_ITO_COLORS[0]
+    grey = "0.45"
     x = np.arange(16)
     plotted_values = [np.asarray(cell["target"]) for cell in summary.values()]
     plotted_values.extend(
@@ -123,7 +126,21 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
     )
     y_maximum = max(0.16, np.ceil(observed_maximum * 1.05 / 0.02) * 0.02)
     for ax, energy in zip(axes, ENERGIES, strict=True):
-        ax.set_title(f"{energy} GeV", fontsize=10)
+        ax.text(
+            0.02,
+            0.88,
+            rf"$E_{{in}}={energy}$ GeV",
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=9,
+            bbox={
+                "facecolor": "white",
+                "alpha": 0.75,
+                "edgecolor": "none",
+                "pad": 1.5,
+            },
+        )
         cell = summary.get(energy)
         if cell is None:
             ax.text(
@@ -137,22 +154,33 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
                 style="italic",
             )
         else:
-            ax.step(x, cell["target"], where="mid", color="black", ls="--", lw=1.1)
+            ax.fill_between(x, 0, cell["target"], step="mid", color="0.88", zorder=0)
+            ax.step(x, cell["target"], where="mid", color="black", ls="--", lw=1.2)
             count_lines: list[tuple[str, str]] = []
             for family, color, short_label in (
                 ("conditioned_iqp", blue, "conditioned"),
-                ("no_condition_iqp", vermillion, "no condition"),
+                ("no_condition_iqp", grey, "no condition"),
             ):
                 if family not in cell["models"]:
                     continue
                 n, lo, med, hi = cell["models"][family]
-                ax.fill_between(x, lo, hi, step="mid", color=color, alpha=0.18)
-                ax.step(x, med, where="mid", color=color, lw=1.5)
+                alpha = 0.22 if family == "conditioned_iqp" else 0.12
+                ax.fill_between(x, lo, hi, step="mid", color=color, alpha=alpha)
+                ax.step(
+                    x,
+                    med,
+                    where="mid",
+                    color=color,
+                    lw=1.4,
+                    ls="--" if family == "no_condition_iqp" else "-",
+                )
+                if family == "conditioned_iqp":
+                    ax.plot(x, med, "o", color=color, ms=2.4, zorder=3)
                 count_lines.append((f"{short_label}: {n}/10", color))
             for row, (label, color) in enumerate(count_lines):
                 ax.text(
                     0.96,
-                    0.96 - 0.065 * row,
+                    0.96 - 0.11 * row,
                     label,
                     transform=ax.transAxes,
                     ha="right",
@@ -161,30 +189,34 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
                     color=color,
                 )
         ax.set_xticks([0, 5, 10, 15])
-        ax.set_xlabel(r"$\eta$ quantile bin")
+        if energy == ENERGIES[-1]:
+            ax.set_xlabel(r"$\eta$ quantile bin")
+        else:
+            ax.set_xlabel("")
         ax.set_ylim(0, y_maximum)
         ax.grid(axis="y", alpha=0.2)
-    axes[0].set_ylabel("probability mass")
+    fig.supylabel("probability mass")
     handles = [
-        Line2D([], [], color="black", ls="--", label="target"),
-        Patch(facecolor=blue, alpha=0.18, label="conditioned IQP, median and IQR"),
         Patch(
-            facecolor=vermillion,
-            alpha=0.18,
-            label="no-condition IQP, median and IQR",
+            facecolor="0.88",
+            edgecolor="black",
+            linestyle="--",
+            label="target",
         ),
+        Line2D([], [], color=blue, marker="o", lw=1.4, ms=3, label="conditioned IQP"),
+        Line2D([], [], color=grey, ls="--", lw=1.4, label="no-condition IQP"),
     ]
     fig.legend(
         handles=handles,
         loc="upper center",
         ncol=3,
-        bbox_to_anchor=(0.5, 1.07),
+        bbox_to_anchor=(0.5, 1.02),
         frameon=False,
         fontsize=8,
     )
     axes[-1].text(
-        0.96,
-        0.04,
+        0.98,
+        0.12,
         "INTERIM RESULTS",
         ha="right",
         va="bottom",
