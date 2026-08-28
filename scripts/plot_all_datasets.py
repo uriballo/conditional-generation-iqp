@@ -84,7 +84,7 @@ def figure() -> plt.Figure:
         (
             curie,
             np.linspace(-1, 1, curie.shape[1]),
-            "Curie--Weiss targets",
+            "Curie-Weiss targets",
             "magnetization",
         ),
         (mfc, np.arange(MFC_ETA_BIN_COUNT), "MFC targets", r"$\eta$ quantile bin"),
