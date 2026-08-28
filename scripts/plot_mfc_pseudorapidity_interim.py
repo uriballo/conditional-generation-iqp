@@ -19,7 +19,6 @@ try:
     from scripts.journal_style import (
         MM,
         OKABE_ITO_COLORS,
-        SINGLE_COL_WIDTH,
         apply_journal_style,
         save_figure,
     )
@@ -27,7 +26,6 @@ except ModuleNotFoundError:
     from journal_style import (  # type: ignore[no-redef]
         MM,
         OKABE_ITO_COLORS,
-        SINGLE_COL_WIDTH,
         apply_journal_style,
         save_figure,
     )
@@ -38,7 +36,7 @@ OUTPUT = Path("paper/mfc_confirmatory_figures/fig_mfc_pseudorapidity_interim")
 
 
 def load_runs(result_dir: Path = RESULT_DIR) -> list[Mapping[str, Any]]:
-    """Load a stable path snapshot, retaining only the requested IQP cell."""
+    """Load a stable snapshot of the promoted conditional cell and baselines."""
     paths = tuple(sorted(Path(result_dir).glob("*.json")))
     out = []
     for path in paths:
@@ -51,7 +49,14 @@ def load_runs(result_dir: Path = RESULT_DIR) -> list[Mapping[str, Any]]:
             or run.get("bin_count") != 16
             or run.get("coding") != "binary"
             or run.get("held_out_energy_gev") not in ENERGIES
-            or run.get("family") not in {"conditioned_iqp", "no_condition_iqp"}
+            or run.get("family")
+            not in {
+                "conditioned_iqp",
+                "no_condition_iqp",
+                "separate_iqp",
+                "categorical_mlp",
+                "histogram_interpolation",
+            }
         ):
             continue
         for key in (
@@ -72,13 +77,13 @@ def load_runs(result_dir: Path = RESULT_DIR) -> list[Mapping[str, Any]]:
 
 def summarize(runs: list[Mapping[str, Any]]) -> dict[int, dict[str, Any]]:
     grouped: dict[tuple[int, str], list[np.ndarray]] = defaultdict(list)
-    seeds: dict[tuple[int, str], set[int]] = defaultdict(set)
+    seeds: dict[tuple[int, str], set[int | None]] = defaultdict(set)
     targets: dict[int, np.ndarray] = {}
     for payload in runs:
         run = payload["run"]
         energy = int(run["held_out_energy_gev"])
         family = str(run["family"])
-        seed = int(run["seed"])
+        seed = None if run.get("seed") is None else int(run["seed"])
         key = (energy, family)
         if seed in seeds[key]:
             raise ValueError(f"duplicate {family} seed {seed} at {energy} GeV")
@@ -90,7 +95,7 @@ def summarize(runs: list[Mapping[str, Any]]) -> dict[int, dict[str, Any]]:
         grouped[key].append(
             np.asarray(payload["prediction_physical_probabilities"], float)
         )
-    result = {e: {"target": targets[e], "models": {}} for e in targets}
+    result = {e: {"target": targets[e], "models": {}, "tvd": {}} for e in targets}
     for (e, family), values in grouped.items():
         arr = np.stack(values)
         result[e]["models"][family] = (
@@ -99,21 +104,25 @@ def summarize(runs: list[Mapping[str, Any]]) -> dict[int, dict[str, Any]]:
             np.median(arr, axis=0),
             np.quantile(arr, 0.75, axis=0),
         )
+        tvds = np.asarray([0.5 * np.abs(value - targets[e]).sum() for value in values])
+        result[e]["tvd"][family] = (
+            len(values),
+            float(np.quantile(tvds, 0.25)),
+            float(np.median(tvds)),
+            float(np.quantile(tvds, 0.75)),
+        )
     return result
 
 
 def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
     apply_journal_style()
-    fig, axes = plt.subplots(
-        5,
-        1,
-        figsize=(SINGLE_COL_WIDTH, 105 * MM),
-        sharey=True,
-        sharex=True,
-        gridspec_kw={"hspace": 0.12},
-        constrained_layout=True,
+    fig = plt.figure(figsize=(170 * MM, 112 * MM), constrained_layout=True)
+    grid = fig.add_gridspec(5, 2, width_ratios=(1.5, 1), wspace=0.28, hspace=0.10)
+    axes = [fig.add_subplot(grid[0, 0])]
+    axes.extend(
+        fig.add_subplot(grid[i, 0], sharex=axes[0], sharey=axes[0]) for i in range(1, 5)
     )
-    axes = np.atleast_1d(axes)
+    response_ax = fig.add_subplot(grid[:, 1])
     x = np.arange(16)
     plotted_values = [np.asarray(cell["target"]) for cell in summary.values()]
     plotted_values.extend(
@@ -127,22 +136,7 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
     )
     y_maximum = max(0.16, np.ceil(observed_maximum * 1.05 / 0.02) * 0.02)
     for ax, energy in zip(axes, ENERGIES, strict=True):
-        energy_color = OKABE_ITO_COLORS[ENERGIES.index(energy)]
-        ax.text(
-            0.04,
-            0.92,
-            rf"$E_{{in}}={energy}$ GeV",
-            transform=ax.transAxes,
-            ha="left",
-            va="top",
-            fontsize=8,
-            bbox={
-                "facecolor": "white",
-                "alpha": 0.75,
-                "edgecolor": "none",
-                "pad": 1.5,
-            },
-        )
+        ax.set_title(rf"$E_{{in}}={energy}$ GeV", loc="left", fontsize=8, pad=2)
         cell = summary.get(energy)
         if cell is None:
             ax.text(
@@ -156,12 +150,10 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
                 style="italic",
             )
         else:
-            ax.fill_between(
-                x, 0, cell["target"], step="mid", color=energy_color, alpha=0.28
-            )
-            ax.step(x, cell["target"], where="mid", color=energy_color, lw=1.1)
+            ax.fill_between(x, 0, cell["target"], step="mid", color="0.82", alpha=0.65)
+            ax.step(x, cell["target"], where="mid", color="0.15", lw=1.0, ls="--")
             for family, line_color in (
-                ("conditioned_iqp", "0.12"),
+                ("conditioned_iqp", OKABE_ITO_COLORS[0]),
                 ("no_condition_iqp", "0.45"),
             ):
                 if family not in cell["models"]:
@@ -173,7 +165,7 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
                         lo,
                         hi,
                         step="mid",
-                        color=energy_color,
+                        color=OKABE_ITO_COLORS[0],
                         alpha=0.14,
                         linewidth=0,
                     )
@@ -184,6 +176,7 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
                     color=line_color,
                     lw=1.1,
                     ls="--" if family == "no_condition_iqp" else "-",
+                    marker="o" if family == "conditioned_iqp" else None,
                 )
             # ``n`` remains part of the summary for programmatic coverage checks;
             # it is intentionally not printed in the manuscript-style figure.
@@ -194,22 +187,50 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
             ax.tick_params(labelbottom=False)
         ax.set_ylim(0, y_maximum)
         ax.grid(axis="y", alpha=0.2)
-    fig.supylabel("probability")
-    handles = [
-        Patch(
-            facecolor=OKABE_ITO_COLORS[0],
-            edgecolor=OKABE_ITO_COLORS[0],
-            alpha=0.28,
-            label="target",
+    axes[2].set_ylabel("probability")
+    response_ax.set_xlabel(r"held-out energy $E_{in}$ (GeV)")
+    response_ax.set_ylabel("profile TVD")
+    response_ax.set_title("held-out interpolation", fontsize=10, pad=8)
+    response_ax.grid(axis="y", alpha=0.2)
+    family_styles = {
+        "conditioned_iqp": (OKABE_ITO_COLORS[0], "-", "conditioned IQP"),
+        "no_condition_iqp": ("0.45", "--", "no condition"),
+        "separate_iqp": (OKABE_ITO_COLORS[2], "-", "separate IQP"),
+        "categorical_mlp": (OKABE_ITO_COLORS[1], "-", "categorical MLP"),
+        "histogram_interpolation": (
+            OKABE_ITO_COLORS[3],
+            "-",
+            "histogram interpolation",
         ),
-        Line2D([], [], color="0.12", lw=1.1, label="conditioned"),
-        Line2D([], [], color="0.45", ls="--", lw=1.1, label="no condition"),
+    }
+    for family, (color, style, label) in family_styles.items():
+        xs, meds, los, his = [], [], [], []
+        for energy in ENERGIES:
+            if family in summary.get(energy, {}).get("tvd", {}):
+                _n, lo, med, hi = summary[energy]["tvd"][family]
+                xs.append(energy)
+                meds.append(med)
+                los.append(lo)
+                his.append(hi)
+        if xs:
+            response_ax.plot(xs, meds, color=color, ls=style, marker="o", label=label)
+            if family not in {"histogram_interpolation"} and len(xs) > 1:
+                response_ax.fill_between(
+                    xs, los, his, color=color, alpha=0.10, linewidth=0
+                )
+    response_ax.set_xticks(ENERGIES)
+    handles = [
+        Patch(facecolor="0.82", edgecolor="0.15", alpha=0.65, label="target"),
+        Line2D([], [], color=OKABE_ITO_COLORS[0], marker="o", label="conditioned IQP"),
+        Line2D([], [], color="0.45", ls="--", label="no condition"),
+        Line2D([], [], color=OKABE_ITO_COLORS[2], label="separate IQP"),
+        Line2D([], [], color=OKABE_ITO_COLORS[1], label="categorical MLP"),
+        Line2D([], [], color=OKABE_ITO_COLORS[3], label="histogram interpolation"),
     ]
     fig.legend(
         handles=handles,
-        loc="upper center",
+        loc="outside upper center",
         ncol=3,
-        bbox_to_anchor=(0.5, 1.025),
         frameon=False,
         fontsize=7,
     )
