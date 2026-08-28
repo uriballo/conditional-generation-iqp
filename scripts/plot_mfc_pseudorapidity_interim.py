@@ -17,15 +17,17 @@ from iqp_cond.artifacts import read_immutable_json
 
 try:
     from scripts.journal_style import (
-        DOUBLE_COL_WIDTH,
+        MM,
         OKABE_ITO_COLORS,
+        SINGLE_COL_WIDTH,
         apply_journal_style,
         save_figure,
     )
 except ModuleNotFoundError:
     from journal_style import (  # type: ignore[no-redef]
-        DOUBLE_COL_WIDTH,
+        MM,
         OKABE_ITO_COLORS,
+        SINGLE_COL_WIDTH,
         apply_journal_style,
         save_figure,
     )
@@ -105,14 +107,13 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
     fig, axes = plt.subplots(
         5,
         1,
-        figsize=(DOUBLE_COL_WIDTH, 5.8),
+        figsize=(SINGLE_COL_WIDTH, 105 * MM),
         sharey=True,
         sharex=True,
-        layout="constrained",
+        gridspec_kw={"hspace": 0.12},
+        constrained_layout=True,
     )
     axes = np.atleast_1d(axes)
-    blue = OKABE_ITO_COLORS[0]
-    grey = "0.45"
     x = np.arange(16)
     plotted_values = [np.asarray(cell["target"]) for cell in summary.values()]
     plotted_values.extend(
@@ -126,14 +127,15 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
     )
     y_maximum = max(0.16, np.ceil(observed_maximum * 1.05 / 0.02) * 0.02)
     for ax, energy in zip(axes, ENERGIES, strict=True):
+        energy_color = OKABE_ITO_COLORS[ENERGIES.index(energy)]
         ax.text(
-            0.02,
-            0.88,
+            0.04,
+            0.92,
             rf"$E_{{in}}={energy}$ GeV",
             transform=ax.transAxes,
             ha="left",
             va="top",
-            fontsize=9,
+            fontsize=8,
             bbox={
                 "facecolor": "white",
                 "alpha": 0.75,
@@ -154,76 +156,62 @@ def build_figure(summary: Mapping[int, Mapping[str, Any]]) -> plt.Figure:
                 style="italic",
             )
         else:
-            ax.fill_between(x, 0, cell["target"], step="mid", color="0.88", zorder=0)
-            ax.step(x, cell["target"], where="mid", color="black", ls="--", lw=1.2)
-            count_lines: list[tuple[str, str]] = []
-            for family, color, short_label in (
-                ("conditioned_iqp", blue, "conditioned"),
-                ("no_condition_iqp", grey, "no condition"),
+            ax.fill_between(
+                x, 0, cell["target"], step="mid", color=energy_color, alpha=0.28
+            )
+            ax.step(x, cell["target"], where="mid", color=energy_color, lw=1.1)
+            for family, line_color in (
+                ("conditioned_iqp", "0.12"),
+                ("no_condition_iqp", "0.45"),
             ):
                 if family not in cell["models"]:
                     continue
-                n, lo, med, hi = cell["models"][family]
-                alpha = 0.22 if family == "conditioned_iqp" else 0.12
-                ax.fill_between(x, lo, hi, step="mid", color=color, alpha=alpha)
+                _n, lo, med, hi = cell["models"][family]
+                if family == "conditioned_iqp":
+                    ax.fill_between(
+                        x,
+                        lo,
+                        hi,
+                        step="mid",
+                        color=energy_color,
+                        alpha=0.14,
+                        linewidth=0,
+                    )
                 ax.step(
                     x,
                     med,
                     where="mid",
-                    color=color,
-                    lw=1.4,
+                    color=line_color,
+                    lw=1.1,
                     ls="--" if family == "no_condition_iqp" else "-",
                 )
-                if family == "conditioned_iqp":
-                    ax.plot(x, med, "o", color=color, ms=2.4, zorder=3)
-                count_lines.append((f"{short_label}: {n}/10", color))
-            for row, (label, color) in enumerate(count_lines):
-                ax.text(
-                    0.96,
-                    0.96 - 0.11 * row,
-                    label,
-                    transform=ax.transAxes,
-                    ha="right",
-                    va="top",
-                    fontsize=7,
-                    color=color,
-                )
+            # ``n`` remains part of the summary for programmatic coverage checks;
+            # it is intentionally not printed in the manuscript-style figure.
         ax.set_xticks([0, 5, 10, 15])
         if energy == ENERGIES[-1]:
             ax.set_xlabel(r"$\eta$ quantile bin")
         else:
-            ax.set_xlabel("")
+            ax.tick_params(labelbottom=False)
         ax.set_ylim(0, y_maximum)
         ax.grid(axis="y", alpha=0.2)
-    fig.supylabel("probability mass")
+    fig.supylabel("probability")
     handles = [
         Patch(
-            facecolor="0.88",
-            edgecolor="black",
-            linestyle="--",
+            facecolor=OKABE_ITO_COLORS[0],
+            edgecolor=OKABE_ITO_COLORS[0],
+            alpha=0.28,
             label="target",
         ),
-        Line2D([], [], color=blue, marker="o", lw=1.4, ms=3, label="conditioned IQP"),
-        Line2D([], [], color=grey, ls="--", lw=1.4, label="no-condition IQP"),
+        Line2D([], [], color="0.12", lw=1.1, label="conditioned"),
+        Line2D([], [], color="0.45", ls="--", lw=1.1, label="no condition"),
     ]
     fig.legend(
         handles=handles,
         loc="upper center",
         ncol=3,
-        bbox_to_anchor=(0.5, 1.02),
+        bbox_to_anchor=(0.5, 1.025),
         frameon=False,
-        fontsize=8,
-    )
-    axes[-1].text(
-        0.98,
-        0.12,
-        "INTERIM RESULTS",
-        ha="right",
-        va="bottom",
         fontsize=7,
-        color="0.35",
-        style="italic",
-        transform=axes[-1].transAxes,
     )
     return fig
 
