@@ -918,30 +918,42 @@ The main contribution of this work is the conditional formulation of classically
 \section{Representative exact distribution profiles}
 \label{app:qualitative-profiles}
 
-This appendix reports representative distribution profiles from the completed $n=8$ exact evaluations. We fixed the conditions by scientific role rather than fit quality: two near-boundary and one interior condition for the Gaussian family, and one disordered, one transition-landmark, and one ordered condition for Curie--Weiss. Each conditioned curve shows the median exact visible distribution over the ten production seeds, and the shaded region shows the corresponding interquartile range. We compare $r\in\{0,3,10\}$ ancillas with the exact target. These profiles supplement the exact-TVD summaries by showing which parts of each distribution the circuit reproduces or misses.
+This appendix separates reconstruction at training conditions from interpolation to held-out conditions. We fixed three conditions in each comparison by scientific role rather than fit quality. Each learned curve shows the median exact visible distribution over ten production seeds, and the shaded region shows the corresponding interquartile range. These profiles supplement the exact-TVD summaries by showing which parts of each distribution the models reproduce or miss.
 
 \subsection{Gaussian profiles}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{figures/gaussian_n8_profile_c0p0625.pdf}
-    \caption{Gaussian Hamming-weight profile at the near-boundary held-out condition $c=0.0625$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. The conditioned models place too little probability on the smallest Hamming weights; additional ancillas reduce but do not remove this boundary mismatch.}
-    \label{fig:app-gaussian-profile-lower}
-\end{figure}
+\subsubsection{Reconstruction at training conditions}
 
-\begin{figure}[H]
+\begin{plainwidetext}
+\noindent\begin{minipage}{\textwidth}
     \centering
-    \includegraphics[width=\columnwidth]{figures/gaussian_n8_profile_c0p4375.pdf}
-    \caption{Gaussian Hamming-weight profile at the interior held-out condition $c=0.4375$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Increasing the ancilla count progressively corrects the height and location of the central mode; the $r=10$ profile follows the exact target closely.}
-    \label{fig:app-gaussian-profile-interior}
-\end{figure}
+    \includegraphics[width=\textwidth]{figures/gaussian_n8_training_profiles.pdf}
+    \widefigurecaption{Gaussian Hamming-weight profiles at the training conditions $c\in\{0,0.5,1\}$ for $n=8$. The curves compare conditioned models with $r\in\{0,3,10\}$ ancillas against the exact target. Learned curves show medians over ten production seeds, and shaded bands show interquartile ranges. The model reconstructs the interior condition more closely than the two endpoints; the persistent endpoint displacement therefore reflects reconstruction error rather than held-out interpolation alone.}{fig:app-gaussian-training-n8}
+\end{minipage}
+\end{plainwidetext}
 
-\begin{figure}[H]
+\begin{plainwidetext}
+\noindent\begin{minipage}{\textwidth}
     \centering
-    \includegraphics[width=\columnwidth]{figures/gaussian_n8_profile_c0p9375.pdf}
-    \caption{Gaussian Hamming-weight profile at the near-boundary held-out condition $c=0.9375$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. All three conditioned models shift the dominant mass towards smaller Hamming weights than the target, and the error persists at $r=10$.}
-    \label{fig:app-gaussian-profile-upper}
-\end{figure}
+    \includegraphics[width=\textwidth]{figures/gaussian_n12_training_profiles.pdf}
+    \widefigurecaption{Gaussian Hamming-weight profiles at the training conditions $c\in\{0,0.5,1\}$ for $n=12$. Curves and uncertainty summaries follow Fig.~\ref{fig:app-gaussian-training-n8}. The endpoint modes remain displaced towards the centre of the Hamming-weight range, whereas the model reproduces the central target more accurately.}{fig:app-gaussian-training-n12}
+\end{minipage}
+\end{plainwidetext}
+
+\clearpage
+\subsubsection{Interpolation to held-out conditions}
+
+\begin{plainwidetext}
+\noindent\begin{minipage}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/gaussian_n8_generalization_profiles.pdf}
+    \widefigurecaption{Gaussian Hamming-weight profiles at the held-out conditions $c\in\{0.0625,0.4375,0.9375\}$ for $n=8$. The conditioned model directly evaluates each held-out condition with $r=10$. The adjacent-independent baseline linearly interpolates, separately within each seed, the exact output distributions of the two neighboring $r=10$ independent circuits. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Both approaches reproduce the interior target more closely than the near-boundary targets.}{fig:app-gaussian-generalization-n8}
+    \medskip
+    \centering
+    \includegraphics[width=\textwidth]{figures/gaussian_n12_generalization_profiles.pdf}
+    \widefigurecaption{Gaussian Hamming-weight profiles at the held-out conditions $c\in\{0.0625,0.4375,0.9375\}$ for $n=12$. The models, interpolation rule, and uncertainty summaries follow Fig.~\ref{fig:app-gaussian-generalization-n8}. The conditioned model follows the target response at the interior condition but retains the endpoint displacement already present at the training conditions.}{fig:app-gaussian-generalization-n12}
+\end{minipage}
+\end{plainwidetext}
 
 \clearpage
 \subsection{Curie--Weiss profiles}
@@ -951,6 +963,14 @@ This appendix reports representative distribution profiles from the completed $n
     \centering
     \includegraphics[width=\textwidth]{figures/curie_weiss_n8_magnetization_profiles.pdf}
     \widefigurecaption{Representative Curie--Weiss magnetization profiles for $n=8$ in the disordered regime at $\beta=0.6$ (a), at the prescribed transition landmark $\beta=1$ (b), and in the ordered regime at $\beta=1.4$ (c). Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Increasing the ancilla count suppresses shell-to-shell oscillations in panels (a) and (b) and recovers the two edge modes in panel (c). Because the condition map contains the $\beta=1$ landmark, panel (b) tests reconstruction at the transition but not unbiased interpolation of its location.}{fig:app-curie-profiles}
+\end{minipage}
+\end{plainwidetext}
+
+\begin{plainwidetext}
+\noindent\begin{minipage}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/curie_weiss_n8_generalization_profiles.pdf}
+    \widefigurecaption{Curie--Weiss magnetization profiles at the held-out inverse temperatures $\beta\in\{0.6,1,1.4\}$ for $n=8$. The conditioned model directly evaluates each held-out temperature with $r=10$, whereas the adjacent-independent baseline linearly interpolates, separately within each seed, the exact output distributions of the two neighboring $r=10$ independent circuits. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Both approaches reproduce the change from the central disordered mode to the ordered edge modes. Because the informed condition map contains the $\beta=1$ landmark, the central panel tests reconstruction at that prescribed landmark rather than unbiased localization of the transition.}{fig:app-curie-generalization}
 \end{minipage}
 \end{plainwidetext}
 

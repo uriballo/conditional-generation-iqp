@@ -10,10 +10,12 @@ figure assets are included locally.
 - `references.bib`: bibliography database.
 - `figures/all_datasets.pdf`
 - `figures/gaussian_results.pdf`
-- `figures/gaussian_n8_profile_c0p0625.pdf`
-- `figures/gaussian_n8_profile_c0p4375.pdf`
-- `figures/gaussian_n8_profile_c0p9375.pdf`
+- `figures/gaussian_n8_training_profiles.pdf`
+- `figures/gaussian_n12_training_profiles.pdf`
+- `figures/gaussian_n8_generalization_profiles.pdf`
+- `figures/gaussian_n12_generalization_profiles.pdf`
 - `figures/curie_weiss_n8_magnetization_profiles.pdf`
+- `figures/curie_weiss_n8_generalization_profiles.pdf`
 - `figures/curie_weiss_results.pdf`: neutral placeholder; replace with the
   campaign figure when available.
 - `figures/curie_weiss_results_placeholder.tex`: editable source for that
