@@ -9,6 +9,7 @@ notitlepage,longbibliography]{revtex4-2}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx,color}
+\usepackage{float}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{quantikz}
 \usepackage{amsthm}
@@ -911,6 +912,60 @@ Conditional generation with IQP Born machines represents a promising avenue for 
 
 \section{Conclusions}
 The main contribution of this work is the conditional formulation of classically trained IQP Born machines. %The proposed framework leverages previous literature on computationally tractable states and reformulates the MMD for the conditional generation case to  
+
+\clearpage
+\appendix
+\section{Representative exact distribution profiles}
+\label{app:qualitative-profiles}
+
+This appendix reports representative distribution profiles from the completed $n=8$ exact evaluations. We fixed the conditions by scientific role rather than fit quality: two near-boundary and one interior condition for the Gaussian family, and one disordered, one transition-landmark, and one ordered condition for Curie--Weiss. Each conditioned curve shows the median exact visible distribution over the ten production seeds, and the shaded region shows the corresponding interquartile range. We compare $r\in\{0,3,10\}$ ancillas with the exact target. These profiles supplement the exact-TVD summaries by showing which parts of each distribution the circuit reproduces or misses.
+
+\subsection{Gaussian profiles}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/gaussian_n8_profile_c0p0625.pdf}
+    \caption{Gaussian Hamming-weight profile at the near-boundary held-out condition $c=0.0625$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. The conditioned models place too little probability on the smallest Hamming weights; additional ancillas reduce but do not remove this boundary mismatch.}
+    \label{fig:app-gaussian-profile-lower}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/gaussian_n8_profile_c0p4375.pdf}
+    \caption{Gaussian Hamming-weight profile at the interior held-out condition $c=0.4375$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Increasing the ancilla count progressively corrects the height and location of the central mode; the $r=10$ profile follows the exact target closely.}
+    \label{fig:app-gaussian-profile-interior}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/gaussian_n8_profile_c0p9375.pdf}
+    \caption{Gaussian Hamming-weight profile at the near-boundary held-out condition $c=0.9375$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. All three conditioned models shift the dominant mass towards smaller Hamming weights than the target, and the error persists at $r=10$.}
+    \label{fig:app-gaussian-profile-upper}
+\end{figure}
+
+\clearpage
+\subsection{Curie--Weiss profiles}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/curie_weiss_n8_profile_beta0p6.pdf}
+    \caption{Curie--Weiss magnetization profile in the disordered regime at $\beta=0.6$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. The zero-ancilla model produces alternating shell errors around the central mode, whereas the $r=10$ profile nearly coincides with the exact target.}
+    \label{fig:app-curie-profile-disordered}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/curie_weiss_n8_profile_beta1p0.pdf}
+    \caption{Curie--Weiss magnetization profile at the prescribed transition landmark $\beta=1$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Ancillas suppress the pronounced shell-to-shell oscillations of the zero-ancilla model. Because the condition map contains this landmark, this profile tests reconstruction at the transition but not unbiased interpolation of its location.}
+    \label{fig:app-curie-profile-critical}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/curie_weiss_n8_profile_beta1p4.pdf}
+    \caption{Curie--Weiss magnetization profile in the ordered regime at $\beta=1.4$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Increasing the ancilla count removes spurious inner-shell structure and recovers the two edge modes of the exact distribution.}
+    \label{fig:app-curie-profile-ordered}
+\end{figure}
 
 
 \section*{DATA AVAILABILITY}
