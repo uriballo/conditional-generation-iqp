@@ -9,7 +9,12 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-from journal_style import SINGLE_COL_WIDTH, apply_journal_style, save_figure
+from journal_style import (
+    DOUBLE_COL_WIDTH,
+    SINGLE_COL_WIDTH,
+    apply_journal_style,
+    save_figure,
+)
 
 from iqp_cond.curie_weiss_data import exact_curie_weiss_target
 from iqp_cond.exact_tvd_results import load_records
@@ -157,6 +162,55 @@ def make_plots(evaluations: Path, output: Path) -> None:
                 handlelength=2.0,
             )
             save_figure(fig, path)
+
+    coordinate = (2 * np.arange(9, dtype=float) - 8) / 8
+    fig, axes = plt.subplots(
+        1,
+        3,
+        figsize=(DOUBLE_COL_WIDTH, 58 / 25.4),
+        sharey=True,
+        layout="constrained",
+    )
+    handles, labels = [], []
+    for panel_index, (ax, condition) in enumerate(
+        zip(axes, CURIE_CONDITIONS, strict=True)
+    ):
+        rows = _rows(records, "curie_weiss", condition, coordinate)
+        target = exact_curie_weiss_target(8, condition).profile
+        for model, color, style in (
+            (r"$r=0$", "#0072B2", "o-"),
+            (r"$r=3$", "#D55E00", "s-"),
+            (r"$r=10$", "#009E73", "^-"),
+        ):
+            data = [x for x in rows if x["model"] == model.replace("$", "")]
+            y = np.array([x["median"] for x in data])
+            lo = np.array([x["q1"] for x in data])
+            hi = np.array([x["q3"] for x in data])
+            ax.fill_between(coordinate, lo, hi, color=color, alpha=0.18, linewidth=0)
+            line = ax.plot(coordinate, y, style, color=color, label=model)[0]
+            if len(handles) < 3:
+                handles.append(line)
+                labels.append(model)
+        target_line = ax.plot(coordinate, target, "k--", label="Exact target")[0]
+        if len(handles) == 3:
+            handles.append(target_line)
+            labels.append("Exact target")
+        ax.set_title(rf"({chr(97 + panel_index)}) $\beta={condition:g}$", pad=4)
+        ax.set_xticks(np.linspace(-1.0, 1.0, 5))
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.set_xlabel("Magnetization $m$")
+    axes[0].set_ylabel("Probability mass")
+    fig.legend(
+        handles,
+        labels,
+        ncol=4,
+        loc="lower center",
+        bbox_to_anchor=(0.5, 1.01),
+        borderaxespad=0,
+        columnspacing=1.0,
+        handlelength=2.0,
+    )
+    save_figure(fig, output / "curie_weiss_n8_magnetization_profiles")
 
 
 if __name__ == "__main__":

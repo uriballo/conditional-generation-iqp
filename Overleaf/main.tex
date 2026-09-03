@@ -946,27 +946,15 @@ This appendix reports representative distribution profiles from the completed $n
 \clearpage
 \subsection{Curie--Weiss profiles}
 
-\begin{figure}[H]
+\begin{plainwidetext}
+\noindent\begin{minipage}{\textwidth}
     \centering
-    \includegraphics[width=\columnwidth]{figures/curie_weiss_n8_profile_beta0p6.pdf}
-    \caption{Curie--Weiss magnetization profile in the disordered regime at $\beta=0.6$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. The zero-ancilla model produces alternating shell errors around the central mode, whereas the $r=10$ profile nearly coincides with the exact target.}
-    \label{fig:app-curie-profile-disordered}
-\end{figure}
+    \includegraphics[width=\textwidth]{figures/curie_weiss_n8_magnetization_profiles.pdf}
+    \widefigurecaption{Representative Curie--Weiss magnetization profiles for $n=8$ in the disordered regime at $\beta=0.6$ (a), at the prescribed transition landmark $\beta=1$ (b), and in the ordered regime at $\beta=1.4$ (c). Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Increasing the ancilla count suppresses shell-to-shell oscillations in panels (a) and (b) and recovers the two edge modes in panel (c). Because the condition map contains the $\beta=1$ landmark, panel (b) tests reconstruction at the transition but not unbiased interpolation of its location.}{fig:app-curie-profiles}
+\end{minipage}
+\end{plainwidetext}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{figures/curie_weiss_n8_profile_beta1p0.pdf}
-    \caption{Curie--Weiss magnetization profile at the prescribed transition landmark $\beta=1$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Ancillas suppress the pronounced shell-to-shell oscillations of the zero-ancilla model. Because the condition map contains this landmark, this profile tests reconstruction at the transition but not unbiased interpolation of its location.}
-    \label{fig:app-curie-profile-critical}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{figures/curie_weiss_n8_profile_beta1p4.pdf}
-    \caption{Curie--Weiss magnetization profile in the ordered regime at $\beta=1.4$ for $n=8$. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Increasing the ancilla count removes spurious inner-shell structure and recovers the two edge modes of the exact distribution.}
-    \label{fig:app-curie-profile-ordered}
-\end{figure}
-
+\clearpage
 
 \section*{DATA AVAILABILITY}
 The code and data supporting the findings of this study are openly available in Zenodo \TODO{add the final Zenodo record and citation}.
