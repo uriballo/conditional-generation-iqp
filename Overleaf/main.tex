@@ -918,7 +918,7 @@ The main contribution of this work is the conditional formulation of classically
 \section{Representative exact distribution profiles}
 \label{app:qualitative-profiles}
 
-This appendix separates reconstruction at training conditions from interpolation to held-out conditions. We fixed three conditions in each comparison by scientific role rather than fit quality. Each learned curve shows the median exact visible distribution over ten production seeds, and the shaded region shows the corresponding interquartile range. These profiles supplement the exact-TVD summaries by showing which parts of each distribution the models reproduce or miss.
+This appendix separates reconstruction at training conditions from interpolation to untrained conditions. We fixed three conditions in each comparison by scientific role rather than fit quality. Each learned curve shows the median exact visible distribution over ten production seeds, and the shaded region shows the corresponding interquartile range. These profiles supplement the exact-TVD summaries by showing which parts of each distribution the models reproduce or miss.
 
 \subsection{Gaussian profiles}
 
@@ -941,17 +941,17 @@ This appendix separates reconstruction at training conditions from interpolation
 \end{plainwidetext}
 
 \clearpage
-\subsubsection{Interpolation to held-out conditions}
+\subsubsection{Interpolation at untrained midpoint probes}
 
 \begin{plainwidetext}
 \noindent\begin{minipage}{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/gaussian_n8_generalization_profiles.pdf}
-    \widefigurecaption{Gaussian Hamming-weight profiles at the held-out conditions $c\in\{0.0625,0.4375,0.9375\}$ for $n=8$. The conditioned model directly evaluates each held-out condition with $r=10$. The adjacent-independent baseline linearly interpolates, separately within each seed, the exact output distributions of the two neighboring $r=10$ independent circuits. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Both approaches reproduce the interior target more closely than the near-boundary targets.}{fig:app-gaussian-generalization-n8}
+    \widefigurecaption{Gaussian Hamming-weight profiles at the post-training midpoint probes $c\in\{0.125,0.375,0.875\}$ for $n=8$. Each probe lies halfway between two adjacent training conditions and is $0.125$ from the nearest one, the largest possible separation within the training range. We evaluated the already selected conditioned $r=10$ checkpoints at these additional conditions; the probes did not enter training, validation, or checkpoint selection. The adjacent-independent baseline linearly interpolates, separately within each seed, the exact output distributions of the two neighboring $r=10$ independent circuits. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. The conditioned model follows the exact target more closely than the independent interpolation baseline at all three probes.}{fig:app-gaussian-generalization-n8}
     \medskip
     \centering
     \includegraphics[width=\textwidth]{figures/gaussian_n12_generalization_profiles.pdf}
-    \widefigurecaption{Gaussian Hamming-weight profiles at the held-out conditions $c\in\{0.0625,0.4375,0.9375\}$ for $n=12$. The models, interpolation rule, and uncertainty summaries follow Fig.~\ref{fig:app-gaussian-generalization-n8}. The conditioned model follows the target response at the interior condition but retains the endpoint displacement already present at the training conditions.}{fig:app-gaussian-generalization-n12}
+    \widefigurecaption{Gaussian Hamming-weight profiles at the post-training midpoint probes $c\in\{0.125,0.375,0.875\}$ for $n=12$. The probe construction, interpolation rule, and uncertainty summaries follow Fig.~\ref{fig:app-gaussian-generalization-n8}. The conditioned model again tracks the exact target across the three probes, whereas interpolation between independent models produces broader or displaced profiles.}{fig:app-gaussian-generalization-n12}
 \end{minipage}
 \end{plainwidetext}
 

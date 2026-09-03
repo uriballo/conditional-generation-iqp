@@ -16,14 +16,21 @@ from journal_style import (
     save_figure,
 )
 
+from iqp_cond.ansatz import complete_ansatz
+from iqp_cond.artifacts import read_immutable_json, sha256_file
 from iqp_cond.curie_weiss_data import exact_curie_weiss_target
+from iqp_cond.encoding import ANGLE_ENCODING
+from iqp_cond.exact import exact_iqp_visible_probabilities
 from iqp_cond.exact_tvd_results import interpolate_probabilities, load_records
-from iqp_cond.gaussian_data import gaussian_target
+from iqp_cond.gaussian_data import condition_angle_matrix, gaussian_target
 
 ANCILLAS = (0, 3, 10)
 SEEDS = tuple(range(100, 110))
 GAUSSIAN_CONDITIONS = (0.0625, 0.4375, 0.9375)
+GAUSSIAN_MIDPOINTS = (0.125, 0.375, 0.875)
 CURIE_CONDITIONS = (0.6, 1.0, 1.4)
+
+
 def _profile(probabilities: np.ndarray, n: int) -> np.ndarray:
     shell = np.array([int(x).bit_count() for x in range(1 << n)])
     return np.bincount(shell, weights=probabilities, minlength=n + 1)
@@ -138,9 +145,84 @@ def _interpolated_rows(records, dataset, n, condition, coordinate, grid):
                 "left_endpoint": left,
                 "right_endpoint": right,
                 "weight": weight,
+                "distance_to_nearest_training": "",
             }
         )
     return rows
+
+
+def _midpoint_rows(records, evaluations, n, condition, coordinate, grid):
+    right_index = next(i for i, value in enumerate(grid) if value > condition)
+    left, right = grid[right_index - 1], grid[right_index]
+    distance = min(condition - left, right - condition)
+    if not np.isclose(condition, (left + right) / 2):
+        raise ValueError("probe is not a training-interval midpoint")
+    generators = np.asarray(complete_ansatz(n + 10).generators)
+    angles = condition_angle_matrix(np.asarray([condition]), n + 10)
+    values = []
+    for seed in SEEDS:
+        matches = [
+            r
+            for r in records
+            if r.identity["dataset"] == "gaussian"
+            and r.identity["visible_qubits"] == n
+            and r.identity["ancillas"] == 10
+            and r.identity["seed"] == seed
+            and r.identity["family"] == "conditioned"
+        ]
+        if len(matches) != 1:
+            raise ValueError("expected one conditioned checkpoint per seed")
+        payload = read_immutable_json(matches[0].envelope_path)
+        raw_path = Path(payload["probabilities_path"])
+        archive_path = (
+            raw_path if raw_path.is_absolute() else evaluations.parent / raw_path
+        )
+        if not archive_path.exists():
+            archive_path = evaluations.parent / "probabilities" / raw_path.name
+        if sha256_file(archive_path) != payload["probabilities_sha256"]:
+            raise ValueError("midpoint probability archive digest mismatch")
+        with np.load(archive_path, allow_pickle=False) as archive:
+            params = np.asarray(archive["selected_params"])
+        probs = exact_iqp_visible_probabilities(
+            params, generators, angles, n, 10, ANGLE_ENCODING
+        )[0]
+        values.append(_profile(probs, n))
+    values = np.asarray(values)
+    return [
+        {
+            "dataset": "gaussian",
+            "n": n,
+            "condition": condition,
+            "split": "midpoint_probe",
+            "model": "r=10",
+            "coordinate": float(xx),
+            "median": float(med),
+            "q1": float(q1),
+            "q3": float(q3),
+            "seed_count": len(SEEDS),
+            "left_endpoint": left,
+            "right_endpoint": right,
+            "weight": 0.5,
+            "distance_to_nearest_training": distance,
+        }
+        for xx, med, q1, q3 in zip(
+            coordinate,
+            np.median(values, 0),
+            np.quantile(values, 0.25, 0),
+            np.quantile(values, 0.75, 0),
+            strict=True,
+        )
+    ]
+
+
+def _validate_midpoint_probes(probes, training, registered_heldout):
+    for probe in probes:
+        if any(np.isclose(probe, value) for value in (*training, *registered_heldout)):
+            raise ValueError("midpoint probes must be absent from campaign grids")
+        right_index = next(i for i, value in enumerate(training) if value > probe)
+        left, right = training[right_index - 1], training[right_index]
+        if not np.isclose(probe, (left + right) / 2):
+            raise ValueError("probe is not a training-interval midpoint")
 
 
 def make_plots(evaluations: Path, output: Path) -> None:
@@ -164,6 +246,9 @@ def make_plots(evaluations: Path, output: Path) -> None:
         raise ValueError(
             "Curie-Weiss generalization panels are not held-out conditions"
         )
+    _validate_midpoint_probes(
+        GAUSSIAN_MIDPOINTS, gaussian_train, gaussian_heldout
+    )
     apply_journal_style()
     for dataset, conditions in (
         ("gaussian", GAUSSIAN_CONDITIONS),
@@ -301,7 +386,11 @@ def make_plots(evaluations: Path, output: Path) -> None:
                 if dataset == "curie_weiss"
                 else gaussian_target(n, 0.5, condition).shell_probabilities
             )
-            base = _rows(records, dataset, condition, x, n)
+            base = (
+                _midpoint_rows(records, evaluations, n, condition, x, gaussian_train)
+                if models == "midpoint"
+                else _rows(records, dataset, condition, x, n)
+            )
             rows = [
                 {
                     **row,
@@ -312,6 +401,7 @@ def make_plots(evaluations: Path, output: Path) -> None:
                     "left_endpoint": "",
                     "right_endpoint": "",
                     "weight": "",
+                    "distance_to_nearest_training": "",
                 }
                 for row in base
                 if row["model"] in {"r=0", "r=3", "r=10"}
@@ -331,9 +421,28 @@ def make_plots(evaluations: Path, output: Path) -> None:
                     "left_endpoint": "",
                     "right_endpoint": "",
                     "weight": "",
+                    "distance_to_nearest_training": "",
                 }
                 for xx, yy in zip(x, target, strict=True)
             ]
+            if models == "midpoint":
+                midpoint_grid = gaussian_train
+                right_index = next(
+                    i for i, value in enumerate(midpoint_grid) if value > condition
+                )
+                midpoint_distance = min(
+                    condition - midpoint_grid[right_index - 1],
+                    midpoint_grid[right_index] - condition,
+                )
+                target_rows = [row for row in rows if row["model"] == "exact target"]
+                rows = [row for row in rows if row["model"] == "r=10"]
+                rows += _interpolated_rows(
+                    records, dataset, n, condition, x, gaussian_train
+                )
+                rows += target_rows
+                for row in rows:
+                    row["split"] = "midpoint_probe"
+                    row["distance_to_nearest_training"] = midpoint_distance
             if models == "generalization":
                 target_rows = [row for row in rows if row["model"] == "exact target"]
                 rows = [row for row in rows if row["model"] == "r=10"]
@@ -373,14 +482,15 @@ def make_plots(evaluations: Path, output: Path) -> None:
                     handles.append(line)
                     labels.append(
                         "Conditioned, $r=10$"
-                        if models == "generalization" and model == "r=10"
+                        if models in {"generalization", "midpoint"}
+                        and model == "r=10"
                         else model
                     )
             target_line = ax.plot(x, target, "k--", label="Exact target")[0]
             if index == 0:
                 handles.append(target_line)
                 labels.append("Exact target")
-            if models == "generalization":
+            if models in {"generalization", "midpoint"}:
                 labels[1] = "Adjacent independent interpolation"
             ax.set_title(
                 rf"({chr(97 + index)}) $c={condition:g}$"
@@ -427,6 +537,7 @@ def make_plots(evaluations: Path, output: Path) -> None:
                 "left_endpoint",
                 "right_endpoint",
                 "weight",
+                "distance_to_nearest_training",
             ]
             writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
             writer.writeheader()
@@ -452,18 +563,18 @@ def make_plots(evaluations: Path, output: Path) -> None:
     panel_figure(
         "gaussian",
         8,
-        tuple(x for x in gaussian_heldout if x in GAUSSIAN_CONDITIONS),
-        "held_out",
+        GAUSSIAN_MIDPOINTS,
+        "midpoint_probe",
         "gaussian_n8_generalization_profiles",
-        "generalization",
+        "midpoint",
     )
     panel_figure(
         "gaussian",
         12,
-        tuple(x for x in gaussian_heldout if x in GAUSSIAN_CONDITIONS),
-        "held_out",
+        GAUSSIAN_MIDPOINTS,
+        "midpoint_probe",
         "gaussian_n12_generalization_profiles",
-        "generalization",
+        "midpoint",
     )
     panel_figure(
         "curie_weiss",
