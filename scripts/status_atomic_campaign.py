@@ -31,6 +31,7 @@ CURIE_N12_LAPTOP = range(2700, 2820)
 CURIE_N12_STRIX = range(2820, 3060)
 CURIE_N12_STRIX_NEXT = range(3060, 3300)
 CURIE_N12_LOCAL_R6 = range(3060, 3180)
+CURIE_N12_R10 = range(3180, 3300)
 
 
 def _artifact_ids(directory: Path) -> set[str]:
@@ -181,6 +182,7 @@ def main() -> None:
     curie_n12_strix_ids = {ids_by_index[i] for i in CURIE_N12_STRIX}
     curie_n12_strix_next_ids = {ids_by_index[i] for i in CURIE_N12_STRIX_NEXT}
     curie_n12_local_r6_ids = {ids_by_index[i] for i in CURIE_N12_LOCAL_R6}
+    curie_n12_r10_ids = {ids_by_index[i] for i in CURIE_N12_R10}
 
     local_training = _artifact_ids(EXACT_RESULTS / "training")
     local_evaluations = _artifact_ids(EXACT_RESULTS / "evaluations")
@@ -238,6 +240,8 @@ def main() -> None:
     n12_remote_training: set[str] = set()
     n12_remote_evaluations: set[str] = set()
     n12_next_evaluations: set[str] = set()
+    n12_r6_remote_evaluations: set[str] = set()
+    n12_r10_remote_evaluations: set[str] = set()
     for row in hosts:
         n12_remote_training.update(
             set(row.get("training_ids", ())) & curie_n12_strix_ids
@@ -248,9 +252,18 @@ def main() -> None:
         n12_next_evaluations.update(
             set(row.get("evaluation_ids", ())) & curie_n12_strix_next_ids
         )
+        n12_r6_remote_evaluations.update(
+            set(row.get("evaluation_ids", ())) & curie_n12_local_r6_ids
+        )
+        n12_r10_remote_evaluations.update(
+            set(row.get("evaluation_ids", ())) & curie_n12_r10_ids
+        )
     n12_laptop_trained = len(local_training & curie_n12_laptop_ids)
     n12_laptop_evaluated = len(local_evaluations & curie_n12_laptop_ids)
     local_r6_evaluated = len(local_evaluations & curie_n12_local_r6_ids)
+    combined_r6_evaluated = len(
+        (local_evaluations | n12_r6_remote_evaluations) & curie_n12_local_r6_ids
+    )
     local_n12_processes = subprocess.run(
         [
             "pgrep",
@@ -271,24 +284,38 @@ def main() -> None:
     print(f"  training done    {_fmt_progress(n12_wave_trained, 360)}")
     print(f"  laptop r=0       {_fmt_progress(n12_laptop_evaluated, 120)}")
     print(f"  Strix r=1,3      {_fmt_progress(len(n12_remote_evaluations), 240)}")
-    print(f"  Strix r=6,10     {_fmt_progress(len(n12_next_evaluations), 240)}")
+    print(f"  r=6 combined     {_fmt_progress(combined_r6_evaluated, 120)}")
     print(f"  local r=6 files  {_fmt_progress(local_r6_evaluated, 120)}")
+    print(
+        f"  Strix r=6 files  {_fmt_progress(len(n12_r6_remote_evaluations), 120)}"
+    )
+    print(
+        f"  Strix r=10 files {_fmt_progress(len(n12_r10_remote_evaluations), 120)}"
+    )
     print(
         f"  running now      {n12_local_workers} laptop + "
         f"{n12_remote_workers}/20 Strix workers"
     )
-    print("  execution        Strix paused; local r=6 wave active")
+    if n12_remote_workers:
+        execution = "Strix r=6 wave active; laptop paused"
+    elif n12_local_workers:
+        execution = "local r=6 wave active; Strix paused"
+    else:
+        execution = "no workers active"
+    print(f"  execution        {execution}")
     for row in hosts:
         if "error" in row:
             continue
-        complete = len(set(row.get("evaluation_ids", ())) & curie_n12_strix_ids)
+        complete = len(
+            set(row.get("evaluation_ids", ())) & curie_n12_local_r6_ids
+        )
         temp = row.get("temperature_c")
         temperature = (
             f"{temp:.0f} °C" if temp is not None else "temperature unavailable"
         )
         print(
             f"    {row['host']}  {row.get('n12_workers', 0):>2} workers | "
-            f"{complete:>3}/120 exact complete | {temperature}"
+            f"{complete:>3}/120 r=6 files | {temperature}"
         )
 
     gaussian_trained = len(local_training & gaussian_n16_ids)
