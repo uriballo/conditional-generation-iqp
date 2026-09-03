@@ -1,0 +1,11 @@
+{
+  "campaign_version": "estimator_audit_confirmatory_v1",
+  "encoders": ["product", "purified", "field_equivariant"],
+  "gradient_reference": "exact_autodiff",
+  "mmd_bandwidth": 1.5,
+  "repetitions": 20,
+  "root_seed": 20260825,
+  "sample_budgets": [256, 1024, 4096, 16384],
+  "topologies": ["sparse", "complete"],
+  "visible_qubits": 4
+}

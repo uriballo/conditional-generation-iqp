@@ -132,9 +132,8 @@ and \(\theta\) is formally one global parameter vector. However, different
 Conditions address disjoint phase blocks. This is a direct-sum
 multiplexing of separate universal generators, not the stronger scientific
 notion in which every Condition constrains the same effective parameters.
-It therefore conflicts with the intent of
-[`ADR 0002`](adr/0002-condition-only-through-the-initial-state.md), even
-though it satisfies the ADR literally. It is best presented as an
+It therefore conflicts with the intended shared-parameter interpretation,
+even though the condition still enters only through the input state. It is best presented as an
 expressivity upper bound or a deliberately weak definition of conditional
 universality.
 
@@ -321,4 +320,3 @@ applies to IQP Born distributions.
 - Can the Bernstein phase blocks be compiled with useful symmetry or tensor
   structure so that phase evaluation and hardware depth avoid the generic
   exponential construction?
-

@@ -29,6 +29,20 @@ class DataRegime(StrEnum):
     FIXED_TOTAL = "fixed_total"
 
 
+_CAMPAIGN_SEEDS = {
+    "gaussian_foundations_v1": {
+        "optimizer_seeds": tuple(range(10)),
+        "root_seed": 20_260_811,
+        "bootstrap_seed": 20_260_811,
+    },
+    "gaussian_confirmatory_v2": {
+        "optimizer_seeds": tuple(range(100, 110)),
+        "root_seed": 20_260_825,
+        "bootstrap_seed": 20_260_825,
+    },
+}
+
+
 def _exact_keys(value: Mapping[str, Any], expected: set[str], context: str) -> None:
     if set(value) != expected:
         raise ProtocolValidationError(
@@ -71,7 +85,7 @@ class GaussianRunIdentity:
     configuration_digest: str
 
     def __post_init__(self) -> None:
-        if self.campaign_version != "gaussian_foundations_v1":
+        if self.campaign_version not in _CAMPAIGN_SEEDS:
             raise ProtocolValidationError("unknown Gaussian campaign version")
         if self.n_qubits < 2 or self.peak_count not in {2, 3, 5, 9}:
             raise ProtocolValidationError("invalid Gaussian run dimensions")
@@ -163,14 +177,18 @@ class GaussianCampaignManifest:
         _exact_keys(self.raw, expected, "Gaussian manifest")
         if self.raw["schema_version"] != 1:
             raise ProtocolValidationError("Gaussian manifest schema_version must be 1")
-        if self.raw["campaign_version"] != "gaussian_foundations_v1":
+        campaign_version = str(self.raw["campaign_version"])
+        campaign_seeds = _CAMPAIGN_SEEDS.get(campaign_version)
+        if campaign_seeds is None:
             raise ProtocolValidationError("Gaussian campaign version is not frozen")
         if self.system_sizes != (8, 12, 16, 19):
             raise ProtocolValidationError("system sizes must be 8/12/16/19")
         if self.width_factors != (0.35, 0.5, 0.75):
             raise ProtocolValidationError("width factors must be 0.35/0.50/0.75")
-        if self.optimizer_seeds != tuple(range(10)):
-            raise ProtocolValidationError("optimizer seeds must be 0--9")
+        if self.optimizer_seeds != campaign_seeds["optimizer_seeds"]:
+            raise ProtocolValidationError(
+                f"optimizer seeds differ for {campaign_version}"
+            )
         target = self.raw["target"]
         _exact_keys(
             target,
@@ -217,7 +235,7 @@ class GaussianCampaignManifest:
             "data",
         )
         if data != {
-            "root_seed": 20260811,
+            "root_seed": campaign_seeds["root_seed"],
             "fixed_per_peak_training": 10_000,
             "fixed_per_peak_validation": 2_000,
             "fixed_total_training": 18_000,
@@ -226,7 +244,9 @@ class GaussianCampaignManifest:
         }:
             raise ProtocolValidationError("data protocol differs")
         self._validate_training()
-        self._validate_runtime_and_statistics()
+        self._validate_runtime_and_statistics(
+            bootstrap_seed=int(campaign_seeds["bootstrap_seed"])
+        )
 
     @property
     def campaign_version(self) -> str:
@@ -306,7 +326,7 @@ class GaussianCampaignManifest:
         if self.raw["training"] != expected:
             raise ProtocolValidationError("training protocol differs")
 
-    def _validate_runtime_and_statistics(self) -> None:
+    def _validate_runtime_and_statistics(self, *, bootstrap_seed: int) -> None:
         runtime = self.raw["runtime_preflight"]
         _exact_keys(
             runtime,
@@ -333,7 +353,7 @@ class GaussianCampaignManifest:
         )
         if statistics != {
             "bootstrap_replicates": 10_000,
-            "bootstrap_seed": 20_260_811,
+            "bootstrap_seed": bootstrap_seed,
             "confidence_level": 0.95,
             "replication_unit": "optimizer_seed",
             "performance_thresholds": None,

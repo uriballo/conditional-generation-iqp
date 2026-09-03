@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "campaign_version": "curie_encoder_ablation_n8_screen_v1",
+  "parent_manifest": "configs/curie_encoder_ablation_v1.json",
+  "parent_manifest_digest": "7d4304b8475ff37aa87a83ad03ba8fff7c941a6486e4421615d8c94a70e6e118",
+  "visible_qubits": [8],
+  "ancillas": [0, 10],
+  "seeds": [100, 101, 102],
+  "arms": ["product_generic_affine", "spin_flip_generic_affine", "product_informed_piecewise", "spin_flip_informed_piecewise"],
+  "artifacts": {"root": "results/curie-encoder-ablation-v1", "immutable": true}
+}

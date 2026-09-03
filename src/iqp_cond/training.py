@@ -127,6 +127,8 @@ def train(
     seed: int,
     config: TrainingConfig,
     encoding: str = ANGLE_ENCODING,
+    *,
+    initial_params: np.ndarray | None = None,
 ) -> TrainingResult:
     """Train one shared conditional model with fixed validation randomness."""
     condition_angles = np.asarray(condition_angles, dtype=np.float64)
@@ -146,7 +148,17 @@ def train(
 
     generators = jnp.asarray(ansatz.generators, dtype=jnp.float64)
     angles = jnp.asarray(condition_angles, dtype=jnp.float64)
-    params = initialize_parameters(ansatz.n_parameters, seed)
+    if initial_params is None:
+        params = initialize_parameters(ansatz.n_parameters, seed)
+    else:
+        candidate = np.asarray(initial_params, dtype=np.float64)
+        if candidate.shape != (ansatz.n_parameters,):
+            raise ValueError(
+                f"initial_params must have shape {(ansatz.n_parameters,)}",
+            )
+        if not np.isfinite(candidate).all():
+            raise ValueError("initial_params must contain only finite values")
+        params = jnp.asarray(candidate, dtype=jnp.float64).copy()
     schedule = optax.cosine_decay_schedule(
         init_value=config.learning_rate,
         decay_steps=config.steps,
@@ -260,6 +272,8 @@ def train_exact(
     seed: int,
     config: TrainingConfig,
     encoding: str = ANGLE_ENCODING,
+    *,
+    initial_params: np.ndarray | None = None,
 ) -> TrainingResult:
     """Train one shared model with the zero-variance Conditional MMD.
 
@@ -282,7 +296,17 @@ def train_exact(
 
     generators = jnp.asarray(ansatz.generators, dtype=jnp.float64)
     angles = jnp.asarray(condition_angles, dtype=jnp.float64)
-    params = initialize_parameters(ansatz.n_parameters, seed)
+    if initial_params is None:
+        params = initialize_parameters(ansatz.n_parameters, seed)
+    else:
+        candidate = np.asarray(initial_params, dtype=np.float64)
+        if candidate.shape != (ansatz.n_parameters,):
+            raise ValueError(
+                f"initial_params must have shape {(ansatz.n_parameters,)}",
+            )
+        if not np.isfinite(candidate).all():
+            raise ValueError("initial_params must contain only finite values")
+        params = jnp.asarray(candidate, dtype=jnp.float64).copy()
     schedule = optax.cosine_decay_schedule(
         init_value=config.learning_rate,
         decay_steps=config.steps,

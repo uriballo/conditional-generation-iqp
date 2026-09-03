@@ -969,8 +969,24 @@ This appendix separates reconstruction at training conditions from interpolation
 \begin{plainwidetext}
 \noindent\begin{minipage}{\textwidth}
     \centering
+    \includegraphics[width=\textwidth]{figures/curie_weiss_n12_magnetization_profiles.pdf}
+    \widefigurecaption{Interim Curie--Weiss magnetization profiles for $n=12$ at the held-out inverse temperatures $\beta\in\{0.6,1,1.4\}$. The curves compare the currently complete conditioned models with $r\in\{0,1,3\}$ against the exact target. Learned curves show medians over ten production seeds, and shaded bands show interquartile ranges. Increasing $r$ reduces the alternating-shell structure in panels (a) and (b), while all three models retain a symmetric two-mode profile in panel (c). The $r\in\{6,10\}$ fits remain pending and are not represented in this partial ancilla comparison.}{fig:app-curie-profiles-n12-partial}
+\end{minipage}
+\end{plainwidetext}
+
+\begin{plainwidetext}
+\noindent\begin{minipage}{\textwidth}
+    \centering
     \includegraphics[width=\textwidth]{figures/curie_weiss_n8_generalization_profiles.pdf}
     \widefigurecaption{Curie--Weiss magnetization profiles at the held-out inverse temperatures $\beta\in\{0.6,1,1.4\}$ for $n=8$. The conditioned model directly evaluates each held-out temperature with $r=10$, whereas the adjacent-independent baseline linearly interpolates, separately within each seed, the exact output distributions of the two neighboring $r=10$ independent circuits. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Both approaches reproduce the change from the central disordered mode to the ordered edge modes. Because the informed condition map contains the $\beta=1$ landmark, the central panel tests reconstruction at that prescribed landmark rather than unbiased localization of the transition.}{fig:app-curie-generalization}
+\end{minipage}
+\end{plainwidetext}
+
+\begin{plainwidetext}
+\noindent\begin{minipage}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/curie_weiss_n12_generalization_profiles.pdf}
+    \widefigurecaption{Interim Curie--Weiss generalization profiles for $n=12$ at $\beta\in\{0.6,1,1.4\}$. The shared conditioned model uses $r=3$, and the independent baseline interpolates the exact output distributions of the two neighboring $r=3$ independent circuits separately within each seed. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. This comparison uses the largest complete ancilla count and does not replace the final analysis with $r\in\{6,10\}$. As in Fig.~\ref{fig:app-curie-generalization}, the $\beta=1$ panel evaluates a prescribed landmark rather than unbiased localization of the transition.}{fig:app-curie-generalization-n12-partial}
 \end{minipage}
 \end{plainwidetext}
 

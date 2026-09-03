@@ -594,7 +594,7 @@ if __name__ == "__main__":
         default=Path("results/exact-tvd-ancilla-v1/evaluations"),
     )
     parser.add_argument(
-        "--output", type=Path, default=Path("paper/qualitative_ancilla_profiles")
+        "--output", type=Path, default=Path("artifacts/qualitative_ancilla_profiles")
     )
     args = parser.parse_args()
     make_plots(args.evaluations, args.output)

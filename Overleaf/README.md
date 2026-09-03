@@ -6,9 +6,8 @@ figure assets are included locally.
 
 ## Inventory
 
-- `main.tex`: canonical manuscript source, with only compile-safety repairs.
+- `main.tex`: canonical manuscript source.
 - `references.bib`: bibliography database.
-- `figures/all_datasets.pdf`
 - `figures/gaussian_results.pdf`
 - `figures/gaussian_n8_training_profiles.pdf`
 - `figures/gaussian_n12_training_profiles.pdf`
@@ -16,10 +15,9 @@ figure assets are included locally.
 - `figures/gaussian_n12_generalization_profiles.pdf`
 - `figures/curie_weiss_n8_magnetization_profiles.pdf`
 - `figures/curie_weiss_n8_generalization_profiles.pdf`
-- `figures/curie_weiss_results.pdf`: neutral placeholder; replace with the
-  campaign figure when available.
-- `figures/curie_weiss_results_placeholder.tex`: editable source for that
-  placeholder.
+- `figures/curie_weiss_n12_magnetization_profiles.pdf`
+- `figures/curie_weiss_n12_generalization_profiles.pdf`
+- `figures/curie_encoder_ablation_n8.pdf`
 
 Generated campaign files referenced conditionally by the source are optional;
 the manuscript supplies pending-value fallbacks when they are absent.

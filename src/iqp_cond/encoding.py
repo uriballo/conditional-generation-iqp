@@ -12,8 +12,12 @@ BLOCK_ZZ_PI4_ENCODING = "block_zz_pi4"
 REUPLOAD_L2_ENCODING = "reupload_l2"
 REUPLOAD_L3_ENCODING = "reupload_l3"
 SPIN_FLIP_BRANCH_ENCODING = "spin_flip_branch"
+FIELD_EQUIVARIANT_ENCODING = "field_equivariant_branch"
 TWO_BLOCK_BRANCH_ENCODING = "two_block_branch"
 RADIAL_SHELL_ENCODING = "radial_shell"
+BETA_BINOMIAL_EQUIVARIANT_ENCODING = "beta_binomial_equivariant"
+BETA_BINOMIAL_SHELL_PHASE_ENCODING = "beta_binomial_shell_phase"
+GRID_ISING_EQUIVARIANT_ENCODING = "grid_ising_equivariant"
 
 # Frozen quartic shell law for the radial-shell encoding (see
 # radial_shell_amplitudes).  log q_c(k) is a centered quartic in the
@@ -26,7 +30,13 @@ RADIAL_LAM4 = 1296.0
 
 BLOCK_ENCODINGS = (BLOCK_ZZ_PI8_ENCODING, BLOCK_ZZ_PI4_ENCODING)
 REUPLOAD_ENCODINGS = (REUPLOAD_L2_ENCODING, REUPLOAD_L3_ENCODING)
-RADIAL_ENCODINGS = (SPIN_FLIP_BRANCH_ENCODING,)
+RADIAL_ENCODINGS = (
+    SPIN_FLIP_BRANCH_ENCODING,
+    FIELD_EQUIVARIANT_ENCODING,
+    BETA_BINOMIAL_EQUIVARIANT_ENCODING,
+    BETA_BINOMIAL_SHELL_PHASE_ENCODING,
+    GRID_ISING_EQUIVARIANT_ENCODING,
+)
 SINGLE_QUBIT_ENCODINGS = (
     ANGLE_ENCODING,
     SYMMETRIC_REUPLOAD_ENCODING,
@@ -151,6 +161,83 @@ def two_branch_shell_amplitudes(
     return amp * (1.0 + parity)
 
 
+def field_equivariant_shell_amplitudes(
+    angles: jnp.ndarray,
+    n_qubits: int,
+) -> jnp.ndarray:
+    """Post-Hadamard shell amplitudes of the signed-field encoder.
+
+    The input is the normalized state
+
+    ``|eta(h)> + X^n |eta(-h)>``,
+
+    where ``|eta(h)> = RY(a(h))|0>^n`` and ``a(-h)=-a(h)``.  The two
+    branches are orthogonal, so the normalization is ``sqrt(2)``.  After the
+    first Hadamards, every computational-basis amplitude depends only on its
+    Hamming weight and can therefore use the radial sampler and ratio query.
+    """
+    a = jnp.asarray(angles)
+    angle = a if a.ndim == 0 else a[..., 0]
+    c = jnp.cos(angle / 2.0)
+    s = jnp.sin(angle / 2.0)
+    big_a = (c + s) / jnp.sqrt(2.0)
+    big_b = (c - s) / jnp.sqrt(2.0)
+    k = jnp.arange(n_qubits + 1)
+    forward = (big_a[..., None] ** (n_qubits - k)) * (big_b[..., None] ** k)
+    reflected = (big_b[..., None] ** (n_qubits - k)) * (big_a[..., None] ** k)
+    parity = jnp.where(k % 2 == 0, 1.0, -1.0)
+    return (forward + parity * reflected) / jnp.sqrt(2.0)
+
+
+def grid_ising_equivariant_shell_amplitudes(
+    angles: jnp.ndarray, n_qubits: int
+) -> jnp.ndarray:
+    """Return a two-coordinate spin-flip-equivariant grid-Ising reference.
+
+    The first coordinate controls the separation of two globally flipped
+    product branches. The second swaps their weights under sign reversal.
+    Neither coordinate specifies the lattice graph or a critical point.
+    """
+    a = jnp.asarray(angles, dtype=jnp.float64)
+    if a.ndim == 0 or a.shape[-1] < 2:
+        raise ValueError("grid-Ising encoding requires two condition coordinates")
+    beta = a[..., 0]
+    field = a[..., 1]
+    angle = jnp.pi / 2 - (jnp.pi / 3) * (0.1 + 0.8 * beta)
+    delta = jnp.pi * field / 6
+    plus = jnp.cos(jnp.pi / 4 - delta)
+    minus = jnp.sin(jnp.pi / 4 - delta)
+    c, s = jnp.cos(angle / 2), jnp.sin(angle / 2)
+    big_a = (c + s) / jnp.sqrt(2.0)
+    big_b = (c - s) / jnp.sqrt(2.0)
+    k = jnp.arange(n_qubits + 1)
+    base = big_a[..., None] ** (n_qubits - k) * big_b[..., None] ** k
+    norm = jnp.sqrt(
+        1.0 + 2.0 * plus * minus * jnp.sin(angle) ** n_qubits
+    )
+    parity = jnp.where(k % 2 == 0, 1.0, -1.0)
+    return base * (plus + parity * minus) / norm
+
+
+def radial_encoding_amplitudes(
+    angles: jnp.ndarray,
+    n_qubits: int,
+    encoding: str,
+) -> jnp.ndarray:
+    """Return shell amplitudes for a named radial encoder."""
+    if encoding == SPIN_FLIP_BRANCH_ENCODING:
+        return two_branch_shell_amplitudes(angles, n_qubits)
+    if encoding == FIELD_EQUIVARIANT_ENCODING:
+        return field_equivariant_shell_amplitudes(angles, n_qubits)
+    if encoding == BETA_BINOMIAL_EQUIVARIANT_ENCODING:
+        return beta_binomial_equivariant_shell_amplitudes(angles, n_qubits)
+    if encoding == BETA_BINOMIAL_SHELL_PHASE_ENCODING:
+        return beta_binomial_shell_phase_amplitudes(angles, n_qubits)
+    if encoding == GRID_ISING_EQUIVARIANT_ENCODING:
+        return grid_ising_equivariant_shell_amplitudes(angles, n_qubits)
+    raise ValueError(f"unknown radial encoding: {encoding!r}")
+
+
 def two_block_shell_amplitudes(
     angles: jnp.ndarray,
     m_a: int,
@@ -208,6 +295,61 @@ def radial_shell_amplitudes(
         dtype=jnp.float64,
     )
     return jnp.exp(logq / 2.0) / jnp.sqrt(binom)
+
+
+def beta_binomial_equivariant_shell_amplitudes(
+    angles: jnp.ndarray,
+    n_qubits: int,
+) -> jnp.ndarray:
+    """Post-Hadamard shell amplitudes for the beta-binomial pilot encoder.
+
+    ``angles[..., :2]`` contains normalized ``(u, v)`` coordinates.  The
+    pre-Hadamard state is the normalized coherent sum of two broadcast RY
+    product states, with branch angles ``pi/2 +/- b(v) + pi/6*(2*u-1)``.
+    The exact overlap normalization makes the family satisfy
+    ``X^n Phi(u,v) = Phi(1-u,v)`` up to floating-point roundoff.
+    """
+    a = jnp.asarray(angles, dtype=jnp.float64)
+    u, v = a[..., 0], a[..., 1]
+    b = jnp.pi / 4.0 + (jnp.pi / 24.0 - jnp.pi / 4.0) * v
+    shift = (jnp.pi / 6.0) * (2.0 * u - 1.0)
+    theta_minus = jnp.pi / 2.0 - b + shift
+    theta_plus = jnp.pi / 2.0 + b + shift
+    k = jnp.arange(n_qubits + 1)
+
+    def branch(theta: jnp.ndarray) -> jnp.ndarray:
+        c, s = jnp.cos(theta / 2.0), jnp.sin(theta / 2.0)
+        big_a = (c + s) / jnp.sqrt(2.0)
+        big_b = (c - s) / jnp.sqrt(2.0)
+        return big_a[..., None] ** (n_qubits - k) * big_b[..., None] ** k
+
+    # The branch overlap is cos(theta_minus-theta_plus)/2 raised to n,
+    # i.e. cos(b)^n.  This is real and positive for the prescribed range.
+    normalization = jnp.sqrt(2.0 + 2.0 * jnp.cos(b) ** n_qubits)
+    return (branch(theta_minus) + branch(theta_plus)) / normalization[..., None]
+
+
+def beta_binomial_shell_phase_amplitudes(
+    angles: jnp.ndarray, n_qubits: int
+) -> jnp.ndarray:
+    """Symmetric shell state with a fixed branch gap and phase modulation."""
+    a = jnp.asarray(angles, dtype=jnp.float64)
+    u, v = a[..., 0], a[..., 1]
+    shift = (jnp.pi / 6.0) * (2.0 * u - 1.0)
+    theta_minus = jnp.pi / 2.0 - jnp.pi / 6.0 + shift
+    theta_plus = jnp.pi / 2.0 + jnp.pi / 6.0 + shift
+    k = jnp.arange(n_qubits + 1)
+
+    def branch(theta):
+        c, s = jnp.cos(theta / 2.0), jnp.sin(theta / 2.0)
+        big_a, big_b = (c + s) / jnp.sqrt(2.0), (c - s) / jnp.sqrt(2.0)
+        return big_a[..., None] ** (n_qubits - k) * big_b[..., None] ** k
+
+    normalization = jnp.sqrt(2.0 + 2.0 * jnp.cos(jnp.pi / 6.0) ** n_qubits)
+    base = (branch(theta_minus) + branch(theta_plus)) / normalization[..., None]
+    gamma = jnp.pi / 12.0 + (jnp.pi / 4.0) * v
+    q = ((n_qubits - 2.0 * k) / n_qubits) ** 2
+    return base * jnp.exp(1j * gamma[..., None] * q)
 
 
 def post_hadamard_amplitudes(

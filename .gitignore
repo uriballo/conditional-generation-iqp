@@ -185,7 +185,7 @@ cython_debug/
 .pi/
 tmp/
 
-# LaTeX build products (the canonical review PDF is under output/pdf/)
+# LaTeX build products
 *.aux
 *.bbl
 *.blg
@@ -193,7 +193,14 @@ tmp/
 *.fls
 *.out
 *.synctex.gz
-paper/main.pdf
+Overleaf/main.pdf
 
-# Rebuilt local handoff bundle
-output/author-review/
+# Local experiment and research artifacts
+.scratch/
+archive/
+artifacts/
+output/
+paper/
+results/
+tmp/
+watch_*
