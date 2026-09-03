@@ -1,0 +1,924 @@
+\documentclass[pra,aps,10pt,twocolumn,floatfix,superscriptaddress,
+notitlepage,longbibliography]{revtex4-2}
+
+\usepackage{xcolor, soul}
+
+% -------------------------------------------------------
+% PACKAGES
+% -------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx,color}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{quantikz}
+\usepackage{amsthm}
+\usepackage{subcaption}
+\newtheorem{definition}{Definition}
+\usepackage{bm}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage[noend]{algpseudocode}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=magenta,urlcolor=blue]{hyperref}
+\usepackage{braket}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{siunitx}
+\usepackage{eurosym}
+
+\sisetup{
+  detect-mode,
+  table-format=1.4, 
+  table-number-alignment = center
+}
+
+\newtheorem{proposition}{Proposition}
+\newcommand{\bits}{\{0,1\}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\mmd}{\operatorname{MMD}}
+\newcommand{\TVD}{\operatorname{TVD}}
+\newcommand{\supp}{\operatorname{supp}}
+\makeatletter
+\newcommand{\tableinput}[1]{\@@input #1 }
+\makeatother
+\definecolor{paperblue}{HTML}{0072B2}
+\newenvironment{plainwidetext}{\par\onecolumngrid\vspace{4pt}}{%
+  \par\vspace{4pt}\twocolumngrid}
+\newcommand{\widefigurecaption}[2]{%
+  \refstepcounter{figure}\label{#2}%
+  \par\vspace{6pt}
+  \noindent\parbox{\textwidth}{\small Figure~\thefigure: #1}\par}
+
+\newif\ifgaussianresults
+\IfFileExists{generated/gaussian_claims.tex}{
+  \gaussianresultstrue
+  \input{generated/gaussian_claims}
+}{
+  \gaussianresultsfalse
+  \newcommand{\GaussianAtomicModels}{0}
+  \newcommand{\HeadlineProfileControl}{pending}
+  \newcommand{\HeadlineProfileBankGap}{pending}
+  \newcommand{\HeadlineProfileLookup}{pending}
+  \newcommand{\HeadlineProfileMixture}{pending}
+}
+
+\IfFileExists{generated/curie_weiss_ancilla_claims.tex}{
+  \input{generated/curie_weiss_ancilla_claims}
+}{
+  \newif\ifcurieweissancillaresults
+  \curieweissancillaresultsfalse
+}
+\IfFileExists{generated/curie_weiss_ancilla_effects.tex}{
+  \newcommand{\curieweissancillaeffects}{
+    \tableinput{generated/curie_weiss_ancilla_effects.tex}}
+}{\newcommand{\curieweissancillaeffects}{
+  \multicolumn{3}{c}{Generated after campaign completion.}\\}}
+\IfFileExists{generated/curie_weiss_ancilla_response.tex}{
+  \newcommand{\curieweissancillaresponse}{
+    \tableinput{generated/curie_weiss_ancilla_response.tex}}
+}{\newcommand{\curieweissancillaresponse}{
+  \multicolumn{6}{c}{Generated after campaign completion.}\\}}
+\IfFileExists{generated/curie_weiss_ancilla_all_rows.tex}{
+  \newcommand{\curieweissancillaallrows}{
+    \tableinput{generated/curie_weiss_ancilla_all_rows.tex}}
+}{\newcommand{\curieweissancillaallrows}{
+  \multicolumn{11}{c}{Generated after campaign completion.}\\}}
+\IfFileExists{generated/curie_weiss_ancilla_pilot.tex}{
+  \newcommand{\curieweissancillapilot}{
+    \tableinput{generated/curie_weiss_ancilla_pilot.tex}}
+}{\newcommand{\curieweissancillapilot}{
+  \multicolumn{4}{c}{Development evidence unavailable.}\\}}
+
+\IfFileExists{generated/capacity_control_claims.tex}{
+  \input{generated/capacity_control_claims}
+}{
+  \newif\ifcapacitycontrolresults
+  \capacitycontrolresultsfalse
+  \newcommand{\CapacityProfileHeldOut}{pending}
+  \newcommand{\CapacityRawHeldOut}{pending}
+  \newcommand{\CapacityProfileCritical}{pending}
+  \newcommand{\CapacityRawCritical}{pending}
+  \newcommand{\CapacityProfileCold}{pending}
+  \newcommand{\CapacityRawCold}{pending}
+}
+
+\newcommand{\campaignfigure}[3]{%
+  \begin{plainwidetext}
+  \noindent\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{gaussian_figures/#1.pdf}
+  \widefigurecaption{#2}{#3}
+  \end{minipage}
+  \end{plainwidetext}
+}
+\newcommand{\curieweissfigure}[3]{%
+  \begin{plainwidetext}
+  \noindent\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{curie_weiss_ancilla_figures/#1.pdf}
+  \widefigurecaption{#2}{#3}
+  \end{minipage}
+  \end{plainwidetext}
+}
+\newcommand{\symmetryfigure}[3]{%
+  \begin{plainwidetext}
+  \noindent\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{symmetry_figures/#1.pdf}
+  \widefigurecaption{#2}{#3}
+  \end{minipage}
+  \end{plainwidetext}
+}
+
+% --- Markup macros for collaborative editing -------------------------
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+\newcommand{\added}[1]{\textcolor{blue}{\textbf{[ADD: #1]}}}
+\newcommand{\removed}[1]{\textcolor{red}{\textit{[REM: #1]}}}
+% --------------------------------------------------------------------
+\usetikzlibrary{positioning,arrows.meta,backgrounds}
+
+\definecolor{paperblue}{HTML}{0072B2}
+\definecolor{softgray}{HTML}{F4F5F7}
+\definecolor{target_purple}{HTML}{6A51A3}
+
+\tikzset{
+  >={Latex[length=2.0mm]},
+  flow/.style={->,line width=0.72pt,draw=black!68},
+  dataflow/.style={->,line width=0.72pt,draw=black!80!black},
+  feedback/.style={->,line width=0.78pt,draw=black,rounded corners=2pt},
+  classical/.style={draw=black!58,fill=white,rounded corners=2pt,line width=0.6pt,
+    align=center,inner xsep=7pt,inner ysep=5pt,font=\small},
+  estimator/.style={classical,draw=target_purple!85!black,fill=target_purple!5},
+  target/.style={classical,draw=black!85!black,fill=softgray!5},
+  subtle/.style={classical,fill=black,draw=softgray!35}
+}
+
+% -------------------------------------------------------
+\begin{document}
+
+%\title{Classically trainable conditional quantum generative models}
+
+\title{Conditional generation with instantaneous quantum polynomial-time circuits}
+
+\author{Oriol Balló-Gimbernat}
+\email{oriol.ballo@eurecat.org}
+\affiliation{Eurecat, Centre Tecnològic de Catalunya, Barcelona, Spain}
+\affiliation{Centre de Visió per Computador (CVC), Barcelona, Spain}
+\affiliation{Universitat Autònoma de Barcelona (UAB), Barcelona, Spain}
+
+\author{Emiliano Tolotti}
+\affiliation{Department of Information Engineering and Computer Science, University of Trento, Via Sommarive 9, 38123 Trento, Italy}
+
+
+\author{...}
+\affiliation{...}
+
+
+\author{Adan Garriga}
+\affiliation{Eurecat, Centre Tecnològic de Catalunya, Barcelona, Spain}
+
+\author{Fernando Vilariño}
+\affiliation{Centre de Visió per Computador (CVC), Barcelona, Spain}
+\affiliation{Universitat Autònoma de Barcelona (UAB), Barcelona, Spain}
+
+\date{\today}
+
+\begin{abstract}
+Conditional generative models represent families of distributions indexed by an input variable. Adding this dependence to instantaneous quantum polynomial-time (IQP) circuits is constrained by their commuting structure, the input variable must fit within the diagonal block. We introduce state-conditioned IQP Born machines, which instead encode the condition in a classically tractable input state while keeping a single diagonal unitary fixed across the family. The Pauli-$Z$ observables required by the maximum mean discrepancy loss, and gradients, remain efficiently estimable on a classical computer whenever the input state supports efficient sampling and amplitude-ratio evaluation. This retains the classical training framework of IQP Born machines. \TODO{Replace the remainder of the abstract after the exact-TVD campaign and Curie--Weiss encoder ablation finish. Do not describe $\beta=1$ as blind interpolation or critical-point discovery; report it as landmark-aware realization and base generalization claims on the non-landmark held-out temperatures.}
+\end{abstract}
+
+\maketitle
+\section{Introduction}
+
+Conditional generative models learn $q_\theta(x\mid c)$, a family of output distributions indexed by a condition $c$. Quantum circuit Born machines (QCBMs) represent discrete distributions through measurement statistics and can be trained with likelihood-free objectives such as maximum mean discrepancy (MMD) \cite{liuDifferentiableLearning2018,benedettiGenerativeModeling2019,gaoQuantumGenerativeModels2018}. Conditional QCBMs encode $c$ through repeated rotations or dedicated condition qubits \cite{kissConditionalBornMachine2022,zengConditionalQCBM2023}. In an instantaneous quantum polynomial-time (IQP) circuit, condition-dependent gates that preserve the IQP form belong to the commuting diagonal block. The diagonal unitary therefore changes with $c$. We ask whether an IQP Born machine can represent $q_\theta(x\mid c)$ while keeping this unitary fixed and retaining its classical training framework.
+
+Classically trained IQP Born machines separate observable estimation from output sampling. Selected Pauli-$Z$ correlators, character-kernel MMD losses, and their gradients can be estimated classically for a tractable reference state, although sampling from related IQP families is associated with hardness results under standard complexity assumptions \cite{nestSimulatingQuantumComputers2011,recio-armengolIQPoptFastOptimization2025,recio-armengolTrainClassicalDeploy2026,bremnerAchievingQuantumSupremacy2017}. We encode $c$ in a classically tractable input state $\ket{\phi(c)}$ and apply one fixed IQP unitary. Product inputs retain the factorized reference distribution used by the Pauli estimator; non-product inputs remain admissible when the state entering the diagonal block supports efficient basis sampling and amplitude-ratio evaluation \cite{nestSimulatingQuantumComputers2011}. The same classical estimators then apply, while the diagonal generators and learned phases remain independent of $c$. Figure~\ref{fig:pipeline_workflow} shows this separation. Input-state encodings and their finite Fourier responses are established in quantum circuit learning \cite{mitaraiQuantumCircuitLearning2018,schuldEffectDataEncoding2021,casasMultidimensionalFourier2023}. Here the input state acts as a conditioning interface for a fixed IQP unitary. We use \emph{classically trainable} only for the observable, loss, and gradient estimators; it does not imply classical access to the output distribution.
+
+Gaussian Hamming-weight targets test conditional translation and within-range interpolation. Curie--Weiss targets test whether the model can follow a change in distribution shape with inverse temperature when the input either does or does not impose the known global spin-flip symmetry. For the finite systems considered here, the region around $\beta=1$ is a smooth crossover rather than an estimate of critical scaling. A beta--binomial family tests two-dimensional conditioning: one coordinate controls the mean Hamming weight, while the other changes the concentration at fixed mean. \TODO{Write the Introduction evidence paragraph after the exact-TVD campaign, Curie--Weiss encoder ablation, and beta--binomial pilot finish. Separate the supplied $\beta=1$ landmark from held-out generalization at $\beta\in\{0.6,0.8,1.2,1.4\}$, and retain the beta--binomial benchmark only if its preregistered pilot gate passes.}
+
+% \begin{figure*}[htbp!]
+%   \centering
+%     \resizebox{0.6\linewidth}{!}{%
+%       \begin{quantikz}[row sep=0.38cm, column sep=0.40cm]
+%         \lstick{$\ket{0}_1$}
+%           & \gate[wires=3,
+%               style={fill=paperblue!10,draw=paperblue,
+%                 rounded corners=3pt,line width=0.65pt,
+%                 inner xsep=5pt,inner ysep=1pt}]
+%               {\begin{gathered}
+%                 \text{Tractable input state}\\[-1pt]
+%                 \displaystyle|\phi(c)\rangle
+%               \end{gathered}}
+%             \gategroup[wires=3,steps=1,
+%               style={draw=none,inner xsep=0pt,inner ysep=0pt},
+%               background,
+%               label style={label position=below,anchor=north,
+%                 text=paperblue,yshift=-3pt}]{Conditioning}
+%           & \gate{H}
+%             \gategroup[wires=3,steps=3,
+%               style={rounded corners=3pt,draw=black!55,line width=0.6pt,
+%                 dash pattern=on 3pt off 2.3pt,
+%                 inner xsep=-1pt,inner ysep=-1pt},
+%               background,
+%               label style={label position=above,anchor=south,
+%                 text=black!65,yshift=3pt}]{IQP Unitary}
+%           & \gate[wires=3]{D_Z(\theta)} & \gate{H} & \meter{} & \rstick{$x_1$} \\
+%         \lstick{$\ket{0}_i$}
+%           &
+%           & \gate{H} & & \gate{H} & \meter{} & \rstick{$x_i$} \\
+%         \lstick{$\ket{0}_n$}
+%           &
+%           & \gate{H} & & \gate{H} & \meter{} & \rstick{$x_n$}
+%       \end{quantikz}%
+%     }
+%   \caption{Conditional IQP circuit Born Machine. Conditioning prepares a classically tractable input state $\ket{\phi(c)}$. The IQP unitary and phase vector are shared across conditions.}
+%   \label{fig:pipeline}
+% \end{figure*}
+
+
+\begin{figure*}[ht!]
+\centering
+
+{\small
+\begin{quantikz}[row sep=0.40cm,column sep=0.42cm]
+ \lstick{$\ket{0}_1$}
+   & \gate[
+       wires=3,
+       style={
+         fill=paperblue!10,
+         draw=paperblue,
+         rounded corners=3pt,
+         line width=0.65pt,
+         inner xsep=6pt,
+         inner ysep=1pt
+       }
+     ]{
+       \begin{gathered}
+         \text{Classically tractable}\\\text{input state}\\[-1pt]
+         \ket{\phi(c_i)}
+       \end{gathered}
+     }
+     \gategroup[
+       wires=3,
+       steps=1,
+       style={
+         draw=none,
+         inner xsep=0pt,
+         inner ysep=0pt
+       },
+       background,
+       label style={
+         label position=below,
+         anchor=north,
+         text=paperblue,
+         yshift=-3pt
+       }
+     ]{Conditioning}
+   & \gate{H}
+     \gategroup[
+       wires=3,
+       steps=3,
+       style={
+         rounded corners=3pt,
+         draw=black!55,
+         line width=0.6pt,
+         dash pattern=on 3pt off 2.3pt,
+         inner xsep=-1pt,
+         inner ysep=-1pt
+       },
+       background,
+       label style={
+         label position=above,
+         anchor=south,
+         text=black!65,
+         yshift=3pt
+       }
+     ]{Shared IQP unitary}
+   & \gate[
+       wires=3,
+       style={
+         fill=paperblue!5,
+         draw=paperblue!90!black,
+         rounded corners=2pt,
+         line width=0.7pt,
+         inner xsep=5pt
+       }
+     ]{D_G(\boldsymbol\theta)}
+   & \gate{H}
+   & \meter{}
+   & \rstick{$x_1$}
+   \\
+ \lstick{$\ket{0}_i$}
+   & & \gate{H} & & \gate{H} & \meter{} & \rstick{$x_i$}
+   \\
+ \lstick{$\ket{0}_n$}
+   & & \gate{H} & & \gate{H} & \meter{} & \rstick{$x_n$}
+\end{quantikz}
+}
+
+\vspace{5mm}
+
+\resizebox{0.8\textwidth}{!}{%
+\begin{tikzpicture}[node distance=7mm and 8mm]
+
+ \node[target,minimum width=42mm] (family)
+   {conditional targets\\
+    $\{p(x\mid c): c\in C\}$};
+
+ \node[estimator,right=of family,minimum width=45mm] (per)
+   {per-condition MMD\\
+    $\mathrm{MMD}^2\!\left(
+      p(\cdot\mid c),
+      q_\theta(\cdot\mid c)
+    \right)$};
+
+ \node[estimator,right=of per,minimum width=42mm] (avg)
+   {shared objective\\
+    $\displaystyle
+      \mathcal L(\theta)
+      =
+      \frac{1}{|C|}
+      \sum_{c\in C}
+      \mathrm{MMD}^2_c$};
+
+ % \node[estimator,right=of avg,minimum width=25mm] (upd)
+ %   {update\\
+ %    $\boldsymbol\theta$};
+
+ \draw[dataflow] (family) -- (per);
+ \draw[flow]     (per)    -- (avg);
+ %\draw[feedback] (avg)    -- (upd);
+
+\end{tikzpicture}%
+}
+
+\caption{Conditional IQP Born machine. For each condition $c_i$, an encoder prepares a classically tractable input state $\ket{\phi(c_i)}$. The same IQP unitary $U_{\theta}=H^{\otimes n}D_G(\boldsymbol\theta)H^{\otimes n}$, defined by a fixed graph $G$ and a parameter vector $\boldsymbol\theta$, is used for all conditions. The conditional family is therefore represented by varying only the input state. During training, the per-condition discrepancies $\mathrm{MMD}^2\!\left(p(\cdot\mid c), q_\theta(\cdot\mid c) \right)$ are averaged into the shared objective $\mathcal L(\theta) = |C|^{-1} \sum_{c\in C} \mathrm{MMD}^2_c$, yielding updates to a single parameter vector. }
+\label{fig:pipeline_workflow}
+\end{figure*}
+
+State conditioning therefore extends classically trained IQP Born machines from a single distribution to a condition-indexed family without reprogramming the diagonal unitary. Our evidence is limited to within-range interpolation on exchangeable targets. The Curie--Weiss experiment does not isolate the effects of the spin-flip construction and ancilla marginalization. We make no claim of universal conditional approximation, classical output sampling, quantum advantage, thermal-state preparation, or favorable optimization behavior \cite{shenCharacterizingTrainability2026}.
+
+
+\section{Conditional IQP model}
+Let $\mathcal{C}$ denote the condition space and let $\{p(\cdot\mid c):c\in\mathcal{C}\}$ be a family of target distributions over $n$-bit strings. We represent this family by encoding each condition $c$ in an input state $\ket{\phi(c)}$ and applying a shared parameterized IQP unitary $U_{\boldsymbol{\theta}}$. The resulting conditional model is
+\begin{equation}
+    q_{\boldsymbol{\theta}}(x\mid c)=\left|\bra{x}U_{\boldsymbol{\theta}}\ket{\phi(c)}\right|^2,
+    \qquad x\in\{0,1\}^n .
+    \label{eq:cond_sampling}
+\end{equation}
+
+The circuit graph and parameter vector are shared across the entire conditional family. We optimize $\boldsymbol{\theta}$ during training, but neither the graph nor $\boldsymbol{\theta}$ changes when the condition changes. Consequently, the model response to $c$ arises from the input state $\ket{\phi(c)}$, rather than from condition-dependent gates in the learned IQP unitary. The state-preparation circuit need not itself have IQP form; throughout this work, ``IQP unitary'' refers specifically to the shared learned unitary $U_{\boldsymbol{\theta}}$.
+
+We define the shared IQP unitary through an undirected graph $G=(V,E)$ with $n=|V|$ vertices. Each vertex carries a one-body generator $Z_i$, and each edge $\{i,j\}\in E$ carries a two-body generator $Z_iZ_j$. For $\boldsymbol{\theta}\in\mathbb{R}^{|V|+|E|}$, the corresponding IQP unitary is
+\begin{equation}
+    U_{\boldsymbol{\theta}}=H^{\otimes n}D_G(\boldsymbol{\theta})H^{\otimes n},
+    \label{eq:iqp-unitary}
+\end{equation}
+where the diagonal layer is
+\begin{equation}
+    D_G(\boldsymbol{\theta})=\exp\left(i\sum_{i\in V}\theta_iZ_i+i\sum_{\{i,j\}\in E}\theta_{ij}Z_iZ_j\right).
+    \label{eq:graph-diagonal}
+\end{equation}
+
+All generators in $D_G(\boldsymbol{\theta})$ commute. The unitary therefore contains $|V|+|E|$ trainable phase parameters, one for each vertex and edge.
+
+To identify conditional encoders that preserve classical estimation, let
+\begin{equation}
+    \psi_c(z)=\bra{z}H^{\otimes n}\ket{\phi(c)}
+    \label{eq:reference-amplitude}
+\end{equation}
+denote the computational-basis amplitudes of the state entering the diagonal layer. Uniformly over the conditions and bit masks used by the loss, we require polynomial-time classical algorithms that sample $z$ from $|\psi_c(z)|^2$ and evaluate
+\begin{equation}
+    R_c(z,a)=\frac{\psi_c(z\oplus a)}{\psi_c(z)}
+    \label{eq:amplitude-ratio}
+\end{equation}
+to the numerical precision required by the estimator.
+
+The ratio need only be defined on the support of $|\psi_c|^2$. Computationally tractable states in the sense of Van den Nest, which permit efficient basis sampling and individual amplitude evaluation, provide a sufficient condition under exact or suitably controlled arithmetic \cite{nestSimulatingQuantumComputers2011}. Our estimator uses the narrower sampling-and-ratio interface above. For a polynomial-size IQP diagonal and a loss with an efficient Pauli-moment description, these operations yield polynomial-time additive estimators of the Pauli-$Z$ moments used for training \cite{recio-armengolIQPoptFastOptimization2025,recio-armengolTrainClassicalDeploy2026}. Section~\ref{sec:cond_training} derives the estimator and its finite-second-moment guarantee. This access does not provide exact output probabilities or efficient classical samples from $q_{\boldsymbol{\theta}}(x\mid c)$.
+
+\subsection{Product-state conditioning}
+Product states provide a direct realization of the tractability interface above. We assign each qubit a fixed rotation axis $j_i\in\{X,Y\}$ and encode the condition through the rotation angles,
+\begin{equation}
+    \ket{\phi(c)}=\bigotimes_{i=1}^{n}R_{j_i}\!\left(\alpha_i(c)\right)\ket{0}.
+    \label{eq:product-encoder}
+\end{equation}
+
+The physical meaning and normalization of $c$ depend on the target family. The axes $j_i$ and angle maps $\alpha_i$ are fixed before training; changing the condition changes only the prepared input state and leaves the shared IQP parameters $\boldsymbol{\theta}$ unchanged.
+
+The local Hadamards before the diagonal layer preserve this product structure. Define $\ket{\chi_i(c)}=H R_{j_i}(\alpha_i(c))\ket{0}$ and $\psi_{c,i}(b)=\braket{b|\chi_i(c)}$ for $b\in\{0,1\}$. The reference amplitudes in Eq.~\eqref{eq:reference-amplitude} then factorize as
+\begin{equation}
+    \psi_c(z)=\prod_{i=1}^{n}\psi_{c,i}(z_i).
+    \label{eq:product-amplitudes}
+\end{equation}
+
+Consequently, we can sample each bit $z_i$ independently from $|\psi_{c,i}(z_i)|^2$. For every sampled string and every mask $a$, the ratio in Eq.~\eqref{eq:amplitude-ratio} is
+\begin{equation}
+    R_c(z,a)=\prod_{i:a_i=1}\frac{\psi_{c,i}(1-z_i)}{\psi_{c,i}(z_i)}.
+    \label{eq:product-amplitude-ratio}
+\end{equation}
+
+Both operations require at most $O(n)$ single-qubit evaluations, so this encoder satisfies the sampling-and-ratio interface uniformly over $c$ and $a$, subject to the numerical-precision requirement stated above. If every angle map is affine, $\alpha_i(c)=\omega_i c+\beta_i$, each output probability is a finite Fourier series in $c$ whose frequencies are signed sums of the encoding frequencies $\omega_i$ \cite{schuldEffectDataEncoding2021,casasMultidimensionalFourier2023}.
+
+\subsection{Two-dimensional product-state conditioning}
+
+The product construction also accommodates vector-valued conditions. For a two-dimensional condition $\boldsymbol c=(c_1,c_2)$, let $u=T_1(c_1)$ and $v=T_2(c_2)$ denote normalized coordinates in $[0,1]$. We assign the coordinates to polar and azimuthal angles,
+\begin{equation}
+    \vartheta(u)=\frac{\pi}{2}+\frac{\pi}{3}(2u-1),
+    \qquad
+    \varphi(v)=\frac{\pi}{3}(2v-1).
+    \label{eq:two-coordinate-angle-maps}
+\end{equation}
+The resulting amplitude--phase encoder is
+\begin{equation}
+\begin{aligned}
+    \ket{\phi_{\mathrm{ap}}(u,v)}
+    &=\left[R_Z\!\left(\varphi(v)\right)
+      R_Y\!\left(\vartheta(u)\right)\ket{0}\right]^{\otimes n}\\
+    &\simeq\left[
+      \cos\!\frac{\vartheta(u)}{2}\ket{0}
+      +e^{i\varphi(v)}\sin\!\frac{\vartheta(u)}{2}\ket{1}
+      \right]^{\otimes n},
+\end{aligned}
+    \label{eq:amplitude-phase-encoder}
+\end{equation}
+where $\simeq$ denotes equality up to a global phase. The first coordinate changes the computational-basis amplitudes, whereas the second changes their relative phase and influences the output through interference. The encoder is a permutation-invariant product state, so the sampling and amplitude-ratio operations factorize as in Eqs.~\eqref{eq:product-amplitudes} and \eqref{eq:product-amplitude-ratio}. The transformations $T_1$ and $T_2$ specify how physical coordinates enter the generic construction and are fixed separately for each dataset.
+
+\subsection{Symmetry-informed conditioning}
+
+The ablation in Sec.~\ref{sec:curie-ablation} separates the effect of this symmetry from the condition map and the number of ancillas.
+
+The zero-field Curie--Weiss distribution is invariant under a global spin flip at every inverse temperature $\beta$,
+\begin{equation}
+    p_\beta(x)=p_\beta(\bar{x}),
+    \label{eq:curie-spin-flip-target}
+\end{equation}
+where $\bar{x}$ flips every bit in $x$. This is a within-condition symmetry: the transformation changes the spin configuration but leaves $\beta$ fixed.
+
+Recio-Armengol, Ahmed, and Bowles showed that a GHZ input enforces this global bit-flip invariance in an IQP-structured Born machine while retaining a classical estimator for the observables required during training \cite{recio-armengolTrainClassicalDeploy2026}. We use the same symmetry principle, but replace their fixed unconditional GHZ input with a condition-dependent family of spin-flip-symmetrized states. Let $m$ denote the size of the register on which the encoder acts and let $F_m=X^{\otimes m}$.
+
+Define the broadcast product state
+\begin{equation}
+    \ket{p_{\alpha(\beta)}}^{\otimes m}
+    =\left[R_Y\!\left(\alpha(\beta)\right)\ket{0}\right]^{\otimes m}.
+    \label{eq:curie-base-product-state}
+\end{equation}
+Our Curie--Weiss encoder is
+\begin{equation}
+    \ket{\phi_{\mathrm{sf}}^{(m)}(\beta)}
+    =\frac{\ket{p_{\alpha(\beta)}}^{\otimes m}+F_m\ket{p_{\alpha(\beta)}}^{\otimes m}}{\sqrt{\mathcal N_\beta}},
+    \label{eq:spin-flip-encoder}
+\end{equation}
+where $\mathcal N_\beta$ is the normalization factor. Equation~\eqref{eq:spin-flip-encoder} is a condition-dependent cat-like state. It reduces to the GHZ construction of Ref.~\cite{recio-armengolTrainClassicalDeploy2026} when $\alpha(\beta)=0$.
+
+The encoder satisfies $F_m\ket{\phi_{\mathrm{sf}}^{(m)}(\beta)}=\ket{\phi_{\mathrm{sf}}^{(m)}(\beta)}$. Moreover, every generator of the IQP unitary in the $X$ basis commutes with $F_m$, and hence $[U_{\boldsymbol{\theta}}^{(m)},F_m]=0$. Its $m$-bit output distribution therefore obeys
+\begin{equation}
+    q_{\boldsymbol{\theta}}^{(m)}(y\mid\beta)
+    =q_{\boldsymbol{\theta}}^{(m)}(\bar{y}\mid\beta).
+    \label{eq:register-spin-flip-invariance}
+\end{equation}
+
+The symmetry condition alone does not establish classical tractability. For the state in Eq.~\eqref{eq:spin-flip-encoder}, however, the amplitudes entering the diagonal layer depend only on the Hamming weight. Write $c_\beta=\cos[\alpha(\beta)/2]$, $s_\beta=\sin[\alpha(\beta)/2]$, $u_\beta=(c_\beta+s_\beta)/\sqrt{2}$, and $v_\beta=(c_\beta-s_\beta)/\sqrt{2}$. For a string $z$ of weight $k=|z|$,
+\begin{equation}
+    \psi_\beta(z)=A_\beta(k)
+    =\frac{u_\beta^{m-k}v_\beta^k\left[1+(-1)^k\right]}{\sqrt{\mathcal N_\beta}}.
+    \label{eq:spin-flip-shell-amplitude}
+\end{equation}
+Odd-weight amplitudes vanish, while all strings within an even-weight shell have the same amplitude. We sample the reference state by first drawing an even weight $k$ with probability
+\begin{equation}
+    P_\beta(k)=\binom{m}{k}|A_\beta(k)|^2
+    \label{eq:spin-flip-shell-probability}
+\end{equation}
+and then drawing a string uniformly from that shell. The amplitude ratio required by Eq.~\eqref{eq:amplitude-ratio} is obtained from the same $m+1$ shell table,
+\begin{equation}
+    R_\beta(z,a)=\frac{A_\beta(|z\oplus a|)}{A_\beta(|z|)}.
+    \label{eq:spin-flip-shell-ratio}
+\end{equation}
+The denominator is nonzero for every sampled $z$. Sampling and ratio evaluation are therefore polynomial in $m$, so this condition-dependent extension retains the classical training interface. It does not imply efficient classical sampling from the trained IQP output distribution.
+
+\subsection{Ancilla-assisted conditioning}
+
+Ancillas extend any of the preceding encoders while retaining a visible $n$-bit output. Let $r$ denote the number of ancillas and $N=n+r$ the size of the joint register. We prepare an $N$-qubit state $\ket{\Phi(c)}$, apply $U_{\boldsymbol{\theta}}^{(N)}$, and marginalize the ancillary outcomes,
+\begin{equation}
+    q_{\boldsymbol{\theta}}(x\mid c)=\sum_{a\in\{0,1\}^{r}}\left|\bra{x,a}U_{\boldsymbol{\theta}}^{(N)}\ket{\Phi(c)}\right|^2.
+    \label{eq:ancilla-visible-marginal}
+\end{equation}
+For the scalar product encoder in Eq.~\eqref{eq:product-encoder}, the tensor product runs over $N$ rather than $n$ qubits and may retain qubit-dependent axes and angle maps. For the amplitude--phase encoder in Eq.~\eqref{eq:amplitude-phase-encoder}, the same two-coordinate single-qubit state is broadcast to all $N$ qubits. For the spin-flip encoder in Eq.~\eqref{eq:spin-flip-encoder}, we set $m=N$; unlike the first two constructions, this state is a coherent superposition and requires the shell-based sampler and ratio evaluator above. In all three cases, the ancillas receive the condition rather than entering as condition-independent workspace.
+
+For the spin-flip construction, Eq.~\eqref{eq:register-spin-flip-invariance} gives $q_{\boldsymbol{\theta}}(x,a\mid\beta)=q_{\boldsymbol{\theta}}(\bar{x},\bar{a}\mid\beta)$ on the joint register. Summing over $a$ and relabelling $a\mapsto\bar{a}$ preserves the symmetry after marginalization,
+\begin{equation}
+    q_{\boldsymbol{\theta}}(x\mid\beta)
+    =q_{\boldsymbol{\theta}}(\bar{x}\mid\beta).
+    \label{eq:visible-spin-flip-invariance}
+\end{equation}
+
+Although the joint output is pure, tracing out the ancillas can produce a mixed visible state of rank at most $2^r$. Kurkin et al. prove that, for unrestricted parameterized IQP Born machines, $n+1$ hidden qubits suffice for exact distributional universality on $n$ visible bits \cite{kurkinUniversalityKernelAdaptive2025}. Their construction may require exponentially many diagonal terms. We do not claim that our two-local model is universal.
+
+Our complete two-local circuit contains $P_N=N+\binom{N}{2}$ trainable phases. Adding $r$ ancillas introduces $nr+r(r+1)/2$ phases associated with ancilla one-body, visible--ancilla, and ancilla--ancilla generators. Visible--ancilla generators couple the additional encoded qubits to the measured register, and affine product encodings can access higher signed sums of the encoding frequencies as $r$ increases \cite{schuldEffectDataEncoding2021,casasMultidimensionalFourier2023}. The ancilla ladder therefore changes both the capacity of the joint circuit and the family of condition responses. Our experiments vary these mechanisms together and measure their combined effect.
+
+Classical estimation still uses only visible observables. A visible Pauli mask $a\in\{0,1\}^n$ is extended to $(a,0^r)$, corresponding to $Z_a\otimes I^{\otimes r}$ on the joint register. Training remains classically estimable whenever the $N$-qubit reference state supports the sampling-and-ratio interface. The scalar and amplitude--phase product encoders satisfy it by factorization; the spin-flip encoder satisfies it through Eqs.~\eqref{eq:spin-flip-shell-probability} and \eqref{eq:spin-flip-shell-ratio}.
+
+
+\section{Conditional IQP training}
+\label{sec:cond_training}
+
+\subsection{Condition-balanced MMD objective}
+
+We train the shared circuit with the squared maximum mean discrepancy (MMD) \cite{grettonKernelTwoSample2012}. For two distributions $p$ and $q$ on $\bits^n$ and a positive-definite kernel $k$, the population discrepancy is
+\begin{equation}
+\begin{aligned}
+\mmd^2(p,q)={}&\E_{x,x'\sim p}[k(x,x')]
+  -2\E_{x\sim p,\,y\sim q}[k(x,y)]\\
+  &+\E_{y,y'\sim q}[k(y,y')].
+\end{aligned}
+\label{eq:mmd-population}
+\end{equation}
+
+On binary strings, we use the Hamming radial basis function kernel
+\begin{equation}
+    k_\sigma(x,y)=\exp\!\left[-\frac{d_H(x,y)}{2\sigma^2}\right],
+    \label{eq:hamming-rbf-kernel}
+\end{equation}
+where $d_H$ is the Hamming distance and $\sigma>0$ is the bandwidth.
+
+Let $\mathcal C_{\mathrm{train}}$ denote the training conditions and $\Sigma$ the bandwidth set. We assign equal weight to every condition and bandwidth,
+\begin{equation}
+\mathcal{L}(\boldsymbol\theta)=\frac{1}{|\mathcal C_{\mathrm{train}}|}
+\sum_{c\in\mathcal C_{\mathrm{train}}}\frac{1}{|\Sigma|}
+\sum_{\sigma\in\Sigma}\mmd^2_\sigma\!\left(p(\cdot\mid c),
+q_{\boldsymbol\theta}(\cdot\mid c)\right).
+\label{eq:conditional-objective}
+\end{equation}
+Equal condition weighting prevents differences in sample availability from changing the relative influence of each condition on the shared parameter vector. During training, independent samples from each condition replace the population expectations in Eq.~\eqref{eq:mmd-population} through the corresponding unbiased U-statistics.
+
+\subsection{Character expansion and bandwidth coverage}
+
+The Hamming-RBF kernel has a product character representation. Let $a\in\bits^n$ be a visible-bit mask with independent coordinates
+\begin{equation}
+    a_i\sim\operatorname{Bernoulli}(p_\sigma),
+    \qquad
+    p_\sigma=\frac{1-e^{-1/(2\sigma^2)}}{2},
+    \label{eq:mmd-mask-law}
+\end{equation}
+and define the binary character $\chi_a(x)=(-1)^{a\cdot x}$. Then
+\begin{equation}
+    k_\sigma(x,y)=\E_a\!\left[\chi_a(x)\chi_a(y)\right].
+    \label{eq:hamming-character-expansion}
+\end{equation}
+If $\mu_p(a)=\E_{x\sim p}[\chi_a(x)]$, substituting Eq.~\eqref{eq:hamming-character-expansion} into Eq.~\eqref{eq:mmd-population} gives
+\begin{equation}
+    \mmd_\sigma^2(p,q)=
+    \E_a\!\left[\left(\mu_p(a)-\mu_q(a)\right)^2\right].
+    \label{eq:mmd-character-moments}
+\end{equation}
+For the Born machine, $\mu_q(a)$ is the expectation value of the visible Pauli string $Z_a=\bigotimes_i Z_i^{a_i}$. Equation~\eqref{eq:mmd-character-moments} is therefore the link between the conditional MMD and the classically estimated observables described above \cite{recio-armengolIQPoptFastOptimization2025,recio-armengolTrainClassicalDeploy2026}.
+
+The mask weight $K=|a|$, also called the operator bodyness, follows a binomial distribution,
+\begin{equation}
+    \begin{aligned}
+        K&\sim\operatorname{Binomial}(n,p_\sigma),\\
+        \E[K]&=np_\sigma,
+        &\operatorname{Var}(K)&=np_\sigma(1-p_\sigma).
+    \end{aligned}
+    \label{eq:mmd-bodyness-distribution}
+\end{equation}
+Thus, a bandwidth controls a distribution over correlation orders rather than selecting one order. Large bandwidths favor low-weight observables, while decreasing $\sigma$ shifts mass toward higher weights. The mean approaches $n/2$ as $\sigma\rightarrow0$. Within a fixed weight, the isotropic kernel assigns the same coefficient to every mask.
+
+We use three bandwidths whose target mean mask weights are
+\begin{equation}
+    \bar K_1=1,
+    \qquad
+    \bar K_2=\frac{1+0.49n}{2},
+    \qquad
+    \bar K_3=0.49n,
+    \label{eq:mmd-target-bodyness}
+\end{equation}
+with
+\begin{equation}
+    \sigma(\bar K)=
+    \left[-2\log\!\left(1-\frac{2\bar K}{n}\right)\right]^{-1/2}.
+    \label{eq:mmd-bodyness-to-sigma}
+\end{equation}
+The first bandwidth emphasizes low-order correlations, the third approaches the largest mean weight available to this isotropic family, and the second lies between them. We apply this fixed rule at every visible-system size and for every dataset to broaden coverage of correlation orders that may contribute to the target--model residual. We do not claim that these bandwidths are optimal. Dataset-specific or residual-adaptive kernel selection could improve the training signal, but it lies outside the scope of this work.
+
+\subsection{Stochastic operator estimator}
+
+The identity mask has $\mu_p(0)=\mu_q(0)=1$ and therefore contributes zero to Eq.~\eqref{eq:mmd-character-moments}. We sample only nonidentity masks from the conditional law $P_\sigma(a\mid a\ne0)$. Its total nonidentity mass is
+\begin{equation}
+    Q_\sigma^+=1-(1-p_\sigma)^n.
+    \label{eq:mmd-nonidentity-mass}
+\end{equation}
+Multiplying the conditional sample average by $Q_\sigma^+$ preserves the original Hamming-RBF objective. If $M$ mask draws contain a set $\mathcal U$ of unique masks and mask $u$ occurs $m_u$ times, the estimator can be written as
+\begin{equation}
+    \widehat{\mmd}_\sigma^2
+    =Q_\sigma^+\sum_{u\in\mathcal U}\frac{m_u}{M}
+    \widehat{\Delta^2}(u),
+    \label{eq:compressed-mmd-estimator}
+\end{equation}
+where $\widehat{\Delta^2}(u)$ is the unbiased U-statistic estimate of the squared character-moment discrepancy for mask $u$. Combining duplicates changes neither the sampled objective nor its gradient; it avoids evaluating the same Pauli observable more than once.
+
+For every finite $\sigma$, the exact kernel assigns positive weight to every character and is characteristic on the finite hypercube. The finite operator and state-sampling budgets still limit coverage and introduce estimator variance. We therefore use MMD as the differentiable optimization loss and reserve exact visible-distribution TVD for checkpoint selection and scientific evaluation.
+
+\subsection{Balanced updates and checkpoint selection}
+
+At update $t$, we draw a minibatch $\mathcal B_{c,t}$ of 100 examples from every training condition and evaluate all three bandwidths. The loss for the single shared parameter vector is
+\begin{equation}
+    \widehat{\mathcal L}_t(\boldsymbol\theta)
+    =\frac{1}{|\mathcal C_{\mathrm{train}}|}
+    \sum_{c\in\mathcal C_{\mathrm{train}}}
+    \frac{1}{|\Sigma|}
+    \sum_{\sigma\in\Sigma}
+    \widehat{\mmd}_{\sigma,t}^2(c).
+    \label{eq:balanced-training-update}
+\end{equation}
+We shuffle the 1,000 examples for each condition independently and traverse them without replacement. Thus, ten updates constitute one epoch, and 2,000 updates correspond to 200 epochs. Each independent baseline follows the same schedule using samples from its single condition.
+
+We optimize Eq.~\eqref{eq:balanced-training-update} with Adam using $\beta_1=0.9$, $\beta_2=0.999$, and a cosine learning-rate schedule from $10^{-2}$ to $10^{-3}$. A preregistered comparison with schedule-free AdamW did not satisfy the adoption criterion, so we retained Adam for all production runs.
+
+We save candidate checkpoints after 500, 1,000, 1,500, and 2,000 updates, together with the checkpoint attaining the lowest validation MMD. Among these candidates, we select the checkpoint with the lowest mean exact validation TVD. For the shared model, validation and checkpoint selection use training conditions only; held-out conditions enter neither initialization, training, nor model selection.
+
+\section{Experimental Setup}
+
+\subsection{Condition encoding}
+
+For experiments using the product-state encoder, we normalize the physical condition to $c\in[0,1]$, use $R_Y$ rotations on every circuit qubit, including the ancillas, and set
+\begin{equation}
+    \alpha_i(c)=\pi(0.35-0.70c),\qquad i=1,\ldots,N.
+    \label{eq:experimental-angle-map}
+\end{equation}
+
+This fixed affine map centers the encoded interval at zero and gives it an angular span of $0.70\pi$. We did not optimize the map or compare it with alternative encodings, so we treat it as an implementation choice rather than an optimality claim. The production Curie--Weiss experiment instead uses the symmetry-informed encoder defined above.
+
+We use a $2\times2$ development ablation to separate the spin-flip input from the condition map. The input is either the broadcast product state or the spin-flip state in Eq.~\eqref{eq:spin-flip-encoder}. The generic map, $\alpha_{\mathrm{gen}}(\beta)=\pi[0.125+0.25(\beta-0.5)]$, is affine on $\beta\in[0.5,1.5]$ and has no feature at $\beta=1$. The informed map is continuous and piecewise linear. At $\beta=0.5$, $0.9$, $1.0$, $1.2$, and $1.5$, its values $\alpha/\pi$ are $-0.14$, $-0.07$, $0$, $0.08$, and $0.14$, respectively. We cross these choices with $r\in\{0,10\}$ at $n=8$ and use matched seeds 100--102, giving 24 fits under the same data, training, checkpoint-selection, and exact-evaluation protocol as the production campaign. Held-out temperatures enter neither training nor checkpoint selection.
+
+\subsection{Benchmark distributions}
+
+\subsubsection{Discrete Gaussian family}
+
+The Gaussian benchmark tests whether one shared circuit can follow a translated family of unimodal distributions. For a bit string $x\in\{0,1\}^n$, let $K(x)=\sum_{i=1}^n x_i$ denote its Hamming weight. At condition $c\in[0,1]$, we assign probability mass
+\begin{equation}
+    \pi_c(k)=\frac{1}{Z_c}\exp\!\left[-\frac{(k-\lambda(c))^2}{2s_n^2}\right],
+    \qquad k\in\{0,\ldots,n\},
+    \label{eq:gaussian-shell-mass}
+\end{equation}
+to the weight-$k$ shell, where $Z_c$ normalizes the distribution. We distribute this mass uniformly within each shell,
+\begin{equation}
+    p_{\mathrm G}(x\mid c)=\frac{\pi_c(K(x))}{\binom{n}{K(x)}}.
+    \label{eq:gaussian-bitstring-target}
+\end{equation}
+
+The prescribed mean and width scale are
+\begin{equation}
+    \mu(c)=n(0.15+0.70c),
+    \qquad
+    s_n=0.5\sqrt{n}.
+    \label{eq:gaussian-target-parameters}
+\end{equation}
+Because Eq.~\eqref{eq:gaussian-shell-mass} is discrete and truncated to $0\leq k\leq n$, we choose $\lambda(c)$ numerically so that $\sum_{k=0}^n k\pi_c(k)=\mu(c)$ exactly. The value $s_n$ is the Gaussian width parameter in Eq.~\eqref{eq:gaussian-shell-mass}; truncation means that it need not equal the resulting standard deviation near the boundaries.
+
+We evaluate $n\in\{8,12,16\}$ using the condition sets
+\begin{align}
+    \mathcal C_{\mathrm{train}}^{\mathrm G}
+    &=\{0,0.25,0.5,0.75,1\},\\
+    \mathcal C_{\mathrm{held}}^{\mathrm G}
+    &=\{0.0625,0.1875,0.3125,0.4375,\nonumber\\
+    &\hspace{1.7em}0.5625,0.6875,0.8125,0.9375\}.
+    \label{eq:gaussian-condition-sets}
+\end{align}
+The shared model is evaluated at the held-out conditions without further fitting. All held-out conditions lie inside the training range, so this benchmark tests interpolation rather than extrapolation. The analytic bitstring probabilities in Eq.~\eqref{eq:gaussian-bitstring-target} permit exact TVD evaluation.
+
+Figure~\ref{fig:gaussian-target-n8} shows the resulting target family for $n=8$. The probability mass remains unimodal and moves across the Hamming-weight shells as $c$ increases; the held-out targets lie between the five distributions used for training.
+
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/gaussian_n8_target.pdf}
+    \caption{Analytic $n=8$ Gaussian target family. Color gives the total probability assigned to Hamming-weight shell $k$; probability is uniform over bit strings within each shell. The black-and-white line marks the prescribed mean $\mu(c)=8(0.15+0.70c)$. Filled and open markers denote training and held-out conditions, respectively. The width factor is fixed at $0.5$.}
+    \label{fig:gaussian-target-n8}
+\end{figure}
+
+\subsubsection{Curie--Weiss family}
+
+The Curie--Weiss benchmark tests whether one shared circuit can follow a change from a central magnetization profile to a symmetric two-mode profile. For a bit string $x\in\{0,1\}^n$, define spins $s_i(x)=2x_i-1\in\{-1,+1\}$, total magnetization $M(x)=\sum_{i=1}^n s_i(x)$, and magnetization per spin $m(x)=M(x)/n$. At zero external field, the finite-size energy is
+\begin{equation}
+    E_n(x)=-\frac{M(x)^2}{2n}.
+    \label{eq:curie-weiss-energy}
+\end{equation}
+The target at inverse temperature $\beta>0$ is the Gibbs distribution
+\begin{equation}
+\begin{aligned}
+    p_{\mathrm{CW}}(x\mid\beta)
+    &=\frac{1}{Z_{n,\beta}}\exp[-\beta E_n(x)]\\
+    &=\frac{1}{Z_{n,\beta}}\exp\!\left[\frac{\beta M(x)^2}{2n}\right],
+\end{aligned}
+    \label{eq:curie-weiss-bitstring-target}
+\end{equation}
+where $Z_{n,\beta}$ is the partition function. We absorb the interaction strength and Boltzmann constant into $\beta$, giving the thermodynamic critical inverse temperature $\beta_c=1$ in this convention \cite{ellisEntropyLargeDeviations2006}.
+
+For $\beta<1$, the magnetization profile is concentrated around $m=0$. For $\beta>1$, it develops two modes at opposite nonzero magnetizations. The finite systems studied here have no singular phase transition, so we use the region around $\beta=1$ as a smooth shape-changing benchmark rather than as a finite-size estimate of critical behavior. The dependence on $M(x)^2$ also gives the exact global spin-flip symmetry stated in Eq.~\eqref{eq:curie-spin-flip-target}.
+
+We evaluate $n\in\{8,12,16\}$ using
+\begin{align}
+    \mathcal C_{\mathrm{train}}^{\mathrm{CW}}
+    &=\{0.5,0.7,0.9,1.1,1.3,1.5\},\\
+    \mathcal C_{\mathrm{held}}^{\mathrm{CW}}
+    &=\{0.6,0.8,1.0,1.2,1.4\}.
+    \label{eq:curie-weiss-condition-sets}
+\end{align}
+Every held-out inverse temperature lies between two training conditions. The symmetry-informed condition map treats $\beta=1$ as a prescribed physical landmark, so we report that point separately and do not use it as evidence of blind critical-point interpolation. We base the general interpolation analysis on the remaining held-out conditions. Equation~\eqref{eq:curie-weiss-bitstring-target} provides the exact bitstring probabilities used for TVD evaluation.
+
+\subsubsection{Beta--binomial family}
+
+The beta--binomial benchmark tests interpolation over a two-dimensional condition space while retaining exchangeability. For $K(x)=\sum_{i=1}^n x_i$, mean coordinate $\mu\in(0,1)$, and concentration $\kappa>0$, we define the probability of each bit string as
+\begin{equation}
+    p_{\mathrm{BB}}(x\mid\mu,\kappa)
+    =\frac{B\!\left(K(x)+\mu\kappa,\,
+    n-K(x)+(1-\mu)\kappa\right)}
+    {B\!\left(\mu\kappa,(1-\mu)\kappa\right)},
+    \label{eq:beta-binomial-bitstring-target}
+\end{equation}
+where $B$ is the beta function. Equation~\eqref{eq:beta-binomial-bitstring-target} is constant within each Hamming shell; the corresponding shell mass includes the multiplicity $\binom{n}{K}$. Its first two moments are
+\begin{equation}
+    \mathbb E[K]=n\mu,
+    \qquad
+    \operatorname{Var}(K)=
+    \frac{n\mu(1-\mu)(n+\kappa)}{1+\kappa}.
+    \label{eq:beta-binomial-moments}
+\end{equation}
+Thus, $\mu$ moves the mean Hamming weight, while increasing $\kappa$ reduces the overdispersion at fixed $\mu$. The family also obeys the complement relation $p_{\mathrm{BB}}(x\mid\mu,\kappa)=p_{\mathrm{BB}}(\bar{x}\mid1-\mu,\kappa)$.
+
+For this family, the transformations in Eq.~\eqref{eq:amplitude-phase-encoder} are
+\begin{equation}
+    T_1(\mu)=\frac{\mu-0.2}{0.6},
+    \qquad
+    T_2(\kappa)=\frac{\log_2\kappa+1}{4}.
+    \label{eq:beta-binomial-normalized-conditions}
+\end{equation}
+The logarithmic transformation places the three training concentrations at evenly spaced coordinates $0$, $0.5$, and $1$.
+
+We train on the Cartesian grid
+\begin{equation}
+    \mathcal C_{\mathrm{train}}^{\mathrm{BB}}
+    =\{0.2,0.5,0.8\}\times\{0.5,2,8\},
+    \label{eq:beta-binomial-training-grid}
+\end{equation}
+and reserve
+\begin{equation}
+\begin{aligned}
+    \mathcal C_{\mathrm{held}}^{\mathrm{BB}}
+    =\{&(0.35,1),(0.65,1),\\
+        &(0.35,4),(0.65,4)\}
+\end{aligned}
+    \label{eq:beta-binomial-held-out-grid}
+\end{equation}
+for the headline interpolation test. These points lie inside the training rectangle in $(\mu,\log_2\kappa)$ coordinates. The isotropic Hamming kernel is appropriate for this target because both its condition response and its within-condition structure depend only on Hamming weight. We nevertheless retain raw bitstring TVD as the primary metric so that MMD cannot hide errors outside the sampled character subspace.
+
+We selected the encoder in a separate development screen at $n=8$, $r\in\{0,10\}$, and seeds 0--2. The screen compared four fixed product-state maps: block-contrast $R_Y$, amplitude--phase $R_Y/R_Z$, swapped axes, and a noncommuting $R_Y/R_Z/R_Y$ reupload. Each shared model was fitted on Eq.~\eqref{eq:beta-binomial-training-grid}. Selection minimized the median, across the six matched seed--ancilla cells, of the mean exact TVD on $(\mu,\kappa)\in\{(0.275,1),(0.725,1),(0.275,4),(0.725,4)\}$. The amplitude--phase map attained the lowest median value, $0.391$, compared with $0.396$, $0.428$, and $0.439$ for noncommuting reupload, swapped axes, and block contrast, respectively. The headline conditions in Eq.~\eqref{eq:beta-binomial-held-out-grid} did not enter encoder selection. This screen chooses the condition representation; it does not establish benchmark performance, which is subject to the independent pilot gate.
+
+\subsection{Data splits and information boundaries}
+
+For each benchmark, system size, and condition, we generate independently seeded training, validation, and test sets containing 1,000 samples each. We freeze these archives before training and reuse them across all model families, ancilla counts, and optimization seeds. The shared model uses training samples only from $\mathcal C_{\mathrm{train}}$; its data initialization draws from a condition-balanced pool of those samples, and its checkpoint selection uses only the corresponding validation sets. No sample from a held-out condition enters its initialization, optimization, or model selection.
+
+The independent model at a condition uses only that condition's training and validation sets. Consequently, independent fits at training conditions form a target-blind interpolation bank, whereas a fit trained at a held-out condition is explicitly target-aware. The frozen test sets are excluded from all fitting and checkpoint decisions. For all three analytic benchmarks, the primary test TVD compares the exact visible model probabilities with Eqs.~\eqref{eq:gaussian-bitstring-target}, \eqref{eq:curie-weiss-bitstring-target}, and \eqref{eq:beta-binomial-bitstring-target}; it is therefore not estimated from the finite test samples.
+
+\subsection{Compared models and baselines}
+
+Let $\boldsymbol c$ denote the physical condition, a scalar for the Gaussian and Curie--Weiss families and the pair $(\mu,\kappa)$ for the beta--binomial family. The \emph{conditioned model} uses one parameter vector $\boldsymbol\theta$ for every $\boldsymbol c\in\mathcal C_{\mathrm{train}}$. At a held-out condition, only the input state changes; the learned diagonal unitary remains fixed. We denote its visible distribution by $q_{\mathrm{cond}}(x\mid\boldsymbol c)$.
+
+The \emph{independent bank} contains one circuit per training condition. Each circuit has the same architecture and training protocol as the conditioned model but has its own parameter vector and sees samples from one condition only. For a held-out $u$ between adjacent training conditions $u_L<u<u_R$, the \emph{adjacent-independent interpolation} baseline is
+\begin{equation}
+\begin{aligned}
+    q_{\mathrm{adj}}(x\mid u)
+    &=(1-t)q_{\mathrm{ind}}(x\mid u_L)\\
+    &\quad+tq_{\mathrm{ind}}(x\mid u_R),\\
+    t&=\frac{u-u_L}{u_R-u_L}.
+\end{aligned}
+    \label{eq:adjacent-independent-interpolation}
+\end{equation}
+This baseline is a classical mixture of two learned output distributions, not the output of one circuit evaluated at $u$. It uses no sample from the held-out condition.
+
+For the beta--binomial family, we interpolate the four surrounding independent-bank outputs bilinearly in $(\mu,\log_2\kappa)$. If $(t_\mu,t_\kappa)\in[0,1]^2$ are the normalized coordinates of a held-out point within its enclosing grid cell, the baseline is
+\begin{equation}
+    q_{\mathrm{bil}}(x)=
+    \sum_{i,j\in\{0,1\}}
+    t_\mu^i(1-t_\mu)^{1-i}
+    t_\kappa^j(1-t_\kappa)^{1-j}
+    q_{\mathrm{ind}}(x\mid\mu_i,\kappa_j).
+    \label{eq:bilinear-independent-interpolation}
+\end{equation}
+We also interpolate the four exact target distributions with the same weights. This separates error caused by the learned bank from the geometric error of bilinear interpolation between the analytic targets.
+
+The \emph{target-aware oracle} is an independent circuit trained directly at the condition being evaluated. At a held-out condition, it measures the capacity of the circuit architecture when target data are available; it is not a generalization method. All paired comparisons use the same visible size, ancilla count, optimization seed, and data archive.
+
+Writing $d_u(q)=\TVD[p(\cdot\mid u),q(\cdot\mid u)]$, we report the held-out generalization advantage
+\begin{equation}
+    \Delta_{\mathrm{gen}}(u)
+    =d_u(q_{\mathrm{adj}})-d_u(q_{\mathrm{cond}}),
+    \label{eq:generalization-advantage}
+\end{equation}
+which is positive when the conditioned model outperforms adjacent-independent interpolation. At a training condition $u_j$, the sharing cost is
+\begin{equation}
+    \Delta_{\mathrm{share}}(u_j)
+    =d_{u_j}(q_{\mathrm{cond}})-d_{u_j}(q_{\mathrm{ind}}).
+    \label{eq:sharing-cost}
+\end{equation}
+At a held-out condition, we instead report $\Delta_{\mathrm{oracle}}(u)=d_u(q_{\mathrm{cond}})-d_u(q_{\mathrm{oracle}})$. This oracle gap combines parameter sharing with the absence of direct held-out training data, so it is not a pure sharing cost. Finally, we measure the ancilla effect by pairing each conditioned model with its $r=0$ counterpart at the same dataset, size, condition, and seed.
+
+\subsection{Fixed experimental configuration}
+
+Table~\ref{tab:fixed-configuration} summarizes the configuration frozen before production. The same settings apply to all three benchmark families and to conditioned and independent fits.
+\begin{table}[tb]
+    \caption{Fixed production configuration. The three bandwidth entries are their expected visible-mask weights.}
+    \label{tab:fixed-configuration}
+    \centering
+    \footnotesize
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        Setting & Value \\
+        \midrule
+        Visible qubits $n$ & $8,12,16$ \\
+        Ancillas $r$ & $0,1,3,6,10$ \\
+        Circuit & Complete two-local IQP on $N=n+r$ \\
+        Trainable phases & $P_N=N+\binom{N}{2}$ \\
+        Production seeds & $100$--$109$ \\
+        Training & $2{,}000$ updates; batch 100 per condition \\
+        Character masks & $2{,}000$ per condition/bandwidth \\
+        Reference samples & $8{,}192$ per loss estimate \\
+        Bandwidth targets & $1$, $(1+0.49n)/2$, and $0.49n$ \\
+        Optimizer & Adam, cosine schedule from $10^{-2}$ to $10^{-3}$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+We initialize visible phases from data using the IQPopt mean--covariance prescription \cite{recio-armengolIQPoptFastOptimization2025}. For the binary mean $\bar{x}_i$ and the covariance $C_{ij}$ of the signed variables $2x_i-1$, the one- and two-body phases are initialized as
+\begin{equation}
+    \theta_i^{(0)}=\arcsin\sqrt{\bar{x}_i},
+    \qquad
+    \theta_{ij}^{(0)}=C_{ij}\sqrt{\frac{2n}{\sum_{a\ne b}C_{ab}^2}}.
+    \label{eq:data-initialization}
+\end{equation}
+The shared model computes these statistics from the balanced pool of training conditions, while each independent model uses its own condition. We initialize every phase touching an ancilla with seeded Gaussian noise of standard deviation $0.01/\sqrt{P_N}$. A development calibration fixed 8,192 reference-state samples and retained the Adam schedule before any production seed was run.
+
+\subsection{Evaluation and statistical reporting}
+
+The primary metric is exact visible-distribution total variation distance,
+\begin{equation}
+    \TVD(p,q)=\frac{1}{2}\sum_{x\in\{0,1\}^n}|p(x)-q(x)|.
+    \label{eq:exact-tvd}
+\end{equation}
+For each selected checkpoint and condition, we compute the full joint output, marginalize the ancillas, and compare the resulting visible probabilities with the analytic target. MMD remains an optimization diagnostic and is not used as the primary measure of model accuracy.
+
+For the Gaussian family, complementary measures are Hamming-profile TVD and the errors in the mean and variance of $K(x)$. For Curie--Weiss, we report magnetization-profile TVD, mean absolute magnetization, energy per spin, and susceptibility $\chi=\beta n(\langle m^2\rangle-\langle m\rangle^2)$. Binder-cumulant and heat-capacity diagnostics are retained in the machine-readable results. For the beta--binomial family, we report Hamming-profile TVD, mean and variance errors, exchangeability defect, and complement-equivariance error. The exchangeability defect is the TVD between the model output and its projection onto distributions that are uniform within each Hamming shell.
+
+We first average conditions within each seed and then report the median and interquartile range over the ten matched seeds. Uncertainty intervals are paired 95\% bootstrap intervals obtained from 10,000 resamples of the seed-level values. We also report the held-out-minus-training TVD gap. For Curie--Weiss, we separate the prescribed $\beta=1$ landmark, the window $\beta\in\{0.8,1.0,1.2\}$, and the average over all five held-out temperatures.
+
+\section{Results}
+
+The Gaussian $n=8$ and $n=12$ exact evaluations are reported below. The $n=16$ Gaussian evaluation remains pending, as do the production Curie--Weiss results and the beta--binomial pilot gate.
+
+\subsection{Gaussian translation and interpolation}
+
+Figure~\ref{fig:gaussian_results} summarizes the Gaussian ancilla ladder. For $n=8$, ancillas improved the held-out accuracy of the conditioned model monotonically. After averaging the eight held-out conditions within each seed, the median exact TVD decreased from $0.219$ at $r=0$ to $0.205$, $0.172$, $0.145$, and $0.102$ at $r=1$, $3$, $6$, and $10$, respectively. Every nonzero ancilla count improved upon $r=0$ in all ten matched seeds. At $r=10$, the paired median change relative to $r=0$ was $-0.117$, with a 95\% bootstrap interval of $[-0.118,-0.114]$. The adjacent independent-model interpolation remained more accurate for $r\leq6$, but the ordering reversed at $r=10$: the conditioned model attained a median held-out TVD of $0.102$, compared with $0.122$ for interpolation. The median advantage, defined as interpolation TVD minus conditioned TVD, was $0.0198$ with a paired 95\% bootstrap interval of $[0.0173,0.0211]$, and was positive in all ten seeds. The target-aware oracle reached $0.085$, leaving a median sharing cost of $0.016$ for the single conditioned circuit.
+
+The improvement was not uniform across the condition range. At the two held-out conditions nearest the domain boundaries, $c=0.0625$ and $c=0.9375$, the $r=10$ conditioned model attained median TVDs of $0.184$ and $0.188$, whereas its median TVD ranged from $0.060$ to $0.086$ at the six interior held-out conditions. Adjacent-bank interpolation showed the same boundary degradation, while the target-aware oracle reached approximately $0.065$ at both near-boundary conditions. The targets are therefore learnable by a circuit trained specifically at those conditions, but the present experiment does not determine whether the boundary error of the shared model arises from the affine condition map, parameter sharing, or optimization. We treat it as a limitation of the observed conditional response rather than evidence against the target family itself.
+
+The same ancilla trend persists at $n=12$, although interpolation becomes more difficult. The median held-out exact TVD of the conditioned model decreased from $0.292$ at $r=0$ to $0.265$, $0.240$, $0.213$, and $0.174$ at $r=1$, $3$, $6$, and $10$, respectively. The paired change at $r=10$ relative to $r=0$ was $-0.121$, with a 95\% bootstrap interval of $[-0.127,-0.107]$. At ten ancillas, the conditioned model and adjacent independent interpolation were statistically comparable ($0.174$ versus $0.175$); the median advantage was $0.0049$, with interval $[-0.0077,0.0137]$, and the conditioned model was better for six of ten seeds. The target-aware oracle reached $0.128$, giving a sharing cost of $0.046$. For comparison, at $n=8$ and $r=10$, the conditioned, interpolation, and oracle medians were $0.102$, $0.122$, and $0.085$, respectively; the conditioned model's advantage was $0.0198$ with interval $[0.0173,0.0211]$ and was positive in all ten seeds. At $n=12$, shared errors remain elevated near the held-out boundaries and around $c=0.5$. The oracle gap indicates a limitation associated with parameter sharing, the encoding, or optimization, but these experiments do not identify which mechanism dominates.
+
+\begin{figure*}[htb!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/gaussian_results.pdf}
+\caption{Held-out exact raw bitstring TVD for the Gaussian family as a function of the ancilla count. Curves show medians over ten seeds after averaging the held-out conditions within each seed; shaded bands show the corresponding seed interquartile ranges. The conditioned model uses one shared circuit, the adjacent independent interpolation combines neighboring independently trained models, and the target-aware oracle is fitted directly at each held-out condition. Panel (a) shows $n=8$ and panel (b) shows $n=12$; exact evaluations for panel (c), $n=16$, are pending. Lower values are better.}
+    \label{fig:gaussian_results}
+\end{figure*}
+\subsection{Curie--Weiss conditioning ablation}
+\label{sec:curie-ablation}
+
+Ancillas improved all four encoder--map combinations in each of the three matched seeds. For the generic product construction, the median exact TVD over the four non-landmark held-out temperatures decreased from $0.295$ at $r=0$ to $0.194$ at $r=10$; at $\beta=1$, it decreased from $0.235$ to $0.108$. Because this arm uses an affine map with no feature at $\beta=1$, the improvement does not rely on supplying the transition landmark through the input map.
+
+The generic product construction nevertheless failed to reproduce the ordered magnetization profile. For $r=10$ and $\beta\in\{1.2,1.3,1.4\}$, its median Hamming-weight profile placed the two modes near weights $2$ and $6$, whereas the target modes lie at weights $0$ and $8$ for $n=8$. At $\beta=1.5$, the learned profile no longer retained the target's two-mode structure. The informed spin-flip construction with $r=10$ preserved the symmetric modes at weights $0$ and $8$ throughout this ordered range. Ancillas therefore improved the generic product model without fully recovering the target bimodality.
+
+Problem-informed conditioning reduced the circuit resources needed for comparable non-landmark interpolation. The spin-flip input with the informed map attained a median non-landmark TVD of $0.193$ without ancillas, close to the $0.194$ attained by the generic product construction with ten ancillas. These circuits use 36 and 171 trainable phases, respectively. This comparison does not imply that symmetry alone substitutes for ancillas. With the generic map, replacing the product input by the spin-flip input changed the non-landmark TVD from $0.295$ to $0.308$ at $r=0$ and from $0.194$ to $0.198$ at $r=10$. The informed map improved both input families, and the spin-flip input became useful when paired with it: at $r=10$, the median non-landmark TVD decreased from $0.115$ for the informed product input to $0.047$ for the informed spin-flip input. The latter construction also attained $0.045$ at $\beta=1$ and remained below $0.083$ at every evaluated temperature.
+
+The ablation therefore identifies complementary effects rather than interchangeable mechanisms. Problem-informed conditioning can reduce the width required to reach a given non-landmark accuracy, while ancillas improve both generic and informed constructions. Their combination gives the lowest error across the temperature range. We use the four non-landmark held-out temperatures for the interpolation claim because the informed map contains the prescribed $\beta=1$ landmark. The ablation has three seeds and serves as a mechanistic analysis; the ten-seed production campaign provides the main Curie--Weiss evidence.
+
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/curie_encoder_ablation_n8.pdf}
+    \caption{Exact bitstring TVD across inverse temperature for the $n=8$ Curie--Weiss ablation. The product input uses the generic affine map, whereas the spin-flip input uses the informed piecewise-linear map. Curves show medians over three matched seeds. Filled markers denote training temperatures and open markers denote held-out temperatures; line style distinguishes $r=0$ from $r=10$. The vertical line marks $\beta=1$, which is a prescribed landmark only for the informed map. Lower values are better.}
+    \label{fig:curie-weiss}
+\end{figure}
+
+\section{Discussion}
+\TODO{Integrate the ten-seed Curie--Weiss production results before fixing the Discussion and deciding whether a third benchmark is required.}
+Conditional generation with IQP Born machines represents a promising avenue for quantum generative modeling as it combines the scalability of IQP circuits and the utility of more general models that enable conditional generation...
+
+\section{Conclusions}
+The main contribution of this work is the conditional formulation of classically trained IQP Born machines. %The proposed framework leverages previous literature on computationally tractable states and reformulates the MMD for the conditional generation case to  
+
+
+\section*{DATA AVAILABILITY}
+The code and data supporting the findings of this study are openly available in Zenodo \TODO{add the final Zenodo record and citation}.
+
+\section*{Acknowledgments}
+OB is a fellow of Eurecat’s ``Vicente L\'opez'' PhD grant program. This piece of research was carried out with the partial support of the following granted projects: $\dots$. 
+
+\bibliography{references}
+
+\end{document}
