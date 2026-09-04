@@ -167,29 +167,18 @@ def main() -> None:
     mm = 1 / 25.4
     fig, axes = plt.subplots(
         1,
-        3,
+        2,
         figsize=(170 * mm, 61 * mm),
         sharey=True,
     )
-    fig.subplots_adjust(
-        left=0.085, right=0.985, top=0.88, bottom=0.30, wspace=0.28
-    )
+    # Reserve space for the shared legend below both axes.
+    fig.subplots_adjust(left=0.085, right=0.985, top=0.88, bottom=0.30, wspace=0.28)
 
     _draw_completed(axes[0], seed_rows, 8)
     _draw_completed(axes[1], seed_rows, 12)
     _format_axis(axes[0], "a", 8)
     _format_axis(axes[1], "b", 12)
-    _format_axis(axes[2], "c", 16)
     axes[0].set_ylabel("Held-out exact TVD")
-    axes[2].text(
-        0.5,
-        0.52,
-        "Exact evaluations\npending",
-        ha="center",
-        va="center",
-        color="0.35",
-        transform=axes[2].transAxes,
-    )
 
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(
@@ -204,6 +193,7 @@ def main() -> None:
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(args.out)
+    fig.savefig(args.out.with_suffix(".png"), dpi=300)
     plt.close(fig)
     print(args.out)
 

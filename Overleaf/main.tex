@@ -188,13 +188,14 @@ Conditional generative models represent families of distributions indexed by an 
 \end{abstract}
 
 \maketitle
+\raggedbottom
 \section{Introduction}
 
 Conditional generative models learn $q_\theta(x\mid c)$, a family of output distributions indexed by a condition $c$. Quantum circuit Born machines (QCBMs) represent discrete distributions through measurement statistics and can be trained with likelihood-free objectives such as maximum mean discrepancy (MMD) \cite{liuDifferentiableLearning2018,benedettiGenerativeModeling2019,gaoQuantumGenerativeModels2018}. Conditional QCBMs encode $c$ through repeated rotations or dedicated condition qubits \cite{kissConditionalBornMachine2022,zengConditionalQCBM2023}. In an instantaneous quantum polynomial-time (IQP) circuit, condition-dependent gates that preserve the IQP form belong to the commuting diagonal block. The diagonal unitary therefore changes with $c$. We ask whether an IQP Born machine can represent $q_\theta(x\mid c)$ while keeping this unitary fixed and retaining its classical training framework.
 
 Classically trained IQP Born machines separate observable estimation from output sampling. Selected Pauli-$Z$ correlators, character-kernel MMD losses, and their gradients can be estimated classically for a tractable reference state, although sampling from related IQP families is associated with hardness results under standard complexity assumptions \cite{nestSimulatingQuantumComputers2011,recio-armengolIQPoptFastOptimization2025,recio-armengolTrainClassicalDeploy2026,bremnerAchievingQuantumSupremacy2017}. We encode $c$ in a classically tractable input state $\ket{\phi(c)}$ and apply one fixed IQP unitary. Product inputs retain the factorized reference distribution used by the Pauli estimator; non-product inputs remain admissible when the state entering the diagonal block supports efficient basis sampling and amplitude-ratio evaluation \cite{nestSimulatingQuantumComputers2011}. The same classical estimators then apply, while the diagonal generators and learned phases remain independent of $c$. Figure~\ref{fig:pipeline_workflow} shows this separation. Input-state encodings and their finite Fourier responses are established in quantum circuit learning \cite{mitaraiQuantumCircuitLearning2018,schuldEffectDataEncoding2021,casasMultidimensionalFourier2023}. Here the input state acts as a conditioning interface for a fixed IQP unitary. We use \emph{classically trainable} only for the observable, loss, and gradient estimators; it does not imply classical access to the output distribution.
 
-Gaussian Hamming-weight targets test conditional translation and within-range interpolation. Curie--Weiss targets test whether the model can follow a change in distribution shape with inverse temperature when the input either does or does not impose the known global spin-flip symmetry. For the finite systems considered here, the region around $\beta=1$ is a smooth crossover rather than an estimate of critical scaling. A beta--binomial family tests two-dimensional conditioning: one coordinate controls the mean Hamming weight, while the other changes the concentration at fixed mean. \TODO{Write the Introduction evidence paragraph after the exact-TVD campaign, Curie--Weiss encoder ablation, and beta--binomial pilot finish. Separate the supplied $\beta=1$ landmark from held-out generalization at $\beta\in\{0.6,0.8,1.2,1.4\}$, and retain the beta--binomial benchmark only if its preregistered pilot gate passes.}
+Gaussian Hamming-weight targets test conditional translation and within-range interpolation. Curie--Weiss targets test whether the model can follow a change in distribution shape with inverse temperature when the input either does or does not impose the known global spin-flip symmetry. For the finite systems considered here, the region around $\beta=1$ is a smooth crossover rather than an estimate of critical scaling. We evaluate both families at eight and twelve visible qubits. \TODO{Finalize the Introduction evidence paragraph from the complete results below. Separate the supplied $\beta=1$ landmark from held-out generalization at $\beta\in\{0.6,0.8,1.2,1.4\}$.}
 
 % \begin{figure*}[htbp!]
 %   \centering
@@ -675,7 +676,7 @@ The prescribed mean and width scale are
 \end{equation}
 Because Eq.~\eqref{eq:gaussian-shell-mass} is discrete and truncated to $0\leq k\leq n$, we choose $\lambda(c)$ numerically so that $\sum_{k=0}^n k\pi_c(k)=\mu(c)$ exactly. The value $s_n$ is the Gaussian width parameter in Eq.~\eqref{eq:gaussian-shell-mass}; truncation means that it need not equal the resulting standard deviation near the boundaries.
 
-We evaluate $n\in\{8,12,16\}$ using the condition sets
+We evaluate $n\in\{8,12\}$ using the condition sets
 \begin{align}
     \mathcal C_{\mathrm{train}}^{\mathrm G}
     &=\{0,0.25,0.5,0.75,1\},\\
@@ -715,7 +716,7 @@ where $Z_{n,\beta}$ is the partition function. We absorb the interaction strengt
 
 For $\beta<1$, the magnetization profile is concentrated around $m=0$. For $\beta>1$, it develops two modes at opposite nonzero magnetizations. The finite systems studied here have no singular phase transition, so we use the region around $\beta=1$ as a smooth shape-changing benchmark rather than as a finite-size estimate of critical behavior. The dependence on $M(x)^2$ also gives the exact global spin-flip symmetry stated in Eq.~\eqref{eq:curie-spin-flip-target}.
 
-We evaluate $n\in\{8,12,16\}$ using
+We evaluate $n\in\{8,12\}$ using
 \begin{align}
     \mathcal C_{\mathrm{train}}^{\mathrm{CW}}
     &=\{0.5,0.7,0.9,1.1,1.3,1.5\},\\
@@ -725,63 +726,16 @@ We evaluate $n\in\{8,12,16\}$ using
 \end{align}
 Every held-out inverse temperature lies between two training conditions. The symmetry-informed condition map treats $\beta=1$ as a prescribed physical landmark, so we report that point separately and do not use it as evidence of blind critical-point interpolation. We base the general interpolation analysis on the remaining held-out conditions. Equation~\eqref{eq:curie-weiss-bitstring-target} provides the exact bitstring probabilities used for TVD evaluation.
 
-\subsubsection{Beta--binomial family}
-
-The beta--binomial benchmark tests interpolation over a two-dimensional condition space while retaining exchangeability. For $K(x)=\sum_{i=1}^n x_i$, mean coordinate $\mu\in(0,1)$, and concentration $\kappa>0$, we define the probability of each bit string as
-\begin{equation}
-    p_{\mathrm{BB}}(x\mid\mu,\kappa)
-    =\frac{B\!\left(K(x)+\mu\kappa,\,
-    n-K(x)+(1-\mu)\kappa\right)}
-    {B\!\left(\mu\kappa,(1-\mu)\kappa\right)},
-    \label{eq:beta-binomial-bitstring-target}
-\end{equation}
-where $B$ is the beta function. Equation~\eqref{eq:beta-binomial-bitstring-target} is constant within each Hamming shell; the corresponding shell mass includes the multiplicity $\binom{n}{K}$. Its first two moments are
-\begin{equation}
-    \mathbb E[K]=n\mu,
-    \qquad
-    \operatorname{Var}(K)=
-    \frac{n\mu(1-\mu)(n+\kappa)}{1+\kappa}.
-    \label{eq:beta-binomial-moments}
-\end{equation}
-Thus, $\mu$ moves the mean Hamming weight, while increasing $\kappa$ reduces the overdispersion at fixed $\mu$. The family also obeys the complement relation $p_{\mathrm{BB}}(x\mid\mu,\kappa)=p_{\mathrm{BB}}(\bar{x}\mid1-\mu,\kappa)$.
-
-For this family, the transformations in Eq.~\eqref{eq:amplitude-phase-encoder} are
-\begin{equation}
-    T_1(\mu)=\frac{\mu-0.2}{0.6},
-    \qquad
-    T_2(\kappa)=\frac{\log_2\kappa+1}{4}.
-    \label{eq:beta-binomial-normalized-conditions}
-\end{equation}
-The logarithmic transformation places the three training concentrations at evenly spaced coordinates $0$, $0.5$, and $1$.
-
-We train on the Cartesian grid
-\begin{equation}
-    \mathcal C_{\mathrm{train}}^{\mathrm{BB}}
-    =\{0.2,0.5,0.8\}\times\{0.5,2,8\},
-    \label{eq:beta-binomial-training-grid}
-\end{equation}
-and reserve
-\begin{equation}
-\begin{aligned}
-    \mathcal C_{\mathrm{held}}^{\mathrm{BB}}
-    =\{&(0.35,1),(0.65,1),\\
-        &(0.35,4),(0.65,4)\}
-\end{aligned}
-    \label{eq:beta-binomial-held-out-grid}
-\end{equation}
-for the headline interpolation test. These points lie inside the training rectangle in $(\mu,\log_2\kappa)$ coordinates. The isotropic Hamming kernel is appropriate for this target because both its condition response and its within-condition structure depend only on Hamming weight. We nevertheless retain raw bitstring TVD as the primary metric so that MMD cannot hide errors outside the sampled character subspace.
-
-We selected the encoder in a separate development screen at $n=8$, $r\in\{0,10\}$, and seeds 0--2. The screen compared four fixed product-state maps: block-contrast $R_Y$, amplitude--phase $R_Y/R_Z$, swapped axes, and a noncommuting $R_Y/R_Z/R_Y$ reupload. Each shared model was fitted on Eq.~\eqref{eq:beta-binomial-training-grid}. Selection minimized the median, across the six matched seed--ancilla cells, of the mean exact TVD on $(\mu,\kappa)\in\{(0.275,1),(0.725,1),(0.275,4),(0.725,4)\}$. The amplitude--phase map attained the lowest median value, $0.391$, compared with $0.396$, $0.428$, and $0.439$ for noncommuting reupload, swapped axes, and block contrast, respectively. The headline conditions in Eq.~\eqref{eq:beta-binomial-held-out-grid} did not enter encoder selection. This screen chooses the condition representation; it does not establish benchmark performance, which is subject to the independent pilot gate.
 
 \subsection{Data splits and information boundaries}
 
 For each benchmark, system size, and condition, we generate independently seeded training, validation, and test sets containing 1,000 samples each. We freeze these archives before training and reuse them across all model families, ancilla counts, and optimization seeds. The shared model uses training samples only from $\mathcal C_{\mathrm{train}}$; its data initialization draws from a condition-balanced pool of those samples, and its checkpoint selection uses only the corresponding validation sets. No sample from a held-out condition enters its initialization, optimization, or model selection.
 
-The independent model at a condition uses only that condition's training and validation sets. Consequently, independent fits at training conditions form a target-blind interpolation bank, whereas a fit trained at a held-out condition is explicitly target-aware. The frozen test sets are excluded from all fitting and checkpoint decisions. For all three analytic benchmarks, the primary test TVD compares the exact visible model probabilities with Eqs.~\eqref{eq:gaussian-bitstring-target}, \eqref{eq:curie-weiss-bitstring-target}, and \eqref{eq:beta-binomial-bitstring-target}; it is therefore not estimated from the finite test samples.
+The independent model at a condition uses only that condition's training and validation sets. Consequently, independent fits at training conditions form a target-blind interpolation bank, whereas a fit trained at a held-out condition is explicitly target-aware. The frozen test sets are excluded from all fitting and checkpoint decisions. For both analytic benchmarks, the primary test TVD compares the exact visible model probabilities with Eqs.~\eqref{eq:gaussian-bitstring-target} and \eqref{eq:curie-weiss-bitstring-target}; it is therefore not estimated from the finite test samples.
 
 \subsection{Compared models and baselines}
 
-Let $\boldsymbol c$ denote the physical condition, a scalar for the Gaussian and Curie--Weiss families and the pair $(\mu,\kappa)$ for the beta--binomial family. The \emph{conditioned model} uses one parameter vector $\boldsymbol\theta$ for every $\boldsymbol c\in\mathcal C_{\mathrm{train}}$. At a held-out condition, only the input state changes; the learned diagonal unitary remains fixed. We denote its visible distribution by $q_{\mathrm{cond}}(x\mid\boldsymbol c)$.
+Let $\boldsymbol c$ denote the physical condition, which is scalar for both evaluated families. The \emph{conditioned model} uses one parameter vector $\boldsymbol\theta$ for every $\boldsymbol c\in\mathcal C_{\mathrm{train}}$. At a held-out condition, only the input state changes; the learned diagonal unitary remains fixed. We denote its visible distribution by $q_{\mathrm{cond}}(x\mid\boldsymbol c)$.
 
 The \emph{independent bank} contains one circuit per training condition. Each circuit has the same architecture and training protocol as the conditioned model but has its own parameter vector and sees samples from one condition only. For a held-out $u$ between adjacent training conditions $u_L<u<u_R$, the \emph{adjacent-independent interpolation} baseline is
 \begin{equation}
@@ -795,18 +749,8 @@ The \emph{independent bank} contains one circuit per training condition. Each ci
 \end{equation}
 This baseline is a classical mixture of two learned output distributions, not the output of one circuit evaluated at $u$. It uses no sample from the held-out condition.
 
-For the beta--binomial family, we interpolate the four surrounding independent-bank outputs bilinearly in $(\mu,\log_2\kappa)$. If $(t_\mu,t_\kappa)\in[0,1]^2$ are the normalized coordinates of a held-out point within its enclosing grid cell, the baseline is
-\begin{equation}
-    q_{\mathrm{bil}}(x)=
-    \sum_{i,j\in\{0,1\}}
-    t_\mu^i(1-t_\mu)^{1-i}
-    t_\kappa^j(1-t_\kappa)^{1-j}
-    q_{\mathrm{ind}}(x\mid\mu_i,\kappa_j).
-    \label{eq:bilinear-independent-interpolation}
-\end{equation}
-We also interpolate the four exact target distributions with the same weights. This separates error caused by the learned bank from the geometric error of bilinear interpolation between the analytic targets.
 
-The \emph{target-aware oracle} is an independent circuit trained directly at the condition being evaluated. At a held-out condition, it measures the capacity of the circuit architecture when target data are available; it is not a generalization method. All paired comparisons use the same visible size, ancilla count, optimization seed, and data archive.
+The \emph{target-aware oracle} is an independent circuit trained directly at the condition being evaluated. At a held-out condition, it is a target-aware reference under the fixed training protocol, not a generalization method or a guaranteed optimum of the circuit family. All paired comparisons use the same visible size, ancilla count, optimization seed, and data archive.
 
 Writing $d_u(q)=\TVD[p(\cdot\mid u),q(\cdot\mid u)]$, we report the held-out generalization advantage
 \begin{equation}
@@ -824,7 +768,7 @@ At a held-out condition, we instead report $\Delta_{\mathrm{oracle}}(u)=d_u(q_{\
 
 \subsection{Fixed experimental configuration}
 
-Table~\ref{tab:fixed-configuration} summarizes the configuration frozen before production. The same settings apply to all three benchmark families and to conditioned and independent fits.
+Table~\ref{tab:fixed-configuration} summarizes the training configuration frozen before production. We report the complete $n\in\{8,12\}$ subset of the larger planned campaign; the $n=16$ extension was deferred for computational reasons. The same settings apply to both benchmark families and to conditioned and independent fits.
 \begin{table}[tb]
     \caption{Fixed production configuration. The three bandwidth entries are their expected visible-mask weights.}
     \label{tab:fixed-configuration}
@@ -834,7 +778,7 @@ Table~\ref{tab:fixed-configuration} summarizes the configuration frozen before p
         \toprule
         Setting & Value \\
         \midrule
-        Visible qubits $n$ & $8,12,16$ \\
+        Visible qubits $n$ & $8,12$ \\
         Ancillas $r$ & $0,1,3,6,10$ \\
         Circuit & Complete two-local IQP on $N=n+r$ \\
         Trainable phases & $P_N=N+\binom{N}{2}$ \\
@@ -866,13 +810,13 @@ The primary metric is exact visible-distribution total variation distance,
 \end{equation}
 For each selected checkpoint and condition, we compute the full joint output, marginalize the ancillas, and compare the resulting visible probabilities with the analytic target. MMD remains an optimization diagnostic and is not used as the primary measure of model accuracy.
 
-For the Gaussian family, complementary measures are Hamming-profile TVD and the errors in the mean and variance of $K(x)$. For Curie--Weiss, we report magnetization-profile TVD, mean absolute magnetization, energy per spin, and susceptibility $\chi=\beta n(\langle m^2\rangle-\langle m\rangle^2)$. Binder-cumulant and heat-capacity diagnostics are retained in the machine-readable results. For the beta--binomial family, we report Hamming-profile TVD, mean and variance errors, exchangeability defect, and complement-equivariance error. The exchangeability defect is the TVD between the model output and its projection onto distributions that are uniform within each Hamming shell.
+For the Gaussian family, complementary measures are Hamming-profile TVD and the errors in the mean and variance of $K(x)$. For Curie--Weiss, we report magnetization-profile TVD, mean absolute magnetization, energy per spin, and susceptibility $\chi=\beta n(\langle m^2\rangle-\langle m\rangle^2)$. Binder-cumulant and heat-capacity diagnostics are retained in the machine-readable results. Profile TVD can conceal errors within Hamming shells and does not replace raw bitstring TVD.
 
 We first average conditions within each seed and then report the median and interquartile range over the ten matched seeds. Uncertainty intervals are paired 95\% bootstrap intervals obtained from 10,000 resamples of the seed-level values. We also report the held-out-minus-training TVD gap. For Curie--Weiss, we separate the prescribed $\beta=1$ landmark, the window $\beta\in\{0.8,1.0,1.2\}$, and the average over all five held-out temperatures.
 
 \section{Results}
 
-The Gaussian $n=8$ and $n=12$ exact evaluations are reported below. The $n=16$ Gaussian evaluation remains pending, as do the production Curie--Weiss results and the beta--binomial pilot gate.
+We report all 2,600 fits and exact evaluations for the Gaussian and Curie--Weiss families at $n\in\{8,12\}$, with ten matched seeds and $r\in\{0,1,3,6,10\}$. Each Gaussian size contributes 700 fits and each Curie--Weiss size contributes 600 fits. The summaries include every seed and condition in this subset.
 
 \subsection{Gaussian translation and interpolation}
 
@@ -885,9 +829,26 @@ The same ancilla trend persists at $n=12$, although interpolation becomes more d
 \begin{figure*}[htb!]
     \centering
     \includegraphics[width=\textwidth]{figures/gaussian_results.pdf}
-\caption{Held-out exact raw bitstring TVD for the Gaussian family as a function of the ancilla count. Curves show medians over ten seeds after averaging the held-out conditions within each seed; shaded bands show the corresponding seed interquartile ranges. The conditioned model uses one shared circuit, the adjacent independent interpolation combines neighboring independently trained models, and the target-aware oracle is fitted directly at each held-out condition. Panel (a) shows $n=8$ and panel (b) shows $n=12$; exact evaluations for panel (c), $n=16$, are pending. Lower values are better.}
+\caption{Held-out exact raw bitstring TVD for the Gaussian family as a function of the ancilla count at $n=8$ (left) and $n=12$ (right). Curves show medians over ten seeds after averaging the eight held-out conditions within each seed; shaded bands show the corresponding seed interquartile ranges. The conditioned model uses one shared circuit, independent interpolation combines neighboring independently trained models, and the target-aware oracle is fitted directly at each held-out condition. Lower values are better.}
     \label{fig:gaussian_results}
 \end{figure*}
+\subsection{Curie--Weiss temperature response}
+
+Ancillas improve the conditioned model across both visible sizes (Fig.~\ref{fig:curie-production-results}). Averaging all five held-out temperatures within each seed, the median exact TVD decreases from $0.190$ to $0.173$, $0.070$, $0.054$, and $0.047$ at $n=8$ as $r$ increases through $0,1,3,6,10$. At $n=12$, the corresponding medians are $0.275$, $0.199$, $0.111$, $0.089$, and $0.076$. These are monotonic improvements of the seed-level medians, not guarantees for every individual condition or fit. Relative to $r=0$, the paired median TVD change at $r=10$ is $-0.143$ with 95\% bootstrap interval $[-0.148,-0.142]$ for $n=8$, and $-0.198$ with interval $[-0.202,-0.193]$ for $n=12$.
+
+The advantage persists when the supplied $\beta=1$ landmark is excluded. At $r=10$, averaging only $\beta\in\{0.6,0.8,1.2,1.4\}$ gives median conditioned TVDs of $0.047$ and $0.081$ for $n=8$ and $n=12$, respectively, compared with $0.058$ and $0.117$ for adjacent-independent interpolation. The paired median advantages are $0.0119$ with interval $[0.0080,0.0136]$ and $0.0363$ with interval $[0.0299,0.0433]$; both are positive in every matched seed. The improvement concerns interpolation within the prescribed, problem-informed temperature map, not discovery of the transition location.
+
+At the prescribed landmark itself, the $r=10$ conditioned model attains median exact TVDs of $0.048$ and $0.054$ for $n=8$ and $n=12$. Averaging the three-point window $\beta\in\{0.8,1,1.2\}$ gives $0.057$ and $0.079$. The magnetization profiles in Appendix~\ref{app:qualitative-profiles} show how ancillas reduce alternating-shell errors while retaining the ordered two-mode shape. Profile accuracy alone is insufficient: at $n=12$ and $r=10$, the full held-out profile-TVD median is $0.063$, below the raw bitstring value $0.076$.
+
+The direct target-aware fits do not provide a lower bound on achieved error. At $r=10$, their median non-landmark TVDs are $0.084$ and $0.152$, exceeding the conditioned values at both sizes. A shared fit receives data from six training temperatures, whereas each independent fit receives data from one temperature, and both use a finite optimization budget. The observed ordering therefore compares the implemented training procedures; it does not show that a shared circuit has greater single-condition capacity. Conversely, at low ancilla counts, interpolation between independent outputs remains more accurate than the shared model. The benefit of sharing depends on the ancilla count and the benchmark.
+
+\begin{figure*}[htb!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/curie_weiss_results.pdf}
+    \caption{Ancilla scaling of held-out exact raw bitstring TVD for the Curie--Weiss production campaign at $n=8$ (left) and $n=12$ (right). Curves show medians and bands show interquartile ranges over ten seeds after averaging all five held-out temperatures within each seed. This average includes the prescribed $\beta=1$ landmark; the text reports non-landmark interpolation separately. The target-aware oracle denotes direct independent fits under the fixed training protocol, not globally optimal circuits.}
+    \label{fig:curie-production-results}
+\end{figure*}
+
 \subsection{Curie--Weiss conditioning ablation}
 \label{sec:curie-ablation}
 
@@ -907,8 +868,9 @@ The ablation therefore identifies complementary effects rather than interchangea
 \end{figure}
 
 \section{Discussion}
-\TODO{Integrate the ten-seed Curie--Weiss production results before fixing the Discussion and deciding whether a third benchmark is required.}
-Conditional generation with IQP Born machines represents a promising avenue for quantum generative modeling as it combines the scalability of IQP circuits and the utility of more general models that enable conditional generation...
+The two benchmarks establish a conditional response with one fixed IQP unitary, but the scope remains within-range interpolation on exchangeable targets at two visible sizes. Ancillas reduce median raw TVD in all four dataset--size combinations. They do not remove the Gaussian boundary errors, and the shared model does not consistently outperform independent interpolation at every width. The Curie--Weiss result additionally uses a problem-informed map, so the non-landmark comparison and the encoder ablation delimit the corresponding generalization claim.
+
+\TODO{Review whether a third benchmark or a targeted ablation is needed to test a claim beyond these exchangeable targets. Larger visible sizes and a new dataset are not required merely to increase the number of experiments; any addition should address a specific limitation of the present evidence.}
 
 \section{Conclusions}
 The main contribution of this work is the conditional formulation of classically trained IQP Born machines. %The proposed framework leverages previous literature on computationally tractable states and reformulates the MMD for the conditional generation case to  
@@ -919,6 +881,29 @@ The main contribution of this work is the conditional formulation of classically
 \label{app:qualitative-profiles}
 
 This appendix separates reconstruction at training conditions from interpolation to untrained conditions. We fixed three conditions in each comparison by scientific role rather than fit quality. Each learned curve shows the median exact visible distribution over ten production seeds, and the shaded region shows the corresponding interquartile range. These profiles supplement the exact-TVD summaries by showing which parts of each distribution the models reproduce or miss.
+
+\subsection{Ancilla scaling and condition-resolved errors}
+
+\begin{plainwidetext}
+\noindent\begin{minipage}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/conditioned_training_vs_heldout.pdf}
+    \widefigurecaption{Exact raw bitstring TVD of the conditioned model at training and held-out conditions for all four dataset--size combinations. Curves show medians and bands show interquartile ranges after averaging the corresponding condition set within each seed. A negative held-out-minus-training gap does not imply better generalization than reconstruction: the two averages use different conditions, and the training sets include the domain endpoints. The Curie--Weiss held-out average includes the supplied $\beta=1$ landmark.}{fig:app-training-heldout-scaling}
+\end{minipage}
+\end{plainwidetext}
+
+\begin{plainwidetext}
+\noindent\begin{minipage}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/gaussian_condition_response.pdf}
+    \widefigurecaption{Condition-resolved exact raw TVD for the Gaussian model at $n=8$ and $n=12$ across all five ancilla counts. Curves show medians and bands show interquartile ranges over ten seeds at each condition. Filled markers denote training conditions and open markers denote held-out conditions. Endpoint errors persist despite the improvement with ancillas; these are reconstruction errors at training conditions rather than evidence of extrapolation failure.}{fig:app-gaussian-condition-response}
+    \medskip
+    \includegraphics[width=\textwidth]{figures/curie_weiss_condition_response.pdf}
+    \widefigurecaption{Condition-resolved exact raw TVD for the Curie--Weiss model at $n=8$ and $n=12$. Marker and uncertainty conventions follow Fig.~\ref{fig:app-gaussian-condition-response}. The vertical line marks the supplied $\beta=1$ landmark. The full condition response complements the averaged ancilla ladder and exposes residual errors away from the landmark.}{fig:app-curie-condition-response}
+\end{minipage}
+\end{plainwidetext}
+
+\clearpage
 
 \subsection{Gaussian profiles}
 
@@ -970,7 +955,7 @@ This appendix separates reconstruction at training conditions from interpolation
 \noindent\begin{minipage}{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/curie_weiss_n12_magnetization_profiles.pdf}
-    \widefigurecaption{Interim Curie--Weiss magnetization profiles for $n=12$ at the held-out inverse temperatures $\beta\in\{0.6,1,1.4\}$. The curves compare the currently complete conditioned models with $r\in\{0,1,3\}$ against the exact target. Learned curves show medians over ten production seeds, and shaded bands show interquartile ranges. Increasing $r$ reduces the alternating-shell structure in panels (a) and (b), while all three models retain a symmetric two-mode profile in panel (c). The $r\in\{6,10\}$ fits remain pending and are not represented in this partial ancilla comparison.}{fig:app-curie-profiles-n12-partial}
+    \widefigurecaption{Curie--Weiss magnetization profiles for $n=12$ at the held-out inverse temperatures $\beta\in\{0.6,1,1.4\}$. The curves compare conditioned models with $r\in\{0,3,10\}$ against the exact target. Learned curves show medians over ten production seeds, and shaded bands show interquartile ranges. Ancillas suppress the alternating-shell structure in panels (a) and (b). The ordered profile in panel (c) remains bimodal, but its mass near the edges and at the centre differs from the target even at $r=10$. The $\beta=1$ panel evaluates the prescribed landmark.}{fig:app-curie-profiles-n12}
 \end{minipage}
 \end{plainwidetext}
 
@@ -986,7 +971,7 @@ This appendix separates reconstruction at training conditions from interpolation
 \noindent\begin{minipage}{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/curie_weiss_n12_generalization_profiles.pdf}
-    \widefigurecaption{Interim Curie--Weiss generalization profiles for $n=12$ at $\beta\in\{0.6,1,1.4\}$. The shared conditioned model uses $r=3$, and the independent baseline interpolates the exact output distributions of the two neighboring $r=3$ independent circuits separately within each seed. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. This comparison uses the largest complete ancilla count and does not replace the final analysis with $r\in\{6,10\}$. As in Fig.~\ref{fig:app-curie-generalization}, the $\beta=1$ panel evaluates a prescribed landmark rather than unbiased localization of the transition.}{fig:app-curie-generalization-n12-partial}
+    \widefigurecaption{Curie--Weiss generalization profiles for $n=12$ at $\beta\in\{0.6,1,1.4\}$. Both the shared conditioned model and the independent-bank circuits use $r=10$. The baseline interpolates the exact output distributions of the two neighboring independent circuits separately within each seed. Curves show medians over ten production seeds, and shaded bands show interquartile ranges. Both methods retain the ordered two-mode shape; the raw-TVD comparison in Fig.~\ref{fig:curie-production-results} also tests the probabilities within each magnetization shell. As in Fig.~\ref{fig:app-curie-generalization}, the $\beta=1$ panel evaluates a prescribed landmark rather than unbiased localization of the transition.}{fig:app-curie-generalization-n12}
 \end{minipage}
 \end{plainwidetext}
 

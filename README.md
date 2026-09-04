@@ -54,10 +54,11 @@ uv run python scripts/run_exact_tvd_campaign.py plan
 uv run python scripts/status_atomic_campaign.py
 ```
 
-The original manifest declares 4,300 fits, including 400 MFC fits. The active
-paper campaign stops before that discarded block and therefore retains 3,900
-Gaussian and Curie--Weiss identities. Training and exact evaluation run in
-separate waves because the largest 26-qubit evaluations are memory intensive.
+The original manifest declares 4,300 fits, including 400 MFC fits. The paper
+reports the complete 8- and 12-visible-qubit subset: 2,600 Gaussian and
+Curie--Weiss fits and exact evaluations. The 16-qubit extension is deferred
+for computational reasons; the frozen manifest and historical artifacts are
+unchanged. Both Strix queues completed on 4 September 2026.
 
 The production settings are 2,000 optimizer updates, 8,192 estimator samples,
 2,000 sampled character operators per bandwidth, three fixed bandwidths, and
@@ -70,9 +71,12 @@ The manuscript reads publication figures from `Overleaf/figures/`. Plotting
 scripts regenerate those files from retained campaign artifacts. Do not restore
 the old `paper/` tree. It belonged to a superseded manuscript.
 
+See [the complete-result audit and reproduction commands](docs/paper_8_12/README.md)
+for the verified data scope, paired numerical summaries, and figure workflow.
+
 ## Cleanup boundary
 
-The Exact-TVD campaign is still running. Its shared modules remain in place
-until every active worker has stopped. A second cleanup pass may then remove
+The in-scope Exact-TVD campaign has finished. Its shared modules remain in place
+for reproducibility. A separately reviewed cleanup pass may remove
 the dormant MFC compatibility branch and any source modules that the retained
 campaign, ablation, grid-Ising pilots, and manuscript figures do not import.

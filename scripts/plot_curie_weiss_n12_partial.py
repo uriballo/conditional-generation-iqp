@@ -1,4 +1,4 @@
-"""Plot partial Curie--Weiss n=12 qualitative profiles."""
+"""Plot complete Curie--Weiss n=12 qualitative profiles."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from iqp_cond.exact_tvd_results import interpolate_probabilities, load_records
 
 SEEDS = tuple(range(100, 110))
 BETAS = (0.6, 1.0, 1.4)
-ANCILLAS = (0, 1, 3)
+ANCILLAS = (0, 3, 10)
 TRAINING = (0.5, 0.7, 0.9, 1.1, 1.3, 1.5)
 FIELDS = [
     "dataset",
@@ -72,7 +72,7 @@ def independent(records, beta, seed, n=12):
         for x in records
         if x.identity["dataset"] == "curie_weiss"
         and x.identity["visible_qubits"] == n
-        and x.identity["ancillas"] == 3
+        and x.identity["ancillas"] == 10
         and x.identity["family"] == "independent"
         and x.identity["seed"] == seed
         and np.isclose(x.conditions, beta).any()
@@ -176,15 +176,15 @@ def main(evaluations, output):
         allrows = []
         colors = {
             "r=0": "#0072B2",
-            "r=1": "#D55E00",
-            "r=3": "#009E73",
+            "r=3": "#D55E00",
+            "r=10": "#009E73",
             "adjacent independent interpolation": "#D55E00",
         }
         handles = []
         labels = {
             "r=0": r"$r=0$",
-            "r=1": r"$r=1$",
             "r=3": r"$r=3$",
+            "r=10": r"$r=10$",
             "adjacent independent interpolation": "Independent interpolation",
         }
         for j, (ax, beta) in enumerate(zip(axes, BETAS, strict=True)):
@@ -227,12 +227,12 @@ def main(evaluations, output):
 
     make(
         "curie_weiss_n12_magnetization_profiles",
-        ["r=0", "r=1", "r=3", "exact target"],
+        ["r=0", "r=3", "r=10", "exact target"],
         "held_out",
     )
     make(
         "curie_weiss_n12_generalization_profiles",
-        ["r=3", "adjacent independent interpolation", "exact target"],
+        ["r=10", "adjacent independent interpolation", "exact target"],
         "held_out",
     )
 
@@ -245,7 +245,7 @@ if __name__ == "__main__":
         default=Path("results/exact-tvd-ancilla-v1/evaluations"),
     )
     p.add_argument(
-        "--output", type=Path, default=Path("artifacts/curie_weiss_n12_partial")
+        "--output", type=Path, default=Path("artifacts/curie_weiss_n12_complete")
     )
     a = p.parse_args()
     main(a.evaluations, a.output)

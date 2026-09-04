@@ -194,6 +194,7 @@ tmp/
 *.out
 *.synctex.gz
 Overleaf/main.pdf
+Overleaf/mainNotes.bib
 
 # Local experiment and research artifacts
 .scratch/
