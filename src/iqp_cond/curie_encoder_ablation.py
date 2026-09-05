@@ -15,7 +15,6 @@ import numpy as np
 
 from .ansatz import complete_ansatz
 from .artifacts import read_immutable_json, sha256_file, write_immutable_json
-from .confirmatory_statistics import median_iqr, paired_interval
 from .curie_weiss_data import exact_curie_weiss_target
 from .encoding import ANGLE_ENCODING, SPIN_FLIP_BRANCH_ENCODING
 from .exact import enumerate_bitstrings, exact_iqp_visible_probabilities
@@ -40,6 +39,7 @@ from .exact_tvd_runner import (
     load_protocol_selection,
 )
 from .exact_tvd_training import CampaignTrainingConfig, train_campaign
+from .gaussian_statistics import median_iqr, paired_interval
 from .protocol import ProtocolValidationError, content_digest
 
 CAMPAIGN_VERSION = "curie_encoder_ablation_v1"

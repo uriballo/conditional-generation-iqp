@@ -53,19 +53,16 @@ from .exact_tvd_training import (
     train_campaign,
 )
 from .gaussian_data import condition_angle_matrix, gaussian_target
-from .mfc_reference_iqp import (
-    bit_codes,
-    load_events,
-    physical_bins,
-)
-from .mfc_reference_iqp import (
-    condition_angle as mfc_condition_angle,
-)
-from .mfc_reference_iqp import (
-    metrics as mfc_metrics,
-)
 from .mmd import _target_terms
 from .simulator import _estimate_pauli_z_unchecked
+
+
+def _require_execution_dataset(dataset: str) -> None:
+    if dataset not in {"gaussian", "curie_weiss"}:
+        raise ValueError(
+            f"execution is unavailable for {dataset!r}; only Gaussian and Curie-Weiss "
+            "are retained (historical identities remain in the frozen plan)"
+        )
 
 
 def _canonical(value: Any) -> bytes:
@@ -141,9 +138,9 @@ def prepare_data_archive(
     *,
     dataset: str,
     n_visible: int,
-    mfc_events: Path | None = None,
 ) -> tuple[Path, str]:
     """Create one fixed, role-separated 1000/1000/1000 archive per cell."""
+    _require_execution_dataset(dataset)
     if n_visible not in config["datasets"][dataset]["visible_qubits"]:
         raise ValueError("dataset size is outside the campaign")
     conditions = _condition_values(config, dataset)
@@ -155,53 +152,22 @@ def prepare_data_archive(
     }
     role_seeds: dict[str, list[int]] = {name: [] for name in roles}
     source_digest = "analytic"
-    events = None
-    if dataset == "mfc":
-        if mfc_events is None:
-            raise ValueError("MFC preparation requires an event archive")
-        events = load_events(mfc_events)
-        source_digest = sha256_file(mfc_events)
     for condition in conditions:
         for role in roles:
             seed = _derived_seed(
                 digest, root, dataset, n_visible, float(condition), role
             )
             role_seeds[role].append(seed)
-            if dataset == "mfc":
-                assert events is not None
-                rng = np.random.default_rng(seed)
-                indices = rng.choice(len(events[int(condition)]), count, replace=False)
-                # Derive all three seeds independently, then reject overlap below.
-                labels, _ = physical_bins(events[int(condition)], int(condition), 8)
-                roles[role].append(bit_codes(labels[indices]).astype(np.int8))
-            else:
-                roles[role].append(
-                    _draw_synthetic(
-                        dataset,
-                        n_visible,
-                        float(condition),
-                        count,
-                        seed,
-                        float(config["datasets"]["gaussian"]["width"]),
-                    )
+            roles[role].append(
+                _draw_synthetic(
+                    dataset,
+                    n_visible,
+                    float(condition),
+                    count,
+                    seed,
+                    float(config["datasets"]["gaussian"]["width"]),
                 )
-    # MFC uses a single permutation so its role splits are provably disjoint.
-    if dataset == "mfc":
-        assert events is not None
-        roles = {name: [] for name in roles}
-        for condition in conditions:
-            energy = int(condition)
-            seed = _derived_seed(digest, root, dataset, n_visible, energy, "all_roles")
-            order = np.random.default_rng(seed).permutation(len(events[energy]))[
-                : 3 * count
-            ]
-            labels, _ = physical_bins(events[energy], energy, 8)
-            for offset, role in enumerate(("train", "validation", "test")):
-                roles[role].append(
-                    bit_codes(
-                        labels[order[offset * count : (offset + 1) * count]]
-                    ).astype(np.int8)
-                )
+            )
     arrays: dict[str, np.ndarray] = {
         "configuration_digest": np.asarray(digest, dtype="S64"),
         "dataset": np.asarray(dataset, dtype=f"S{len(dataset)}"),
@@ -250,18 +216,13 @@ def _curie_angle(beta: float) -> float:
 def condition_angles(
     dataset: str, conditions: Sequence[float], total_qubits: int
 ) -> np.ndarray:
+    _require_execution_dataset(dataset)
     values = np.asarray(conditions, dtype=np.float64)
     if dataset == "gaussian":
         return condition_angle_matrix(values, total_qubits)
     if dataset == "curie_weiss":
         return np.repeat(
             np.asarray([_curie_angle(float(v)) for v in values])[:, None],
-            total_qubits,
-            axis=1,
-        )
-    if dataset == "mfc":
-        return np.repeat(
-            np.asarray([mfc_condition_angle(float(v)) for v in values])[:, None],
             total_qubits,
             axis=1,
         )
@@ -452,9 +413,8 @@ def calibration_cell(
     repeats: int = 5,
 ) -> dict[str, Any]:
     """Measure all four estimator gates in one representative pilot cell."""
-    if dataset not in {"gaussian", "curie_weiss", "mfc"}:
-        raise ValueError("unknown calibration dataset")
-    n_visible = 3 if dataset == "mfc" else 8
+    _require_execution_dataset(dataset)
+    n_visible = 8
     archive = load_data_archive(config, data_directory, dataset, n_visible)
     conditions = np.asarray(
         config["datasets"][dataset]["training_conditions"], dtype=np.float64
@@ -587,6 +547,7 @@ def train_run(
     output_directory: Path,
 ) -> dict[str, Any]:
     """Fit one identity and persist immutable candidate checkpoints."""
+    _require_execution_dataset(run.dataset)
     if run.configuration_digest != manifest_digest(config):
         raise ValueError("run belongs to another campaign")
     training_path = output_directory / "training" / f"{run.run_id}.json"
@@ -662,13 +623,9 @@ def train_run(
             run.seed,
             training_config,
         )
-        checkpoints = np.stack(
-            [checkpoint.params for checkpoint in result.checkpoints]
-        )
+        checkpoints = np.stack([checkpoint.params for checkpoint in result.checkpoints])
         arrays = {
-            "configuration_digest": np.asarray(
-                run.configuration_digest, dtype="S64"
-            ),
+            "configuration_digest": np.asarray(run.configuration_digest, dtype="S64"),
             "run_id": np.asarray(run.run_id, dtype="S64"),
             "initial_params": initial,
             "checkpoint_params": checkpoints,
@@ -757,11 +714,6 @@ def _metrics(
         ).to_dict()
         result["test_mmd"] = _diagnostic_mmd(model, target, sigmas)
         return result
-    if dataset == "mfc":
-        result = mfc_metrics(target, model)
-        result["bitstring_tvd"] = result.pop("tvd")
-        result["test_mmd"] = _diagnostic_mmd(model, target, sigmas)
-        return result
     bits = enumerate_bitstrings(n_visible)
     target_profile = shell_probabilities(target, bits)
     model_profile = shell_probabilities(model, bits)
@@ -789,6 +741,7 @@ def evaluate_run(
     output_directory: Path,
 ) -> dict[str, Any]:
     """Select by exact validation TVD and evaluate one fit on fixed test data."""
+    _require_execution_dataset(run.dataset)
     start = time.monotonic()
     training_payload = read_immutable_json(
         output_directory / "training" / f"{run.run_id}.json"
@@ -859,15 +812,12 @@ def evaluate_run(
     for condition, data_index, prediction in zip(
         evaluation_conditions, evaluation_indices, predictions, strict=True
     ):
-        if run.dataset == "mfc":
-            target = _empirical_probabilities(archive["test"][data_index])
-        else:
-            target = _exact_target(
-                run.dataset,
-                run.visible_qubits,
-                float(condition),
-                float(config["datasets"]["gaussian"]["width"]),
-            )
+        target = _exact_target(
+            run.dataset,
+            run.visible_qubits,
+            float(condition),
+            float(config["datasets"]["gaussian"]["width"]),
+        )
         evaluation_targets.append(target)
         split = (
             "training"

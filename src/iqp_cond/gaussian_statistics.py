@@ -3,12 +3,27 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
 import numpy as np
 
 from .exact import shell_probabilities, total_variation_distance
+
+
+def median_iqr(values: Sequence[float]) -> dict[str, float | int]:
+    """Return the declared descriptive statistics without changing units."""
+    array = np.asarray(values, dtype=np.float64)
+    if array.ndim != 1 or array.size < 1 or not np.all(np.isfinite(array)):
+        raise ValueError("summary values must be a non-empty finite vector")
+    return {
+        "median": float(np.median(array)),
+        "q25": float(np.quantile(array, 0.25)),
+        "q75": float(np.quantile(array, 0.75)),
+        "n_replication_units": int(array.size),
+        "replication_unit": "seed",
+    }
 
 
 @dataclass(frozen=True, slots=True)
@@ -115,6 +130,22 @@ def paired_bootstrap_interval(
         bootstrap_seed=seed,
         paired_seed_values=ordered,
     )
+
+
+def paired_interval(
+    values: Mapping[int, float],
+    *,
+    replicates: int,
+    seed: int,
+    confidence_level: float,
+) -> dict[str, object]:
+    """Bootstrap a paired seed-level contrast with frozen randomness."""
+    return paired_bootstrap_interval(
+        dict(values),
+        replicates=replicates,
+        seed=seed,
+        confidence_level=confidence_level,
+    ).to_dict()
 
 
 def adjacent_indices(

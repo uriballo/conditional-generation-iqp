@@ -33,11 +33,6 @@ def main() -> None:
     parser.add_argument(
         "--remote-root", default="/home/uribagi/exact-tvd-ancilla-v1-src"
     )
-    parser.add_argument(
-        "--mfc-events",
-        type=Path,
-        default=ROOT / ".scratch/mfc-confirmatory/events.npz",
-    )
     args = parser.parse_args()
     digest = source_digest()
     hosts = tuple(args.host) if args.host else HOSTS
@@ -56,21 +51,6 @@ def main() -> None:
                 ],
                 check=True,
             )
-        incoming = f"{destination}/incoming"
-        subprocess.run(["ssh", remote, "mkdir", "-p", incoming], check=True)
-        subprocess.run(
-            ["rsync", "-a", str(args.mfc_events), f"{remote}:{incoming}/events.npz"],
-            check=True,
-        )
-        subprocess.run(
-            [
-                "ssh",
-                remote,
-                "sha256sum",
-                f"{destination}/incoming/events.npz",
-            ],
-            check=True,
-        )
     print(
         json.dumps(
             {"source_digest": digest, "remote_path": destination, "hosts": hosts}

@@ -41,12 +41,7 @@ def _parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
     plan = subparsers.add_parser("plan")
     plan.add_argument("--json", action="store_true")
-    prepare = subparsers.add_parser("prepare-data")
-    prepare.add_argument(
-        "--mfc-events",
-        type=Path,
-        default=ROOT / ".scratch/mfc-confirmatory/events.npz",
-    )
+    subparsers.add_parser("prepare-data")
     for command in ("train", "evaluate"):
         action = subparsers.add_parser(command)
         action.add_argument("--run-id")
@@ -76,7 +71,11 @@ def _selected_runs(args: argparse.Namespace, runs: tuple) -> list:
         return [runs[args.run_index]]
     if args.shard_count < 1 or not 0 <= args.shard_index < args.shard_count:
         raise SystemExit("invalid shard coordinates")
-    selected = list(runs[args.shard_index :: args.shard_count])
+    selected = [
+        run
+        for run in runs[args.shard_index :: args.shard_count]
+        if run.dataset in {"gaussian", "curie_weiss"}
+    ]
     return selected if args.max_runs is None else selected[: args.max_runs]
 
 
@@ -96,14 +95,14 @@ def main() -> None:
         return
     if args.command == "prepare-data":
         prepared = []
-        for dataset, spec in config["datasets"].items():
+        for dataset in ("gaussian", "curie_weiss"):
+            spec = config["datasets"][dataset]
             for n_visible in spec["visible_qubits"]:
                 path, digest = prepare_data_archive(
                     config,
                     args.data_directory,
                     dataset=dataset,
                     n_visible=n_visible,
-                    mfc_events=args.mfc_events if dataset == "mfc" else None,
                 )
                 prepared.append({"path": str(path), "sha256": digest})
         print(json.dumps(prepared, indent=2))

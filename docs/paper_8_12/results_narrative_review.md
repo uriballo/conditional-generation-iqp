@@ -12,14 +12,22 @@ The revised paragraphs are in `Overleaf/main.tex`, Results. Each paragraph opens
 
 ## Claim-evidence map
 
-- Claim: ancillas reduce median held-out raw TVD for both sizes of both datasets. | Evidence: five-point ladders in `gaussian_results.pdf` and `curie_weiss_results.pdf`; paired seed summaries in `summary.json`. | Status: supported for aggregate medians, not every fit.
-- Claim: Gaussian shared interpolation beats the independent bank at n=8, r=10, but the n=12 advantage is unresolved. | Evidence: paired advantages 0.0198 [0.0173, 0.0211] and 0.0049 [-0.0077, 0.0137]. | Status: supported.
-- Claim: Gaussian residuals include endpoint reconstruction errors. | Evidence: training-condition profiles at c=0 and c=1 and condition-resolved raw TVD. | Status: supported; attribution to encoding versus optimization remains unresolved.
-- Claim: midpoint profiles illustrate differences between shared predictions and output mixtures. | Evidence: three post-training probes at each Gaussian size. | Status: supported as qualitative evidence, not a replacement headline test or proof of within-shell accuracy.
-- Claim: CW improves beyond the supplied landmark. | Evidence: non-landmark r=10 paired advantages 0.0119 [0.0080, 0.0136] and 0.0363 [0.0299, 0.0433], positive in all ten seeds. | Status: supported within the prescribed map and training range.
-- Claim: ancillas improve the CW shape, while twelve-qubit ordered residuals remain. | Evidence: magnetization profiles at beta=0.6, 1, 1.4, especially alternating-shell errors and ordered edge/centre mass. | Status: supported; profile aggregation does not certify raw accuracy.
-- Claim: the input symmetry and map interact. | Evidence: retained three-seed crossed ablation; symmetry alone under the affine map does not improve the reported average. | Status: supported for the tested constructions, not a universal resource equivalence.
-- Claim: shared CW circuits exceed an oracle capacity bound. | Evidence: direct fits use a finite budget and different condition-data access. | Status: unsupported; explicitly excluded.
+This is the canonical claim table for the current Results handoff, not a new numerical analysis. Production claims use the frozen manifest checksum in [provenance.json](provenance.json), which records 2,600 training/evaluation identities and their artifact hashes. Numerical comparisons come from [summary.json](summary.json) and [seed_summary.csv](seed_summary.csv); reproduction and raw-store locations are in [README.md](README.md). Development ablations and supplementary midpoint probes are separate evidence and must not inherit production verification merely by appearing here.
+
+The author approved delivery of the Results narrative at commit `53d36a46`; that delivery approval is distinct from independent scientific validation. The table records the existing review's support and limitations. This documentation update does not change claims or manuscript prose.
+
+| Claim | Result artifact or figure evidence | Limitation and evidence-review status |
+| --- | --- | --- |
+| ancillas reduce median held-out raw TVD for both sizes of both datasets. | five-point ladders in `gaussian_results.pdf` and `curie_weiss_results.pdf`; paired seed summaries in `summary.json`. | supported for aggregate medians, not every fit. |
+| Gaussian shared interpolation beats the independent bank at n=8, r=10, but the n=12 advantage is unresolved. | paired advantages 0.0198 [0.0173, 0.0211] and 0.0049 [-0.0077, 0.0137]. | supported. |
+| Gaussian residuals include endpoint reconstruction errors. | training-condition profiles at c=0 and c=1 and condition-resolved raw TVD. | supported; attribution to encoding versus optimization remains unresolved. |
+| midpoint profiles illustrate differences between shared predictions and output mixtures. | three post-training probes at each Gaussian size. | supported as qualitative evidence, not a replacement headline test or proof of within-shell accuracy. |
+| CW improves beyond the supplied landmark. | non-landmark r=10 paired advantages 0.0119 [0.0080, 0.0136] and 0.0363 [0.0299, 0.0433], positive in all ten seeds. | supported within the prescribed map and training range. |
+| ancillas improve the CW shape, while twelve-qubit ordered residuals remain. | magnetization profiles at beta=0.6, 1, 1.4, especially alternating-shell errors and ordered edge/centre mass. | supported; profile aggregation does not certify raw accuracy. |
+| the input symmetry and map interact. | retained three-seed crossed ablation; symmetry alone under the affine map does not improve the reported average. | supported for the tested constructions, not a universal resource equivalence. |
+| shared CW circuits exceed an oracle capacity bound. | direct fits use a finite budget and different condition-data access. | unsupported; explicitly excluded. |
+
+Before changing a claim, identify its exact protocol/result path and figure or table, retain the relevant limitations, and record the new author-review status. The retained three-seed crossed ablation's immutable protocol/artifact pointer is not established by this table; resolve it before revising that claim. Do not infer quantum advantage, extrapolation, or an oracle capacity bound from this evidence.
 
 ## Five-dimension self-review
 

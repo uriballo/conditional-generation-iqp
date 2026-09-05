@@ -76,7 +76,14 @@ for the verified data scope, paired numerical summaries, and figure workflow.
 
 ## Cleanup boundary
 
-The in-scope Exact-TVD campaign has finished. Its shared modules remain in place
-for reproducibility. A separately reviewed cleanup pass may remove
-the dormant MFC compatibility branch and any source modules that the retained
-campaign, ablation, grid-Ising pilots, and manuscript figures do not import.
+The in-scope Exact-TVD campaign has finished. Retained shared modules and
+figure scripts reproduce the Gaussian and Curie-Weiss results. Retired
+confirmatory, phase-OOD, latent-input, and MFC execution code has been removed;
+Git history preserves those implementations.
+
+The frozen plan still contains all 4,300 original identities. Data preparation
+and default training/evaluation shards now execute only Gaussian and
+Curie-Weiss, preserving their original indices. Explicit MFC execution is
+unsupported. Historical development plans and selectors retain MFC cells so
+archived calibration and optimizer-selection evidence can still be checked;
+re-running those MFC cells requires the historical source bundle.

@@ -3,15 +3,18 @@ from pathlib import Path
 import jax
 import jax.numpy as jnp
 import numpy as np
+import pytest
 
 from iqp_cond.ansatz import complete_ansatz
-from iqp_cond.exact_tvd_campaign import load_manifest
+from iqp_cond.exact_tvd_campaign import load_manifest, production_identities
 from iqp_cond.exact_tvd_runner import (
     _git_revision,
     _weighted_loss_functions,
     condition_angles,
+    evaluate_run,
     load_data_archive,
     prepare_data_archive,
+    train_run,
 )
 
 
@@ -39,7 +42,8 @@ def test_condition_maps_cover_all_total_qubits():
     curie = condition_angles("curie_weiss", [0.8, 1.0, 1.2], 18)
     assert curie.shape == (3, 18)
     assert np.allclose(curie[1], 0.0)
-    assert condition_angles("mfc", [125], 13).shape == (1, 13)
+    with pytest.raises(ValueError, match="execution is unavailable"):
+        condition_angles("mfc", [125], 13)
 
 
 def test_weighted_mmd_loss_and_gradient_are_finite():
@@ -65,3 +69,27 @@ def test_weighted_mmd_loss_and_gradient_are_finite():
     assert np.isfinite(float(value))
     assert np.all(np.isfinite(np.asarray(gradient)))
     assert np.isfinite(float(validation(params)))
+
+
+def test_retired_mfc_preparation_fails_before_writing(tmp_path):
+    config = load_manifest(Path("configs/exact_tvd_ancilla_v1.json"))
+    with pytest.raises(ValueError, match="execution is unavailable"):
+        prepare_data_archive(config, tmp_path, dataset="mfc", n_visible=3)
+    assert not list(tmp_path.iterdir())
+
+
+@pytest.mark.parametrize("execute", [train_run, evaluate_run])
+def test_retired_mfc_execution_fails_before_accessing_artifacts(tmp_path, execute):
+    config = load_manifest(Path("configs/exact_tvd_ancilla_v1.json"))
+    run = next(run for run in production_identities(config) if run.dataset == "mfc")
+    extra = {"selection": {}} if execute is train_run else {}
+    with pytest.raises(ValueError, match="execution is unavailable"):
+        execute(
+            repository=tmp_path,
+            config=config,
+            run=run,
+            data_directory=tmp_path,
+            output_directory=tmp_path,
+            **extra,
+        )
+    assert not list(tmp_path.iterdir())

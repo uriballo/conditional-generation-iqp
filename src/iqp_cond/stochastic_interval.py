@@ -20,17 +20,22 @@ from .training import (
 
 def sample_interval_angles(
     baseline: np.ndarray,
-    half_width: float,
+    half_width: float | np.ndarray,
     seed: int | np.integer,
 ) -> np.ndarray:
     """Sample one angle independently per condition and qubit, deterministically."""
     baseline = np.asarray(baseline, dtype=np.float64)
     if baseline.ndim != 2:
         raise ValueError("baseline must have shape (n_conditions, n_qubits)")
-    if half_width < 0 or not np.isfinite(half_width):
+    widths = np.asarray(half_width, dtype=np.float64)
+    if widths.shape not in ((), (baseline.shape[1],), baseline.shape):
+        raise ValueError(
+            "half_width must be scalar, per-qubit, or match baseline shape"
+        )
+    if not np.all(np.isfinite(widths)) or np.any(widths < 0):
         raise ValueError("half_width must be finite and non-negative")
     rng = np.random.default_rng(int(seed))
-    return baseline + rng.uniform(-half_width, half_width, baseline.shape)
+    return baseline + rng.uniform(-widths, widths, baseline.shape)
 
 
 sample_resampled_angles = sample_interval_angles
@@ -40,7 +45,7 @@ def train_with_resampled_angles(
     model_name: str,
     ansatz: Ansatz,
     angle_centers: np.ndarray,
-    half_width: float,
+    half_width: float | np.ndarray,
     training_targets: np.ndarray,
     validation_targets: np.ndarray,
     seed: int,

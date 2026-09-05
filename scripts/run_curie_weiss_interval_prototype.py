@@ -15,6 +15,7 @@ from pathlib import Path
 
 import numpy as np
 
+from iqp_cond.ancilla import ancilla_only_condition_angles, marginalize_ancillas
 from iqp_cond.ansatz import complete_ansatz
 from iqp_cond.exact import (
     enumerate_bitstrings,
@@ -22,12 +23,19 @@ from iqp_cond.exact import (
     shell_probabilities,
     total_variation_distance,
 )
-from iqp_cond.matched_capacity import beta_to_angles
-from iqp_cond.stochastic_interval import train_with_resampled_angles
+from iqp_cond.stochastic_interval import (
+    sample_interval_angles,
+    train_with_resampled_angles,
+)
 from iqp_cond.training import TrainingConfig
 
 TRAINING_BETAS = np.asarray([0.5, 0.7, 0.9, 1.1, 1.3, 1.5])
 HELDOUT_BETAS = np.asarray([0.6, 0.8, 1.0, 1.2, 1.4])
+
+
+def beta_to_angles(betas: tuple[float, ...] | np.ndarray) -> np.ndarray:
+    """Map inverse temperatures to the prototype's broadcast input angle."""
+    return np.pi * (0.35 - 0.70 * (np.asarray(betas, dtype=np.float64) - 0.5))
 
 
 def curie_weiss_probabilities(n_qubits: int, beta: float) -> np.ndarray:
@@ -62,7 +70,6 @@ def evaluate(
     betas: np.ndarray,
     probabilities: np.ndarray,
     n_qubits: int,
-    role: str,
     width: float,
     arm: str,
 ) -> list[dict[str, object]]:
@@ -73,7 +80,7 @@ def evaluate(
         rows.append(
             {
                 "beta": float(beta),
-                "role": role,
+                "role": "training" if beta in TRAINING_BETAS else "heldout",
                 "arm": arm,
                 "half_width_pi": width,
                 "profile_tvd": total_variation_distance(
@@ -86,14 +93,28 @@ def evaluate(
 
 
 def run(args: argparse.Namespace) -> dict[str, object]:
-    n = args.n_qubits
-    ansatz = complete_ansatz(n)
-    train_targets = target_samples(TRAINING_BETAS, n, 300_000, args.samples)
+    n_visible = args.n_qubits
+    n_total = n_visible + args.ancillas
+    ansatz = complete_ansatz(n_total)
+    train_targets = target_samples(TRAINING_BETAS, n_visible, 300_000, args.samples)
     validation_targets = target_samples(
-        TRAINING_BETAS, n, 400_000, args.validation_samples
+        TRAINING_BETAS, n_visible, 400_000, args.validation_samples
     )
     all_betas = np.concatenate((TRAINING_BETAS, HELDOUT_BETAS))
-    centers = np.repeat(beta_to_angles(TRAINING_BETAS)[:, None], n, axis=1)
+    inference_ancilla_centers = np.repeat(
+        beta_to_angles(all_betas)[:, None], args.ancillas, axis=1
+    )
+    inference_centers = (
+        np.asarray(ancilla_only_condition_angles(inference_ancilla_centers, n_visible))
+        if args.ancillas
+        else np.repeat(beta_to_angles(all_betas)[:, None], n_visible, axis=1)
+    )
+    centers = inference_centers[: len(TRAINING_BETAS)]
+    widths = (
+        np.ones(n_total)
+        if args.ancillas == 0
+        else np.concatenate((np.zeros(n_visible), np.ones(args.ancillas)))
+    )
     rows: list[dict[str, object]] = []
     fits: list[dict[str, object]] = []
     for width in args.half_width_pi:
@@ -101,13 +122,13 @@ def run(args: argparse.Namespace) -> dict[str, object]:
             f"curie_weiss_interval_{width:g}_seed{args.seed}",
             ansatz,
             centers,
-            width * np.pi,
+            widths * width * np.pi,
             train_targets,
             validation_targets,
             args.seed,
             TrainingConfig(
                 steps=args.steps,
-                batch_size=args.samples,
+                batch_size=args.batch_size,
                 validation_interval=max(1, min(25, args.steps)),
                 n_ops=args.n_ops,
                 n_iqp_samples=args.n_iqp_samples,
@@ -116,25 +137,23 @@ def run(args: argparse.Namespace) -> dict[str, object]:
             ),
             validation_members=args.validation_members,
         )
-        inference_centers = np.repeat(beta_to_angles(all_betas)[:, None], n, axis=1)
-        ensemble_angles = np.stack(
-            [
-                inference_centers
-                + np.random.default_rng(args.seed + 700_000 + member).uniform(
-                    -width * np.pi,
-                    width * np.pi,
-                    inference_centers.shape,
-                )
-                for member in range(args.ensemble_members)
-            ]
-        )
         ensemble = np.mean(
             np.stack(
                 [
-                    exact_iqp_probabilities_many(
-                        result.best_params, result.generators, angles
+                    marginalize_ancillas(
+                        exact_iqp_probabilities_many(
+                            result.best_params,
+                            result.generators,
+                            sample_interval_angles(
+                                inference_centers,
+                                widths * width * np.pi,
+                                args.seed + 700_000 + member,
+                            ),
+                        ),
+                        n_visible,
+                        args.ancillas,
                     )
-                    for angles in ensemble_angles
+                    for member in range(args.ensemble_members)
                 ]
             ),
             axis=0,
@@ -143,8 +162,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
             evaluate(
                 all_betas,
                 ensemble,
-                n,
-                "heldout_or_training",
+                n_visible,
                 width,
                 "probability_ensemble",
             )
@@ -156,12 +174,12 @@ def run(args: argparse.Namespace) -> dict[str, object]:
                 "best_validation_loss": result.best_validation_loss,
             }
         )
-    for row in rows:
-        row["role"] = "heldout" if row["beta"] in HELDOUT_BETAS else "training"
     return {
         "status": "prototype",
         "dataset": "Curie-Weiss",
-        "n_qubits": n,
+        "n_qubits": n_total,
+        "visible_qubits": n_visible,
+        "ancillas": args.ancillas,
         "training_betas": TRAINING_BETAS.tolist(),
         "heldout_betas": HELDOUT_BETAS.tolist(),
         "fits": fits,
@@ -172,22 +190,24 @@ def run(args: argparse.Namespace) -> dict[str, object]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--n-qubits", type=int, default=4)
+    parser.add_argument("--ancillas", type=int, default=0)
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--steps", type=int, default=100)
-    parser.add_argument("--samples", type=int, default=500)
-    parser.add_argument("--validation-samples", type=int, default=300)
-    parser.add_argument("--n-ops", type=int, default=32)
-    parser.add_argument("--n-iqp-samples", type=int, default=512)
-    parser.add_argument("--validation-iqp-samples", type=int, default=512)
-    parser.add_argument("--validation-members", type=int, default=2)
+    parser.add_argument("--steps", type=int, default=2_000)
+    parser.add_argument("--samples", type=int, default=1_500)
+    parser.add_argument("--batch-size", type=int, default=75)
+    parser.add_argument("--validation-samples", type=int, default=16_384)
+    parser.add_argument("--n-ops", type=int, default=256)
+    parser.add_argument("--n-iqp-samples", type=int, default=8_192)
+    parser.add_argument("--validation-iqp-samples", type=int, default=16_384)
+    parser.add_argument("--validation-members", type=int, default=1)
     parser.add_argument("--ensemble-members", type=int, default=8)
     parser.add_argument(
         "--half-width-pi", nargs="+", type=float, default=(0.0, 0.05, 0.10)
     )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    if args.n_qubits < 2 or args.steps < 1:
-        parser.error("n-qubits must be >= 2 and steps must be positive")
+    if args.n_qubits < 2 or args.ancillas < 0 or args.steps < 1:
+        parser.error("n-qubits must be >= 2, ancillas non-negative, and steps positive")
     payload = run(args)
     rendered = json.dumps(payload, indent=2, sort_keys=True)
     if args.output:
