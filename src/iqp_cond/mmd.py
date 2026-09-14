@@ -25,9 +25,6 @@ class ConditionalMMDResult:
     loss: jnp.ndarray
     per_condition: jnp.ndarray
     per_bandwidth_condition: jnp.ndarray
-    model_expectations: tuple[jnp.ndarray, ...]
-    target_expectations: tuple[jnp.ndarray, ...]
-    operators: tuple[jnp.ndarray, ...]
 
 
 @dataclass(frozen=True)
@@ -139,9 +136,6 @@ def conditional_mmd(
 
     bandwidth_keys = jax.random.split(key, len(sigmas))
     bandwidth_losses = []
-    model_expectations = []
-    target_expectations = []
-    all_ops = []
     for sigma, sigma_key in zip(sigmas, bandwidth_keys, strict=True):
         op_key, model_key = jax.random.split(sigma_key)
         ops_data = sample_mmd_operators(
@@ -177,9 +171,6 @@ def conditional_mmd(
             + target_squares
         )
         bandwidth_losses.append(jnp.mean(per_op, axis=-1))
-        model_expectations.append(model.values)
-        target_expectations.append(target_means)
-        all_ops.append(ops_data)
 
     per_bandwidth_condition = jnp.stack(bandwidth_losses, axis=0)
     per_condition = jnp.mean(per_bandwidth_condition, axis=0)
@@ -187,9 +178,6 @@ def conditional_mmd(
         loss=jnp.mean(per_condition),
         per_condition=per_condition,
         per_bandwidth_condition=per_bandwidth_condition,
-        model_expectations=tuple(model_expectations),
-        target_expectations=tuple(target_expectations),
-        operators=tuple(all_ops),
     )
 
 

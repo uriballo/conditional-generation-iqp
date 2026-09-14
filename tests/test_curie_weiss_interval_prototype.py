@@ -38,7 +38,7 @@ def test_run_uses_prefix_and_role_specific_widths(monkeypatch, ancillas):
     seen = {}
 
     def train(*args, **kwargs):
-        seen["centers"], seen["widths"] = args[2], args[3]
+        seen["centers"], seen["widths"] = args[1], args[2]
         return SimpleNamespace(
             best_params=0, generators=[], best_step=0, best_validation_loss=0.0
         )

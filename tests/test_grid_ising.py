@@ -5,7 +5,6 @@ import numpy as np
 from iqp_cond.exact_tvd_campaign import expected_bodyness_sigmas
 from iqp_cond.grid_ising import (
     character_moments,
-    complement_equivariance_error,
     enumerate_spins,
     exact_probabilities,
     lattice_edges,
@@ -33,10 +32,6 @@ def test_edges_are_unique_and_probabilities_match_boltzmann_ratios():
         + field * (magnetization[left] - magnetization[right])
     )
     assert np.isclose(probability[left] / probability[right], expected_ratio)
-
-
-def test_complement_equivariance():
-    assert complement_equivariance_error((2, 4), 0.4, 0.2) < 1e-14
 
 
 def test_sampling_is_reproducible_and_matches_exact_mean():

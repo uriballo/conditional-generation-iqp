@@ -34,7 +34,6 @@ def test_stochastic_training_returns_finite_history():
         validation_n_iqp_samples=8,
     )
     result = train_with_resampled_angles(
-        "tiny",
         ansatz,
         centers,
         0.05,

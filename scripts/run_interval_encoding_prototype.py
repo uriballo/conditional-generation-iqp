@@ -113,7 +113,6 @@ def run(args: argparse.Namespace) -> dict[str, object]:
                 seed=angle_seed,
             )
             result = train_with_resampled_angles(
-                f"interval_width_{interval_width:g}_seed{seed}",
                 ansatz,
                 training_angles,
                 interval_width * np.pi,

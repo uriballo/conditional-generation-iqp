@@ -115,27 +115,9 @@ def sample_exact(
     return enumerate_spins(shape)[indices]
 
 
-def complement(spins: np.ndarray) -> np.ndarray:
-    """Apply the global spin flip."""
-    return -np.asarray(spins, dtype=np.int8)
-
-
 def total_variation_distance(left: np.ndarray, right: np.ndarray) -> float:
     """Return the total variation distance between two probability vectors."""
     return float(0.5 * np.sum(np.abs(np.asarray(left) - np.asarray(right))))
-
-
-def complement_equivariance_error(
-    shape: Shape,
-    beta: float,
-    field: float,
-    *,
-    periodic: bool = True,
-) -> float:
-    """Return TVD for ``p(-s|beta,field)=p(s|beta,-field)``."""
-    positive = exact_probabilities(shape, beta, field, periodic=periodic)
-    negative = exact_probabilities(shape, beta, -field, periodic=periodic)
-    return total_variation_distance(positive, negative[::-1])
 
 
 def fast_walsh_hadamard(values: np.ndarray) -> np.ndarray:
@@ -283,13 +265,3 @@ def spectrum_diagnostic(
         "edge_count": len(edge_set),
         "bands": bands,
     }
-
-
-# Short aliases retained for exploratory notebooks.
-edges = lattice_edges
-states = enumerate_spins
-statistics = sufficient_statistics
-probabilities = exact_probabilities
-sample = sample_exact
-tvd = total_variation_distance
-fwht = fast_walsh_hadamard

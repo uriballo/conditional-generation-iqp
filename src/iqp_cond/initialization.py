@@ -59,7 +59,3 @@ def initialize_parameters_from_data(
             assert scale is not None
             result[index] = covariance[left, right] * scale * np.pi / max_abs_cov
     return result
-
-
-# Descriptive alias for callers that use IQPopt's terminology.
-initialize_from_data = initialize_parameters_from_data

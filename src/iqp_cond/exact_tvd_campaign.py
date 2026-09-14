@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -24,28 +23,6 @@ def expected_bodyness_sigmas(n: int) -> tuple[float, float, float]:
         raise ValueError("n must be at least two")
     weights = (1.0, (1.0 + 0.49 * n) / 2.0, 0.49 * n)
     return tuple(float((-2.0 * np.log(1.0 - 2.0 * b / n)) ** -0.5) for b in weights)
-
-
-def split_indices(size: int, *, seed: int, count: int = 1000) -> dict[str, np.ndarray]:
-    """Make reproducible, disjoint train/validation/test index arrays."""
-    if size < 3 * count:
-        raise ValueError("size must hold three disjoint splits")
-    rng = np.random.default_rng(seed)
-    chosen = rng.choice(size, 3 * count, replace=False)
-    return {
-        name: chosen[i * count : (i + 1) * count]
-        for i, name in enumerate(("train", "validation", "test"))
-    }
-
-
-def synthetic_split_roles(*, seed: int, count: int = 1000) -> dict[str, int]:
-    """Stable role seeds without materializing held-out synthetic data."""
-    return {
-        name: int.from_bytes(
-            hashlib.sha256(f"{seed}:{name}".encode()).digest()[:8], "big"
-        )
-        for name in ("train", "validation", "test")
-    }
 
 
 @dataclass(frozen=True, slots=True)

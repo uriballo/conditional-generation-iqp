@@ -38,11 +38,7 @@ def sample_interval_angles(
     return baseline + rng.uniform(-widths, widths, baseline.shape)
 
 
-sample_resampled_angles = sample_interval_angles
-
-
 def train_with_resampled_angles(
-    model_name: str,
     ansatz: Ansatz,
     angle_centers: np.ndarray,
     half_width: float | np.ndarray,
@@ -164,8 +160,6 @@ def train_with_resampled_angles(
             if current < best_validation:
                 best_validation, best_params, best_step = current, params, completed
     return TrainingResult(
-        model_name,
-        ansatz.name,
         seed,
         np.asarray(ansatz.generators),
         centers,

@@ -119,7 +119,6 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     fits: list[dict[str, object]] = []
     for width in args.half_width_pi:
         result = train_with_resampled_angles(
-            f"curie_weiss_interval_{width:g}_seed{args.seed}",
             ansatz,
             centers,
             widths * width * np.pi,

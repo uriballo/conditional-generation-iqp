@@ -6,7 +6,6 @@ from iqp_cond.exact_tvd_campaign import (
     expected_bodyness_sigmas,
     load_manifest,
     production_identities,
-    split_indices,
 )
 
 
@@ -17,13 +16,6 @@ def test_manifest_and_exact_run_count():
     runs = production_identities(manifest)
     assert len(runs) == 4300
     assert len(set(runs)) == 4300
-
-
-def test_splits_are_disjoint_and_reproducible():
-    first = split_indices(5000, seed=7)
-    second = split_indices(5000, seed=7)
-    assert all(np.array_equal(first[k], second[k]) for k in first)
-    assert len(set(np.concatenate(tuple(first.values())))) == 3000
 
 
 def test_bodyness_sigmas_and_validation():

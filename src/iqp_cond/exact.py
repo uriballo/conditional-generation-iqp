@@ -234,66 +234,6 @@ def exact_iqp_visible_probabilities(
     return np.stack(outputs)
 
 
-def exact_iqp_visible_probabilities_product_amplitudes(
-    params: np.ndarray | jnp.ndarray,
-    generators: np.ndarray | jnp.ndarray,
-    input_amplitudes: np.ndarray | jnp.ndarray,
-    n_visible: int,
-    n_ancillas: int = 0,
-) -> np.ndarray:
-    """Evaluate visible marginals for explicit local product-state inputs.
-
-    The final axis of ``input_amplitudes`` contains the computational-basis
-    amplitudes before the first Hadamard. Conditions are evaluated one at a
-    time and ancillas are marginalized immediately.
-    """
-    params = np.asarray(params, dtype=np.float64)
-    generators = np.asarray(generators)
-    amplitudes = np.asarray(input_amplitudes, dtype=np.complex128)
-    if generators.ndim != 2:
-        raise ValueError("generators must have shape (n_generators, n_qubits)")
-    if n_visible < 1 or n_ancillas < 0:
-        raise ValueError("n_visible must be positive and n_ancillas non-negative")
-    n_qubits = n_visible + n_ancillas
-    if generators.shape[1] != n_qubits:
-        raise ValueError("generator width must equal n_visible + n_ancillas")
-    if params.shape != (generators.shape[0],):
-        raise ValueError("params must have shape (n_generators,)")
-    if amplitudes.ndim == 2:
-        amplitudes = amplitudes[None, ...]
-    if amplitudes.ndim != 3 or amplitudes.shape[1:] != (n_qubits, 2):
-        raise ValueError(
-            "input_amplitudes must have shape (conditions, qubits, 2)"
-        )
-    norms = np.sum(np.abs(amplitudes) ** 2, axis=-1)
-    if not np.all(np.isfinite(norms)) or not np.allclose(
-        norms, 1.0, atol=1e-10, rtol=1e-10
-    ):
-        raise ValueError("each local input state must be finite and normalized")
-
-    scale = np.sqrt(2.0)
-    post_zero = (amplitudes[..., 0] + amplitudes[..., 1]) / scale
-    post_one = (amplitudes[..., 0] - amplitudes[..., 1]) / scale
-    phase_factors = np.exp(1j * _phase_values(params, generators))
-    visible_size = 2**n_visible
-    outputs = []
-    for zero, one in zip(post_zero, post_one, strict=True):
-        zero = zero[::-1]
-        one = one[::-1]
-        reference = np.asarray([zero[0], one[0]], dtype=np.complex128)
-        for index in range(1, n_qubits):
-            reference = np.outer(reference, [zero[index], one[index]]).ravel()
-        final_state = _fwht(reference * phase_factors) / np.sqrt(2**n_qubits)
-        probabilities = np.abs(final_state) ** 2
-        probabilities /= probabilities.sum()
-        outputs.append(
-            probabilities
-            if n_ancillas == 0
-            else probabilities.reshape(2**n_ancillas, visible_size).sum(axis=0)
-        )
-    return np.stack(outputs)
-
-
 def total_variation_distance(
     reference: np.ndarray,
     candidate: np.ndarray,

@@ -63,28 +63,6 @@ def _sample_reference_single(
     ).astype(jnp.float64)
 
 
-def _post_hadamard_product_amplitudes(
-    input_amplitudes: jnp.ndarray,
-) -> tuple[jnp.ndarray, jnp.ndarray]:
-    """Convert normalized local input amplitudes to post-Hadamard amplitudes."""
-    values = jnp.asarray(input_amplitudes, dtype=jnp.complex128)
-    if values.ndim == 2:
-        values = values[None, ...]
-    if values.ndim != 3 or values.shape[-1] != 2:
-        raise ValueError(
-            "input_amplitudes must have shape (conditions, qubits, 2)"
-        )
-    norms = jnp.sum(jnp.abs(values) ** 2, axis=-1)
-    if not bool(jnp.all(jnp.isfinite(norms))) or not bool(
-        jnp.allclose(norms, 1.0, atol=1e-10, rtol=1e-10)
-    ):
-        raise ValueError("each local input state must be finite and normalized")
-    scale = jnp.sqrt(jnp.asarray(2.0, dtype=jnp.float64))
-    return (values[..., 0] + values[..., 1]) / scale, (
-        values[..., 0] - values[..., 1]
-    ) / scale
-
-
 def _sample_reference_blocks(
     key: jax.Array,
     block_amps: jnp.ndarray,
@@ -318,69 +296,6 @@ def estimate_pauli_z(
         n_samples,
         encoding,
     )
-
-
-def estimate_pauli_z_product_amplitudes(
-    params: jnp.ndarray,
-    generators: jnp.ndarray,
-    ops: jnp.ndarray,
-    input_amplitudes: jnp.ndarray,
-    key: jax.Array,
-    n_samples: int,
-) -> ExpectationEstimate:
-    """Estimate Pauli-Z expectations for explicit product-state inputs.
-
-    ``input_amplitudes[c, q]`` contains the two computational-basis
-    amplitudes of qubit ``q`` before the first Hadamard for condition ``c``.
-    This interface supports multidimensional encoders without packing several
-    coordinates into a scalar angle.
-    """
-    params = jnp.asarray(params, dtype=jnp.float64)
-    generators = jnp.asarray(generators, dtype=jnp.float64)
-    ops = jnp.asarray(ops, dtype=jnp.float64)
-    if generators.ndim != 2:
-        raise ValueError("generators must have shape (n_generators, n_qubits)")
-    if params.shape != (generators.shape[0],):
-        raise ValueError("params must have shape (n_generators,)")
-    if ops.ndim == 1:
-        ops = ops[None, :]
-    if ops.ndim != 2 or ops.shape[1] != generators.shape[1]:
-        raise ValueError("ops must have shape (n_ops, n_qubits)")
-    if n_samples < 2:
-        raise ValueError("n_samples must be at least two")
-    _validate_binary("generators", generators)
-    _validate_binary("ops", ops)
-    amp_zero, amp_one = _post_hadamard_product_amplitudes(input_amplitudes)
-    if amp_zero.shape[1] != generators.shape[1]:
-        raise ValueError("input amplitudes must cover every circuit qubit")
-    return _estimate_pauli_z_product_amplitudes_unchecked(
-        params,
-        generators,
-        ops,
-        amp_zero,
-        amp_one,
-        key,
-        n_samples,
-    )
-
-
-def _estimate_pauli_z_product_amplitudes_unchecked(
-    params: jnp.ndarray,
-    generators: jnp.ndarray,
-    ops: jnp.ndarray,
-    amp_zero: jnp.ndarray,
-    amp_one: jnp.ndarray,
-    key: jax.Array,
-    n_samples: int,
-) -> ExpectationEstimate:
-    """Unchecked estimator for normalized post-Hadamard product amplitudes."""
-    samples = _sample_reference_single(key, amp_one, n_samples)
-    ratios = _amplitude_ratios_single(samples, ops, amp_zero, amp_one)
-    phases = _phase_differences(params, generators, ops, samples)
-    sample_values = jnp.real(ratios * jnp.exp(1j * phases))
-    values = jnp.mean(sample_values, axis=1)
-    standard_errors = jnp.std(sample_values, axis=1, ddof=1) / jnp.sqrt(n_samples)
-    return ExpectationEstimate(values, standard_errors, sample_values)
 
 
 def _estimate_pauli_z_unchecked(
