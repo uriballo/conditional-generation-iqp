@@ -1,0 +1,58 @@
+\section{Correlated reference access and preparation}
+\label{app:at-reference}
+
+Expanding the trace in Eq.~\eqref{eq:bond-transfer-amplitude} over cyclic physical spins gives the Hadamard transform of Eq.~\eqref{eq:bond-input}. The $\mathbb Z_2$ symmetry makes $\psi_g(z)$ vanish at odd parity; the two-ring reference has even parity in each layer. We enforce these support zeros exactly. A ratio can have a zero numerator, but its denominator is queried only at a sampled nonzero-support state.
+
+For sequential reference sampling, define $\mathcal E_z=A_z\otimes\overline{A_z}$ and $\mathcal S=\mathcal E_0+\mathcal E_1$. The probability of a length-$k$ prefix, apart from the common normalization $2^m Z_m(g)$, is
+\begin{equation}
+ w(z_0,\ldots,z_{k-1})=\operatorname{tr}\!\left[\mathcal E_{z_0}\cdots\mathcal E_{z_{k-1}}\mathcal S^{m-k}\right].
+\end{equation}
+Indeed, $|\operatorname{tr}M|^2=\operatorname{tr}(M\otimes\overline M)$, and summing over each unobserved bit replaces its doubled matrix by $\mathcal S$. The two child-prefix weights normalized by their sum give the next-bit probability. Precomputing the suffix powers takes $O(m)$ arithmetic and each draw uses $O(m)$ fixed-dimension contractions. The two rings are sampled independently. Amplitudes and their ratios use Eq.~\eqref{eq:bond-transfer-amplitude}, with the common normalization cancelling in the ratio.
+
+This arithmetic bound assumes controlled numerical precision. Common positive rescaling stabilizes prefix and suffix contractions; it does not remove cancellation in very small amplitudes. The implementation rescales the amplitude transfer matrix by $2\cosh(g/2)$ in the ratio path. Enumeration checks cover reference probabilities, moments, phase gradients and both layer flips at the tested sizes, and separate tests verify coherent preparation amplitudes. These checks do not establish uniform floating-point accuracy at arbitrary size or coupling.
+
+Classical reference sampling is distinct from preparing the physical quantum input. For the latter, let $V_{uv}=e^{g(1-2u)(1-2v)}$ and initialize spin zero in $|+\rangle$. At site $i=1,\ldots,m-1$, conditioned on $x_0=u$ and $x_{i-1}=v$, use
+\begin{equation}
+ P(x_i=w\mid x_0=u,x_{i-1}=v)
+ =\frac{V_{vw}(V^{m-i})_{wu}}{(V^{m-i+1})_{vu}}.
+\end{equation}
+An $R_Y$ rotation through $2\arcsin\sqrt{P(x_i=1\mid u,v)}$ prepares the positive conditional amplitudes. The transfer suffix includes the closing bond, and the product telescopes to the normalized Ising probability with $P(x_0)=1/2$. Finally apply the $m$ gates $e^{i\eta Z_iZ_{i+1}}$. This prepares $|B_g\rangle$ with $O(m)$ bounded-control rotations and $O(m)$ diagonal gates, without extra logical ancillas. It assumes access to those controls: retaining the first spin as a control can require routing on local hardware, and synthesis precision is an additional cost. No hardware preparation was executed in this study.
+
+\section{Ashkin--Teller comparators and structural diagnostics}
+\subsection{Information and classical fitting rules}
+\label{app:at-comparators}
+
+Both classical predictors use the four-state orbits of independent layer flips, with $K=2^{n-2}$ orbits, and expand each predicted orbit mass uniformly over its four strings. They share exactly the training and validation data used by the quantum models. The symmetry-only quantum input knows the partition, flips and fixed cat-angle map; the bond input additionally knows the uncoupled ring law, adjacency, $g(c)=c$ and $\eta=\pi/8$. All encoder parameters are fixed. The original zero-ancilla IQP models have 30 independent phases at $n=8$ and 78 at $n=12$; the data-size follow-up uses 78, 102 and 126 phases at $n=12$ with zero, two and four ancillas. The classical representations below have different capacities; their counts are not resource-equivalent to quantum phase counts.
+
+For empirical log composition with $s$ training examples per condition, each perimeter orbit histogram is smoothed as $\widehat q_c(j)=(N_{cj}+\lambda)/(s+K\lambda)$. The original studies use $s=1000$; the data-size follow-up uses $s\in\{100,300,1000\}$ with the same pseudocount grid. At an interior condition the predicted orbit logits are
+\begin{equation}
+\begin{split}
+ \ell_j(a,b)={}&\tfrac12\left[\log\widehat q_{a,l}(j)+\log\widehat q_{a,h}(j)\right]\\
+ &+\tfrac12\left[\log\widehat q_{l,b}(j)+\log\widehat q_{h,b}(j)\right]\\
+ &-\tfrac14\sum_{u,v\in\{l,h\}}\log\widehat q_{u,v}(j),
+\end{split}
+\end{equation}
+with $l=.1$, $h=.7$, followed by softmax normalization. The same composition rule is used at perimeter conditions for validation, including repeated edge terms where coordinates coincide. Perimeter-validation orbit NLL selects the total pseudocount mass $K\lambda\in\{6.4,64,640\}$. Thus $\lambda\in\{.1,1,10\}$ at $n=8$ and $\{.00625,.0625,.625\}$ at $n=12$. The 16 histograms have $16(K-1)$ degrees of freedom.
+
+The pooled log-linear predictor has orbit logits $\ell_j(a,b)=w_j^\top[1,(a-.4)/.3,(b-.4)/.3]$, with one reference logit zero. It fits $3(K-1)=189$ or 3,069 coefficients by minimizing mean-per-condition training NLL plus $\lambda\|w\|^2/2$, including intercepts. Validation NLL selects $\lambda\in\{10^{-6},10^{-5},\ldots,10^{-1}\}$. Each candidate starts at zero and uses L-BFGS-B with 5,000 iterations, function tolerance $10^{-14}$ and gradient tolerance $10^{-8}$. A candidate must be finite, report success, and have gradient infinity norm at most $10^{-6}$; a failed candidate retries the same objective from its last iterate with up to 20,000 iterations. Grid-order ties are deterministic. All candidates satisfy the convergence gate. No ring-energy features are supplied. Nevertheless, fixed-$\kappa$ target log odds are affine in $(a,b)$, so this family is well specified.
+
+The eight-qubit confirmation uses seeds 2701--2710 and the original twelve-qubit study seeds 3711--3720. The data-size/ancilla follow-up uses fresh paired seeds 4711--4720, nested training prefixes and fixed independent validation sets as specified in Sec.~\ref{sec:data-ancilla-followup}. Each size has its own frozen source, samples, fitted parameters, prediction seal and evaluation record. The follow-up is informed by the earlier result and is not an independent repetition of design selection. Exploratory encoder/circuit choices and the unsuccessful joint-extrapolation study precede these freezes; their results are retained in the accompanying research artifacts rather than pooled with the confirmation seeds.
+
+\subsection{Structure beyond weight profiles and marginals}
+\label{app:at-diagnostics}
+
+Let $\mathcal E q$ redistribute each output uniformly within its joint layer-Hamming-weight shell $(K_A,K_B)$, preserving every shell mass. This is averaging over independent within-layer permutations. Let $r=q_Aq_B$ preserve the output's full within-layer marginals while removing interlayer dependence. We report
+\begin{align}
+ \Delta_{\rm spatial}&=\TVD(\mathcal E q,p)-\TVD(q,p),\\
+ \Delta_{\rm dependence}&=\TVD(q_Aq_B,p)-\TVD(q,p).
+\end{align}
+Positive values mean the output's arrangement or dependence improves accuracy relative to that transformation. These are not optimally refitted exchangeable or independent baselines, nor interventions isolating individual gates. The target-only $\TVD(\mathcal E p,p)$ in the data release describes departure from exchangeability, not a best achievable exchangeable error. An isotropic Hamming kernel is invariant under simultaneous permutations of its arguments; this does not average either distribution over permutations or require an exchangeable learned output.
+
+These diagnostics were chosen after the $n=8$ result and were predeclared for $n=12$. All six models and every seed/condition pair are retained. Means average conditions within seeds, then seeds; 95\% intervals use 10,000 bootstrap resamples of seed indices. Removing structure increases TVD for both IQP encoders in all 90 pairs at $n=8$. At $n=12$, mean spatial/dependence deltas are $.12190/.01033$ for symmetry-only IQP and $.17557/.05541$ for bond-informed IQP. Symmetry-only dependence deltas are negative in 13/90 pairs, including eight seeds at $(.54,.54)$ where the condition mean is $-.00197$; bond-informed dependence deltas are positive in every pair. The bond input already has a spatial delta of $.18480$ at this size. Comparing this with the trained delta alone does not measure learning improvement, because both raw and transformed distributions change.
+
+In the original zero-ancilla studies, the two trained models improve joint TVD and connected-bond RMSE over their own input at every tested pair, but other errors need not improve. Bond-informed IQP at $n=12$ worsens A-marginal TVD in 29/90 pairs and B-marginal TVD in 28/90 pairs. Relative to symmetry-only IQP its mean connected-bond error is higher at $(.22,.22)$, $(.22,.38)$, $(.38,.22)$ and $(.38,.38)$; the corresponding $n=8$ exception is $(.54,.54)$. These metric-specific exceptions are retained despite the favorable primary mean-TVD comparison.
+
+\clearpage
+
+\input{ashkin_teller_tables}
+\clearpage

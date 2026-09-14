@@ -1,0 +1,76 @@
+{
+  "date": "2026-09-07",
+  "pdf": {
+    "path": "output/pdf/body-figures/conditional-iqp-supervisor-draft.pdf",
+    "sha256": "2c889acfda1bfaffee46d43bbb03fe4f9382cff0cab101a5dada659b5212a372",
+    "pages": 26
+  },
+  "sources": {
+    "Overleaf/main.tex": "d4c6cf4b690d7f384d3054f8017170481044010ce1edf38496130df521d77b97",
+    "Overleaf/ashkin_teller_appendix.tex": "d5695d22f1e38b0985f9a4cf763c0e032736e261e7a4ec9d86d92c7e4f0a8438",
+    "Overleaf/ashkin_teller_structure_body.tex": "7e34c5a2b09c4cccbdc5cb2a0f8f7779778321d8924e9a868ab3ed4b8d2a0263",
+    "Overleaf/ashkin_teller_tables.tex": "d4699789fb50a6b5ab16fc760d99ea381dd47e6d5f0270b76157c1e13bac0291",
+    "Overleaf/references.bib": "71c4c9eeaee99d940d1d391c2ae4372744ea6a8701fa444eeb85bd3599bd5a3c",
+    "Overleaf/figures/ashkin_teller_paper_summary.pdf": "b2967e728ab3103bde34e40f69125c2f8960cc58e593e615cc10d0d5a2d44ab7",
+    "Overleaf/figures/ashkin_teller_structure_n12.pdf": "11642189704f2b311aab9e0ff95111b8381ca3716e5920f1841c434a49dad437",
+    "Overleaf/figures/ashkin_teller_structure_n8.pdf": "292ac561c699cd5ad8736e7dd7d4ce922f7f4d50a6f5c80dc46261e42049af17",
+    "Overleaf/figures/conditioned_training_vs_heldout.pdf": "a6c7afebc999af7aa18c7c414294b88098a4f3277483c73c69ff7bf0996ca702",
+    "Overleaf/figures/curie_encoder_ablation_n8.pdf": "e5741622417ff8cf6b3f73f2f337c0f89460f32b7f1f96d99d86551dd548b905",
+    "Overleaf/figures/curie_weiss_condition_response.pdf": "74d9356ff8769960f457ee8d136b88677ee44bab55ed9cf3126c9d894733f2c2",
+    "Overleaf/figures/curie_weiss_n12_generalization_profiles.pdf": "abc13dd3893a70be6e575ab4ad480cda27a021ef5b9d83dbd5ff5811424b846f",
+    "Overleaf/figures/curie_weiss_n12_magnetization_profiles.pdf": "a788c619b1a0fb3a63734e7ba3162fcb114eb364d3a18df872bcebef85c6c056",
+    "Overleaf/figures/curie_weiss_n8_generalization_profiles.pdf": "d71d8589a0ba2ffb792df37ff9e4719864b5eee927b654bef7be3a6056d754fc",
+    "Overleaf/figures/curie_weiss_n8_magnetization_profiles.pdf": "a6256637771a4130c346d7c93dd4a036df6a03b4f7ec311ca2cf03246f45f6de",
+    "Overleaf/figures/curie_weiss_results.pdf": "e2c57f73841164f1949f53c9588b8aa1fedbf2c5451a8aac9b4e427f41eac454",
+    "Overleaf/figures/gaussian_condition_response.pdf": "b2204e247f9722e9712bd969b02dfec6285b1b012404ca08ea3a81c9e86a9d55",
+    "Overleaf/figures/gaussian_n12_generalization_profiles.pdf": "4d75ffed20bb236d021e4e23635ef85112020a963bdd0dbf81573ca0eb19305b",
+    "Overleaf/figures/gaussian_n12_training_profiles.pdf": "9515721600aa720f506ea4d71292723368e035f98c5986dbabf6f27ca0baf744",
+    "Overleaf/figures/gaussian_n8_generalization_profiles.pdf": "c0296178ce66b48eb78a0e2ed7ea1cc40c25502ff9b4469219cfac3332699aea",
+    "Overleaf/figures/gaussian_n8_training_profiles.pdf": "aae492a79e96f1e676f48fbed085b1dc42f899bad52b60ae85c8518f52f206d1",
+    "Overleaf/figures/gaussian_results.pdf": "77a06809198fbfcf73d8371899bb7b9f606c637c1c3054bdfd6d874ac9fa8891"
+  },
+  "body_figures": {
+    "1": {
+      "page": 2,
+      "purpose": "workflow"
+    },
+    "2": {
+      "page": 11,
+      "purpose": "Gaussian accuracy"
+    },
+    "3": {
+      "page": 12,
+      "purpose": "Gaussian reconstruction and midpoint interpolation"
+    },
+    "4": {
+      "page": 13,
+      "purpose": "Curie-Weiss accuracy"
+    },
+    "5": {
+      "page": 14,
+      "purpose": "Curie-Weiss shape and baseline comparison"
+    },
+    "6": {
+      "page": 15,
+      "purpose": "conditioning ablation"
+    },
+    "7": {
+      "page": 16,
+      "purpose": "Ashkin-Teller interpolation"
+    },
+    "8": {
+      "page": 17,
+      "purpose": "spatial and dependence diagnostics"
+    }
+  },
+  "verification": {
+    "assets_unchanged_from_previous_review": 17,
+    "each_asset_included_once": true,
+    "all_15_captions_extracted_in_order": true,
+    "resolved_references": true,
+    "overfull_boxes": false,
+    "visual_review": "Reviewed pages 11-26 after restructuring, then final changed pages 14-19; pages 1-10 retain prior reviewed layout. Repaired ablation caption page break.",
+    "remaining_warning": "benign nameref label redefinition"
+  },
+  "scope": "LaTeX recomposition of verified panels; no new experiments or numerical changes; author review pending"
+}

@@ -76,19 +76,8 @@ Claim-evidence review:
 - Accurate profiles imply accurate raw bitstring distributions: unsupported.
   Profile aggregation can conceal errors within a shell.
 
-## Review before submission
+## Current manuscript review status
 
-Contribution and writing: the fixed-unitary conditional construction remains
-the central claim. Abstract and Introduction evidence summaries still require
-the author's final revision.
+The draft now includes Gaussian, Curie–Weiss and the completed spatial Ashkin–Teller study. Abstract, Introduction, Methods, Results, Discussion and Conclusions have been reconciled and assistant-reviewed. The CW development-ablation artifact pointer is verified; the three-seed scope remains explicit.
 
-Experimental strength: complete matched seeds, oracle and interpolation
-baselines, and the encoder ablation support a focused two-benchmark account.
-
-Evaluation completeness: a third dataset is not automatically necessary.
-A nonexchangeable target would address a limitation that another exchangeable
-example or a larger visible size would not. That remains a research decision.
-
-Method soundness: preserve the distinction between tractable observable
-estimation and output sampling, and between the condition-map prior and
-generalization. No quantum advantage or scaling claim follows from these sizes.
+See the [first supervisor draft review](../supervisor-draft-review-2026-09-07.md) for the PDF, figure map, validation and remaining author decisions. Author scientific review, authorship/funding confirmation and public archival deposition remain pending. Preserve the distinction between tractable observable estimation and output sampling, and between supplied input structure and interpolation. No quantum advantage, general extrapolation or scaling claim follows from these sizes.

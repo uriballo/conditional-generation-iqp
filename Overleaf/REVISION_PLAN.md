@@ -1,5 +1,7 @@
 # Revision plan: conditional IQP model and training
 
+Status, 2026-09-07: this is the historical planning document. The implemented manuscript and remaining author decisions are documented in the [first supervisor draft review](../docs/supervisor-draft-review-2026-09-07.md).
+
 This plan applies to the canonical Overleaf manuscript. It deliberately stops
 short of rewriting the LaTeX: the first pass should agree on the argument and
 section boundaries before changing scientific prose.
