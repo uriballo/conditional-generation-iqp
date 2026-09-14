@@ -8,6 +8,7 @@ from math import comb
 import jax
 import jax.numpy as jnp
 
+from .bond_reference import BOND_ENCODING, sample_two_rings, two_ring_ratios
 from .encoding import (
     ANGLE_ENCODING,
     block_post_hadamard_amplitudes,
@@ -391,7 +392,17 @@ def _estimate_pauli_z_unchecked(
     n_samples: int,
     encoding: str = ANGLE_ENCODING,
 ) -> ExpectationEstimate:
-    if is_radial_shell_encoding(encoding):
+    if encoding == BOND_ENCODING:
+        n_qubits = int(generators.shape[1])
+        couplings = angles[:, jnp.asarray([0, n_qubits // 2])]
+        keys = jax.random.split(key, angles.shape[0])
+        samples = jax.vmap(lambda k, c: sample_two_rings(k, c, n_qubits, n_samples))(
+            keys, couplings
+        )
+
+        ratios = jax.vmap(lambda z, c: two_ring_ratios(z, ops, c))(samples, couplings)
+
+    elif is_radial_shell_encoding(encoding):
         shell_amp = radial_shell_amplitudes(angles, int(generators.shape[1]))
         samples = _sample_reference_radial(key, shell_amp, n_samples)
         ratios = _amplitude_ratios_radial(samples, ops, shell_amp)

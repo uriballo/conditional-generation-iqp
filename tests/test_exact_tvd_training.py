@@ -31,6 +31,31 @@ def test_nonidentity_masks_have_exact_analytic_normalization():
     assert np.isclose(float(weights.sum()), 1.0 - (1.0 - p) ** n_qubits)
 
 
+def test_partial_epoch_preserves_full_epoch_schedule_and_budget():
+    partial = shuffled_batches(2, 300, CampaignTrainingConfig(steps=500), 4711)
+    complete = shuffled_batches(2, 300, CampaignTrainingConfig(steps=501), 4711)
+    np.testing.assert_array_equal(partial, complete[:500])
+    assert partial.shape == (500, 2, 100)
+    for condition in range(2):
+        for start in range(0, 498, 3):
+            np.testing.assert_array_equal(
+                np.sort(partial[start : start + 3, condition].ravel()), np.arange(300)
+            )
+        assert len(np.unique(partial[498:, condition])) == 200
+
+
+def test_complete_epoch_schedule_matches_original_rng_order():
+    rng = np.random.default_rng(7)
+    expected = np.empty((20, 3, 100), dtype=np.int32)
+    for start in (0, 10):
+        for condition in range(3):
+            expected[start : start + 10, condition] = rng.permutation(1000).reshape(
+                10, 100
+            )
+    actual = shuffled_batches(3, 1000, CampaignTrainingConfig(steps=20), 7)
+    np.testing.assert_array_equal(actual, expected)
+
+
 def test_schedule_free_checkpoints_use_evaluation_parameters():
     config = CampaignTrainingConfig(
         steps=10,

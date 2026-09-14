@@ -1,0 +1,3648 @@
+{
+  "protocol": {
+    "question": "Does a bond-aware reference and/or aligned four-body IQP phase bank improve shared fitting and learned cross-layer dependence on already-inspected development conditions?",
+    "source_commit": "4fc4aa96f5a82f16fdb21fb93d69acb02122ee29",
+    "status": "development ablation, no fresh generalization claim",
+    "conditions": [
+      [
+        0.1,
+        0.1
+      ],
+      [
+        0.3,
+        0.1
+      ],
+      [
+        0.5,
+        0.1
+      ],
+      [
+        0.7,
+        0.1
+      ],
+      [
+        0.1,
+        0.3
+      ],
+      [
+        0.1,
+        0.5
+      ],
+      [
+        0.1,
+        0.7
+      ],
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.7
+      ],
+      [
+        0.7,
+        0.5
+      ],
+      [
+        0.7,
+        0.7
+      ]
+    ],
+    "n": 8,
+    "ancillas": 0,
+    "sites_per_layer": 4,
+    "kappa": 0.3,
+    "encoders": {
+      "cat": "same two-block cat; alpha(c)=.225*pi-.20*pi*(c-.1)/.6",
+      "bond": "per-layer physical amplitudes exp[(c/2+i*pi/8)*sumspinbond]/sqrt Z(c); product across layers; no kappa encoded"
+    },
+    "circuits": {
+      "base": "complete two-local bank deduplicated by characters on even/even Fourier support:30 independent generators",
+      "four_body": "base plus deduplicated aligned bond-pair XXXX strings:32 independent generators"
+    },
+    "data": "1000 train and1000 independent validation samples per condition and seed; same archives across4models; all11conditions used in fitting and selection",
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "seed_rule": "first4big-endian bytes SHA256(json.dumps(['at-bond-redesign-v1',*coords])) AND(2**31-1)",
+    "initialization": "data_initialize pooled11000samples on original36generators; sum parameters with identical restrictedcharacters to preserve initialphase; extended2parameters initializedzero; paired acrossencoders",
+    "optimizer": "Adam cosine .01 to .001,500steps,batch100percondition,validation every25",
+    "selection": "initial,scheduledfinal,lowest validationMMD candidate; choose minimum mean empirical validationTVD over11developmentconditions",
+    "stage1": "exact population MMD, existing3expected-bodyness bandwidths, all4models all3seeds",
+    "stage2_gate": "Any bond variant passes if across3seeds median meanTVD<=.15, worst conditionTVD acrossseeds<=.25, median meanencoder-only improvement>=.03, worst connected-bondRMSE<=.10. Gate is a provisional development decision, not a theorem or significance test.",
+    "stage2": "If a bond variant passes, run sampled-MMD training at all3seeds for the passing bond variants plus cat with corresponding circuit; same steps,data,initialization,selection. Fixed512nonidentity masks perbandwidth percondition,2048fresh reference samples percondition perupdate, unbiased target and model second-moment U-statistics; fixed2048reference validation samples, independent from training; one shared reference draw set across masks/bandwidths percondition is allowed and unbiased. At n8 cache amplitude/character queries for operators and reference strings; reference draws must use validated transfer sampler for bond, never an enumerated probability categorical sampler.",
+    "checks": "reference amplitudes/prefixes/sampling/ratios and moments against exact small-system values; restrictedphase rank and collapsed initial equivalence; inputdistinguishability bound; targetenergies; exactMMD against double kernel expectation; sampledgradient check beforestage2",
+    "stopping": "If no bond variant passes, stop after stage1 and record failure without retuning maps,phase,steps or gates. Classical superiority neverrequired. Fresh generalization protocol remains separate."
+  },
+  "results": [
+    {
+      "seed": 0,
+      "encoder": "cat",
+      "circuit": "base",
+      "n_parameters": 30,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.20557555208445055,
+      "selected": [
+        {
+          "raw_tvd": 0.18641922305612535,
+          "layer_A_tvd": 0.07784668249003016,
+          "layer_B_tvd": 0.07795959081132756,
+          "connected_bond_rmse": 0.2246587483063106,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1598596712102019,
+          "layer_A_tvd": 0.0889988615046885,
+          "layer_B_tvd": 0.0713627623340401,
+          "connected_bond_rmse": 0.16723925276607665,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1378670445671289,
+          "layer_A_tvd": 0.05797341426667489,
+          "layer_B_tvd": 0.061265135521018935,
+          "connected_bond_rmse": 0.1062505362203961,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.11033060335336356,
+          "layer_A_tvd": 0.043866184973752186,
+          "layer_B_tvd": 0.049558670076107966,
+          "connected_bond_rmse": 0.05308635181010447,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1598880917842928,
+          "layer_A_tvd": 0.07233182615784588,
+          "layer_B_tvd": 0.08922443993359061,
+          "connected_bond_rmse": 0.16749647977531476,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1382705171099628,
+          "layer_A_tvd": 0.062221936950183895,
+          "layer_B_tvd": 0.058307442914369866,
+          "connected_bond_rmse": 0.10669222764439217,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.11087403373703728,
+          "layer_A_tvd": 0.05048390032922401,
+          "layer_B_tvd": 0.04369977392413382,
+          "connected_bond_rmse": 0.05347814694487229,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.11232249058242422,
+          "layer_A_tvd": 0.05093104860394685,
+          "layer_B_tvd": 0.05050566831469131,
+          "connected_bond_rmse": 0.0005947773271911982,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.0970849086741947,
+          "layer_A_tvd": 0.042575210802735144,
+          "layer_B_tvd": 0.04967038653451546,
+          "connected_bond_rmse": 0.022707215430096406,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.0965991997067811,
+          "layer_A_tvd": 0.049447385670901685,
+          "layer_B_tvd": 0.04225841248641775,
+          "connected_bond_rmse": 0.022788100907460605,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.10839722220345843,
+          "layer_A_tvd": 0.049741233064580205,
+          "layer_B_tvd": 0.04997583165586332,
+          "connected_bond_rmse": 0.03432703843783481,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.4759826694053466,
+          "layer_A_tvd": 0.3235961518665593,
+          "layer_B_tvd": 0.32359615186655943,
+          "connected_bond_rmse": 0.3074023646789453,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.4471636687013277,
+          "layer_A_tvd": 0.3700046614881714,
+          "layer_B_tvd": 0.2690512987203404,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.33577497247013555,
+          "layer_B_tvd": 0.2081240282186558,
+          "connected_bond_rmse": 0.21600997415508094,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676954,
+          "layer_A_tvd": 0.23788800508627037,
+          "layer_B_tvd": 0.1629437769018719,
+          "connected_bond_rmse": 0.13939696850378044,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.44716366870132784,
+          "layer_A_tvd": 0.2690512987203405,
+          "layer_B_tvd": 0.3700046614881715,
+          "connected_bond_rmse": 0.2782308810217886,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.20812402821865558,
+          "layer_B_tvd": 0.33577497247013555,
+          "connected_bond_rmse": 0.21600997415508108,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676926,
+          "layer_A_tvd": 0.16294377690187184,
+          "layer_B_tvd": 0.23788800508626992,
+          "connected_bond_rmse": 0.13939696850378014,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2681857281419774,
+          "layer_A_tvd": 0.20450811025028495,
+          "layer_B_tvd": 0.2045081102502849,
+          "connected_bond_rmse": 0.125805602311298,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23084762411201237,
+          "layer_A_tvd": 0.16118451780539,
+          "layer_B_tvd": 0.1476472612949321,
+          "connected_bond_rmse": 0.07311065572116082,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2308476241120122,
+          "layer_A_tvd": 0.147647261294932,
+          "layer_B_tvd": 0.16118451780538998,
+          "connected_bond_rmse": 0.07311065572116154,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2016399006699528,
+          "layer_A_tvd": 0.12114210706151152,
+          "layer_B_tvd": 0.12114210706151157,
+          "connected_bond_rmse": 0.04084781725873521,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.46769541671113724,
+          "layer_A_tvd": 0.30699566073321116,
+          "layer_B_tvd": 0.3202670818731106,
+          "connected_bond_rmse": 0.30678249175350103,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.553373889298121,
+          "layer_A_tvd": 0.4772841017501836,
+          "layer_B_tvd": 0.35089807496294884,
+          "connected_bond_rmse": 0.27732221913339133,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6530662570869403,
+          "layer_A_tvd": 0.6020182299865486,
+          "layer_B_tvd": 0.3814133890458754,
+          "connected_bond_rmse": 0.21512021835241624,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7316507027811481,
+          "layer_A_tvd": 0.6804731845943262,
+          "layer_B_tvd": 0.40636345617457653,
+          "connected_bond_rmse": 0.1388437352302996,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5619192446777829,
+          "layer_A_tvd": 0.3389390046472572,
+          "layer_B_tvd": 0.49477456823792504,
+          "connected_bond_rmse": 0.27795190822420657,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6640184634691355,
+          "layer_A_tvd": 0.3708748460308886,
+          "layer_B_tvd": 0.6209299494750107,
+          "connected_bond_rmse": 0.2159776346050923,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7428312759000228,
+          "layer_A_tvd": 0.39701497258907514,
+          "layer_B_tvd": 0.6983179880747177,
+          "connected_bond_rmse": 0.1392555407146572,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7683782025609911,
+          "layer_A_tvd": 0.653873671632478,
+          "layer_B_tvd": 0.6700844343484496,
+          "connected_bond_rmse": 0.1257646366135145,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8340248126195866,
+          "layer_A_tvd": 0.6710344615170168,
+          "layer_B_tvd": 0.7308412921181826,
+          "connected_bond_rmse": 0.07327341098606385,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.833166001640609,
+          "layer_A_tvd": 0.7144639255112404,
+          "layer_B_tvd": 0.6861628402614717,
+          "connected_bond_rmse": 0.07320120766542358,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8783757326214786,
+          "layer_A_tvd": 0.7244593546174309,
+          "layer_B_tvd": 0.7403548461409319,
+          "connected_bond_rmse": 0.04109807597601536,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.0004865888048382375,
+      "seconds": 1.099263083000551
+    },
+    {
+      "seed": 1,
+      "encoder": "cat",
+      "circuit": "base",
+      "n_parameters": 30,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.2025005071783325,
+      "selected": [
+        {
+          "raw_tvd": 0.18659956801822936,
+          "layer_A_tvd": 0.07781449836953173,
+          "layer_B_tvd": 0.07801906991630853,
+          "connected_bond_rmse": 0.22515035066385555,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.16006479752976166,
+          "layer_A_tvd": 0.08893456116566813,
+          "layer_B_tvd": 0.07251525144110943,
+          "connected_bond_rmse": 0.1680135355825811,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.13829483587979224,
+          "layer_A_tvd": 0.05787820057361959,
+          "layer_B_tvd": 0.06232262856321048,
+          "connected_bond_rmse": 0.10709134639520632,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.11114167151908808,
+          "layer_A_tvd": 0.043921320876561094,
+          "layer_B_tvd": 0.05052027827225843,
+          "connected_bond_rmse": 0.0537143225786438,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.16007904815775909,
+          "layer_A_tvd": 0.07158724740812343,
+          "layer_B_tvd": 0.08934327265468642,
+          "connected_bond_rmse": 0.16787919706476429,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.13807641450429758,
+          "layer_A_tvd": 0.061440103998369036,
+          "layer_B_tvd": 0.05848340625147968,
+          "connected_bond_rmse": 0.10694569099368562,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.11015977446192322,
+          "layer_A_tvd": 0.049702618031302506,
+          "layer_B_tvd": 0.04322549286619229,
+          "connected_bond_rmse": 0.05379082496410235,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.11236638027833207,
+          "layer_A_tvd": 0.05041078282451671,
+          "layer_B_tvd": 0.051148927603563606,
+          "connected_bond_rmse": 0.0006638083827983606,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09678148546671927,
+          "layer_A_tvd": 0.04216765659056301,
+          "layer_B_tvd": 0.04966863051733314,
+          "connected_bond_rmse": 0.02198533858622898,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09704184395448562,
+          "layer_A_tvd": 0.049201066833262454,
+          "layer_B_tvd": 0.042882872926601,
+          "connected_bond_rmse": 0.022165039490779626,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.10771591930384342,
+          "layer_A_tvd": 0.049448410904804854,
+          "layer_B_tvd": 0.05005853565026931,
+          "connected_bond_rmse": 0.03359053184601591,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.4759826694053466,
+          "layer_A_tvd": 0.3235961518665593,
+          "layer_B_tvd": 0.32359615186655943,
+          "connected_bond_rmse": 0.3074023646789453,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.4471636687013277,
+          "layer_A_tvd": 0.3700046614881714,
+          "layer_B_tvd": 0.2690512987203404,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.33577497247013555,
+          "layer_B_tvd": 0.2081240282186558,
+          "connected_bond_rmse": 0.21600997415508094,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676954,
+          "layer_A_tvd": 0.23788800508627037,
+          "layer_B_tvd": 0.1629437769018719,
+          "connected_bond_rmse": 0.13939696850378044,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.44716366870132784,
+          "layer_A_tvd": 0.2690512987203405,
+          "layer_B_tvd": 0.3700046614881715,
+          "connected_bond_rmse": 0.2782308810217886,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.20812402821865558,
+          "layer_B_tvd": 0.33577497247013555,
+          "connected_bond_rmse": 0.21600997415508108,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676926,
+          "layer_A_tvd": 0.16294377690187184,
+          "layer_B_tvd": 0.23788800508626992,
+          "connected_bond_rmse": 0.13939696850378014,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2681857281419774,
+          "layer_A_tvd": 0.20450811025028495,
+          "layer_B_tvd": 0.2045081102502849,
+          "connected_bond_rmse": 0.125805602311298,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23084762411201237,
+          "layer_A_tvd": 0.16118451780539,
+          "layer_B_tvd": 0.1476472612949321,
+          "connected_bond_rmse": 0.07311065572116082,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2308476241120122,
+          "layer_A_tvd": 0.147647261294932,
+          "layer_B_tvd": 0.16118451780538998,
+          "connected_bond_rmse": 0.07311065572116154,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2016399006699528,
+          "layer_A_tvd": 0.12114210706151152,
+          "layer_B_tvd": 0.12114210706151157,
+          "connected_bond_rmse": 0.04084781725873521,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.4585038000515127,
+          "layer_A_tvd": 0.3106322036710406,
+          "layer_B_tvd": 0.30535157219121645,
+          "connected_bond_rmse": 0.30630633818976083,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5498710465624099,
+          "layer_A_tvd": 0.4802354860856547,
+          "layer_B_tvd": 0.3382148118340835,
+          "connected_bond_rmse": 0.2776355721860177,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.649584685555916,
+          "layer_A_tvd": 0.603369122848783,
+          "layer_B_tvd": 0.37108582000843304,
+          "connected_bond_rmse": 0.21585652485537443,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7274627193768297,
+          "layer_A_tvd": 0.6807077366648151,
+          "layer_B_tvd": 0.3978659636171687,
+          "connected_bond_rmse": 0.1392317172146092,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5461851452491009,
+          "layer_A_tvd": 0.342744837755498,
+          "layer_B_tvd": 0.47312951493969957,
+          "connected_bond_rmse": 0.2773290528010589,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6453709397099301,
+          "layer_A_tvd": 0.3748485269692329,
+          "layer_B_tvd": 0.5955247067329397,
+          "connected_bond_rmse": 0.2154971867946154,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7230133010827101,
+          "layer_A_tvd": 0.4010928017150803,
+          "layer_B_tvd": 0.6731858649319344,
+          "connected_bond_rmse": 0.13916571776128006,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7627819940111551,
+          "layer_A_tvd": 0.6567388558102967,
+          "layer_B_tvd": 0.6501571680674529,
+          "connected_bond_rmse": 0.12669959362200775,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8280230182471414,
+          "layer_A_tvd": 0.6745111563139672,
+          "layer_B_tvd": 0.7097725056253235,
+          "connected_bond_rmse": 0.07409803676790663,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8281476585667451,
+          "layer_A_tvd": 0.7168829668851802,
+          "layer_B_tvd": 0.6681832816387083,
+          "connected_bond_rmse": 0.07416231058756628,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8735368039568454,
+          "layer_A_tvd": 0.7277963928224379,
+          "layer_B_tvd": 0.7205067872079618,
+          "connected_bond_rmse": 0.04202092201793048,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.00048662032792167733,
+      "seconds": 1.1188840420072665
+    },
+    {
+      "seed": 2,
+      "encoder": "cat",
+      "circuit": "base",
+      "n_parameters": 30,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.19490112283923614,
+      "selected": [
+        {
+          "raw_tvd": 0.18661274528239374,
+          "layer_A_tvd": 0.07442003972680522,
+          "layer_B_tvd": 0.07447178451820546,
+          "connected_bond_rmse": 0.22925973265529756,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14757732288165992,
+          "layer_A_tvd": 0.08215280550052795,
+          "layer_B_tvd": 0.0691791242521875,
+          "connected_bond_rmse": 0.1738231104294072,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1230430322766468,
+          "layer_A_tvd": 0.04783601398312308,
+          "layer_B_tvd": 0.057317116739068544,
+          "connected_bond_rmse": 0.11204194014908452,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.10836047226450955,
+          "layer_A_tvd": 0.05049484672547017,
+          "layer_B_tvd": 0.04467232352014437,
+          "connected_bond_rmse": 0.055217823277862184,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14769924391131767,
+          "layer_A_tvd": 0.06976557140928367,
+          "layer_B_tvd": 0.08225618591229758,
+          "connected_bond_rmse": 0.17397583707969583,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.12334291434374768,
+          "layer_A_tvd": 0.05789519913592157,
+          "layer_B_tvd": 0.047989096081041946,
+          "connected_bond_rmse": 0.11230951267921645,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.10929074719857595,
+          "layer_A_tvd": 0.04523237010971365,
+          "layer_B_tvd": 0.05059600853232038,
+          "connected_bond_rmse": 0.05546585237402552,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09189903862106516,
+          "layer_A_tvd": 0.041475420234800525,
+          "layer_B_tvd": 0.04135475914894521,
+          "connected_bond_rmse": 0.005571414204330689,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08064336688712684,
+          "layer_A_tvd": 0.03402813127336998,
+          "layer_B_tvd": 0.042001815514697005,
+          "connected_bond_rmse": 0.01911082304180718,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08032417134325764,
+          "layer_A_tvd": 0.041870172422348535,
+          "layer_B_tvd": 0.03397450084770381,
+          "connected_bond_rmse": 0.01915289473452083,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08108149797256076,
+          "layer_A_tvd": 0.036567070733266205,
+          "layer_B_tvd": 0.03687910249271885,
+          "connected_bond_rmse": 0.029523617322292996,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.4759826694053466,
+          "layer_A_tvd": 0.3235961518665593,
+          "layer_B_tvd": 0.32359615186655943,
+          "connected_bond_rmse": 0.3074023646789453,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.4471636687013277,
+          "layer_A_tvd": 0.3700046614881714,
+          "layer_B_tvd": 0.2690512987203404,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.33577497247013555,
+          "layer_B_tvd": 0.2081240282186558,
+          "connected_bond_rmse": 0.21600997415508094,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676954,
+          "layer_A_tvd": 0.23788800508627037,
+          "layer_B_tvd": 0.1629437769018719,
+          "connected_bond_rmse": 0.13939696850378044,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.44716366870132784,
+          "layer_A_tvd": 0.2690512987203405,
+          "layer_B_tvd": 0.3700046614881715,
+          "connected_bond_rmse": 0.2782308810217886,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.20812402821865558,
+          "layer_B_tvd": 0.33577497247013555,
+          "connected_bond_rmse": 0.21600997415508108,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676926,
+          "layer_A_tvd": 0.16294377690187184,
+          "layer_B_tvd": 0.23788800508626992,
+          "connected_bond_rmse": 0.13939696850378014,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2681857281419774,
+          "layer_A_tvd": 0.20450811025028495,
+          "layer_B_tvd": 0.2045081102502849,
+          "connected_bond_rmse": 0.125805602311298,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23084762411201237,
+          "layer_A_tvd": 0.16118451780539,
+          "layer_B_tvd": 0.1476472612949321,
+          "connected_bond_rmse": 0.07311065572116082,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2308476241120122,
+          "layer_A_tvd": 0.147647261294932,
+          "layer_B_tvd": 0.16118451780538998,
+          "connected_bond_rmse": 0.07311065572116154,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2016399006699528,
+          "layer_A_tvd": 0.12114210706151152,
+          "layer_B_tvd": 0.12114210706151157,
+          "connected_bond_rmse": 0.04084781725873521,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.4752498838235898,
+          "layer_A_tvd": 0.31957535526903436,
+          "layer_B_tvd": 0.32330940011059317,
+          "connected_bond_rmse": 0.3074682556575959,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5654276777367888,
+          "layer_A_tvd": 0.4903850193283629,
+          "layer_B_tvd": 0.3523214676024492,
+          "connected_bond_rmse": 0.27848447904140106,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6582954895980089,
+          "layer_A_tvd": 0.6112065270492979,
+          "layer_B_tvd": 0.3810603085167213,
+          "connected_bond_rmse": 0.2163738973231703,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7330309824560317,
+          "layer_A_tvd": 0.6833271608597771,
+          "layer_B_tvd": 0.4044650372753229,
+          "connected_bond_rmse": 0.13971581752697781,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5669025083198684,
+          "layer_A_tvd": 0.34831716053356787,
+          "layer_B_tvd": 0.49554632934575066,
+          "connected_bond_rmse": 0.27835963638708416,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6620760068030047,
+          "layer_A_tvd": 0.3767519913068449,
+          "layer_B_tvd": 0.617517396484325,
+          "connected_bond_rmse": 0.21624091253050778,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7375653521282548,
+          "layer_A_tvd": 0.3998748651080982,
+          "layer_B_tvd": 0.6906751396089419,
+          "connected_bond_rmse": 0.1397424424776966,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7677149940292263,
+          "layer_A_tvd": 0.6569793811606515,
+          "layer_B_tvd": 0.6635108642982952,
+          "connected_bond_rmse": 0.12645139821457127,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8310392267325846,
+          "layer_A_tvd": 0.67154418133505,
+          "layer_B_tvd": 0.7216891636833194,
+          "connected_bond_rmse": 0.07382188484035469,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8306635496879258,
+          "layer_A_tvd": 0.7146145940079645,
+          "layer_B_tvd": 0.6782011314488915,
+          "connected_bond_rmse": 0.07381280303144871,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8749739424147651,
+          "layer_A_tvd": 0.7236334234956694,
+          "layer_B_tvd": 0.7306024330964591,
+          "connected_bond_rmse": 0.04162516040146685,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.0004469645045125202,
+      "seconds": 1.1213582499913173
+    },
+    {
+      "seed": 0,
+      "encoder": "cat",
+      "circuit": "four_body",
+      "n_parameters": 32,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.19805237928199293,
+      "selected": [
+        {
+          "raw_tvd": 0.18276020368807067,
+          "layer_A_tvd": 0.08190985539901768,
+          "layer_B_tvd": 0.08830609106962203,
+          "connected_bond_rmse": 0.19461055874861177,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14427602788797123,
+          "layer_A_tvd": 0.07115489808623529,
+          "layer_B_tvd": 0.07327728048181009,
+          "connected_bond_rmse": 0.13339903363380778,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.13013958663793085,
+          "layer_A_tvd": 0.04835252628184948,
+          "layer_B_tvd": 0.06789245102993609,
+          "connected_bond_rmse": 0.07328315366932858,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.12772520351017652,
+          "layer_A_tvd": 0.0875050713682393,
+          "layer_B_tvd": 0.057868515402493034,
+          "connected_bond_rmse": 0.02110465268184563,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1611805267089459,
+          "layer_A_tvd": 0.062395301317084984,
+          "layer_B_tvd": 0.10989561142993938,
+          "connected_bond_rmse": 0.13251273695432314,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14460643954618294,
+          "layer_A_tvd": 0.05601922686818063,
+          "layer_B_tvd": 0.08891659067200991,
+          "connected_bond_rmse": 0.075851547451315,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1045068097374944,
+          "layer_A_tvd": 0.047814040392929344,
+          "layer_B_tvd": 0.06360160748944627,
+          "connected_bond_rmse": 0.033488584681251425,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07764031437870048,
+          "layer_A_tvd": 0.025115905889938398,
+          "layer_B_tvd": 0.05203324023039439,
+          "connected_bond_rmse": 0.04262509253205538,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08169186294073903,
+          "layer_A_tvd": 0.019458945107893047,
+          "layer_B_tvd": 0.05718363023232764,
+          "connected_bond_rmse": 0.057615995762225834,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08706345508077468,
+          "layer_A_tvd": 0.0715388969861453,
+          "layer_B_tvd": 0.0389944894133467,
+          "connected_bond_rmse": 0.06883279812398031,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.0982915817602464,
+          "layer_A_tvd": 0.05559304320438915,
+          "layer_B_tvd": 0.05414124086172966,
+          "connected_bond_rmse": 0.07610367694881265,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.4759826694053466,
+          "layer_A_tvd": 0.3235961518665593,
+          "layer_B_tvd": 0.32359615186655943,
+          "connected_bond_rmse": 0.3074023646789453,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.4471636687013277,
+          "layer_A_tvd": 0.3700046614881714,
+          "layer_B_tvd": 0.2690512987203404,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.33577497247013555,
+          "layer_B_tvd": 0.2081240282186558,
+          "connected_bond_rmse": 0.21600997415508094,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676954,
+          "layer_A_tvd": 0.23788800508627037,
+          "layer_B_tvd": 0.1629437769018719,
+          "connected_bond_rmse": 0.13939696850378044,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.44716366870132784,
+          "layer_A_tvd": 0.2690512987203405,
+          "layer_B_tvd": 0.3700046614881715,
+          "connected_bond_rmse": 0.2782308810217886,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.20812402821865558,
+          "layer_B_tvd": 0.33577497247013555,
+          "connected_bond_rmse": 0.21600997415508108,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676926,
+          "layer_A_tvd": 0.16294377690187184,
+          "layer_B_tvd": 0.23788800508626992,
+          "connected_bond_rmse": 0.13939696850378014,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2681857281419774,
+          "layer_A_tvd": 0.20450811025028495,
+          "layer_B_tvd": 0.2045081102502849,
+          "connected_bond_rmse": 0.125805602311298,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23084762411201237,
+          "layer_A_tvd": 0.16118451780539,
+          "layer_B_tvd": 0.1476472612949321,
+          "connected_bond_rmse": 0.07311065572116082,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2308476241120122,
+          "layer_A_tvd": 0.147647261294932,
+          "layer_B_tvd": 0.16118451780538998,
+          "connected_bond_rmse": 0.07311065572116154,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2016399006699528,
+          "layer_A_tvd": 0.12114210706151152,
+          "layer_B_tvd": 0.12114210706151157,
+          "connected_bond_rmse": 0.04084781725873521,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.46769541671113724,
+          "layer_A_tvd": 0.30699566073321116,
+          "layer_B_tvd": 0.3202670818731106,
+          "connected_bond_rmse": 0.30678249175350103,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.553373889298121,
+          "layer_A_tvd": 0.4772841017501836,
+          "layer_B_tvd": 0.35089807496294884,
+          "connected_bond_rmse": 0.27732221913339133,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6530662570869403,
+          "layer_A_tvd": 0.6020182299865486,
+          "layer_B_tvd": 0.3814133890458754,
+          "connected_bond_rmse": 0.21512021835241624,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7316507027811481,
+          "layer_A_tvd": 0.6804731845943262,
+          "layer_B_tvd": 0.40636345617457653,
+          "connected_bond_rmse": 0.1388437352302996,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5619192446777829,
+          "layer_A_tvd": 0.3389390046472572,
+          "layer_B_tvd": 0.49477456823792504,
+          "connected_bond_rmse": 0.27795190822420657,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6640184634691355,
+          "layer_A_tvd": 0.3708748460308886,
+          "layer_B_tvd": 0.6209299494750107,
+          "connected_bond_rmse": 0.2159776346050923,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7428312759000228,
+          "layer_A_tvd": 0.39701497258907514,
+          "layer_B_tvd": 0.6983179880747177,
+          "connected_bond_rmse": 0.1392555407146572,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7683782025609911,
+          "layer_A_tvd": 0.653873671632478,
+          "layer_B_tvd": 0.6700844343484496,
+          "connected_bond_rmse": 0.1257646366135145,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8340248126195866,
+          "layer_A_tvd": 0.6710344615170168,
+          "layer_B_tvd": 0.7308412921181826,
+          "connected_bond_rmse": 0.07327341098606385,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.833166001640609,
+          "layer_A_tvd": 0.7144639255112404,
+          "layer_B_tvd": 0.6861628402614717,
+          "connected_bond_rmse": 0.07320120766542358,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8783757326214786,
+          "layer_A_tvd": 0.7244593546174309,
+          "layer_B_tvd": 0.7403548461409319,
+          "connected_bond_rmse": 0.04109807597601536,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.000561693194520531,
+      "seconds": 1.0095184999954654
+    },
+    {
+      "seed": 1,
+      "encoder": "cat",
+      "circuit": "four_body",
+      "n_parameters": 32,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.2680206633830087,
+      "selected": [
+        {
+          "raw_tvd": 0.2316067640590131,
+          "layer_A_tvd": 0.12262902174320953,
+          "layer_B_tvd": 0.11376722517748832,
+          "connected_bond_rmse": 0.18603898083818027,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23821786838188086,
+          "layer_A_tvd": 0.11363813015225627,
+          "layer_B_tvd": 0.1192783667597343,
+          "connected_bond_rmse": 0.12553992603829964,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.24406229873973023,
+          "layer_A_tvd": 0.12037514022161731,
+          "layer_B_tvd": 0.11288912306277255,
+          "connected_bond_rmse": 0.058546913001251775,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.27435832232985313,
+          "layer_A_tvd": 0.2331979354199126,
+          "layer_B_tvd": 0.09181170106022618,
+          "connected_bond_rmse": 0.020059541757029564,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.231533351608119,
+          "layer_A_tvd": 0.12511873028336642,
+          "layer_B_tvd": 0.10337564871267266,
+          "connected_bond_rmse": 0.12465981602186206,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23471335179030667,
+          "layer_A_tvd": 0.11554009657545636,
+          "layer_B_tvd": 0.10720471027374373,
+          "connected_bond_rmse": 0.05571730330869323,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2650522401510783,
+          "layer_A_tvd": 0.09198281815023265,
+          "layer_B_tvd": 0.21165446356415646,
+          "connected_bond_rmse": 0.025846775743429962,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14754754398081887,
+          "layer_A_tvd": 0.048523804767478626,
+          "layer_B_tvd": 0.046272639544735414,
+          "connected_bond_rmse": 0.04623303530420885,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14933451879802107,
+          "layer_A_tvd": 0.044157343610732785,
+          "layer_B_tvd": 0.10791822419595784,
+          "connected_bond_rmse": 0.08574110352126253,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.15410457702455782,
+          "layer_A_tvd": 0.12082847659296339,
+          "layer_B_tvd": 0.043650425351810296,
+          "connected_bond_rmse": 0.08346756643784335,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14815206641465514,
+          "layer_A_tvd": 0.08850344190289308,
+          "layer_B_tvd": 0.07279507767676514,
+          "connected_bond_rmse": 0.08582215734198356,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.4759826694053466,
+          "layer_A_tvd": 0.3235961518665593,
+          "layer_B_tvd": 0.32359615186655943,
+          "connected_bond_rmse": 0.3074023646789453,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.4471636687013277,
+          "layer_A_tvd": 0.3700046614881714,
+          "layer_B_tvd": 0.2690512987203404,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.33577497247013555,
+          "layer_B_tvd": 0.2081240282186558,
+          "connected_bond_rmse": 0.21600997415508094,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676954,
+          "layer_A_tvd": 0.23788800508627037,
+          "layer_B_tvd": 0.1629437769018719,
+          "connected_bond_rmse": 0.13939696850378044,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.44716366870132784,
+          "layer_A_tvd": 0.2690512987203405,
+          "layer_B_tvd": 0.3700046614881715,
+          "connected_bond_rmse": 0.2782308810217886,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.20812402821865558,
+          "layer_B_tvd": 0.33577497247013555,
+          "connected_bond_rmse": 0.21600997415508108,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676926,
+          "layer_A_tvd": 0.16294377690187184,
+          "layer_B_tvd": 0.23788800508626992,
+          "connected_bond_rmse": 0.13939696850378014,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2681857281419774,
+          "layer_A_tvd": 0.20450811025028495,
+          "layer_B_tvd": 0.2045081102502849,
+          "connected_bond_rmse": 0.125805602311298,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23084762411201237,
+          "layer_A_tvd": 0.16118451780539,
+          "layer_B_tvd": 0.1476472612949321,
+          "connected_bond_rmse": 0.07311065572116082,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2308476241120122,
+          "layer_A_tvd": 0.147647261294932,
+          "layer_B_tvd": 0.16118451780538998,
+          "connected_bond_rmse": 0.07311065572116154,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2016399006699528,
+          "layer_A_tvd": 0.12114210706151152,
+          "layer_B_tvd": 0.12114210706151157,
+          "connected_bond_rmse": 0.04084781725873521,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.4585038000515127,
+          "layer_A_tvd": 0.3106322036710406,
+          "layer_B_tvd": 0.30535157219121645,
+          "connected_bond_rmse": 0.30630633818976083,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5498710465624099,
+          "layer_A_tvd": 0.4802354860856547,
+          "layer_B_tvd": 0.3382148118340835,
+          "connected_bond_rmse": 0.2776355721860177,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.649584685555916,
+          "layer_A_tvd": 0.603369122848783,
+          "layer_B_tvd": 0.37108582000843304,
+          "connected_bond_rmse": 0.21585652485537443,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7274627193768297,
+          "layer_A_tvd": 0.6807077366648151,
+          "layer_B_tvd": 0.3978659636171687,
+          "connected_bond_rmse": 0.1392317172146092,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5461851452491009,
+          "layer_A_tvd": 0.342744837755498,
+          "layer_B_tvd": 0.47312951493969957,
+          "connected_bond_rmse": 0.2773290528010589,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6453709397099301,
+          "layer_A_tvd": 0.3748485269692329,
+          "layer_B_tvd": 0.5955247067329397,
+          "connected_bond_rmse": 0.2154971867946154,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7230133010827101,
+          "layer_A_tvd": 0.4010928017150803,
+          "layer_B_tvd": 0.6731858649319344,
+          "connected_bond_rmse": 0.13916571776128006,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7627819940111551,
+          "layer_A_tvd": 0.6567388558102967,
+          "layer_B_tvd": 0.6501571680674529,
+          "connected_bond_rmse": 0.12669959362200775,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8280230182471414,
+          "layer_A_tvd": 0.6745111563139672,
+          "layer_B_tvd": 0.7097725056253235,
+          "connected_bond_rmse": 0.07409803676790663,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8281476585667451,
+          "layer_A_tvd": 0.7168829668851802,
+          "layer_B_tvd": 0.6681832816387083,
+          "connected_bond_rmse": 0.07416231058756628,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8735368039568454,
+          "layer_A_tvd": 0.7277963928224379,
+          "layer_B_tvd": 0.7205067872079618,
+          "connected_bond_rmse": 0.04202092201793048,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.002368234487292189,
+      "seconds": 1.0681054169981508
+    },
+    {
+      "seed": 2,
+      "encoder": "cat",
+      "circuit": "four_body",
+      "n_parameters": 32,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.1945745615514749,
+      "selected": [
+        {
+          "raw_tvd": 0.1862773613709266,
+          "layer_A_tvd": 0.07780260967184574,
+          "layer_B_tvd": 0.07798997163042815,
+          "connected_bond_rmse": 0.2242752216981374,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.15323811881261784,
+          "layer_A_tvd": 0.08891080885304065,
+          "layer_B_tvd": 0.06605944599776398,
+          "connected_bond_rmse": 0.168614101997719,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.13182565594591789,
+          "layer_A_tvd": 0.05784302897984108,
+          "layer_B_tvd": 0.05759363637943535,
+          "connected_bond_rmse": 0.10943789264571964,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.10749978566512738,
+          "layer_A_tvd": 0.04434948087741461,
+          "layer_B_tvd": 0.04624999493659317,
+          "connected_bond_rmse": 0.05741031830262638,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.15350614389939538,
+          "layer_A_tvd": 0.06677504609122777,
+          "layer_B_tvd": 0.08928513747441615,
+          "connected_bond_rmse": 0.1687866999980124,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.13241617137399742,
+          "layer_A_tvd": 0.05830489482266721,
+          "layer_B_tvd": 0.05839732170986926,
+          "connected_bond_rmse": 0.1097292763842326,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.10802404165479687,
+          "layer_A_tvd": 0.04695716910913357,
+          "layer_B_tvd": 0.044415629212492674,
+          "connected_bond_rmse": 0.05767684082396645,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09291959620143747,
+          "layer_A_tvd": 0.04130503224942506,
+          "layer_B_tvd": 0.041439007741771644,
+          "connected_bond_rmse": 0.00513333845576354,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07822566270085236,
+          "layer_A_tvd": 0.0322018283111869,
+          "layer_B_tvd": 0.03849874195543766,
+          "connected_bond_rmse": 0.016780220779090135,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07784228305891391,
+          "layer_A_tvd": 0.038430639500697056,
+          "layer_B_tvd": 0.03237313996113081,
+          "connected_bond_rmse": 0.01683877940011555,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07693343027965896,
+          "layer_A_tvd": 0.03386809252980203,
+          "layer_B_tvd": 0.034525491142755826,
+          "connected_bond_rmse": 0.027958693338032824,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.4759826694053466,
+          "layer_A_tvd": 0.3235961518665593,
+          "layer_B_tvd": 0.32359615186655943,
+          "connected_bond_rmse": 0.3074023646789453,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.4471636687013277,
+          "layer_A_tvd": 0.3700046614881714,
+          "layer_B_tvd": 0.2690512987203404,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.33577497247013555,
+          "layer_B_tvd": 0.2081240282186558,
+          "connected_bond_rmse": 0.21600997415508094,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676954,
+          "layer_A_tvd": 0.23788800508627037,
+          "layer_B_tvd": 0.1629437769018719,
+          "connected_bond_rmse": 0.13939696850378044,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.44716366870132784,
+          "layer_A_tvd": 0.2690512987203405,
+          "layer_B_tvd": 0.3700046614881715,
+          "connected_bond_rmse": 0.2782308810217886,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37138919925810676,
+          "layer_A_tvd": 0.20812402821865558,
+          "layer_B_tvd": 0.33577497247013555,
+          "connected_bond_rmse": 0.21600997415508108,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29837154494676926,
+          "layer_A_tvd": 0.16294377690187184,
+          "layer_B_tvd": 0.23788800508626992,
+          "connected_bond_rmse": 0.13939696850378014,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2681857281419774,
+          "layer_A_tvd": 0.20450811025028495,
+          "layer_B_tvd": 0.2045081102502849,
+          "connected_bond_rmse": 0.125805602311298,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23084762411201237,
+          "layer_A_tvd": 0.16118451780539,
+          "layer_B_tvd": 0.1476472612949321,
+          "connected_bond_rmse": 0.07311065572116082,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2308476241120122,
+          "layer_A_tvd": 0.147647261294932,
+          "layer_B_tvd": 0.16118451780538998,
+          "connected_bond_rmse": 0.07311065572116154,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2016399006699528,
+          "layer_A_tvd": 0.12114210706151152,
+          "layer_B_tvd": 0.12114210706151157,
+          "connected_bond_rmse": 0.04084781725873521,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.4752498838235898,
+          "layer_A_tvd": 0.31957535526903436,
+          "layer_B_tvd": 0.32330940011059317,
+          "connected_bond_rmse": 0.3074682556575959,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5654276777367888,
+          "layer_A_tvd": 0.4903850193283629,
+          "layer_B_tvd": 0.3523214676024492,
+          "connected_bond_rmse": 0.27848447904140106,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6582954895980089,
+          "layer_A_tvd": 0.6112065270492979,
+          "layer_B_tvd": 0.3810603085167213,
+          "connected_bond_rmse": 0.2163738973231703,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7330309824560317,
+          "layer_A_tvd": 0.6833271608597771,
+          "layer_B_tvd": 0.4044650372753229,
+          "connected_bond_rmse": 0.13971581752697781,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5669025083198684,
+          "layer_A_tvd": 0.34831716053356787,
+          "layer_B_tvd": 0.49554632934575066,
+          "connected_bond_rmse": 0.27835963638708416,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6620760068030047,
+          "layer_A_tvd": 0.3767519913068449,
+          "layer_B_tvd": 0.617517396484325,
+          "connected_bond_rmse": 0.21624091253050778,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7375653521282548,
+          "layer_A_tvd": 0.3998748651080982,
+          "layer_B_tvd": 0.6906751396089419,
+          "connected_bond_rmse": 0.1397424424776966,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7677149940292263,
+          "layer_A_tvd": 0.6569793811606515,
+          "layer_B_tvd": 0.6635108642982952,
+          "connected_bond_rmse": 0.12645139821457127,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8310392267325846,
+          "layer_A_tvd": 0.67154418133505,
+          "layer_B_tvd": 0.7216891636833194,
+          "connected_bond_rmse": 0.07382188484035469,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8306635496879258,
+          "layer_A_tvd": 0.7146145940079645,
+          "layer_B_tvd": 0.6782011314488915,
+          "connected_bond_rmse": 0.07381280303144871,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.8749739424147651,
+          "layer_A_tvd": 0.7236334234956694,
+          "layer_B_tvd": 0.7306024330964591,
+          "connected_bond_rmse": 0.04162516040146685,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.00042310971485856,
+      "seconds": 1.0522443330119131
+    },
+    {
+      "seed": 0,
+      "encoder": "bond",
+      "circuit": "base",
+      "n_parameters": 30,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.18415139315672632,
+      "selected": [
+        {
+          "raw_tvd": 0.2065803310592481,
+          "layer_A_tvd": 0.06826148945101389,
+          "layer_B_tvd": 0.06824178659150103,
+          "connected_bond_rmse": 0.2194618403574392,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1458082183212226,
+          "layer_A_tvd": 0.06019880831124369,
+          "layer_B_tvd": 0.0401820880636769,
+          "connected_bond_rmse": 0.16237781614894514,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09938712835603483,
+          "layer_A_tvd": 0.04045329362693726,
+          "layer_B_tvd": 0.02271383197168659,
+          "connected_bond_rmse": 0.0936330779564552,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07067454479587601,
+          "layer_A_tvd": 0.03792002807759878,
+          "layer_B_tvd": 0.030049791924536443,
+          "connected_bond_rmse": 0.03282515632431824,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14578523988443753,
+          "layer_A_tvd": 0.040227665136112555,
+          "layer_B_tvd": 0.06017755471707858,
+          "connected_bond_rmse": 0.16237515842262473,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.0993883687269358,
+          "layer_A_tvd": 0.022780534683318636,
+          "layer_B_tvd": 0.040418304509273376,
+          "connected_bond_rmse": 0.0936237091456517,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07065563146613785,
+          "layer_A_tvd": 0.030123567927052876,
+          "layer_B_tvd": 0.03797037700936128,
+          "connected_bond_rmse": 0.03280708726331506,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08278354380034458,
+          "layer_A_tvd": 0.050305717083254216,
+          "layer_B_tvd": 0.0504084846858998,
+          "connected_bond_rmse": 0.027762855672697914,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08066224304279085,
+          "layer_A_tvd": 0.05949525807329037,
+          "layer_B_tvd": 0.05327772591489788,
+          "connected_bond_rmse": 0.06437321106136419,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08063608170601436,
+          "layer_A_tvd": 0.05319532210125359,
+          "layer_B_tvd": 0.05950952562788632,
+          "connected_bond_rmse": 0.06436014869600006,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07769714562137447,
+          "layer_A_tvd": 0.04914412693640735,
+          "layer_B_tvd": 0.04921575439990349,
+          "connected_bond_rmse": 0.08663548937672369,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.22467476599847908,
+          "layer_A_tvd": 0.02227615988964967,
+          "layer_B_tvd": 0.022276159889649726,
+          "connected_bond_rmse": 0.3074023646789451,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350448,
+          "layer_A_tvd": 0.03149359292151654,
+          "layer_B_tvd": 0.07682101303586851,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.03288287857260423,
+          "layer_B_tvd": 0.13774828353755314,
+          "connected_bond_rmse": 0.2160099741550813,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2518598256831388,
+          "layer_A_tvd": 0.025232001774899655,
+          "layer_B_tvd": 0.18987324523056467,
+          "connected_bond_rmse": 0.1393969685037798,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350443,
+          "layer_A_tvd": 0.07682101303586844,
+          "layer_B_tvd": 0.031493592921516586,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.13774828353755317,
+          "layer_B_tvd": 0.03288287857260423,
+          "connected_bond_rmse": 0.21600997415508136,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.25185982568313864,
+          "layer_A_tvd": 0.18987324523056465,
+          "layer_B_tvd": 0.025232001774899804,
+          "connected_bond_rmse": 0.13939696850377986,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3015589916004352,
+          "layer_A_tvd": 0.164149740792455,
+          "layer_B_tvd": 0.16414974079245498,
+          "connected_bond_rmse": 0.12580560231129664,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.20747333323734984,
+          "layer_B_tvd": 0.11547274556623727,
+          "connected_bond_rmse": 0.07311065572116185,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.11547274556623718,
+          "layer_B_tvd": 0.20747333323734973,
+          "connected_bond_rmse": 0.073110655721163,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2577108383918346,
+          "layer_A_tvd": 0.14197789979965814,
+          "layer_B_tvd": 0.14197789979965808,
+          "connected_bond_rmse": 0.04084781725873565,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.35037658165662144,
+          "layer_A_tvd": 0.1604878412256185,
+          "layer_B_tvd": 0.17184605860385005,
+          "connected_bond_rmse": 0.299624360004552,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.36825852575333606,
+          "layer_A_tvd": 0.1544832744849991,
+          "layer_B_tvd": 0.1579013418014699,
+          "connected_bond_rmse": 0.27167872594826054,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5137297828127034,
+          "layer_A_tvd": 0.37269407086151063,
+          "layer_B_tvd": 0.16085940617558173,
+          "connected_bond_rmse": 0.2110347845839178,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6298897464229074,
+          "layer_A_tvd": 0.5526667285025505,
+          "layer_B_tvd": 0.19806598886530902,
+          "connected_bond_rmse": 0.13595659019869447,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3342651860289392,
+          "layer_A_tvd": 0.13997965357538508,
+          "layer_B_tvd": 0.1202608443154803,
+          "connected_bond_rmse": 0.27187891374585627,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.4843577316937211,
+          "layer_A_tvd": 0.17835547614321567,
+          "layer_B_tvd": 0.3358328036352227,
+          "connected_bond_rmse": 0.21150564674718267,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.609063518016465,
+          "layer_A_tvd": 0.21572933871200428,
+          "layer_B_tvd": 0.526542051991624,
+          "connected_bond_rmse": 0.13654705407231021,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5882154565914033,
+          "layer_A_tvd": 0.49052988550821125,
+          "layer_B_tvd": 0.45908020634105684,
+          "connected_bond_rmse": 0.1237208449010381,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6910882798907125,
+          "layer_A_tvd": 0.5303782672810787,
+          "layer_B_tvd": 0.6093827609157618,
+          "connected_bond_rmse": 0.07226224773264193,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6902549878328801,
+          "layer_A_tvd": 0.6315458393199644,
+          "layer_B_tvd": 0.49898914113158305,
+          "connected_bond_rmse": 0.07207638753985997,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7750322692388536,
+          "layer_A_tvd": 0.6553689017357995,
+          "layer_B_tvd": 0.6332284969484111,
+          "connected_bond_rmse": 0.04076705520696147,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.00039890950715159435,
+      "seconds": 1.0664130420045694
+    },
+    {
+      "seed": 1,
+      "encoder": "bond",
+      "circuit": "base",
+      "n_parameters": 30,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.1851607932699588,
+      "selected": [
+        {
+          "raw_tvd": 0.2065618857884664,
+          "layer_A_tvd": 0.0682820829957414,
+          "layer_B_tvd": 0.0682893903609913,
+          "connected_bond_rmse": 0.21947872250800737,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14574303440400205,
+          "layer_A_tvd": 0.06022980332584531,
+          "layer_B_tvd": 0.04026807078304381,
+          "connected_bond_rmse": 0.16238236577484283,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09935919882017816,
+          "layer_A_tvd": 0.04046807457711601,
+          "layer_B_tvd": 0.02282976859325464,
+          "connected_bond_rmse": 0.09361937676241051,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07059268918844924,
+          "layer_A_tvd": 0.037928041470578905,
+          "layer_B_tvd": 0.03014348598901155,
+          "connected_bond_rmse": 0.032790186069945125,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14574725297807017,
+          "layer_A_tvd": 0.04026101169326053,
+          "layer_B_tvd": 0.06023487894507679,
+          "connected_bond_rmse": 0.16238365155414336,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.0993587062850528,
+          "layer_A_tvd": 0.022819439242809273,
+          "layer_B_tvd": 0.04047529605183305,
+          "connected_bond_rmse": 0.09362196266380535,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07059962950957055,
+          "layer_A_tvd": 0.030138590906246703,
+          "layer_B_tvd": 0.03792159746437865,
+          "connected_bond_rmse": 0.0327936798686668,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08283313624514915,
+          "layer_A_tvd": 0.05032119899200602,
+          "layer_B_tvd": 0.05030236755321139,
+          "connected_bond_rmse": 0.027777519254340736,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08071668404546967,
+          "layer_A_tvd": 0.05949684157157624,
+          "layer_B_tvd": 0.0532107072715768,
+          "connected_bond_rmse": 0.06439091504583315,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08071916612731136,
+          "layer_A_tvd": 0.05322563935431297,
+          "layer_B_tvd": 0.059489146538918534,
+          "connected_bond_rmse": 0.06439277774010342,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07776643432359531,
+          "layer_A_tvd": 0.04917808887184469,
+          "layer_B_tvd": 0.04916431164776501,
+          "connected_bond_rmse": 0.08666822419891358,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.22467476599847908,
+          "layer_A_tvd": 0.02227615988964967,
+          "layer_B_tvd": 0.022276159889649726,
+          "connected_bond_rmse": 0.3074023646789451,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350448,
+          "layer_A_tvd": 0.03149359292151654,
+          "layer_B_tvd": 0.07682101303586851,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.03288287857260423,
+          "layer_B_tvd": 0.13774828353755314,
+          "connected_bond_rmse": 0.2160099741550813,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2518598256831388,
+          "layer_A_tvd": 0.025232001774899655,
+          "layer_B_tvd": 0.18987324523056467,
+          "connected_bond_rmse": 0.1393969685037798,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350443,
+          "layer_A_tvd": 0.07682101303586844,
+          "layer_B_tvd": 0.031493592921516586,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.13774828353755317,
+          "layer_B_tvd": 0.03288287857260423,
+          "connected_bond_rmse": 0.21600997415508136,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.25185982568313864,
+          "layer_A_tvd": 0.18987324523056465,
+          "layer_B_tvd": 0.025232001774899804,
+          "connected_bond_rmse": 0.13939696850377986,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3015589916004352,
+          "layer_A_tvd": 0.164149740792455,
+          "layer_B_tvd": 0.16414974079245498,
+          "connected_bond_rmse": 0.12580560231129664,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.20747333323734984,
+          "layer_B_tvd": 0.11547274556623727,
+          "connected_bond_rmse": 0.07311065572116185,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.11547274556623718,
+          "layer_B_tvd": 0.20747333323734973,
+          "connected_bond_rmse": 0.073110655721163,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2577108383918346,
+          "layer_A_tvd": 0.14197789979965814,
+          "layer_B_tvd": 0.14197789979965808,
+          "connected_bond_rmse": 0.04084781725873565,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.35008843846803384,
+          "layer_A_tvd": 0.16477883090728057,
+          "layer_B_tvd": 0.17065662261541686,
+          "connected_bond_rmse": 0.2980991756488741,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3644676988514062,
+          "layer_A_tvd": 0.15239587592975917,
+          "layer_B_tvd": 0.14528831009358392,
+          "connected_bond_rmse": 0.27051829112375725,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5106936745166364,
+          "layer_A_tvd": 0.373153078454843,
+          "layer_B_tvd": 0.1850260859543797,
+          "connected_bond_rmse": 0.21034911987584487,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6292548713491803,
+          "layer_A_tvd": 0.5556717867965757,
+          "layer_B_tvd": 0.22212320595878815,
+          "connected_bond_rmse": 0.13569236965975745,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37061943033988587,
+          "layer_A_tvd": 0.14667402818128047,
+          "layer_B_tvd": 0.16597094666380172,
+          "connected_bond_rmse": 0.2703061305376243,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5151755474251614,
+          "layer_A_tvd": 0.17582166245301184,
+          "layer_B_tvd": 0.381575446398131,
+          "connected_bond_rmse": 0.2099061425411166,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6311919458313737,
+          "layer_A_tvd": 0.21301553536462522,
+          "layer_B_tvd": 0.5584196299382088,
+          "connected_bond_rmse": 0.13509556355049657,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6042644697759819,
+          "layer_A_tvd": 0.47929081454738803,
+          "layer_B_tvd": 0.48844427157268333,
+          "connected_bond_rmse": 0.1230658870714154,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7015511197662117,
+          "layer_A_tvd": 0.5180594368459384,
+          "layer_B_tvd": 0.6289497713434855,
+          "connected_bond_rmse": 0.0717161627023978,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7022835798605129,
+          "layer_A_tvd": 0.6229767036392043,
+          "layer_B_tvd": 0.5270536227212603,
+          "connected_bond_rmse": 0.07192145733158027,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7828454821797091,
+          "layer_A_tvd": 0.6459453685317587,
+          "layer_B_tvd": 0.6517690628018895,
+          "connected_bond_rmse": 0.040716961947067844,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.0003989195682763981,
+      "seconds": 1.0582178330078023
+    },
+    {
+      "seed": 2,
+      "encoder": "bond",
+      "circuit": "base",
+      "n_parameters": 30,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.1852353989399476,
+      "selected": [
+        {
+          "raw_tvd": 0.206584772814878,
+          "layer_A_tvd": 0.06826527567809158,
+          "layer_B_tvd": 0.0682565215715868,
+          "connected_bond_rmse": 0.2194766524678186,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.14580890722788237,
+          "layer_A_tvd": 0.060204466346869843,
+          "layer_B_tvd": 0.04019527509455874,
+          "connected_bond_rmse": 0.1623886749146515,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09938591457304663,
+          "layer_A_tvd": 0.040451545327756834,
+          "layer_B_tvd": 0.02273221915452903,
+          "connected_bond_rmse": 0.09363571973823896,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07066387512502703,
+          "layer_A_tvd": 0.037949543992523586,
+          "layer_B_tvd": 0.030062609398969965,
+          "connected_bond_rmse": 0.03281660331708377,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1457990063621175,
+          "layer_A_tvd": 0.04021270607977083,
+          "layer_B_tvd": 0.06019691148730177,
+          "connected_bond_rmse": 0.1623870434367361,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09938897378258471,
+          "layer_A_tvd": 0.022757735428167534,
+          "layer_B_tvd": 0.04043873696901096,
+          "connected_bond_rmse": 0.09363146713052956,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07065673785127694,
+          "layer_A_tvd": 0.03008794964400567,
+          "layer_B_tvd": 0.03796924720008962,
+          "connected_bond_rmse": 0.03280950322195356,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08279552446936406,
+          "layer_A_tvd": 0.05035344622215387,
+          "layer_B_tvd": 0.05039512033562393,
+          "connected_bond_rmse": 0.027767448112929645,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.08067341325052649,
+          "layer_A_tvd": 0.0594956396763526,
+          "layer_B_tvd": 0.05327006751557396,
+          "connected_bond_rmse": 0.06438053166154982,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.0806645493467219,
+          "layer_A_tvd": 0.0532367607538916,
+          "layer_B_tvd": 0.05950339503387837,
+          "connected_bond_rmse": 0.06437582206483575,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07771638143984502,
+          "layer_A_tvd": 0.04918309530609276,
+          "layer_B_tvd": 0.04921273582486192,
+          "connected_bond_rmse": 0.0866519392730089,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.22467476599847908,
+          "layer_A_tvd": 0.02227615988964967,
+          "layer_B_tvd": 0.022276159889649726,
+          "connected_bond_rmse": 0.3074023646789451,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350448,
+          "layer_A_tvd": 0.03149359292151654,
+          "layer_B_tvd": 0.07682101303586851,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.03288287857260423,
+          "layer_B_tvd": 0.13774828353755314,
+          "connected_bond_rmse": 0.2160099741550813,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2518598256831388,
+          "layer_A_tvd": 0.025232001774899655,
+          "layer_B_tvd": 0.18987324523056467,
+          "connected_bond_rmse": 0.1393969685037798,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350443,
+          "layer_A_tvd": 0.07682101303586844,
+          "layer_B_tvd": 0.031493592921516586,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.13774828353755317,
+          "layer_B_tvd": 0.03288287857260423,
+          "connected_bond_rmse": 0.21600997415508136,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.25185982568313864,
+          "layer_A_tvd": 0.18987324523056465,
+          "layer_B_tvd": 0.025232001774899804,
+          "connected_bond_rmse": 0.13939696850377986,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3015589916004352,
+          "layer_A_tvd": 0.164149740792455,
+          "layer_B_tvd": 0.16414974079245498,
+          "connected_bond_rmse": 0.12580560231129664,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.20747333323734984,
+          "layer_B_tvd": 0.11547274556623727,
+          "connected_bond_rmse": 0.07311065572116185,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.11547274556623718,
+          "layer_B_tvd": 0.20747333323734973,
+          "connected_bond_rmse": 0.073110655721163,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2577108383918346,
+          "layer_A_tvd": 0.14197789979965814,
+          "layer_B_tvd": 0.14197789979965808,
+          "connected_bond_rmse": 0.04084781725873565,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.39004000822640783,
+          "layer_A_tvd": 0.18870622411066168,
+          "layer_B_tvd": 0.1942588186262115,
+          "connected_bond_rmse": 0.31293379573561386,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3552363535063653,
+          "layer_A_tvd": 0.14420306670677385,
+          "layer_B_tvd": 0.17546306091431546,
+          "connected_bond_rmse": 0.28298606848860924,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.49734000634692843,
+          "layer_A_tvd": 0.3364675817178202,
+          "layer_B_tvd": 0.17492745589614594,
+          "connected_bond_rmse": 0.21968310772544888,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6154013755128299,
+          "layer_A_tvd": 0.522786310814167,
+          "layer_B_tvd": 0.21384126310954507,
+          "connected_bond_rmse": 0.14201032976913722,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.34600600420055705,
+          "layer_A_tvd": 0.16752883509700178,
+          "layer_B_tvd": 0.1404211601408374,
+          "connected_bond_rmse": 0.2829421334649123,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.4836608074252865,
+          "layer_A_tvd": 0.18029295308023235,
+          "layer_B_tvd": 0.32256405087259155,
+          "connected_bond_rmse": 0.21957197434865966,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6052672951690281,
+          "layer_A_tvd": 0.21915423341022205,
+          "layer_B_tvd": 0.5126512881477361,
+          "connected_bond_rmse": 0.14186006390519806,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5657160199157397,
+          "layer_A_tvd": 0.4716151600495999,
+          "layer_B_tvd": 0.457711826512538,
+          "connected_bond_rmse": 0.1279538685273424,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6753926382578019,
+          "layer_A_tvd": 0.5172960229255865,
+          "layer_B_tvd": 0.6059479790293072,
+          "connected_bond_rmse": 0.07453322499447863,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6753970714711024,
+          "layer_A_tvd": 0.6160472176149513,
+          "layer_B_tvd": 0.5033928092397825,
+          "connected_bond_rmse": 0.07458278890577026,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7652430116561562,
+          "layer_A_tvd": 0.6443869149465807,
+          "layer_B_tvd": 0.6343094127500745,
+          "connected_bond_rmse": 0.04182762476259168,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.00039891047910100425,
+      "seconds": 1.014003791991854
+    },
+    {
+      "seed": 0,
+      "encoder": "bond",
+      "circuit": "four_body",
+      "n_parameters": 32,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.17930726943926875,
+      "selected": [
+        {
+          "raw_tvd": 0.18491820492147676,
+          "layer_A_tvd": 0.06582405624491303,
+          "layer_B_tvd": 0.06578879506271271,
+          "connected_bond_rmse": 0.20720845335041177,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.13956140577339982,
+          "layer_A_tvd": 0.05999825701687314,
+          "layer_B_tvd": 0.035069539885652076,
+          "connected_bond_rmse": 0.15074700112218015,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09428066144399266,
+          "layer_A_tvd": 0.04320260580121531,
+          "layer_B_tvd": 0.013580767803105784,
+          "connected_bond_rmse": 0.08415454235432801,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.05713173548854171,
+          "layer_A_tvd": 0.020373822566860534,
+          "layer_B_tvd": 0.022701964334226842,
+          "connected_bond_rmse": 0.02701446033789909,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.13950616567784702,
+          "layer_A_tvd": 0.03509365609419743,
+          "layer_B_tvd": 0.059958962608199606,
+          "connected_bond_rmse": 0.15074540158977923,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09422229875037244,
+          "layer_A_tvd": 0.013655231907078128,
+          "layer_B_tvd": 0.04315412172769848,
+          "connected_bond_rmse": 0.08414729041654637,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.05708462843729267,
+          "layer_A_tvd": 0.02267126043486552,
+          "layer_B_tvd": 0.020458478196584855,
+          "connected_bond_rmse": 0.02699989545527681,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07690247532270554,
+          "layer_A_tvd": 0.04466899526503513,
+          "layer_B_tvd": 0.04470284861605697,
+          "connected_bond_rmse": 0.03462983013135591,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07384523419704442,
+          "layer_A_tvd": 0.057885101362715324,
+          "layer_B_tvd": 0.03786031746699817,
+          "connected_bond_rmse": 0.06923839205375648,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07382735963157053,
+          "layer_A_tvd": 0.03783408423751092,
+          "layer_B_tvd": 0.05791084932682201,
+          "connected_bond_rmse": 0.06922833396969028,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07546713804210828,
+          "layer_A_tvd": 0.04184645370671136,
+          "layer_B_tvd": 0.04186210716116281,
+          "connected_bond_rmse": 0.09130453445925882,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.22467476599847908,
+          "layer_A_tvd": 0.02227615988964967,
+          "layer_B_tvd": 0.022276159889649726,
+          "connected_bond_rmse": 0.3074023646789451,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350448,
+          "layer_A_tvd": 0.03149359292151654,
+          "layer_B_tvd": 0.07682101303586851,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.03288287857260423,
+          "layer_B_tvd": 0.13774828353755314,
+          "connected_bond_rmse": 0.2160099741550813,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2518598256831388,
+          "layer_A_tvd": 0.025232001774899655,
+          "layer_B_tvd": 0.18987324523056467,
+          "connected_bond_rmse": 0.1393969685037798,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350443,
+          "layer_A_tvd": 0.07682101303586844,
+          "layer_B_tvd": 0.031493592921516586,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.13774828353755317,
+          "layer_B_tvd": 0.03288287857260423,
+          "connected_bond_rmse": 0.21600997415508136,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.25185982568313864,
+          "layer_A_tvd": 0.18987324523056465,
+          "layer_B_tvd": 0.025232001774899804,
+          "connected_bond_rmse": 0.13939696850377986,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3015589916004352,
+          "layer_A_tvd": 0.164149740792455,
+          "layer_B_tvd": 0.16414974079245498,
+          "connected_bond_rmse": 0.12580560231129664,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.20747333323734984,
+          "layer_B_tvd": 0.11547274556623727,
+          "connected_bond_rmse": 0.07311065572116185,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.11547274556623718,
+          "layer_B_tvd": 0.20747333323734973,
+          "connected_bond_rmse": 0.073110655721163,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2577108383918346,
+          "layer_A_tvd": 0.14197789979965814,
+          "layer_B_tvd": 0.14197789979965808,
+          "connected_bond_rmse": 0.04084781725873565,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.35037658165662144,
+          "layer_A_tvd": 0.1604878412256185,
+          "layer_B_tvd": 0.17184605860385005,
+          "connected_bond_rmse": 0.299624360004552,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.36825852575333606,
+          "layer_A_tvd": 0.1544832744849991,
+          "layer_B_tvd": 0.1579013418014699,
+          "connected_bond_rmse": 0.27167872594826054,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5137297828127034,
+          "layer_A_tvd": 0.37269407086151063,
+          "layer_B_tvd": 0.16085940617558173,
+          "connected_bond_rmse": 0.2110347845839178,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6298897464229074,
+          "layer_A_tvd": 0.5526667285025505,
+          "layer_B_tvd": 0.19806598886530902,
+          "connected_bond_rmse": 0.13595659019869447,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3342651860289392,
+          "layer_A_tvd": 0.13997965357538508,
+          "layer_B_tvd": 0.1202608443154803,
+          "connected_bond_rmse": 0.27187891374585627,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.4843577316937211,
+          "layer_A_tvd": 0.17835547614321567,
+          "layer_B_tvd": 0.3358328036352227,
+          "connected_bond_rmse": 0.21150564674718267,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.609063518016465,
+          "layer_A_tvd": 0.21572933871200428,
+          "layer_B_tvd": 0.526542051991624,
+          "connected_bond_rmse": 0.13654705407231021,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5882154565914033,
+          "layer_A_tvd": 0.49052988550821125,
+          "layer_B_tvd": 0.45908020634105684,
+          "connected_bond_rmse": 0.1237208449010381,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6910882798907125,
+          "layer_A_tvd": 0.5303782672810787,
+          "layer_B_tvd": 0.6093827609157618,
+          "connected_bond_rmse": 0.07226224773264193,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6902549878328801,
+          "layer_A_tvd": 0.6315458393199644,
+          "layer_B_tvd": 0.49898914113158305,
+          "connected_bond_rmse": 0.07207638753985997,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7750322692388536,
+          "layer_A_tvd": 0.6553689017357995,
+          "layer_B_tvd": 0.6332284969484111,
+          "connected_bond_rmse": 0.04076705520696147,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.0003701578419126286,
+      "seconds": 1.006563749993802
+    },
+    {
+      "seed": 1,
+      "encoder": "bond",
+      "circuit": "four_body",
+      "n_parameters": 32,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.17977572904801778,
+      "selected": [
+        {
+          "raw_tvd": 0.18494915412766638,
+          "layer_A_tvd": 0.06582780352224124,
+          "layer_B_tvd": 0.0658382093288378,
+          "connected_bond_rmse": 0.20720669226694177,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1395344014579527,
+          "layer_A_tvd": 0.0600109307208828,
+          "layer_B_tvd": 0.03513461660053975,
+          "connected_bond_rmse": 0.1507351559747813,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09423020514005581,
+          "layer_A_tvd": 0.043195166438735486,
+          "layer_B_tvd": 0.013697735046882709,
+          "connected_bond_rmse": 0.08413093755090098,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.05702944873356664,
+          "layer_A_tvd": 0.0204166018453088,
+          "layer_B_tvd": 0.022635663836066525,
+          "connected_bond_rmse": 0.02697981290093145,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.1395443626396481,
+          "layer_A_tvd": 0.03512786532002159,
+          "layer_B_tvd": 0.06002090135428714,
+          "connected_bond_rmse": 0.15073573099670634,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09423916251739584,
+          "layer_A_tvd": 0.013699105757156636,
+          "layer_B_tvd": 0.04320635071946074,
+          "connected_bond_rmse": 0.0841326514446684,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.05704243028122116,
+          "layer_A_tvd": 0.02264636985834065,
+          "layer_B_tvd": 0.02041498894114392,
+          "connected_bond_rmse": 0.02698267846061747,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07695512862114684,
+          "layer_A_tvd": 0.04468002878338749,
+          "layer_B_tvd": 0.04466967675074953,
+          "connected_bond_rmse": 0.03464548789884142,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07388964216097468,
+          "layer_A_tvd": 0.057887877461234784,
+          "layer_B_tvd": 0.03785134559369242,
+          "connected_bond_rmse": 0.06924536281662261,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07389235109186915,
+          "layer_A_tvd": 0.03785907018720376,
+          "layer_B_tvd": 0.057878439792493,
+          "connected_bond_rmse": 0.0692469909322575,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07552309346553576,
+          "layer_A_tvd": 0.0418646016338955,
+          "layer_B_tvd": 0.04185817935153228,
+          "connected_bond_rmse": 0.09131011330447562,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.22467476599847908,
+          "layer_A_tvd": 0.02227615988964967,
+          "layer_B_tvd": 0.022276159889649726,
+          "connected_bond_rmse": 0.3074023646789451,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350448,
+          "layer_A_tvd": 0.03149359292151654,
+          "layer_B_tvd": 0.07682101303586851,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.03288287857260423,
+          "layer_B_tvd": 0.13774828353755314,
+          "connected_bond_rmse": 0.2160099741550813,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2518598256831388,
+          "layer_A_tvd": 0.025232001774899655,
+          "layer_B_tvd": 0.18987324523056467,
+          "connected_bond_rmse": 0.1393969685037798,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350443,
+          "layer_A_tvd": 0.07682101303586844,
+          "layer_B_tvd": 0.031493592921516586,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.13774828353755317,
+          "layer_B_tvd": 0.03288287857260423,
+          "connected_bond_rmse": 0.21600997415508136,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.25185982568313864,
+          "layer_A_tvd": 0.18987324523056465,
+          "layer_B_tvd": 0.025232001774899804,
+          "connected_bond_rmse": 0.13939696850377986,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3015589916004352,
+          "layer_A_tvd": 0.164149740792455,
+          "layer_B_tvd": 0.16414974079245498,
+          "connected_bond_rmse": 0.12580560231129664,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.20747333323734984,
+          "layer_B_tvd": 0.11547274556623727,
+          "connected_bond_rmse": 0.07311065572116185,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.11547274556623718,
+          "layer_B_tvd": 0.20747333323734973,
+          "connected_bond_rmse": 0.073110655721163,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2577108383918346,
+          "layer_A_tvd": 0.14197789979965814,
+          "layer_B_tvd": 0.14197789979965808,
+          "connected_bond_rmse": 0.04084781725873565,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.35008843846803384,
+          "layer_A_tvd": 0.16477883090728057,
+          "layer_B_tvd": 0.17065662261541686,
+          "connected_bond_rmse": 0.2980991756488741,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3644676988514062,
+          "layer_A_tvd": 0.15239587592975917,
+          "layer_B_tvd": 0.14528831009358392,
+          "connected_bond_rmse": 0.27051829112375725,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5106936745166364,
+          "layer_A_tvd": 0.373153078454843,
+          "layer_B_tvd": 0.1850260859543797,
+          "connected_bond_rmse": 0.21034911987584487,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6292548713491803,
+          "layer_A_tvd": 0.5556717867965757,
+          "layer_B_tvd": 0.22212320595878815,
+          "connected_bond_rmse": 0.13569236965975745,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.37061943033988587,
+          "layer_A_tvd": 0.14667402818128047,
+          "layer_B_tvd": 0.16597094666380172,
+          "connected_bond_rmse": 0.2703061305376243,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5151755474251614,
+          "layer_A_tvd": 0.17582166245301184,
+          "layer_B_tvd": 0.381575446398131,
+          "connected_bond_rmse": 0.2099061425411166,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6311919458313737,
+          "layer_A_tvd": 0.21301553536462522,
+          "layer_B_tvd": 0.5584196299382088,
+          "connected_bond_rmse": 0.13509556355049657,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6042644697759819,
+          "layer_A_tvd": 0.47929081454738803,
+          "layer_B_tvd": 0.48844427157268333,
+          "connected_bond_rmse": 0.1230658870714154,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7015511197662117,
+          "layer_A_tvd": 0.5180594368459384,
+          "layer_B_tvd": 0.6289497713434855,
+          "connected_bond_rmse": 0.0717161627023978,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7022835798605129,
+          "layer_A_tvd": 0.6229767036392043,
+          "layer_B_tvd": 0.5270536227212603,
+          "connected_bond_rmse": 0.07192145733158027,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7828454821797091,
+          "layer_A_tvd": 0.6459453685317587,
+          "layer_B_tvd": 0.6517690628018895,
+          "connected_bond_rmse": 0.040716961947067844,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.0003701707417256597,
+      "seconds": 1.0174692080036039
+    },
+    {
+      "seed": 2,
+      "encoder": "bond",
+      "circuit": "four_body",
+      "n_parameters": 32,
+      "selected_index": 1,
+      "selected_step": 500,
+      "validation_tvd": 0.1798493754417458,
+      "selected": [
+        {
+          "raw_tvd": 0.1849165702997722,
+          "layer_A_tvd": 0.0658180439828771,
+          "layer_B_tvd": 0.06580323835180889,
+          "connected_bond_rmse": 0.2071979988601544,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.13953175734351117,
+          "layer_A_tvd": 0.05999157577859876,
+          "layer_B_tvd": 0.03507279330557132,
+          "connected_bond_rmse": 0.15073890200871626,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09425939646602532,
+          "layer_A_tvd": 0.04319743467726198,
+          "layer_B_tvd": 0.013561378447288393,
+          "connected_bond_rmse": 0.0841458400776815,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.05712646141455692,
+          "layer_A_tvd": 0.02040083215392751,
+          "layer_B_tvd": 0.02269760533458659,
+          "connected_bond_rmse": 0.02700313249418845,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.13950985929029625,
+          "layer_A_tvd": 0.03508251322991006,
+          "layer_B_tvd": 0.05997572253014571,
+          "connected_bond_rmse": 0.1507381212903599,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.09423601820540321,
+          "layer_A_tvd": 0.013590740185951605,
+          "layer_B_tvd": 0.043177863045439746,
+          "connected_bond_rmse": 0.08414273553012643,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.05710718745381395,
+          "layer_A_tvd": 0.022684299125219545,
+          "layer_B_tvd": 0.02043512680982914,
+          "connected_bond_rmse": 0.02699713916339934,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07689286451495159,
+          "layer_A_tvd": 0.04467817506047905,
+          "layer_B_tvd": 0.04469264985796195,
+          "connected_bond_rmse": 0.034641832431758,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07384745708818805,
+          "layer_A_tvd": 0.057896507613065494,
+          "layer_B_tvd": 0.037854520870979506,
+          "connected_bond_rmse": 0.06925278581417625,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07384043778920016,
+          "layer_A_tvd": 0.03784319454171086,
+          "layer_B_tvd": 0.05790781752122107,
+          "connected_bond_rmse": 0.06924874147216246,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.07548089964829988,
+          "layer_A_tvd": 0.04185729478710289,
+          "layer_B_tvd": 0.041864432925939124,
+          "connected_bond_rmse": 0.09132934546406267,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "encoder_only": [
+        {
+          "raw_tvd": 0.22467476599847908,
+          "layer_A_tvd": 0.02227615988964967,
+          "layer_B_tvd": 0.022276159889649726,
+          "connected_bond_rmse": 0.3074023646789451,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350448,
+          "layer_A_tvd": 0.03149359292151654,
+          "layer_B_tvd": 0.07682101303586851,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.03288287857260423,
+          "layer_B_tvd": 0.13774828353755314,
+          "connected_bond_rmse": 0.2160099741550813,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2518598256831388,
+          "layer_A_tvd": 0.025232001774899655,
+          "layer_B_tvd": 0.18987324523056467,
+          "connected_bond_rmse": 0.1393969685037798,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.23452730622350443,
+          "layer_A_tvd": 0.07682101303586844,
+          "layer_B_tvd": 0.031493592921516586,
+          "connected_bond_rmse": 0.27823088102178856,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2442666137187614,
+          "layer_A_tvd": 0.13774828353755317,
+          "layer_B_tvd": 0.03288287857260423,
+          "connected_bond_rmse": 0.21600997415508136,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.25185982568313864,
+          "layer_A_tvd": 0.18987324523056465,
+          "layer_B_tvd": 0.025232001774899804,
+          "connected_bond_rmse": 0.13939696850377986,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3015589916004352,
+          "layer_A_tvd": 0.164149740792455,
+          "layer_B_tvd": 0.16414974079245498,
+          "connected_bond_rmse": 0.12580560231129664,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.20747333323734984,
+          "layer_B_tvd": 0.11547274556623727,
+          "connected_bond_rmse": 0.07311065572116185,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.29359745372053103,
+          "layer_A_tvd": 0.11547274556623718,
+          "layer_B_tvd": 0.20747333323734973,
+          "connected_bond_rmse": 0.073110655721163,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.2577108383918346,
+          "layer_A_tvd": 0.14197789979965814,
+          "layer_B_tvd": 0.14197789979965808,
+          "connected_bond_rmse": 0.04084781725873565,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "initial": [
+        {
+          "raw_tvd": 0.39004000822640783,
+          "layer_A_tvd": 0.18870622411066168,
+          "layer_B_tvd": 0.1942588186262115,
+          "connected_bond_rmse": 0.31293379573561386,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.3552363535063653,
+          "layer_A_tvd": 0.14420306670677385,
+          "layer_B_tvd": 0.17546306091431546,
+          "connected_bond_rmse": 0.28298606848860924,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.49734000634692843,
+          "layer_A_tvd": 0.3364675817178202,
+          "layer_B_tvd": 0.17492745589614594,
+          "connected_bond_rmse": 0.21968310772544888,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6154013755128299,
+          "layer_A_tvd": 0.522786310814167,
+          "layer_B_tvd": 0.21384126310954507,
+          "connected_bond_rmse": 0.14201032976913722,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.34600600420055705,
+          "layer_A_tvd": 0.16752883509700178,
+          "layer_B_tvd": 0.1404211601408374,
+          "connected_bond_rmse": 0.2829421334649123,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.4836608074252865,
+          "layer_A_tvd": 0.18029295308023235,
+          "layer_B_tvd": 0.32256405087259155,
+          "connected_bond_rmse": 0.21957197434865966,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6052672951690281,
+          "layer_A_tvd": 0.21915423341022205,
+          "layer_B_tvd": 0.5126512881477361,
+          "connected_bond_rmse": 0.14186006390519806,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.5657160199157397,
+          "layer_A_tvd": 0.4716151600495999,
+          "layer_B_tvd": 0.457711826512538,
+          "connected_bond_rmse": 0.1279538685273424,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6753926382578019,
+          "layer_A_tvd": 0.5172960229255865,
+          "layer_B_tvd": 0.6059479790293072,
+          "connected_bond_rmse": 0.07453322499447863,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.6753970714711024,
+          "layer_A_tvd": 0.6160472176149513,
+          "layer_B_tvd": 0.5033928092397825,
+          "connected_bond_rmse": 0.07458278890577026,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        },
+        {
+          "raw_tvd": 0.7652430116561562,
+          "layer_A_tvd": 0.6443869149465807,
+          "layer_B_tvd": 0.6343094127500745,
+          "connected_bond_rmse": 0.04182762476259168,
+          "flip_A_tvd": 0.0,
+          "flip_B_tvd": 0.0
+        }
+      ],
+      "population_mmd": 0.00037015350404288796,
+      "seconds": 1.0177709169947775
+    }
+  ],
+  "aggregate": [
+    {
+      "encoder": "cat",
+      "circuit": "base",
+      "mean_tvd": 0.12473058478915348,
+      "seed_mean_tvds": [
+        0.1289011823622701,
+        0.12893833991583922,
+        0.11635223208935107
+      ],
+      "worst_tvd": 0.18661274528239374,
+      "worst_connected_rmse": 0.22925973265529756,
+      "mean_connected_rmse": 0.08805337636564403,
+      "mean_encoder_only_gain": 0.20630144905209283,
+      "parameters": 30
+    },
+    {
+      "encoder": "cat",
+      "circuit": "four_body",
+      "mean_tvd": 0.15022039897330028,
+      "seed_mean_tvds": [
+        0.121807455625203,
+        0.21078935484345765,
+        0.11806438645124016
+      ],
+      "worst_tvd": 0.27435832232985313,
+      "worst_connected_rmse": 0.2242752216981374,
+      "mean_connected_rmse": 0.0839315858886369,
+      "mean_encoder_only_gain": 0.18081163486794596,
+      "parameters": 32
+    },
+    {
+      "encoder": "bond",
+      "circuit": "base",
+      "mean_tvd": 0.10546043487087886,
+      "seed_mean_tvds": [
+        0.10545986152549243,
+        0.10545434706502864,
+        0.10546709602211551
+      ],
+      "worst_tvd": 0.206584772814878,
+      "worst_connected_rmse": 0.21947872250800737,
+      "mean_connected_rmse": 0.09457140415775406,
+      "mean_encoder_only_gain": 0.15203474646390477,
+      "parameters": 30
+    },
+    {
+      "encoder": "bond",
+      "circuit": "four_body",
+      "mean_tvd": 0.09697956355870922,
+      "seed_mean_tvds": [
+        0.09697702797148654,
+        0.09698448911245755,
+        0.09697717359218352
+      ],
+      "worst_tvd": 0.18494915412766638,
+      "worst_connected_rmse": 0.20720845335041177,
+      "mean_connected_rmse": 0.09049110073924282,
+      "mean_encoder_only_gain": 0.16051561777607445,
+      "parameters": 32
+    }
+  ],
+  "stage2_gates": {
+    "base": {
+      "passes": false,
+      "median_mean_tvd": 0.10545986152549243,
+      "worst_tvd": 0.206584772814878,
+      "median_encoder_only_gain": 0.1520353198092912,
+      "worst_connected_rmse": 0.21947872250800737
+    },
+    "four_body": {
+      "passes": false,
+      "median_mean_tvd": 0.09697717359218352,
+      "worst_tvd": 0.18494915412766638,
+      "median_encoder_only_gain": 0.16051800774260014,
+      "worst_connected_rmse": 0.20720845335041177
+    }
+  },
+  "sampled_training_triggered": false,
+  "verification": {
+    "checked_fit_archives": 12,
+    "checkpoint_argmin_normalization_symmetry_metrics": true,
+    "exact_mmd_double_kernel_error": 2.710505431213761e-19,
+    "stored_mmd_double_kernel_error": 3.2526065174565133e-19
+  },
+  "preflight": {
+    "transfer_amplitude_and_moment_ratio_max_error": 2.4424906541753444e-15,
+    "input_bound": {
+      "cat": {
+        "max_target_tvd_minus_input_trace_distance": 0.0,
+        "pair_indices": [
+          0,
+          0
+        ],
+        "any_violation": false
+      },
+      "bond": {
+        "max_target_tvd_minus_input_trace_distance": 0.006266403583243485,
+        "pair_indices": [
+          1,
+          7
+        ],
+        "any_violation": true
+      }
+    },
+    "dedup_initial_phase_and_existing_cat_equivalence": true
+  },
+  "reference_validation": {
+    "amplitude_checks": [
+      {
+        "m": 4,
+        "g": 0.1,
+        "max_amplitude_error": 4.506008925723787e-16
+      },
+      {
+        "m": 4,
+        "g": 0.3,
+        "max_amplitude_error": 1.6676373995813556e-16
+      },
+      {
+        "m": 4,
+        "g": 0.5,
+        "max_amplitude_error": 2.9504581591051765e-16
+      },
+      {
+        "m": 4,
+        "g": 0.7,
+        "max_amplitude_error": 1.7554167342883506e-16
+      },
+      {
+        "m": 6,
+        "g": 0.1,
+        "max_amplitude_error": 4.577566798522237e-16
+      },
+      {
+        "m": 6,
+        "g": 0.3,
+        "max_amplitude_error": 2.2887833992611187e-16
+      },
+      {
+        "m": 6,
+        "g": 0.5,
+        "max_amplitude_error": 1.7010907505015192e-16
+      },
+      {
+        "m": 6,
+        "g": 0.7,
+        "max_amplitude_error": 7.108895957933346e-16
+      }
+    ],
+    "sampled_checks": [
+      {
+        "a": 0.1,
+        "b": 0.1,
+        "n_samples": 50000,
+        "reference_sampling_tvd": 0.012242965050248095,
+        "max_moment_error": 0.008167781676570396,
+        "max_checked_gradient_error": 0.018932027676565672
+      },
+      {
+        "a": 0.3,
+        "b": 0.5,
+        "n_samples": 50000,
+        "reference_sampling_tvd": 0.0147645912352968,
+        "max_moment_error": 0.011655369352733688,
+        "max_checked_gradient_error": 0.01736986735243476
+      },
+      {
+        "a": 0.7,
+        "b": 0.7,
+        "n_samples": 50000,
+        "reference_sampling_tvd": 0.012567318442911889,
+        "max_moment_error": 0.007395197237946842,
+        "max_checked_gradient_error": 0.018361470876662844
+      }
+    ],
+    "m32_even_parity_and_finite_amplitude_smoke": true,
+    "seconds": 0.8024397090048296
+  },
+  "source_hashes": {
+    "protocol.json": "5e175f7c1309290269b93d555ea334801e4cbc73e5fd9f6aff71ff453ad2cf0c",
+    "common.py": "22491a7409ad335cffb0271f3ae91e89326a1e848f4dba2167544c63f1d690f7",
+    "exact_fit.py": "0667fff53d63ba8aba7dd8b7e218a74724f4c10f03f9c5a8400d2205dc420064",
+    "bond_reference.py": "f49f04691958e82272e7db80240cd84ab855b84043b5647d18dc929a90132d52",
+    "check_reference.py": "04abdc5a05c0da3459f879a8dcc14675c24b245a49909cc08ffedfd97fb8dea5",
+    "analyze.py": "f6078f20bed43bcbcc9f171958eb850b36d336700fb8a2117d7f886c289b801a"
+  },
+  "source_freeze": {
+    "common.py": "22491a7409ad335cffb0271f3ae91e89326a1e848f4dba2167544c63f1d690f7",
+    "exact_fit.py": "0667fff53d63ba8aba7dd8b7e218a74724f4c10f03f9c5a8400d2205dc420064",
+    "protocol.json": "5e175f7c1309290269b93d555ea334801e4cbc73e5fd9f6aff71ff453ad2cf0c"
+  },
+  "outcome": "Bond+four-body improves exact development fitting to meanTVD .09698 from cat-base .12473. Correlation errors remain uneven; both bond variants miss worst-correlation threshold, so no sampled training. Reference sampler and moment/gradient queries passed finite numerical checks. No new generalization claim and no classical-superiority criterion.",
+  "artifact_scope": "Disposable development ablation; no production or manuscript changes. Temporary scripts/data/checkpoints removed after capture."
+}

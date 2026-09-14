@@ -1,0 +1,449 @@
+{
+  "rows": [
+    {
+      "mode": "sampled",
+      "seed": 0,
+      "q": 0.2,
+      "r": 0,
+      "selected_step": 150,
+      "validation_tvd": 0.5593644073307691,
+      "initial": {
+        "raw_tvd": 0.7469024259902048,
+        "pair_rmse": 0.43268133854001434,
+        "shell_tvd": 0.49241545069499015,
+        "population_mmd": 0.1520716438894929
+      },
+      "selected": {
+        "raw_tvd": 0.5461428758861537,
+        "pair_rmse": 0.10285823289662588,
+        "shell_tvd": 0.5197825098648594,
+        "population_mmd": 0.06813424772335828
+      },
+      "final": {
+        "raw_tvd": 0.5469873719548788,
+        "pair_rmse": 0.10272404016683553,
+        "shell_tvd": 0.5180156640864338,
+        "population_mmd": 0.06816178863458691
+      },
+      "ancilla_movement": 0.0,
+      "seconds": 2.759949042010703,
+      "n_parameters": 36,
+      "selected_mean_pixel": 0.49631969642819435,
+      "target_mean_pixel": 0.23000000000000004
+    },
+    {
+      "mode": "sampled",
+      "seed": 0,
+      "q": 0.2,
+      "r": 3,
+      "selected_step": 300,
+      "validation_tvd": 0.5596163994364163,
+      "initial": {
+        "raw_tvd": 0.7468981149220533,
+        "pair_rmse": 0.4326816684110407,
+        "shell_tvd": 0.49241421093827625,
+        "population_mmd": 0.15207175265234446
+      },
+      "selected": {
+        "raw_tvd": 0.546902547428673,
+        "pair_rmse": 0.10434883271241618,
+        "shell_tvd": 0.5223809834936349,
+        "population_mmd": 0.06813460119084654
+      },
+      "final": {
+        "raw_tvd": 0.546902547428673,
+        "pair_rmse": 0.10434883271241618,
+        "shell_tvd": 0.5223809834936349,
+        "population_mmd": 0.06813460119084654
+      },
+      "ancilla_movement": 0.03905929570752081,
+      "seconds": 3.1483658329962054,
+      "n_parameters": 66,
+      "selected_mean_pixel": 0.49646918150089725,
+      "target_mean_pixel": 0.23000000000000004
+    },
+    {
+      "mode": "sampled",
+      "seed": 0,
+      "q": 0.5,
+      "r": 0,
+      "selected_step": 300,
+      "validation_tvd": 0.42906087557557376,
+      "initial": {
+        "raw_tvd": 0.6452795238403978,
+        "pair_rmse": 0.29517849350546704,
+        "shell_tvd": 0.26927703951226284,
+        "population_mmd": 0.03053120380499368
+      },
+      "selected": {
+        "raw_tvd": 0.3927960766408439,
+        "pair_rmse": 0.13626730111139437,
+        "shell_tvd": 0.21147396855578532,
+        "population_mmd": 0.007081424542244405
+      },
+      "final": {
+        "raw_tvd": 0.3927960766408439,
+        "pair_rmse": 0.13626730111139437,
+        "shell_tvd": 0.21147396855578532,
+        "population_mmd": 0.007081424542244405
+      },
+      "ancilla_movement": 0.0,
+      "seconds": 2.565324666997185,
+      "n_parameters": 36,
+      "selected_mean_pixel": 0.5049856560030991,
+      "target_mean_pixel": 0.5
+    },
+    {
+      "mode": "sampled",
+      "seed": 0,
+      "q": 0.5,
+      "r": 3,
+      "selected_step": 50,
+      "validation_tvd": 0.37866054847384945,
+      "initial": {
+        "raw_tvd": 0.6452791431966607,
+        "pair_rmse": 0.29517862286956675,
+        "shell_tvd": 0.2692763841542777,
+        "population_mmd": 0.030531233201054442
+      },
+      "selected": {
+        "raw_tvd": 0.3405728890040611,
+        "pair_rmse": 0.13899972663649807,
+        "shell_tvd": 0.13631295108439442,
+        "population_mmd": 0.006120790481493899
+      },
+      "final": {
+        "raw_tvd": 0.3466955669664616,
+        "pair_rmse": 0.12752232710053213,
+        "shell_tvd": 0.13528152429624654,
+        "population_mmd": 0.006352443297685293
+      },
+      "ancilla_movement": 1.1204708311133138,
+      "seconds": 2.9632067089987686,
+      "n_parameters": 66,
+      "selected_mean_pixel": 0.5015499797154528,
+      "target_mean_pixel": 0.5
+    },
+    {
+      "mode": "sampled",
+      "seed": 0,
+      "q": 0.8,
+      "r": 0,
+      "selected_step": 300,
+      "validation_tvd": 0.5632507589871635,
+      "initial": {
+        "raw_tvd": 0.7424940579778073,
+        "pair_rmse": 0.4479335131762953,
+        "shell_tvd": 0.49711932171649914,
+        "population_mmd": 0.1568430459673284
+      },
+      "selected": {
+        "raw_tvd": 0.5413372099767342,
+        "pair_rmse": 0.11547770788339969,
+        "shell_tvd": 0.5027744835167679,
+        "population_mmd": 0.06842960961094038
+      },
+      "final": {
+        "raw_tvd": 0.5413372099767342,
+        "pair_rmse": 0.11547770788339969,
+        "shell_tvd": 0.5027744835167679,
+        "population_mmd": 0.06842960961094038
+      },
+      "ancilla_movement": 0.0,
+      "seconds": 2.460339915996883,
+      "n_parameters": 36,
+      "selected_mean_pixel": 0.5051550135598573,
+      "target_mean_pixel": 0.7700000000000001
+    },
+    {
+      "mode": "sampled",
+      "seed": 0,
+      "q": 0.8,
+      "r": 3,
+      "selected_step": 300,
+      "validation_tvd": 0.5627974983156067,
+      "initial": {
+        "raw_tvd": 0.7424890683392433,
+        "pair_rmse": 0.4479338340387916,
+        "shell_tvd": 0.4971176309745152,
+        "population_mmd": 0.15684308255250196
+      },
+      "selected": {
+        "raw_tvd": 0.5418683700678703,
+        "pair_rmse": 0.11526630093990338,
+        "shell_tvd": 0.5022308480353171,
+        "population_mmd": 0.06842241376565208
+      },
+      "final": {
+        "raw_tvd": 0.5418683700678703,
+        "pair_rmse": 0.11526630093990338,
+        "shell_tvd": 0.5022308480353171,
+        "population_mmd": 0.06842241376565208
+      },
+      "ancilla_movement": 0.03832917171377626,
+      "seconds": 2.9787345420045312,
+      "n_parameters": 66,
+      "selected_mean_pixel": 0.5051642595643107,
+      "target_mean_pixel": 0.7700000000000001
+    },
+    {
+      "mode": "population",
+      "seed": 0,
+      "q": 0.2,
+      "r": 0,
+      "selected_step": 300,
+      "validation_tvd": 0.5627179172402872,
+      "initial": {
+        "raw_tvd": 0.7469024259902048,
+        "pair_rmse": 0.43268133854001434,
+        "shell_tvd": 0.49241545069499015,
+        "population_mmd": 0.1520716438894929
+      },
+      "selected": {
+        "raw_tvd": 0.5494929294049056,
+        "pair_rmse": 0.10098885635904753,
+        "shell_tvd": 0.5235344512843484,
+        "population_mmd": 0.06803432688468333
+      },
+      "final": {
+        "raw_tvd": 0.5494929294049056,
+        "pair_rmse": 0.10098885635904753,
+        "shell_tvd": 0.5235344512843484,
+        "population_mmd": 0.06803432688468333
+      },
+      "ancilla_movement": 0.0,
+      "seconds": 1.0308542499988107,
+      "n_parameters": 36,
+      "selected_mean_pixel": 0.49669403540956114,
+      "target_mean_pixel": 0.23000000000000004
+    },
+    {
+      "mode": "population",
+      "seed": 0,
+      "q": 0.2,
+      "r": 3,
+      "selected_step": 300,
+      "validation_tvd": 0.5627602639495459,
+      "initial": {
+        "raw_tvd": 0.7468981149220533,
+        "pair_rmse": 0.4326816684110407,
+        "shell_tvd": 0.49241421093827625,
+        "population_mmd": 0.15207175265234446
+      },
+      "selected": {
+        "raw_tvd": 0.5495153951758709,
+        "pair_rmse": 0.10097715908413317,
+        "shell_tvd": 0.5236415341301236,
+        "population_mmd": 0.06803424364418628
+      },
+      "final": {
+        "raw_tvd": 0.5495153951758709,
+        "pair_rmse": 0.10097715908413317,
+        "shell_tvd": 0.5236415341301236,
+        "population_mmd": 0.06803424364418628
+      },
+      "ancilla_movement": 0.005689761503980325,
+      "seconds": 1.0439484999951674,
+      "n_parameters": 66,
+      "selected_mean_pixel": 0.4967007291966269,
+      "target_mean_pixel": 0.23000000000000004
+    },
+    {
+      "mode": "population",
+      "seed": 0,
+      "q": 0.5,
+      "r": 0,
+      "selected_step": 300,
+      "validation_tvd": 0.4146676061262844,
+      "initial": {
+        "raw_tvd": 0.6452795238403978,
+        "pair_rmse": 0.29517849350546704,
+        "shell_tvd": 0.26927703951226284,
+        "population_mmd": 0.03053120380499368
+      },
+      "selected": {
+        "raw_tvd": 0.3840082910832684,
+        "pair_rmse": 0.1405162671983484,
+        "shell_tvd": 0.2098859688196454,
+        "population_mmd": 0.006658323899249888
+      },
+      "final": {
+        "raw_tvd": 0.3840082910832684,
+        "pair_rmse": 0.1405162671983484,
+        "shell_tvd": 0.2098859688196454,
+        "population_mmd": 0.006658323899249888
+      },
+      "ancilla_movement": 0.0,
+      "seconds": 0.95801004099485,
+      "n_parameters": 36,
+      "selected_mean_pixel": 0.4999890010444442,
+      "target_mean_pixel": 0.5
+    },
+    {
+      "mode": "population",
+      "seed": 0,
+      "q": 0.5,
+      "r": 3,
+      "selected_step": 300,
+      "validation_tvd": 0.3260852707165366,
+      "initial": {
+        "raw_tvd": 0.6452791431966607,
+        "pair_rmse": 0.29517862286956675,
+        "shell_tvd": 0.2692763841542777,
+        "population_mmd": 0.030531233201054442
+      },
+      "selected": {
+        "raw_tvd": 0.27985567654067706,
+        "pair_rmse": 0.12229221551009482,
+        "shell_tvd": 0.11192545219799127,
+        "population_mmd": 0.004484361143851333
+      },
+      "final": {
+        "raw_tvd": 0.27985567654067706,
+        "pair_rmse": 0.12229221551009482,
+        "shell_tvd": 0.11192545219799127,
+        "population_mmd": 0.004484361143851333
+      },
+      "ancilla_movement": 1.155107966117302,
+      "seconds": 1.0738732919999165,
+      "n_parameters": 66,
+      "selected_mean_pixel": 0.5000000001082203,
+      "target_mean_pixel": 0.5
+    },
+    {
+      "mode": "population",
+      "seed": 0,
+      "q": 0.8,
+      "r": 0,
+      "selected_step": 300,
+      "validation_tvd": 0.5660529090426838,
+      "initial": {
+        "raw_tvd": 0.7424940579778073,
+        "pair_rmse": 0.4479335131762953,
+        "shell_tvd": 0.49711932171649914,
+        "population_mmd": 0.1568430459673284
+      },
+      "selected": {
+        "raw_tvd": 0.5473193450443863,
+        "pair_rmse": 0.10157038276763203,
+        "shell_tvd": 0.5140074012588985,
+        "population_mmd": 0.06804121025774112
+      },
+      "final": {
+        "raw_tvd": 0.5473193450443863,
+        "pair_rmse": 0.10157038276763203,
+        "shell_tvd": 0.5140074012588985,
+        "population_mmd": 0.06804121025774112
+      },
+      "ancilla_movement": 0.0,
+      "seconds": 0.9891895420005312,
+      "n_parameters": 36,
+      "selected_mean_pixel": 0.503932249073215,
+      "target_mean_pixel": 0.7700000000000001
+    },
+    {
+      "mode": "population",
+      "seed": 0,
+      "q": 0.8,
+      "r": 3,
+      "selected_step": 300,
+      "validation_tvd": 0.5669668844240723,
+      "initial": {
+        "raw_tvd": 0.7424890683392433,
+        "pair_rmse": 0.4479338340387916,
+        "shell_tvd": 0.4971176309745152,
+        "population_mmd": 0.15684308255250196
+      },
+      "selected": {
+        "raw_tvd": 0.547939328930108,
+        "pair_rmse": 0.10148569797112275,
+        "shell_tvd": 0.5165119644884556,
+        "population_mmd": 0.06803999595707033
+      },
+      "final": {
+        "raw_tvd": 0.547939328930108,
+        "pair_rmse": 0.10148569797112275,
+        "shell_tvd": 0.5165119644884556,
+        "population_mmd": 0.06803999595707033
+      },
+      "ancilla_movement": 0.007455305081895862,
+      "seconds": 1.006972165996558,
+      "n_parameters": 66,
+      "selected_mean_pixel": 0.5037605199011884,
+      "target_mean_pixel": 0.7700000000000001
+    }
+  ],
+  "controls": [
+    {
+      "q": 0.2,
+      "training_histogram_tvd": 0.1090505696875,
+      "fitted_independent_pixels_tvd": 0.535331025114771
+    },
+    {
+      "q": 0.5,
+      "training_histogram_tvd": 0.13738242890625005,
+      "fitted_independent_pixels_tvd": 0.6515283832316056
+    },
+    {
+      "q": 0.8,
+      "training_histogram_tvd": 0.11669762777343753,
+      "fitted_independent_pixels_tvd": 0.524577356332856
+    }
+  ],
+  "protocol": {
+    "question": "Can the current complete two-local IQP family fit density-conditioned noisy BAS targets at n8 under isotropic MMD?",
+    "shape": [
+      2,
+      4
+    ],
+    "densities": [
+      0.2,
+      0.5,
+      0.8
+    ],
+    "epsilon": 0.05,
+    "ancillas": [
+      0,
+      3
+    ],
+    "initial_seeds": [
+      0
+    ],
+    "modes": [
+      "sampled",
+      "population"
+    ],
+    "updates": 300,
+    "n_ops_per_bandwidth": 256,
+    "n_model_samples": 1024,
+    "train_samples": 1000,
+    "validation_samples": 1000,
+    "batch_size": 100,
+    "learning_rate": 0.01,
+    "final_learning_rate": 0.001,
+    "validation_interval": 25,
+    "initialization": "existing data_initialize; fixed zero input angles",
+    "checkpoint_selection": "initial, final, lowest validation MMD candidate; choose by empirical validation TVD",
+    "primary_metric": "exact analytic raw TVD",
+    "gate": {
+      "applies_to": "sampled seed0 r3 across densities",
+      "median_at_most": 0.15,
+      "maximum_at_most": 0.25
+    },
+    "if_gate_passes": "repeat sampled screen at seeds 1 and 2 without changing settings",
+    "if_gate_fails": "report no-go at this budget; use exact-population control as diagnosis, no hyperparameter search",
+    "population_control": "uses analytic target and exact MMD for training and candidate generation, not apples-to-apples finite-data performance",
+    "source_commit": "4fc4aa96f5a82f16fdb21fb93d69acb02122ee29"
+  },
+  "protocol_sha256": "39c282253e31790aafb963fff8656dc54ecd0c5c3124a0d08f7899b6abd99de9",
+  "runner_sha256": "68e7bdfb9de42307b139af8839a8ba06cc2edaf07ff654fb4cd2ed3aa4ea6871",
+  "runtime": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "jax": "0.9.1",
+    "numpy": "2.2.4"
+  },
+  "decision": "do_not_promote_current_setup",
+  "scope": "one-seed disposable capacity screen; no conditional training",
+  "validation": "analytic law cross-checked by explicit latent enumeration; all candidate laws normalized; empirical checkpoint selection and exact MMD/TVD independently recomputed",
+  "prototype_disposition": "Disposable runner and raw temporary checkpoints removed after recording this result; no production benchmark added."
+}

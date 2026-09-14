@@ -1,0 +1,106 @@
+{
+  "status": "Verified integration; scientific author review pending",
+  "verified_local": "2026-09-08T09:38:02+02:00",
+  "iqp_fits": 180,
+  "classical_bundles": 30,
+  "sealed_files": 420,
+  "evaluation_rows": 300,
+  "verification": [
+    "current frozen source/data/archive hashes match",
+    "sealed probability hashes and normalization/symmetries match",
+    "independent full-metric recomputation for 300 rows passed",
+    "primary paired interactions independently recomputed",
+    "report focused tests: 4 passed; Ruff format/check passed",
+    "figure PNG and rendered vector PDF visually reviewed",
+    "manuscript pages 2,11,12,18,19,20,21 visually reviewed",
+    "28 pages; references/citations resolved; no overfull boxes"
+  ],
+  "figures": [
+    {
+      "figure": 1,
+      "page": 2
+    },
+    {
+      "figure": 2,
+      "page": 12
+    },
+    {
+      "figure": 3,
+      "page": 13
+    },
+    {
+      "figure": 4,
+      "page": 14
+    },
+    {
+      "figure": 5,
+      "page": 15
+    },
+    {
+      "figure": 6,
+      "page": 16
+    },
+    {
+      "figure": 7,
+      "page": 17
+    },
+    {
+      "figure": 8,
+      "page": 18
+    },
+    {
+      "figure": 9,
+      "page": 19
+    },
+    {
+      "figure": 10,
+      "page": 21
+    },
+    {
+      "figure": 11,
+      "page": 22
+    },
+    {
+      "figure": 12,
+      "page": 22
+    },
+    {
+      "figure": 13,
+      "page": 23
+    },
+    {
+      "figure": 14,
+      "page": 23
+    },
+    {
+      "figure": 15,
+      "page": 24
+    },
+    {
+      "figure": 16,
+      "page": 24
+    }
+  ],
+  "sha256": {
+    "Overleaf/main.tex": "789dfc63daee0ab3dce9e4e512210b32ce69b1f01e55a862ee39b1c0493ce803",
+    "Overleaf/figures/data_ancilla_learning_curves.pdf": "3c33e1e47deef53bb7ee45dc2e0736c04b9abc909a9921806ded3a49ebd07f96",
+    "Overleaf/figures/data_ancilla_learning_curves.png": "dd953dc665774af8de9d3bfc22b85206c4d54d112d669b536dd91e2899de6e78",
+    "scripts/report_ashkin_teller_data_efficiency.py": "fa225042b3def032eec33947d629cc03b9b1738977f1e6ea6748a73c40d74dc9",
+    "output/pdf/data-ancilla-results/conditional-iqp-supervisor-draft.pdf": "6fcb4510b4ab67114107a32c7dd9c3099490a121ba2865c764d6ec383c1a6a4a",
+    "artifacts/ashkin-teller-data-efficiency-2026-09-07/manifest.json": "ded6ad230319b14256eda0c1255c13c5d79faf3d6e0e754b844dd305a11649f5",
+    "artifacts/ashkin-teller-data-efficiency-2026-09-07/predictions-seal.json": "8a70b99b20c66a26ab06c524f5a7c7b4be886b914c6a425fb214457ee1db470c",
+    "artifacts/ashkin-teller-data-efficiency-2026-09-07/evaluation-started.json": "a6e8166d22614b6c3fd598a1065e939855d047e3d476189f612dfc55e817cd92",
+    "artifacts/ashkin-teller-data-efficiency-2026-09-07/evaluation.json": "c9904d762b8cf7c87785a1509345e741720da0ab5e5cba46f03fe8ebf8a77920",
+    "artifacts/ashkin-teller-data-efficiency-2026-09-07/report/summary.json": "2ccc899320162057de3a7c7d980e851db147062411b4369465315c6b637f0f4e",
+    "artifacts/ashkin-teller-data-efficiency-2026-09-07/report/independent-interaction-check.json": "47e78eff15c6311f791fb4b203b9e82eeed97ac1a9aa720069f101f7fd1606ee"
+  },
+  "limitations": [
+    "previously studied interpolation domain",
+    "fixed additional16000validation labels",
+    "fixed500updates rather than equal epochs",
+    "78/102/126 active parameters, not countmatched",
+    "ten paired seeds; descriptive percentile intervals without multiplicity correction",
+    "null/adverse evidence and poor fits retained"
+  ],
+  "not_committed_pushed_or_sent": true
+}

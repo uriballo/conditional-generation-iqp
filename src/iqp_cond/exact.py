@@ -5,6 +5,7 @@ from __future__ import annotations
 import jax.numpy as jnp
 import numpy as np
 
+from .bond_reference import BOND_ENCODING, two_ring_amplitudes
 from .encoding import (
     ANGLE_ENCODING,
     block_post_hadamard_amplitudes,
@@ -97,6 +98,13 @@ def _reference_state(
     encoding: str,
 ) -> np.ndarray:
     n_pairs = n_qubits // 2
+    if encoding == BOND_ENCODING:
+        return np.asarray(
+            two_ring_amplitudes(
+                jnp.asarray(enumerate_bitstrings(n_qubits)),
+                jnp.asarray(condition_angles)[jnp.asarray([0, n_qubits // 2])],
+            )
+        )
     if is_radial_shell_encoding(encoding):
         shell_amp = radial_shell_amplitudes(jnp.asarray(condition_angles), n_qubits)
         weights = enumerate_bitstrings(n_qubits).sum(axis=1)
@@ -356,7 +364,12 @@ def exact_iqp_probabilities_many_jax(
     probabilities = []
     n_pairs = n_qubits // 2
     for condition_angles in angles:
-        if is_radial_shell_encoding(encoding):
+        if encoding == BOND_ENCODING:
+            reference = two_ring_amplitudes(
+                jnp.asarray(enumerate_bitstrings(n_qubits)),
+                condition_angles[jnp.asarray([0, n_qubits // 2])],
+            )
+        elif is_radial_shell_encoding(encoding):
             shell_amp = radial_shell_amplitudes(condition_angles, n_qubits)
             weights = jnp.asarray(
                 enumerate_bitstrings(n_qubits).sum(axis=1),

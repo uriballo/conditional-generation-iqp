@@ -61,25 +61,24 @@ def shuffled_batches(
     config: CampaignTrainingConfig,
     seed: int,
 ) -> np.ndarray:
-    """Return deterministic, shuffled batches without replacement per epoch."""
+    """Return shuffled epochs, truncating the final epoch to the update budget."""
     if n_conditions < 1 or n_examples < 1 or config.batch_size < 1:
         raise ValueError("condition, example, and batch sizes must be positive")
     if n_examples % config.batch_size:
         raise ValueError("n_examples must be divisible by batch_size")
     batches_per_epoch = n_examples // config.batch_size
-    epochs, remainder = divmod(config.steps, batches_per_epoch)
-    if remainder:
-        raise ValueError("steps must be an integer number of epochs")
+    epochs = (config.steps + batches_per_epoch - 1) // batches_per_epoch
     rng = np.random.default_rng(seed)
     result = np.empty((config.steps, n_conditions, config.batch_size), dtype=np.int32)
     row = 0
     for _ in range(epochs):
+        take = min(batches_per_epoch, config.steps - row)
         for condition in range(n_conditions):
             permutation = rng.permutation(n_examples)
-            result[row : row + batches_per_epoch, condition] = permutation.reshape(
+            result[row : row + take, condition] = permutation.reshape(
                 batches_per_epoch, config.batch_size
-            )
-        row += batches_per_epoch
+            )[:take]
+        row += take
     return result
 
 
