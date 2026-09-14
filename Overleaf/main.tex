@@ -687,15 +687,6 @@ We evaluate $n\in\{8,12\}$ using the condition sets
 \end{align}
 The shared model is evaluated at the held-out conditions without further fitting. All held-out conditions lie inside the training range, so this benchmark tests interpolation rather than extrapolation. The analytic bitstring probabilities in Eq.~\eqref{eq:gaussian-bitstring-target} permit exact TVD evaluation.
 
-Figure~\ref{fig:gaussian-target-n8} shows the resulting target family for $n=8$. The probability mass remains unimodal and moves across the Hamming-weight shells as $c$ increases; the held-out targets lie between the five distributions used for training.
-
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=\columnwidth]{figures/gaussian_n8_target.pdf}
-    \caption{Analytic $n=8$ Gaussian target family. Color gives the total probability assigned to Hamming-weight shell $k$; probability is uniform over bit strings within each shell. The black-and-white line marks the prescribed mean $\mu(c)=8(0.15+0.70c)$. Filled and open markers denote training and held-out conditions, respectively. The width factor is fixed at $0.5$.}
-    \label{fig:gaussian-target-n8}
-\end{figure}
-
 \subsubsection{Curie--Weiss family}
 
 The Curie--Weiss benchmark tests whether one shared circuit can follow a change from a central magnetization profile to a symmetric two-mode profile. For a bit string $x\in\{0,1\}^n$, define spins $s_i(x)=2x_i-1\in\{-1,+1\}$, total magnetization $M(x)=\sum_{i=1}^n s_i(x)$, and magnetization per spin $m(x)=M(x)/n$. At zero external field, the finite-size energy is
@@ -820,7 +811,7 @@ We assess whether one fixed IQP unitary can follow a conditional distribution fa
 
 \subsection{Gaussian translation and interpolation}
 
-The Gaussian benchmark tests a simple change in location without a change in the prescribed width. The target profiles in Fig.~\ref{fig:gaussian-target-n8} provide the reference response: changing the condition translates the Hamming-weight distribution. The learned profiles at $c\in\{0,0.5,1\}$ show that the shared circuit reproduces the central target more closely than the endpoints at both visible sizes (Figs.~\ref{fig:app-gaussian-training-n8} and \ref{fig:app-gaussian-training-n12}). Near the endpoints, the learned modes remain displaced towards the centre of the Hamming-weight range. This discrepancy already occurs at training conditions and therefore cannot be attributed solely to interpolation.
+The Gaussian benchmark tests a simple change in location without a change in the prescribed width. Changing the condition translates the Hamming-weight distribution according to Eq.~\eqref{eq:gaussian-target-parameters}. The learned profiles at $c\in\{0,0.5,1\}$ show that the shared circuit reproduces the central target more closely than the endpoints at both visible sizes (Figs.~\ref{fig:app-gaussian-training-n8} and \ref{fig:app-gaussian-training-n12}). Near the endpoints, the learned modes remain displaced towards the centre of the Hamming-weight range. This discrepancy already occurs at training conditions and therefore cannot be attributed solely to interpolation.
 
 Ancillas reduce the held-out error at both visible sizes (Fig.~\ref{fig:gaussian_results}). At $n=8$, the median TVD decreases from $0.219$ without ancillas to $0.102$ with ten ancillas; at $n=12$, it decreases from $0.292$ to $0.174$. The medians decrease at every step of the five-point ancilla ladder. The paired median changes from $r=0$ to $r=10$ are $-0.117$ with 95\% bootstrap interval $[-0.118,-0.114]$ and $-0.121$ with interval $[-0.127,-0.107]$, respectively. These improvements establish an ancilla benefit under the fixed training protocol, although the twelve-qubit family retains a larger absolute error.
 
