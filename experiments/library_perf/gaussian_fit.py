@@ -81,6 +81,7 @@ def main() -> None:
     parser.add_argument(
         "--gemm-dtype", choices=["float64", "float32"], default="float64"
     )
+    parser.add_argument("--sample-chunk", type=int, default=0)
     parser.add_argument("--label", default="gaussian-n12")
     args = parser.parse_args()
 
@@ -125,6 +126,7 @@ def main() -> None:
         validation_n_ops=args.n_ops,
         validation_n_iqp_samples=args.samples,
         gemm_dtype=jnp.float32 if args.gemm_dtype == "float32" else None,
+        sample_chunk=args.sample_chunk or None,
     )
 
     start = time.perf_counter()
@@ -192,6 +194,7 @@ def main() -> None:
         "sigmas": list(config.sigmas),
         "mask_refresh": args.refresh,
         "gemm_dtype": args.gemm_dtype,
+        "sample_chunk": args.sample_chunk,
         "seed": args.seed,
         "ancillas": args.ancillas,
         "n_parameters": ansatz.n_parameters,

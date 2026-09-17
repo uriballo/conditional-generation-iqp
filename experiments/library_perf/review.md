@@ -65,6 +65,40 @@ Reading:
   same best step, with validation, held-out MMD and final loss within ~1e-8
   relative between float64 and mixed precision (seed spread is ~6%).
 
+## Sample-axis streaming
+
+The sibling repository streams its operator axis with `lax.scan` to cap memory;
+here the sample axis is the one that matters, because the product-encoder ratio
+tensor is `(samples, masks, model qubits)`.  `sample_chunk` streams that axis and
+accumulates the per-mask sum and sum of squares, which is the same U-statistic
+up to summation order.
+
+Interleaved A/B on the idle host, forward + gradient:
+
+| case | monolithic | chunk 2048 | speedup |
+|---|---|---|---|
+| r=10, S=8192, 64 ops | 37.87 ms | 34.22 ms | 1.11x |
+| r=0, S=8192, 64 ops | 26.68 ms | 23.41 ms | 1.14x |
+| r=10, S=16384, 1000 ops | 300.65 ms | 242.52 ms | 1.24x |
+
+Full 2000-step fits at the shipped defaults (`n_ops=64`, S=8192):
+
+| arm | wall | per step | peak RSS | validation | held-out |
+|---|---|---|---|---|---|
+| r=0, monolithic | 61.75 s | 30.9 ms | 1306 MiB | 0.023541 | 5.01e-3 |
+| r=0, chunk 2048 | 59.56 s | 29.8 ms | 1199 MiB | 0.023541 | 5.01e-3 |
+| r=10, monolithic | 97.82 s | 48.9 ms | 1462 MiB | 0.022461 | 4.03e-3 |
+| r=10, chunk 2048 | 83.20 s | 41.6 ms | 1349 MiB | 0.022461 | 4.03e-3 |
+
+Small budgets pay for the extra program structure (S=500: +13% step time), so
+the default is monolithic.
+
+Rejected: `jax.checkpoint` on the condition body.  It was 32% slower and did not
+reduce the peak, because XLA already reuses buffers across the sequential
+per-condition subgraphs and RSS counts allocator-retained pages, not live
+tensors.  The memory that scales with the condition count is backward
+activations, not the forward ratio tensor.
+
 ## Stage attribution (isolated calls, not additive)
 
 | stage | ms |

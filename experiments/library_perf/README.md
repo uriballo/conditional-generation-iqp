@@ -45,6 +45,11 @@ Reading:
   loss functions or `TrainingConfig`) is another 7.5% at production and 21.5% at
   paper scale on this CPU host, with gradient error ~1e-7; on GPUs the same
   estimator structure gains 15-28x.  See `review.md` and `precision.py`.
+- **Sample-axis streaming** (`sample_chunk`, `chunking.py`) bounds the live
+  `(samples, masks, qubits)` ratio tensor.  At the 8192-sample defaults it is
+  3.5% faster with no ancillas and 14.9% faster with ten, at 8% lower peak
+  RSS, and identically valued; at small sample budgets it costs a little, so
+  it is off by default.
 - The pure-JAX mask path (`loss.sampled_mmd`) costs ~1.5–2x the compressed
   step at the same draw budget: it cannot collapse duplicates, so it evaluates
   ~1.8x more mask columns. `sampled_mmd` remains for whole-loop-on-device use.
@@ -136,6 +141,7 @@ implementations.
 | `review.py`, `review.md` | jit/vmap variant review and its written findings |
 | `step_improve.py` | interleaved A/B of bank build, ratio dtype, cap widths |
 | `precision.py` | float64 vs mixed-GEMM float32 vs full float32, with accuracy |
+| `chunking.py` | sample-axis streaming vs monolithic, memory and time |
 | `pipeline.py` | full-pipeline arm comparison and checkpoint consistency |
 | `gaussian_fit.py` | full 12-qubit Gaussian fit through the library |
 | `legacy_fit.py` | the same fit through the research campaign implementation |
