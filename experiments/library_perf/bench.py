@@ -25,7 +25,8 @@ from pathlib import Path
 import jax
 import jax.numpy as jnp
 from common import PYTHON, REPO, block, problem, save, timeit
-from iqp_cond.loss import banked_mmd, operator_bank, sampled_mmd
+from iqp_cond.loss import banked_mmd, sampled_mmd
+from iqp_cond.operators import operator_bank
 
 import iqp_cond as iqc
 

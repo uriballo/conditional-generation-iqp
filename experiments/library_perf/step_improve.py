@@ -18,12 +18,8 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 from common import block, problem, save
-from iqp_cond.loss import (
-    _assemble_bank,
-    _draw_entrywise,
-    banked_mmd,
-    operator_bank,
-)
+from iqp_cond.loss import banked_mmd
+from iqp_cond.operators import _assemble_bank, _draw_entrywise, operator_bank
 
 import iqp_cond as iqc
 

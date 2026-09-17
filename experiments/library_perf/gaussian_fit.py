@@ -93,7 +93,7 @@ def main() -> None:
         iqc.PRODUCT,
         condition_angles(conditions[held_out], n_model),
     )
-    ancilla_support = np.any(generators[:, n_visible:] != 0, axis=1)
+    ancilla_support = iqc.ancilla_support(generators, n_visible)
     if args.ancillas:
         initial_params = iqc.initialize_parameters_with_ancillas(
             training[0],

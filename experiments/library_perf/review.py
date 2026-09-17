@@ -26,12 +26,8 @@ import jax.numpy as jnp
 import numpy as np
 from common import problem, save
 from iqp_cond.estimator import _phase_differences, estimate_pauli_z_unchecked
-from iqp_cond.loss import (
-    _condition_mmd,
-    banked_mmd,
-    operator_bank,
-    sample_nonidentity_masks,
-)
+from iqp_cond.loss import _condition_mmd, banked_mmd
+from iqp_cond.operators import operator_bank, sample_nonidentity_masks
 
 import iqp_cond as iqc
 from iqp_cond.ancilla import pad_visible_masks
