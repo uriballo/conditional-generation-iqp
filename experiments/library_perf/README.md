@@ -41,6 +41,10 @@ Reading:
   reference draw per condition across bandwidths (the paper's estimator form)
   saves more than the per-step bank build costs, so `step` beats `cache` by
   ~16% while keeping each update unbiased for the true kernel MMD.
+- **Mixed-precision phase contraction** (`gemm_dtype=jnp.float32`, either on the
+  loss functions or `TrainingConfig`) is another 7.5% at production and 21.5% at
+  paper scale on this CPU host, with gradient error ~1e-7; on GPUs the same
+  estimator structure gains 15-28x.  See `review.md` and `precision.py`.
 - The pure-JAX mask path (`loss.sampled_mmd`) costs ~1.5–2x the compressed
   step at the same draw budget: it cannot collapse duplicates, so it evaluates
   ~1.8x more mask columns. `sampled_mmd` remains for whole-loop-on-device use.
@@ -80,29 +84,48 @@ Idle `strix-halo2`.
   replacement (`shuffled_batches`), the library resamples with replacement per
   update; the campaign's validation pass runs eagerly, the library's is jitted.
 
-## Same fit with 10 ancillas (22 model qubits)
+## Same fit with 0 and 10 ancillas (current library)
 
-`--ancillas 10` puts ten identity-marginalized qubits under the same product
+`--ancillas r` puts `r` identity-marginalized qubits under the same product
 encoder and shared IQP unitary; the target stays 12 visible bits. Everything
 else is unchanged (2000 updates, batch 100, `n_ops=1000`, 500 samples,
-`sigmas=(1,2,4)`).
+`sigmas=(1,2,4)`, per-step refresh). `--gemm-dtype float32` selects the mixed
+precision phase contraction. Idle `strix-halo2`, fresh bank sampler.
 
-| implementation | wall | per step | best step | validation | held-out MMD |
+| arm | wall | per step | validation | held-out MMD | peak RSS |
 |---|---|---|---|---|---|
-| research campaign (retained bank) | 48.71 s | 24.4 ms | 1975 | 0.02179 | 3.74e-3 |
-| library `mask_refresh="cache"` | 31.16 s | 15.6 ms | 1750 | 0.02117 | 4.15e-3 |
-| library `mask_refresh="step"` (default) | 35.36 s | 17.7 ms | 1750 | 0.02091 | 3.72e-3 |
-| library `mask_refresh="step"`, seed 1 | 33.87 s | 16.9 ms | 1800 | 0.02174 | 3.85e-3 |
+| r=0, float64 | 27.21 s | 13.61 ms | 0.022492 | 4.58e-3 | 1200.8 MiB |
+| r=0, float32 GEMM | 26.50 s | 13.25 ms | 0.022492 | 4.58e-3 | 1173.3 MiB |
+| r=10, float64 | 30.13 s | 15.06 ms | 0.021034 | 3.92e-3 | 1306.8 MiB |
+| r=10, float32 GEMM | 27.62 s | 13.81 ms | 0.021034 | 3.92e-3 | 1253.0 MiB |
 
-- The library stays ~27% faster than the campaign implementation with ancillas
-  (step) and ~36% with the retained bank.
-- Held-out MMD improves over the ancilla-free runs (4.8e-3 → 3.7–4.2e-3),
-  matching the paper's ancilla-scaling finding; the ancilla overhead itself is
-  small at this budget (~7% per step for 253 vs 78 generators).
-- Ancilla initialization is the campaign rule: visible parameters from data,
-  seeded Gaussian noise on ancilla-support generators
-  (`initialize_parameters_with_ancillas` / `data_initialize`), identical in both
-  implementations.
+- Ten ancillas cost **+10.7% wall and +8.8% peak RSS** at float64, while
+  improving the held-out MMD by ~14% (4.58e-3 → 3.92e-3), matching the paper's
+  ancilla-scaling finding.
+- Mixed precision helps more with ancillas (−8.3% vs −2.6% wall) because the
+  ancilla-dependent tensors are the ones the cast halves; quality is unchanged.
+- Training equivalence across dtypes: three seeds each at r=0 and r=10 reach
+  the **same best step**, and validation, held-out MMD and final train loss
+  agree to ~1e-8 relative (e.g. held-out 4.58295435e-3 vs 4.58295429e-3),
+  against a seed-to-seed spread of ~6%. The cast only moves noise far below the
+  statistics the fit is decided on.
+- The full-run peak is dominated by runtime and evaluation buffers, so the
+  ancilla memory effect is easier to see on the step alone (same settings,
+  training step in a subprocess, per-entry evaluation):
+
+| samples | r=0 peak | r=10 peak | difference |
+|---|---|---|---|
+| 500 | 505.3 MiB | 518.9 MiB | +13.6 MiB (+2.7%) |
+| 16384 | 2520.9 MiB | 2855.1 MiB | +334 MiB (+13.3%) |
+
+The step's ancilla cost grows with the sample budget because the product-encoder
+ratio tensor is `(samples, masks, model qubits)`: masks stay visible-width but
+the qubit axis grows from 12 to 22.
+
+Ancilla initialization is the campaign rule: visible parameters from data,
+seeded Gaussian noise on ancilla-support generators
+(`initialize_parameters_with_ancillas` / `data_initialize`), identical in both
+implementations.
 
 ## Files
 
@@ -112,6 +135,7 @@ else is unchanged (2000 updates, batch 100, `n_ops=1000`, 500 samples,
 | `bench.py` | `step` / `validate` / `e2e` / `memory` subcommands |
 | `review.py`, `review.md` | jit/vmap variant review and its written findings |
 | `step_improve.py` | interleaved A/B of bank build, ratio dtype, cap widths |
+| `precision.py` | float64 vs mixed-GEMM float32 vs full float32, with accuracy |
 | `pipeline.py` | full-pipeline arm comparison and checkpoint consistency |
 | `gaussian_fit.py` | full 12-qubit Gaussian fit through the library |
 | `legacy_fit.py` | the same fit through the research campaign implementation |

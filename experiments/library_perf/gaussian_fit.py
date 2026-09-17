@@ -21,6 +21,8 @@ protocol; ``estimate_pauli_z`` / ``sampled_mmd`` / ``banked_mmd`` take explicit
 from __future__ import annotations
 
 import argparse
+import resource
+import sys
 import time
 from pathlib import Path
 
@@ -36,6 +38,13 @@ DEFAULT_DATA = (
     "results/exact-tvd-ancilla-v1/data/gaussian-n12.npz",
     "data/gaussian-n12.npz",
 )
+
+
+def peak_rss_mib() -> float:
+    """Peak resident set size of this process; ru_maxrss is KiB on Linux."""
+    rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    divisor = 1024.0 if sys.platform.startswith("linux") else 1024.0 * 1024.0
+    return rss / divisor
 
 
 def load_dataset(path: Path) -> dict:
@@ -69,6 +78,9 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--ancillas", type=int, default=0)
     parser.add_argument("--refresh", choices=[iqc.STEP, iqc.CACHE], default=iqc.STEP)
+    parser.add_argument(
+        "--gemm-dtype", choices=["float64", "float32"], default="float64"
+    )
     parser.add_argument("--label", default="gaussian-n12")
     args = parser.parse_args()
 
@@ -112,6 +124,7 @@ def main() -> None:
         n_iqp_samples=args.samples,
         validation_n_ops=args.n_ops,
         validation_n_iqp_samples=args.samples,
+        gemm_dtype=jnp.float32 if args.gemm_dtype == "float32" else None,
     )
 
     start = time.perf_counter()
@@ -178,6 +191,7 @@ def main() -> None:
         "n_iqp_samples": args.samples,
         "sigmas": list(config.sigmas),
         "mask_refresh": args.refresh,
+        "gemm_dtype": args.gemm_dtype,
         "seed": args.seed,
         "ancillas": args.ancillas,
         "n_parameters": ansatz.n_parameters,
@@ -191,6 +205,7 @@ def main() -> None:
         "final_train_loss": float(np.mean(result.train_losses[-20:])),
         "held_out_mmd": held_out_score,
         "checkpoint_consistent": abs(reproduced - result.best_validation_loss) <= 1e-12,
+        "peak_rss_mib": peak_rss_mib(),
     }
     for name, value in payload.items():
         print(f"{name}: {value}")

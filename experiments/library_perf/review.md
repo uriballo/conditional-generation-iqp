@@ -30,6 +30,41 @@ Rejected after measurement: a multi-bank pilot to tighten `max_masks` (6%
 slower and shape-sensitive), `jax.vmap` over conditions or bandwidths (below),
 and pure-JAX mask sampling for the default path (below).
 
+## Precision levers
+
+Inspired by the sibling `iqpopt-gpu` repository, whose benchmark shows that
+mixed precision is the dominant lever on GPUs (`fp32-mix`: 22-24x on forward +
+backward, <0.1% error, zero sign flips; plain fp64 is 1/64 rate on consumer
+cards).  The shipped knob is `gemm_dtype` on `estimate_pauli_z_*`,
+`banked_mmd`, `sampled_mmd`, and `TrainingConfig`: only the phase contraction
+runs in the reduced dtype, and the result is cast back to float64 so
+exponentiation and every reduction stay precise.
+
+Idle `strix-halo2`, shared-sample step unless noted:
+
+| case | float64 | mixed `gemm_dtype=float32` | full float32 |
+|---|---|---|---|
+| production step (n=12, C=5, `n_ops=64`, S=8192) | 22.45 ms | **20.76 ms** | 21.9 ms |
+| paper scale (22 qubits, C=10, `n_ops=256`, S=16384) | 319.1 ms | **250.5 ms** | — |
+| Gaussian fit, 2000 steps (`n_ops=1000`, S=500) | 27.39 s | 26.62 s | — |
+| gradient relative error vs float64 | — | 4e-7 (production), 7e-8 (paper) | 1.5e-2 |
+| loss deviation vs float64 | — | ~1e-11 | 8e-4 |
+
+Reading:
+
+- Mixed precision is profitable even on CPU once the estimator is large
+  (+7.5% production, +21.5% paper scale) and costs nothing statistically: the
+  reductions accumulate in float64, so the loss is unchanged to ~1e-11 and the
+  gradient to ~1e-7.
+- Casting *everything* to float32 is strictly worse: no extra speed and a 1.5%
+  gradient error, which is why the knob is a GEMM dtype and not a global one.
+- On GPUs the gap is far larger; the sibling benchmark is the reference for
+  that regime.  Default remains float64 so golden fixtures and published
+  numbers stay bit-identical.
+- Trained outcomes are unaffected: three seeds each at r=0 and r=10 reach the
+  same best step, with validation, held-out MMD and final loss within ~1e-8
+  relative between float64 and mixed precision (seed spread is ~6%).
+
 ## Stage attribution (isolated calls, not additive)
 
 | stage | ms |

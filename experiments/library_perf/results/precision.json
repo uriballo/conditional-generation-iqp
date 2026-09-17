@@ -1,0 +1,41 @@
+{
+  "accuracy_vs_f64": {
+    "f32_everything": {
+      "gradient_cosine": 0.9998935877280997,
+      "gradient_relative_error": 0.014589051674486425,
+      "loss": 0.10273240940486585,
+      "loss_deviation": 0.0008331344476048413
+    },
+    "f32_gemm": {
+      "gradient_cosine": 0.9999999999999148,
+      "gradient_relative_error": 4.146966872528017e-07,
+      "loss": 0.10189927494991843,
+      "loss_deviation": 7.342570995660935e-12
+    }
+  },
+  "case": {
+    "n_conditions": 5,
+    "n_visible": 12
+  },
+  "paper_scale_accuracy": {
+    "gradient_cosine": 0.9999999999999978,
+    "gradient_relative_error": 6.65566500882817e-08,
+    "loss_deviation": 3.380240531924983e-12
+  },
+  "paper_scale_step_ms": {
+    "f32_gemm": 250.45143417082727,
+    "f64": 319.0848471131176
+  },
+  "sample_sweep_ms": {
+    "1000": 3.85215412825346,
+    "2000": 7.243901025503874,
+    "250": 2.3635919205844402,
+    "4000": 13.005157932639122,
+    "500": 2.815490122884512
+  },
+  "step_ms": {
+    "f32_everything": 21.897577913478017,
+    "f32_gemm": 20.75635688379407,
+    "f64": 22.447034949436784
+  }
+}
