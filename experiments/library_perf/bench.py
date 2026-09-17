@@ -15,6 +15,7 @@ Every timing is a median over warm, fully blocking calls; memory is
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import json
 import os
 import subprocess
@@ -25,7 +26,7 @@ from pathlib import Path
 import jax
 import jax.numpy as jnp
 from common import PYTHON, REPO, block, problem, save, timeit
-from iqp_cond.loss import banked_mmd, sampled_mmd
+from iqp_cond.loss import mmd
 from iqp_cond.operators import operator_bank
 
 import iqp_cond as iqc
@@ -54,12 +55,12 @@ def _losses(problem_case: dict):
         n_visible,
         seed=0,
     )
-    params = iqc.initialize_parameters(ansatz.n_parameters, 0)
+    params = iqc.random_parameters(ansatz.n_parameters, 0)
     generators = jnp.asarray(ansatz.generators)
     batch = jnp.asarray(targets[:, : config.batch_size])
 
     def fresh_loss(params, target_batch, key):
-        return sampled_mmd(
+        return mmd(
             params,
             generators,
             encoders,
@@ -72,14 +73,14 @@ def _losses(problem_case: dict):
 
     def banked_loss(params, target_batch, key):
         # Mirrors the trainer's per-step path: shared reference samples.
-        return banked_mmd(
+        return mmd(
             params,
             generators,
             encoders,
             target_batch,
-            bank,
-            config.n_iqp_samples,
             key,
+            bank=bank,
+            n_samples=config.n_iqp_samples,
             shared_samples=True,
         ).loss
 
@@ -144,14 +145,14 @@ def bench_validate(case: dict) -> dict:
     )
 
     def validation(params):
-        return banked_mmd(
+        return mmd(
             params,
             context["generators"],
             context["encoders"],
             validation_targets,
-            validation_bank,
-            config.validation_n_iqp_samples,
             jax.random.PRNGKey(2),
+            bank=validation_bank,
+            n_samples=config.validation_n_iqp_samples,
         ).loss
 
     return {
@@ -162,18 +163,14 @@ def bench_validate(case: dict) -> dict:
 
 def bench_e2e(case: dict, steps: int, refresh: str = iqc.STEP) -> dict:
     ansatz, encoders, targets = problem(**case)
-    config = iqc.TrainingConfig(steps=steps)
-    validation = targets[:, : max(1, targets.shape[1] // 4)]
-    start = time.perf_counter()
-    result = iqc.train(
-        ansatz,
-        encoders,
-        targets,
-        validation,
-        seed=0,
-        config=config,
+    model = iqc.ConditionalModel(ansatz, encoders)
+    config = dataclasses.replace(
+        iqc.TrainingConfig(steps=steps),
         mask_refresh=refresh,
     )
+    validation = targets[:, : max(1, targets.shape[1] // 4)]
+    start = time.perf_counter()
+    result = iqc.train(model, targets, validation, seed=0, config=config)
     wall = time.perf_counter() - start
     return {
         "case": case,
@@ -181,7 +178,6 @@ def bench_e2e(case: dict, steps: int, refresh: str = iqc.STEP) -> dict:
         "steps": steps,
         "wall_s": wall,
         "per_step_ms": 1e3 * wall / steps,
-        "n_banks": int(result.n_banks),
         "best_validation_loss": float(result.best_validation_loss),
     }
 
@@ -203,14 +199,14 @@ def _memory_case(name: str, case: dict) -> dict:
         )
 
         def call(params):
-            return banked_mmd(
+            return mmd(
                 params,
                 context["generators"],
                 context["encoders"],
                 jnp.asarray(context["targets"]),
-                validation_bank,
-                config.validation_n_iqp_samples,
                 jax.random.PRNGKey(2),
+                bank=validation_bank,
+                n_samples=config.validation_n_iqp_samples,
             ).loss
 
         fn = jax.jit(call)

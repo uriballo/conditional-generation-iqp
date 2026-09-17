@@ -18,7 +18,7 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 from common import block, problem, save
-from iqp_cond.loss import banked_mmd
+from iqp_cond.loss import mmd
 from iqp_cond.operators import _assemble_bank, _draw_entrywise, operator_bank
 
 import iqp_cond as iqc
@@ -66,7 +66,7 @@ def main() -> None:
         n_targets=2048,
         seed=0,
     )
-    params = iqc.initialize_parameters(ansatz.n_parameters, 0)
+    params = iqc.random_parameters(ansatz.n_parameters, 0)
     batch = jnp.asarray(targets[:, : config.batch_size])
     key = jax.random.PRNGKey(0)
     sigmas = config.sigmas
@@ -110,14 +110,14 @@ def main() -> None:
         )
 
         def loss(current_params, target_batch, current_bank, step_key):
-            return banked_mmd(
+            return mmd(
                 current_params,
                 ansatz.generators,
                 encoders,
                 target_batch,
-                current_bank,
-                config.n_iqp_samples,
                 step_key,
+                bank=current_bank,
+                n_samples=config.n_iqp_samples,
             ).loss
 
         value_and_grad = jax.jit(jax.value_and_grad(loss))

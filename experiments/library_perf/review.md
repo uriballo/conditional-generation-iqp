@@ -31,7 +31,7 @@ The first is exact: the product encoder's amplitudes are real, and the float
 components extracted from the pinned complex expression are bit-for-bit the
 golden values (all 74 tests pass unchanged, including the campaign-equivalence
 loss). The third is the paper's estimator form — every mask is evaluated on the
-same reference draw — and is exposed as `banked_mmd(..., shared_samples=True)`;
+same reference draw — and is exposed as `mmd(..., bank=..., shared_samples=True)`;
 the trainer uses it for `mask_refresh="step"`, while `"cache"` keeps the
 campaign's per-entry layout bit for bit.
 
@@ -47,7 +47,7 @@ Inspired by the sibling `iqpopt-gpu` repository, whose benchmark shows that
 mixed precision is the dominant lever on GPUs (`fp32-mix`: 22-24x on forward +
 backward, <0.1% error, zero sign flips; plain fp64 is 1/64 rate on consumer
 cards).  The shipped knob is `gemm_dtype` on `estimate_pauli_z_*`,
-`banked_mmd`, `sampled_mmd`, and `TrainingConfig`: only the phase contraction
+`mmd`, and `TrainingConfig`: only the phase contraction
 runs in the reduced dtype, and the result is cast back to float64 so
 exponentiation and every reduction stay precise.
 
@@ -128,11 +128,11 @@ live, not where wall clock goes.
 
 | variant | ms | vs baseline |
 |---|---|---|
-| `banked_mmd`, one reference draw per condition | 22.9 | 0.75× |
-| `banked_mmd`, per-entry draws (campaign layout) | 30.7 | 1.00× |
+| `mmd` with `bank`, one reference draw per condition | 22.9 | 0.75× |
+| `mmd` with `bank`, per-entry draws (campaign layout) | 30.7 | 1.00× |
 | `jax.vmap` over conditions, padded widths | 38.5 | 1.25× |
 | `jax.vmap` over bandwidths, padded widths | 46.1 | 1.50× |
-| pure-JAX `sampled_mmd` (masks in JAX) | 47.0 | 1.53× |
+| `mmd` with fresh in-JAX masks (`sigmas`/`n_ops`) | 47.0 | 1.53× |
 
 Conclusions:
 
@@ -163,7 +163,7 @@ is untouched (golden fixtures) and remains the per-entry redraw path.
 ## Full pipeline
 
 `pipeline.py`: shipped trainer at `mask_refresh="step"` and `"cache"`, plus a
-loop mirroring it with `sampled_mmd`, on identical data, seed, schedule, and
+loop mirroring it with fresh in-JAX masks (`iqp_cond.mmd` with `sigmas`/`n_ops`), on identical data, seed, schedule, and
 optimizer; every arm scored on a common independent bank; the trainer's own
 validation bank is rebuilt to check the checkpoint.
 
@@ -173,7 +173,7 @@ validation bank is rebuilt to check the checkpoint.
 |---|---|---|
 | `mask_refresh="step"` (default) | 16.2 / 16.4 | 2.30e-4 / -1.18e-4 |
 | `mask_refresh="cache"` | 18.4 / 18.9 | 1.91e-4 / -1.02e-4 |
-| pure-JAX `sampled_mmd` loop | 27.3 / 27.3 | 2.98e-4 / -1.06e-4 |
+| fresh in-JAX mask loop | 27.3 / 27.3 | 2.98e-4 / -1.06e-4 |
 
 2000 steps, seed 0, production case (`bench.py e2e`):
 

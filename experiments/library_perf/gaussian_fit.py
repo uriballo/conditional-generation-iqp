@@ -13,7 +13,7 @@ encoder is the broadcast product-state map ``alpha(c) = pi (0.35 - 0.70 c)``.
 Everything the run needs is exposed on the public API: ``TrainingConfig``
 carries the update budget, per-condition batch, bandwidths, operator draws, and
 Monte Carlo samples; ``train(..., mask_refresh=...)`` selects the mask
-protocol; ``estimate_pauli_z`` / ``sampled_mmd`` / ``banked_mmd`` take explicit
+protocol; ``estimate_pauli_z`` and ``mmd`` take explicit
 ``sigmas``, ``n_ops``, and ``n_samples`` the way ``iqpopt.mmd_loss_iqp`` takes
 ``sigma``, ``n_ops``, ``n_samples``.
 """
@@ -30,6 +30,7 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 from common import REPO, save
+from iqp_cond.operators import operator_bank
 
 import iqp_cond as iqc
 
@@ -106,16 +107,17 @@ def main() -> None:
         iqc.PRODUCT,
         condition_angles(conditions[held_out], n_model),
     )
-    ancilla_support = iqc.ancilla_support(generators, n_visible)
-    if args.ancillas:
-        initial_params = iqc.initialize_parameters_with_ancillas(
-            training[0],
-            generators,
-            ancilla_support,
-            args.seed,
-        )
-    else:
-        initial_params = iqc.initialize_parameters_from_data(training[0], generators)
+    initial_params = iqc.parameters_from_data(
+        training[0],
+        generators,
+        n_visible=n_visible,
+        seed=args.seed,
+    )
+    model = iqc.ConditionalModel(
+        ansatz,
+        encoders,
+        n_visible=n_visible if args.ancillas else None,
+    )
 
     config = iqc.TrainingConfig(
         steps=args.steps,
@@ -127,24 +129,23 @@ def main() -> None:
         validation_n_iqp_samples=args.samples,
         gemm_dtype=jnp.float32 if args.gemm_dtype == "float32" else None,
         sample_chunk=args.sample_chunk or None,
+        mask_refresh=args.refresh,
     )
 
     start = time.perf_counter()
     result = iqc.train(
-        ansatz,
-        encoders,
+        model,
         training,
         validation,
         seed=args.seed,
         config=config,
         initial_params=initial_params,
-        mask_refresh=args.refresh,
     )
     wall = time.perf_counter() - start
 
     # Generalization to the eight held-out conditions, on an independent bank.
     key = jax.random.PRNGKey(args.seed + 4242)
-    generalization_bank = iqc.operator_bank(
+    generalization_bank = operator_bank(
         config.sigmas,
         args.n_ops,
         held_out_encoders.n_conditions,
@@ -152,20 +153,20 @@ def main() -> None:
         seed=args.seed + 31,
     )
     held_out_score = float(
-        iqc.banked_mmd(
+        iqc.mmd(
             result.best_params,
             ansatz.generators,
             held_out_encoders,
             jnp.asarray(held_out_targets),
-            generalization_bank,
-            args.samples,
             key,
+            bank=generalization_bank,
+            n_samples=args.samples,
             shared_samples=True,
         ).loss,
     )
 
     # Checkpoint consistency against the trainer's own validation bank and key.
-    expected_bank = iqc.operator_bank(
+    expected_bank = operator_bank(
         config.sigmas,
         config.validation_n_ops,
         encoders.n_conditions,
@@ -173,14 +174,14 @@ def main() -> None:
         seed=args.seed + 1,
     )
     reproduced = float(
-        iqc.banked_mmd(
+        iqc.mmd(
             result.best_params,
             ansatz.generators,
             encoders,
             jnp.asarray(validation),
-            expected_bank,
-            config.validation_n_iqp_samples,
             jax.random.PRNGKey(args.seed + 1_000_000),
+            bank=expected_bank,
+            n_samples=config.validation_n_iqp_samples,
         ).loss,
     )
 
@@ -202,7 +203,6 @@ def main() -> None:
         "held_out_conditions": [float(value) for value in conditions[held_out]],
         "wall_s": wall,
         "per_step_ms": 1e3 * wall / args.steps,
-        "n_banks": int(result.n_banks),
         "best_step": int(result.best_step),
         "best_validation_loss": float(result.best_validation_loss),
         "final_train_loss": float(np.mean(result.train_losses[-20:])),

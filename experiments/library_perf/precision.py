@@ -25,6 +25,8 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 from common import block, problem, save
+from iqp_cond.loss import mmd
+from iqp_cond.operators import operator_bank
 
 import iqp_cond as iqc
 from iqp_cond.ancilla import pad_visible_masks
@@ -151,10 +153,10 @@ def main() -> None:
         n_targets=2048,
         seed=0,
     )
-    params = iqc.initialize_parameters(ansatz.n_parameters, 0)
+    params = iqc.random_parameters(ansatz.n_parameters, 0)
     batch = jnp.asarray(targets[:, : config.batch_size])
     key = jax.random.PRNGKey(0)
-    bank = iqc.operator_bank(
+    bank = operator_bank(
         config.sigmas,
         config.n_ops,
         n_conditions,
@@ -165,14 +167,14 @@ def main() -> None:
     report: dict = {"case": {"n_visible": n_visible, "n_conditions": n_conditions}}
 
     def shipped(current_params, target_batch, step_key, gemm_dtype=None):
-        return iqc.banked_mmd(
+        return mmd(
             current_params,
             generators,
             encoders,
             target_batch,
-            bank,
-            config.n_iqp_samples,
             step_key,
+            bank=bank,
+            n_samples=config.n_iqp_samples,
             shared_samples=True,
             gemm_dtype=gemm_dtype,
         ).loss
@@ -237,14 +239,14 @@ def main() -> None:
     for n_samples in (250, 500, 1000, 2000, 4000):
 
         def sweep_loss(p, t, k, s=n_samples):
-            return iqc.banked_mmd(
+            return mmd(
                 p,
                 generators,
                 encoders,
                 t,
-                bank,
-                s,
                 k,
+                bank=bank,
+                n_samples=s,
                 shared_samples=True,
             ).loss
 
@@ -264,9 +266,9 @@ def main() -> None:
         n_targets=2048,
         seed=1,
     )
-    paper_params = iqc.initialize_parameters(paper_ansatz.n_parameters, 0)
+    paper_params = iqc.random_parameters(paper_ansatz.n_parameters, 0)
     paper_batch = jnp.asarray(paper_targets)
-    paper_bank = iqc.operator_bank(
+    paper_bank = operator_bank(
         paper_config.sigmas,
         paper_config.n_ops,
         paper_encoders.n_conditions,
@@ -276,14 +278,14 @@ def main() -> None:
     paper_generators = jnp.asarray(paper_ansatz.generators, dtype=jnp.float64)
 
     def paper_shipped(current_params, target_batch, step_key, gemm_dtype=None):
-        return iqc.banked_mmd(
+        return mmd(
             current_params,
             paper_generators,
             paper_encoders,
             target_batch,
-            paper_bank,
-            paper_config.n_iqp_samples,
             step_key,
+            bank=paper_bank,
+            n_samples=paper_config.n_iqp_samples,
             gemm_dtype=gemm_dtype,
         ).loss
 

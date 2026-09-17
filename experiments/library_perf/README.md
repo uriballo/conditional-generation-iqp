@@ -79,11 +79,12 @@ Reading:
   3.5% faster with no ancillas and 14.9% faster with ten, at 8% lower peak
   RSS, and identically valued; at small sample budgets it costs a little, so
   it is off by default.
-- The pure-JAX mask path (`loss.sampled_mmd`) costs ~1.5–2x the compressed
-  step at the same draw budget: it cannot collapse duplicates, so it evaluates
-  ~1.8x more mask columns. `sampled_mmd` remains for whole-loop-on-device use.
+- The fresh-in-JAX mask path (`iqp_cond.mmd` with `sigmas`/`n_ops`) costs
+  ~1.5–2x the compressed step at the same draw budget: it cannot collapse
+  duplicates, so it evaluates ~1.8x more mask columns. It remains for
+  whole-loop-on-device use.
 - Product ratios run in float64 (real amplitudes), the batched numpy bank build
-  uses one `np.unique` for all entries, and `banked_mmd` can share samples; see
+  uses one `np.unique` for all entries, and the bank path can share samples; see
   `review.md` for the interleaved A/B measurements and the rejected variants
   (vmap over conditions/bandwidths, multi-bank cap calibration).
 
@@ -158,7 +159,7 @@ the qubit axis grows from 12 to 22.
 
 Ancilla initialization is the campaign rule: visible parameters from data,
 seeded Gaussian noise on ancilla-support generators
-(`initialize_parameters_with_ancillas` / `data_initialize`), identical in both
+(`iqp_cond.parameters_from_data` / `iqp_cond.random_parameters`), identical in both
 implementations.
 
 ## Files

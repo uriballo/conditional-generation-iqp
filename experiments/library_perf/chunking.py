@@ -27,8 +27,10 @@ import time
 import jax
 import jax.numpy as jnp
 import numpy as np
-from iqp_cond.estimator import estimate_pauli_z_from_samples
-from iqp_cond.loss import target_moments
+from iqp_cond.encoders import select_encoder
+from iqp_cond.estimator import estimate_pauli_z_unchecked
+from iqp_cond.loss import mmd, target_moments
+from iqp_cond.operators import operator_bank
 
 import iqp_cond as iqc
 from iqp_cond.ancilla import pad_visible_masks
@@ -49,8 +51,8 @@ def build(ancillas: int, samples: int, n_ops: int) -> dict:
     encoders = iqc.encoder(iqc.PRODUCT, angles)
     rng = np.random.default_rng(0)
     targets = rng.integers(0, 2, size=(n_conditions, 100, n_visible)).astype(float)
-    params = iqc.initialize_parameters(ansatz.n_parameters, 0)
-    bank = iqc.operator_bank((1.0, 2.0, 4.0), n_ops, n_conditions, n_visible, seed=0)
+    params = iqc.random_parameters(ansatz.n_parameters, 0)
+    bank = operator_bank((1.0, 2.0, 4.0), n_ops, n_conditions, n_visible, seed=0)
     return {
         "ansatz": ansatz,
         "encoders": encoders,
@@ -64,14 +66,14 @@ def build(ancillas: int, samples: int, n_ops: int) -> dict:
 
 
 def monolithic_loss(params, generators, encoders, targets, bank, samples, key):
-    return iqc.banked_mmd(
+    return mmd(
         params,
         generators,
         encoders,
         targets,
-        bank,
-        samples,
         key,
+        bank=bank,
+        n_samples=samples,
         shared_samples=True,
     ).loss
 
@@ -94,7 +96,7 @@ def chunked_loss(
     n_ancillas = encoders.n_qubits - targets.shape[2]
     condition_values = []
     for condition in range(encoders.n_conditions):
-        encoder = encoders.select(condition)
+        encoder = select_encoder(encoders, condition)
         drawn = encoder.sample(jax.random.fold_in(key, condition), samples)
         bandwidth_values = []
         for bandwidth in range(bank.n_bandwidths):
@@ -104,12 +106,13 @@ def chunked_loss(
             total_sq = jnp.zeros(masks.shape[0])
             for start in range(0, samples, chunk):
                 part = drawn[:, start : start + chunk]
-                estimate = estimate_pauli_z_from_samples(
+                estimate = estimate_pauli_z_unchecked(
                     params,
                     generators,
-                    model_masks,
                     encoder,
-                    part,
+                    model_masks,
+                    samples=part,
+                    return_samples=True,
                 )
                 values = estimate.sample_values[0]
                 total = total + jnp.sum(values, axis=0)

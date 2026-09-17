@@ -21,7 +21,7 @@ import time
 import jax
 import jax.numpy as jnp
 from common import block, problem
-from iqp_cond.loss import banked_mmd
+from iqp_cond.loss import mmd
 from iqp_cond.operators import operator_bank
 
 import iqp_cond as iqc
@@ -60,7 +60,7 @@ def main() -> None:
         seed=0,
         n_ancillas=args.ancillas,
     )
-    params = iqc.initialize_parameters(ansatz.n_parameters, 0)
+    params = iqc.random_parameters(ansatz.n_parameters, 0)
     generators = jnp.asarray(ansatz.generators)
     bank = operator_bank(
         SIGMAS,
@@ -73,14 +73,14 @@ def main() -> None:
     gemm_dtype = jnp.float32 if args.gemm_dtype == "float32" else None
 
     def loss(current_params, target_batch, current_bank, step_key, chunk=None):
-        return banked_mmd(
+        return mmd(
             current_params,
             generators,
             encoders,
             target_batch,
-            current_bank,
-            args.samples,
             step_key,
+            bank=current_bank,
+            n_samples=args.samples,
             shared_samples=True,
             gemm_dtype=gemm_dtype,
             sample_chunk=chunk,
@@ -106,14 +106,14 @@ def main() -> None:
     )
     validation = jax.jit(
         lambda p: (
-            banked_mmd(
+            mmd(
                 p,
                 generators,
                 encoders,
                 jnp.asarray(targets),
-                bank,
-                args.samples,
                 jax.random.PRNGKey(1),
+                bank=bank,
+                n_samples=args.samples,
                 shared_samples=True,
             ).loss
         ),

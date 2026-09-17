@@ -1,11 +1,12 @@
 """Do the step-level review findings survive a full training pipeline?
 
-Runs the shipped trainer with per-step banks (``mask_refresh="step"``) and with
+Runs the shipped trainer with per-step masks (``mask_refresh="step"``) and with
 one retained bank (``"cache"``), plus a loop that mirrors the trainer but trains
-on the pure-JAX ``sampled_mmd``, all on the same data, seed, schedule, and
-optimizer.  Reports wall clock, loss trajectories, and a common independent
-score, then verifies that the returned ``best_params`` reproduce the returned
-``best_validation_loss`` against the trainer's own validation bank.
+on masks drawn inside JAX (``iqp_cond.mmd`` with ``sigmas``/``n_ops``), all on
+the same data, seed, schedule, and optimizer.  Reports wall clock, loss
+trajectories, and a common independent score, then verifies that the returned
+``best_params`` reproduce the returned ``best_validation_loss`` against the
+trainer's own validation bank.
 
     PYTHONPATH=packages/iqp-cond/src .venv/bin/python \
         experiments/library_perf/pipeline.py
@@ -13,6 +14,7 @@ score, then verifies that the returned ``best_params`` reproduce the returned
 
 from __future__ import annotations
 
+import dataclasses
 import statistics
 import time
 
@@ -21,7 +23,7 @@ import jax.numpy as jnp
 import numpy as np
 import optax
 from common import problem, save
-from iqp_cond.loss import banked_mmd, sampled_mmd
+from iqp_cond.operators import operator_bank
 
 import iqp_cond as iqc
 
@@ -36,14 +38,13 @@ def _batches(targets: np.ndarray, config: iqc.TrainingConfig, seed: int) -> np.n
 
 
 def train_with_jax_masks(
-    ansatz: iqc.Ansatz,
-    encoders: iqc.Encoder,
+    model: iqc.ConditionalModel,
     training_targets: np.ndarray,
     config: iqc.TrainingConfig,
     seed: int,
 ) -> tuple[np.ndarray, np.ndarray, float]:
-    """The trainer loop with ``sampled_mmd`` as the objective (masks in JAX)."""
-    params = iqc.initialize_parameters(ansatz.n_parameters, seed)
+    """The trainer loop with fresh in-JAX masks as the objective."""
+    params = iqc.random_parameters(model.ansatz.n_parameters, seed)
     schedule = optax.cosine_decay_schedule(
         init_value=config.learning_rate,
         decay_steps=config.steps,
@@ -52,19 +53,17 @@ def train_with_jax_masks(
     optimizer = optax.adam(schedule)
     optimizer_state = optimizer.init(params)
     indices = _batches(training_targets, config, seed)
-    generators = jnp.asarray(ansatz.generators)
     root_key = jax.random.PRNGKey(seed)
 
     def loss(current_params, target_batch, step_key):
-        return sampled_mmd(
+        return model.mmd(
             current_params,
-            generators,
-            encoders,
             target_batch,
             step_key,
             sigmas=config.sigmas,
             n_ops=config.n_ops,
             n_samples=config.n_iqp_samples,
+            shared_samples=True,
         ).loss
 
     value_and_gradient = jax.jit(jax.value_and_grad(loss))
@@ -104,8 +103,9 @@ def main() -> None:
             n_targets=2048,
             seed=seed,
         )
+        model = iqc.ConditionalModel(ansatz, encoders)
         validation = targets[:, :512]
-        common_bank = iqc.operator_bank(
+        common_bank = operator_bank(
             config.sigmas,
             config.validation_n_ops,
             encoders.n_conditions,
@@ -116,61 +116,42 @@ def main() -> None:
 
         def independent_score(
             current_params: np.ndarray,
-            ansatz=ansatz,
-            encoders=encoders,
+            model=model,
             validation=validation,
             common_bank=common_bank,
             common_key=common_key,
         ) -> float:
             return float(
-                banked_mmd(
+                model.mmd(
                     current_params,
-                    ansatz.generators,
-                    encoders,
                     jnp.asarray(validation),
-                    common_bank,
-                    config.validation_n_iqp_samples,
                     common_key,
+                    bank=common_bank,
+                    n_samples=config.validation_n_iqp_samples,
                 ).loss,
             )
 
         run: dict = {}
-        start = time.perf_counter()
-        step_result = iqc.train(
-            ansatz,
-            encoders,
-            targets,
-            validation,
-            seed=seed,
-            config=config,
-        )
-        run["step"] = {
-            "wall_s": time.perf_counter() - start,
-            "best_validation_loss": float(step_result.best_validation_loss),
-            "independent_score": independent_score(step_result.best_params),
-            "final_train_loss": float(np.mean(step_result.train_losses[-20:])),
-        }
-
-        start = time.perf_counter()
-        cache_result = iqc.train(
-            ansatz,
-            encoders,
-            targets,
-            validation,
-            seed=seed,
-            config=config,
-            mask_refresh=iqc.CACHE,
-        )
-        run["cache"] = {
-            "wall_s": time.perf_counter() - start,
-            "best_validation_loss": float(cache_result.best_validation_loss),
-            "independent_score": independent_score(cache_result.best_params),
-            "final_train_loss": float(np.mean(cache_result.train_losses[-20:])),
-        }
+        results: dict = {}
+        for name, refresh in (("step", iqc.STEP), ("cache", iqc.CACHE)):
+            start = time.perf_counter()
+            result = iqc.train(
+                model,
+                targets,
+                validation,
+                seed=seed,
+                config=dataclasses.replace(config, mask_refresh=refresh),
+            )
+            results[name] = result
+            run[name] = {
+                "wall_s": time.perf_counter() - start,
+                "best_validation_loss": float(result.best_validation_loss),
+                "independent_score": independent_score(result.best_params),
+                "final_train_loss": float(np.mean(result.train_losses[-20:])),
+            }
 
         jax_params, jax_losses, jax_wall = train_with_jax_masks(
-            ansatz,
-            encoders,
+            model,
             targets,
             config,
             seed,
@@ -183,7 +164,7 @@ def main() -> None:
 
         # Pipeline consistency: the reported best loss must be the objective at
         # best_params on the trainer's own validation bank and key.
-        expected_bank = iqc.operator_bank(
+        expected_bank = operator_bank(
             config.sigmas,
             config.validation_n_ops,
             encoders.n_conditions,
@@ -191,21 +172,18 @@ def main() -> None:
             seed + 1,
         )
         expected_key = jax.random.PRNGKey(seed + 1_000_000)
-        for name, result in (("step", step_result), ("cache", cache_result)):
+        for name in ("step", "cache"):
             reproduced = float(
-                banked_mmd(
-                    result.best_params,
-                    ansatz.generators,
-                    encoders,
+                model.mmd(
+                    results[name].best_params,
                     jnp.asarray(validation),
-                    expected_bank,
-                    config.validation_n_iqp_samples,
                     expected_key,
+                    bank=expected_bank,
+                    n_samples=config.validation_n_iqp_samples,
                 ).loss,
             )
-            run[name]["reproduced_best_loss"] = reproduced
             run[name]["checkpoint_consistent"] = (
-                abs(reproduced - result.best_validation_loss) <= 1e-12
+                abs(reproduced - run[name]["best_validation_loss"]) <= 1e-12
             )
 
         report[f"seed_{seed}"] = run
