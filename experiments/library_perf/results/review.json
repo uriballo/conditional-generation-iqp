@@ -1,0 +1,30 @@
+{
+  "bank_build_ms": {
+    "operator_bank": 1.3234219513833523,
+    "sampler_only": 2.5253325002267957
+  },
+  "baseline_ms": {
+    "banked_forward": 30.69206199143082,
+    "sampled_mmd_forward_grad": 46.96639196481556
+  },
+  "case": {
+    "n_conditions": 5,
+    "n_visible": 12
+  },
+  "shared_samples_ms": {
+    "forward_grad": 22.910326020792127
+  },
+  "stages_ms": {
+    "amplitude_ratios": 3.4831289667636156,
+    "condition_mmd": 6.939042476005852,
+    "estimate_one_entry": 6.774371606297791,
+    "phase_differences": 1.380035886541009,
+    "sample": 0.8492089109495282
+  },
+  "vmap_bands_ms": {
+    "forward_grad": 46.08018952421844
+  },
+  "vmap_conditions_ms": {
+    "forward_grad": 38.456429028883576
+  }
+}

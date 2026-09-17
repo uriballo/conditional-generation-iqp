@@ -1,0 +1,53 @@
+{
+  "config": {
+    "batch_size": 256,
+    "n_iqp_samples": 8192,
+    "n_ops": 64,
+    "sigmas": [
+      1.0,
+      2.0,
+      4.0
+    ],
+    "steps": 2000,
+    "validation_n_iqp_samples": 16384,
+    "validation_n_ops": 256
+  },
+  "label": "pre-refactor",
+  "memory": [
+    {
+      "case": {
+        "n_conditions": 5,
+        "n_targets": 2048,
+        "n_visible": 12
+      },
+      "compile_and_first_call_s": 1.0087117080111057,
+      "mode": "train",
+      "name": "train",
+      "peak_rss_mib": 634.78125
+    },
+    {
+      "case": {
+        "n_conditions": 5,
+        "n_targets": 2048,
+        "n_visible": 12
+      },
+      "compile_and_first_call_s": 1.20388954191003,
+      "mode": "validate",
+      "name": "validate",
+      "peak_rss_mib": 610.46875
+    },
+    {
+      "case": {
+        "family": "spin_flip",
+        "n_ancillas": 10,
+        "n_conditions": 10,
+        "n_targets": 2048,
+        "n_visible": 12
+      },
+      "compile_and_first_call_s": 1.8392827500356361,
+      "mode": "paper",
+      "name": "paper",
+      "peak_rss_mib": 1386.984375
+    }
+  ]
+}

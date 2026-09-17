@@ -1,0 +1,136 @@
+# Performance review and step-mode optimisation
+
+Date: 2026-09-17 · Subject: `packages/iqp-cond`. Production problem unless
+stated: 12 visible qubits, 5 conditions, complete two-local ansatz,
+`TrainingConfig` defaults (`n_ops=64`, `n_iqp_samples=8192`, `sigmas=(1,2,4)`).
+
+Hosts: `strix-halo2` (32-core x86, 124 GiB, idle, JAX 0.11 CPU, float64) for all
+headline numbers; Apple M3 Max for cross-checks (the laptop runs background load
+and drifts by tens of percent, so only interleaved ratios are used from it).
+Harness: `review.py`, `step_improve.py`, `pipeline.py`, `bench.py`; raw outputs
+in `results/`.
+
+## Optimisations landed
+
+| change | measurement (interleaved, idle host) |
+|---|---|
+| Product ratios in float64 instead of complex128 | ratio stage 1.64 → 0.33 ms (5×); validation pass 94 → 55 ms |
+| Batched numpy bank build (one `np.unique` for all entries) | bank build 2.77 → 1.10 ms (2.5×) |
+| Shared reference samples per condition across bandwidths | step loss+grad 30.7 → 22.9 ms (25%); e2e 77.8 → 59.8 s |
+
+The first is exact: the product encoder's amplitudes are real, and the float
+components extracted from the pinned complex expression are bit-for-bit the
+golden values (all 74 tests pass unchanged, including the campaign-equivalence
+loss). The third is the paper's estimator form — every mask is evaluated on the
+same reference draw — and is exposed as `banked_mmd(..., shared_samples=True)`;
+the trainer uses it for `mask_refresh="step"`, while `"cache"` keeps the
+campaign's per-entry layout bit for bit.
+
+Rejected after measurement: a multi-bank pilot to tighten `max_masks` (6%
+slower and shape-sensitive), `jax.vmap` over conditions or bandwidths (below),
+and pure-JAX mask sampling for the default path (below).
+
+## Stage attribution (isolated calls, not additive)
+
+| stage | ms |
+|---|---|
+| `sample` (one condition) | 0.85 |
+| `amplitude_ratios` (one condition, first bandwidth entry) | 3.48 |
+| `_phase_differences` (same) | 1.38 |
+| full single-entry estimate | 6.77 |
+| full single-entry `_condition_mmd` | 6.94 |
+
+The full 15-entry step costs ~23 ms, well below 15 x 6.9 ms: XLA runs the
+independent per-entry subgraphs concurrently. Stage rows say where the flops
+live, not where wall clock goes.
+
+## Variants, forward + gradient, same problem
+
+| variant | ms | vs baseline |
+|---|---|---|
+| `banked_mmd`, one reference draw per condition | 22.9 | 0.75× |
+| `banked_mmd`, per-entry draws (campaign layout) | 30.7 | 1.00× |
+| `jax.vmap` over conditions, padded widths | 38.5 | 1.25× |
+| `jax.vmap` over bandwidths, padded widths | 46.1 | 1.50× |
+| pure-JAX `sampled_mmd` (masks in JAX) | 47.0 | 1.53× |
+
+Conclusions:
+
+- **Sharing samples across bandwidths wins** (25%): the sampler is expensive
+  enough on this host that resampling per bandwidth is the largest avoidable
+  cost, and one draw per condition is closer to the paper.
+- **vmap does not pay here.** Both axes were measured; padding every entry to a
+  common width (the per-bandwidth widths cannot survive `vmap`) and the batched
+  dot lowering cost more than the Python loop, because the loop's subgraphs
+  already overlap and each one stays narrow. vmap is the right tool for a
+  GPU-resident batched workload, or for a much larger condition count.
+- **The pure-JAX path remains the whole-loop-on-device option** at ~1.5× the
+  shared-sample banked step: it cannot collapse duplicate masks, so it evaluates
+  ~1.8× more mask columns at equal draws.
+
+## Bank build
+
+| component | ms |
+|---|---|
+| `operator_bank` (all 15 entries) | 1.10 |
+| `sample_nonidentity_masks` entry-wise | 2.53 |
+
+The batched path packs each mask into one integer code and groups by condition,
+so compression is a single `np.unique` over 15 entries instead of one
+lexicographic row sort per entry. The pinned `sample_nonidentity_masks` sampler
+is untouched (golden fixtures) and remains the per-entry redraw path.
+
+## Full pipeline
+
+`pipeline.py`: shipped trainer at `mask_refresh="step"` and `"cache"`, plus a
+loop mirroring it with `sampled_mmd`, on identical data, seed, schedule, and
+optimizer; every arm scored on a common independent bank; the trainer's own
+validation bank is rebuilt to check the checkpoint.
+
+500 steps, 2 seeds:
+
+| arm | wall s (seed 0 / 1) | independent score (seed 0 / 1) |
+|---|---|---|
+| `mask_refresh="step"` (default) | 16.2 / 16.4 | 2.30e-4 / -1.18e-4 |
+| `mask_refresh="cache"` | 18.4 / 18.9 | 1.91e-4 / -1.02e-4 |
+| pure-JAX `sampled_mmd` loop | 27.3 / 27.3 | 2.98e-4 / -1.06e-4 |
+
+2000 steps, seed 0, production case (`bench.py e2e`):
+
+| arm | wall | per step |
+|---|---|---|
+| step | **59.8 s** | 29.9 ms |
+| cache | 71.0 s | 35.5 ms |
+| pure-JAX (pipeline extrapolation) | ~109 s | 54.6 ms |
+
+- The default per-step refresh is now the **fastest** arm: shared sampling saves
+  more than the per-step bank build costs. It is also the unbiased one.
+- Checkpoint integrity is exact: `best_params` re-evaluated on the trainer's
+  validation bank and key reproduces `best_validation_loss` bit-for-bit for both
+  trainer arms and both seeds.
+- No convergence difference is detectable at 500 steps; arm spread (~1e-5 to
+  1e-4) is the order of seed noise. This is not a convergence study.
+
+## Correctness note found during the review
+
+At encoder angles near the two-branch deterministic point (`alpha = pi/2`), the
+reference law concentrates on a few strings but the amplitude ratios on rare
+strings are huge; the estimator stays unbiased with bounded second moment, yet
+the per-sample standard deviation computed from a finite sample can be ~0 while
+the mean is still moving. Sample-standard-error tolerances are therefore not
+valid there. The PennyLane cross-checks pick angles in the spread regime and
+document this in `tests/test_pennylane_crosscheck.py`.
+
+## Reproduction
+
+On the idle Strix host (`uribagi@192.168.1.67`), with the package and harness
+rsynced to `/home/uribagi/iqp-cond-perf`:
+
+```bash
+cd experiments/library_perf
+export PYTHONPATH=../../packages/iqp-cond/src
+../../.venv/bin/python review.py
+../../.venv/bin/python step_improve.py
+../../.venv/bin/python pipeline.py
+../../.venv/bin/python bench.py e2e --label strix --refresh step   # and cache
+```

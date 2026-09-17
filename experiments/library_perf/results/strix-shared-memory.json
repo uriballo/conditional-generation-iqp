@@ -1,0 +1,64 @@
+{
+  "config": {
+    "batch_size": 256,
+    "n_iqp_samples": 8192,
+    "n_ops": 64,
+    "sigmas": [
+      1.0,
+      2.0,
+      4.0
+    ],
+    "steps": 2000,
+    "validation_n_iqp_samples": 16384,
+    "validation_n_ops": 256
+  },
+  "label": "strix-shared",
+  "memory": [
+    {
+      "case": {
+        "n_conditions": 5,
+        "n_targets": 2048,
+        "n_visible": 12
+      },
+      "compile_and_first_call_s": 0.6160096270032227,
+      "mode": "train",
+      "name": "train",
+      "peak_rss_mib": 615.75390625
+    },
+    {
+      "case": {
+        "n_conditions": 5,
+        "n_targets": 2048,
+        "n_visible": 12
+      },
+      "compile_and_first_call_s": 1.3780519240535796,
+      "mode": "jax",
+      "name": "jax",
+      "peak_rss_mib": 872.50390625
+    },
+    {
+      "case": {
+        "n_conditions": 5,
+        "n_targets": 2048,
+        "n_visible": 12
+      },
+      "compile_and_first_call_s": 0.7596479160711169,
+      "mode": "validate",
+      "name": "validate",
+      "peak_rss_mib": 674.71875
+    },
+    {
+      "case": {
+        "family": "spin_flip",
+        "n_ancillas": 10,
+        "n_conditions": 10,
+        "n_targets": 2048,
+        "n_visible": 12
+      },
+      "compile_and_first_call_s": 1.3508160810451955,
+      "mode": "paper",
+      "name": "paper",
+      "peak_rss_mib": 1152.44921875
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "config": {
+    "batch_size": 256,
+    "n_iqp_samples": 8192,
+    "n_ops": 64,
+    "sigmas": [
+      1.0,
+      2.0,
+      4.0
+    ],
+    "steps": 2000,
+    "validation_n_iqp_samples": 16384,
+    "validation_n_ops": 256
+  },
+  "label": "pre-refactor",
+  "validate_production": {
+    "case": {
+      "n_conditions": 5,
+      "n_targets": 2048,
+      "n_visible": 12
+    },
+    "validation_pass": {
+      "max_ms": 92.2482080059126,
+      "median_ms": 88.77329097595066,
+      "min_ms": 84.9152080481872
+    }
+  }
+}

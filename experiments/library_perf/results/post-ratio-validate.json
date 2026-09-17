@@ -1,0 +1,28 @@
+{
+  "config": {
+    "batch_size": 256,
+    "n_iqp_samples": 8192,
+    "n_ops": 64,
+    "sigmas": [
+      1.0,
+      2.0,
+      4.0
+    ],
+    "steps": 2000,
+    "validation_n_iqp_samples": 16384,
+    "validation_n_ops": 256
+  },
+  "label": "post-ratio",
+  "validate_production": {
+    "case": {
+      "n_conditions": 5,
+      "n_targets": 2048,
+      "n_visible": 12
+    },
+    "validation_pass": {
+      "max_ms": 59.370707953348756,
+      "median_ms": 58.5138329770416,
+      "min_ms": 57.81708296854049
+    }
+  }
+}

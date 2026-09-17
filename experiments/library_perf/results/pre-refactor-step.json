@@ -1,0 +1,60 @@
+{
+  "config": {
+    "batch_size": 256,
+    "n_iqp_samples": 8192,
+    "n_ops": 64,
+    "sigmas": [
+      1.0,
+      2.0,
+      4.0
+    ],
+    "steps": 2000,
+    "validation_n_iqp_samples": 16384,
+    "validation_n_ops": 256
+  },
+  "label": "pre-refactor",
+  "step_production": {
+    "bank_build": {
+      "max_ms": 2.5076670572161674,
+      "median_ms": 2.4862498976290226,
+      "min_ms": 2.458999981172383
+    },
+    "case": {
+      "n_conditions": 5,
+      "n_targets": 2048,
+      "n_visible": 12
+    },
+    "step_forward": {
+      "max_ms": 22.255957941524684,
+      "median_ms": 21.445083897560835,
+      "min_ms": 20.733583951368928
+    },
+    "step_loss_grad": {
+      "max_ms": 23.086957982741296,
+      "median_ms": 22.87362504284829,
+      "min_ms": 22.524000029079616
+    }
+  },
+  "step_small": {
+    "bank_build": {
+      "max_ms": 1.348332967609167,
+      "median_ms": 1.3118749484419823,
+      "min_ms": 1.292541972361505
+    },
+    "case": {
+      "n_conditions": 3,
+      "n_targets": 1024,
+      "n_visible": 8
+    },
+    "step_forward": {
+      "max_ms": 7.648041937500238,
+      "median_ms": 7.298415992408991,
+      "min_ms": 7.212541997432709
+    },
+    "step_loss_grad": {
+      "max_ms": 10.475624934770167,
+      "median_ms": 10.110583039931953,
+      "min_ms": 9.998333058319986
+    }
+  }
+}

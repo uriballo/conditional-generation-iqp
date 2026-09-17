@@ -1,0 +1,40 @@
+{
+  "config": {
+    "batch_size": 256,
+    "n_iqp_samples": 8192,
+    "n_ops": 64,
+    "sigmas": [
+      1.0,
+      2.0,
+      4.0
+    ],
+    "steps": 2000,
+    "validation_n_iqp_samples": 16384,
+    "validation_n_ops": 256
+  },
+  "e2e_production": {
+    "best_validation_loss": 4.793854215597903e-06,
+    "case": {
+      "n_conditions": 5,
+      "n_targets": 2048,
+      "n_visible": 12
+    },
+    "n_banks": 250,
+    "per_step_ms": 33.94214991648914,
+    "steps": 2000,
+    "wall_s": 67.88429983297829
+  },
+  "e2e_small": {
+    "best_validation_loss": -0.000471544347602497,
+    "case": {
+      "n_conditions": 3,
+      "n_targets": 1024,
+      "n_visible": 8
+    },
+    "n_banks": 500,
+    "per_step_ms": 12.94148545851931,
+    "steps": 2000,
+    "wall_s": 25.88297091703862
+  },
+  "label": "pre-refactor"
+}

@@ -1,0 +1,40 @@
+{
+  "batch_size": 100,
+  "best_step": 550,
+  "best_validation_loss": 0.023560831510348348,
+  "data": "/home/uribagi/iqp-cond-perf/data/gaussian-n12.npz",
+  "final_train_loss": 0.021241515400465236,
+  "held_out_conditions": [
+    0.0625,
+    0.1875,
+    0.3125,
+    0.4375,
+    0.5625,
+    0.6875,
+    0.8125,
+    0.9375
+  ],
+  "held_out_mmd": 0.004823240274426583,
+  "implementation": "research src/iqp_cond",
+  "label": "legacy-gaussian-n12",
+  "mask_refresh": "retained (campaign)",
+  "n_iqp_samples": 500,
+  "n_ops": 1000,
+  "n_parameters": 78,
+  "per_step_ms": 18.984942783601582,
+  "seed": 0,
+  "sigmas": [
+    1.0,
+    2.0,
+    4.0
+  ],
+  "steps": 2000,
+  "training_conditions": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "wall_s": 37.969885567203164
+}

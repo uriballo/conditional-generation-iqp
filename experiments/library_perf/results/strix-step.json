@@ -1,0 +1,88 @@
+{
+  "config": {
+    "batch_size": 256,
+    "n_iqp_samples": 8192,
+    "n_ops": 64,
+    "sigmas": [
+      1.0,
+      2.0,
+      4.0
+    ],
+    "steps": 2000,
+    "validation_n_iqp_samples": 16384,
+    "validation_n_ops": 256
+  },
+  "label": "strix",
+  "step_production": {
+    "bank_build": {
+      "max_ms": 1.3502859510481358,
+      "median_ms": 1.1660910677164793,
+      "min_ms": 1.1049530003219843
+    },
+    "banked_loss": {
+      "step_forward": {
+        "max_ms": 22.692885948345065,
+        "median_ms": 20.498861093074083,
+        "min_ms": 20.24652692489326
+      },
+      "step_loss_grad": {
+        "max_ms": 31.078638043254614,
+        "median_ms": 30.35589586943388,
+        "min_ms": 29.88510695286095
+      }
+    },
+    "case": {
+      "n_conditions": 5,
+      "n_targets": 2048,
+      "n_visible": 12
+    },
+    "fresh_loss": {
+      "step_forward": {
+        "max_ms": 30.958391027525067,
+        "median_ms": 30.52507108077407,
+        "min_ms": 29.755119932815433
+      },
+      "step_loss_grad": {
+        "max_ms": 50.36504799500108,
+        "median_ms": 48.22230106219649,
+        "min_ms": 47.288723988458514
+      }
+    }
+  },
+  "step_small": {
+    "bank_build": {
+      "max_ms": 0.9933849796652794,
+      "median_ms": 0.8845080155879259,
+      "min_ms": 0.8575888350605965
+    },
+    "banked_loss": {
+      "step_forward": {
+        "max_ms": 9.078944101929665,
+        "median_ms": 7.992362137883902,
+        "min_ms": 7.540102116763592
+      },
+      "step_loss_grad": {
+        "max_ms": 12.36627297475934,
+        "median_ms": 12.232596054673195,
+        "min_ms": 11.34351803921163
+      }
+    },
+    "case": {
+      "n_conditions": 3,
+      "n_targets": 1024,
+      "n_visible": 8
+    },
+    "fresh_loss": {
+      "step_forward": {
+        "max_ms": 12.221846031025052,
+        "median_ms": 11.871763970702887,
+        "min_ms": 10.221106000244617
+      },
+      "step_loss_grad": {
+        "max_ms": 27.850487967953086,
+        "median_ms": 26.51326102204621,
+        "min_ms": 25.89040598832071
+      }
+    }
+  }
+}
