@@ -16,7 +16,16 @@ in `results/`.
 |---|---|
 | Product ratios in float64 instead of complex128 | ratio stage 1.64 → 0.33 ms (5×); validation pass 94 → 55 ms |
 | Batched numpy bank build (one `np.unique` for all entries) | bank build 2.77 → 1.10 ms (2.5×) |
+| Rejection-free NumPy sampler (inverse CDF + order statistic) | 1.6-3.8× per bandwidth |
+| uint32 rank draws for all conditions at once, plus scalar `math.exp` instead of a JAX probability call | bank build 3.83 → 2.26 ms at 2000 ops (1.7×) |
 | Shared reference samples per condition across bandwidths | step loss+grad 30.7 → 22.9 ms (25%); e2e 77.8 → 59.8 s |
+
+Bank-build numbers in the current experiment regime (1000-2000 operators):
+1.24 ms at 1000 ops and 2.26 ms at 2000 ops, against 2.09/3.83 ms before the
+uint32 rewrite.  Mixed precision is worth 5.8% (r=0) to 16.4% (r=10) of a
+full 2000-step fit at 2000 ops / 1000 samples, with identical validation and
+held-out scores.  The shipped-defaults figures below are the preliminary
+campaign settings and remain only as historical context.
 
 The first is exact: the product encoder's amplitudes are real, and the float
 components extracted from the pinned complex expression are bit-for-bit the
@@ -28,7 +37,9 @@ campaign's per-entry layout bit for bit.
 
 Rejected after measurement: a multi-bank pilot to tighten `max_masks` (6%
 slower and shape-sensitive), `jax.vmap` over conditions or bandwidths (below),
-and pure-JAX mask sampling for the default path (below).
+pure-JAX mask sampling for the default path (below), and sharing the sample
+characters across bandwidths (1.00-1.03x and bit-identical: XLA already
+common-subexpresses them).
 
 ## Precision levers
 

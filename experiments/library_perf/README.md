@@ -14,6 +14,35 @@ Each command writes `results/<label>-<command>.json`; timing is the median of
 warm, fully blocking calls, memory is peak `ru_maxrss` of a dedicated
 subprocess (includes the JAX runtime).
 
+## Experiment regime (1000-2000 operators, 500-1000 samples)
+
+The shipped `TrainingConfig` defaults (64 operators, 8192 samples) were the
+preliminary campaign settings.  The current experiments use 1000-2000
+operators and 500-1000 samples; bank construction is a much larger share
+there, and mixed precision pays more.  Per-step breakdown (idle host):
+
+| case | bank build | step f64 | step f32-GEMM | validation |
+|---|---|---|---|---|
+| r=0, 1000 ops, S=500 | 1.24 ms | 8.42 ms | 8.06 ms | 2.75 ms |
+| r=10, 1000 ops, S=500 | 1.24 ms | 10.85 ms | 8.40 ms | 4.95 ms |
+| r=0, 2000 ops, S=1000 | 2.26 ms | 20.48 ms | 17.58 ms | 8.00 ms |
+| r=10, 2000 ops, S=1000 | 2.26 ms | 26.58 ms | 20.51 ms | 14.13 ms |
+
+Full 2000-step fits at 2000 ops / 1000 samples:
+
+| arm | wall | per step | validation | held-out MMD | peak RSS |
+|---|---|---|---|---|---|
+| r=0, float64 | 58.86 s | 29.4 ms | 0.022653 | 4.98e-3 | 1221 MiB |
+| r=0, float32 GEMM | 55.44 s | 27.7 ms | 0.022653 | 4.98e-3 | 1162 MiB |
+| r=10, float64 | 70.93 s | 35.5 ms | 0.021473 | 3.85e-3 | 1250 MiB |
+| r=10, float32 GEMM | 59.30 s | 29.7 ms | 0.021473 | 3.85e-3 | 1251 MiB |
+
+Mixed precision is worth 5.8% (r=0) to 16.4% (r=10) end to end with
+bit-comparable validation and held-out scores; ten ancillas cost 7-20% wall
+and improve the held-out MMD by ~23%.  `sample_chunk` is neutral in this
+regime (S <= 1000) and the bank build is down to 1.2-2.3 ms after the
+rejection-free uint32 sampler rewrite.
+
 ## Headline numbers (2026-09-17, idle `strix-halo2`)
 
 Idle 32-core x86, 124 GiB, JAX 0.11 CPU backend, float64. Problem: 12 visible
@@ -142,6 +171,7 @@ implementations.
 | `step_improve.py` | interleaved A/B of bank build, ratio dtype, cap widths |
 | `precision.py` | float64 vs mixed-GEMM float32 vs full float32, with accuracy |
 | `chunking.py` | sample-axis streaming vs monolithic, memory and time |
+| `regime.py` | per-step breakdown in the 1000-2000 operator regime |
 | `pipeline.py` | full-pipeline arm comparison and checkpoint consistency |
 | `gaussian_fit.py` | full 12-qubit Gaussian fit through the library |
 | `legacy_fit.py` | the same fit through the research campaign implementation |

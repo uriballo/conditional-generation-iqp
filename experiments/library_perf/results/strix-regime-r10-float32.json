@@ -1,0 +1,45 @@
+{
+  "ancillas": 10,
+  "batch_size": 100,
+  "best_step": 1750,
+  "best_validation_loss": 0.02147292631939987,
+  "checkpoint_consistent": false,
+  "data": "/home/uribagi/iqp-cond-perf/data/gaussian-n12.npz",
+  "final_train_loss": 0.020403416187476788,
+  "gemm_dtype": "float32",
+  "held_out_conditions": [
+    0.0625,
+    0.1875,
+    0.3125,
+    0.4375,
+    0.5625,
+    0.6875,
+    0.8125,
+    0.9375
+  ],
+  "held_out_mmd": 0.0038454835063879795,
+  "label": "strix-regime-r10-float32",
+  "mask_refresh": "step",
+  "n_banks": 2000,
+  "n_iqp_samples": 1000,
+  "n_ops": 2000,
+  "n_parameters": 253,
+  "peak_rss_mib": 1251.41015625,
+  "per_step_ms": 29.6518765775254,
+  "sample_chunk": 0,
+  "seed": 0,
+  "sigmas": [
+    1.0,
+    2.0,
+    4.0
+  ],
+  "steps": 2000,
+  "training_conditions": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "wall_s": 59.3037531550508
+}
