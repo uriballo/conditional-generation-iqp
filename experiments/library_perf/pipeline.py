@@ -44,6 +44,7 @@ def train_with_jax_masks(
     seed: int,
 ) -> tuple[np.ndarray, np.ndarray, float]:
     """The trainer loop with fresh in-JAX masks as the objective."""
+    sigmas = config.resolved_sigmas(model.visible)
     params = iqc.random_parameters(model.ansatz.n_parameters, seed)
     schedule = optax.cosine_decay_schedule(
         init_value=config.learning_rate,
@@ -60,9 +61,9 @@ def train_with_jax_masks(
             current_params,
             target_batch,
             step_key,
-            sigmas=config.sigmas,
+            sigmas=sigmas,
             n_ops=config.n_ops,
-            n_samples=config.n_iqp_samples,
+            n_samples=config.mc_samples,
             shared_samples=True,
         ).loss
 
@@ -94,6 +95,7 @@ def train_with_jax_masks(
 
 def main() -> None:
     config = iqc.TrainingConfig(steps=500, validation_interval=25)
+    sigmas = config.resolved_sigmas(12)
     seeds = (0, 1)
     report: dict = {"config": {"steps": config.steps, "seeds": list(seeds)}}
     for seed in seeds:
@@ -106,7 +108,7 @@ def main() -> None:
         model = iqc.ConditionalModel(ansatz, encoders)
         validation = targets[:, :512]
         common_bank = operator_bank(
-            config.sigmas,
+            sigmas,
             config.validation_n_ops,
             encoders.n_conditions,
             targets.shape[2],
@@ -127,7 +129,7 @@ def main() -> None:
                     jnp.asarray(validation),
                     common_key,
                     bank=common_bank,
-                    n_samples=config.validation_n_iqp_samples,
+                    n_samples=config.validation_mc_samples,
                 ).loss,
             )
 
@@ -165,7 +167,7 @@ def main() -> None:
         # Pipeline consistency: the reported best loss must be the objective at
         # best_params on the trainer's own validation bank and key.
         expected_bank = operator_bank(
-            config.sigmas,
+            sigmas,
             config.validation_n_ops,
             encoders.n_conditions,
             targets.shape[2],
@@ -179,7 +181,7 @@ def main() -> None:
                     jnp.asarray(validation),
                     expected_key,
                     bank=expected_bank,
-                    n_samples=config.validation_n_iqp_samples,
+                    n_samples=config.validation_mc_samples,
                 ).loss,
             )
             run[name]["checkpoint_consistent"] = (

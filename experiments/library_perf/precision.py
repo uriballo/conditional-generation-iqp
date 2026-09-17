@@ -156,8 +156,9 @@ def main() -> None:
     params = iqc.random_parameters(ansatz.n_parameters, 0)
     batch = jnp.asarray(targets[:, : config.batch_size])
     key = jax.random.PRNGKey(0)
+    sigmas = config.resolved_sigmas(n_visible)
     bank = operator_bank(
-        config.sigmas,
+        sigmas,
         config.n_ops,
         n_conditions,
         n_visible,
@@ -174,7 +175,7 @@ def main() -> None:
             target_batch,
             step_key,
             bank=bank,
-            n_samples=config.n_iqp_samples,
+            n_samples=config.mc_samples,
             shared_samples=True,
             gemm_dtype=gemm_dtype,
         ).loss
@@ -189,7 +190,7 @@ def main() -> None:
             encoders32,
             target_batch,
             bank,
-            config.n_iqp_samples,
+            config.mc_samples,
             step_key,
         )
 
@@ -258,7 +259,7 @@ def main() -> None:
     report["sample_sweep_ms"] = sweep
 
     # ------------------------------------------------------- paper scale
-    paper_config = iqc.TrainingConfig(batch_size=2048, n_ops=256, n_iqp_samples=16384)
+    paper_config = iqc.TrainingConfig(batch_size=2048, n_ops=256, mc_samples=16384)
     paper_ansatz, paper_encoders, paper_targets = problem(
         n_visible=12,
         n_conditions=10,
@@ -269,7 +270,7 @@ def main() -> None:
     paper_params = iqc.random_parameters(paper_ansatz.n_parameters, 0)
     paper_batch = jnp.asarray(paper_targets)
     paper_bank = operator_bank(
-        paper_config.sigmas,
+        paper_config.resolved_sigmas(12),
         paper_config.n_ops,
         paper_encoders.n_conditions,
         12,
@@ -285,7 +286,7 @@ def main() -> None:
             target_batch,
             step_key,
             bank=paper_bank,
-            n_samples=paper_config.n_iqp_samples,
+            n_samples=paper_config.mc_samples,
             gemm_dtype=gemm_dtype,
         ).loss
 

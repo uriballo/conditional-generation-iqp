@@ -48,8 +48,9 @@ def _losses(problem_case: dict):
     ansatz, encoders, targets = problem(**problem_case)
     config = TRAIN
     n_visible = problem_case["n_visible"]
+    sigmas = config.resolved_sigmas(n_visible)
     bank = operator_bank(
-        config.sigmas,
+        sigmas,
         config.n_ops,
         problem_case["n_conditions"],
         n_visible,
@@ -66,9 +67,9 @@ def _losses(problem_case: dict):
             encoders,
             target_batch,
             key,
-            sigmas=config.sigmas,
+            sigmas=sigmas,
             n_ops=config.n_ops,
-            n_samples=config.n_iqp_samples,
+            n_samples=config.mc_samples,
         ).loss
 
     def banked_loss(params, target_batch, key):
@@ -80,7 +81,7 @@ def _losses(problem_case: dict):
             target_batch,
             key,
             bank=bank,
-            n_samples=config.n_iqp_samples,
+            n_samples=config.mc_samples,
             shared_samples=True,
         ).loss
 
@@ -119,7 +120,7 @@ def bench_step(case: dict) -> dict:
         **arms,
         "bank_build": timeit(
             lambda: operator_bank(
-                config.sigmas,
+                config.resolved_sigmas(case["n_visible"]),
                 config.n_ops,
                 case["n_conditions"],
                 case["n_visible"],
@@ -137,7 +138,7 @@ def bench_validate(case: dict) -> dict:
     config = TRAIN
     validation_targets = jnp.asarray(context["targets"])
     validation_bank = operator_bank(
-        config.sigmas,
+        config.resolved_sigmas(case["n_visible"]),
         config.validation_n_ops,
         case["n_conditions"],
         case["n_visible"],
@@ -152,7 +153,7 @@ def bench_validate(case: dict) -> dict:
             validation_targets,
             jax.random.PRNGKey(2),
             bank=validation_bank,
-            n_samples=config.validation_n_iqp_samples,
+            n_samples=config.validation_mc_samples,
         ).loss
 
     return {
@@ -191,7 +192,7 @@ def _memory_case(name: str, case: dict) -> dict:
 
     if name == "validate":
         validation_bank = operator_bank(
-            config.sigmas,
+            config.resolved_sigmas(case["n_visible"]),
             config.validation_n_ops,
             case["n_conditions"],
             case["n_visible"],
@@ -206,7 +207,7 @@ def _memory_case(name: str, case: dict) -> dict:
                 jnp.asarray(context["targets"]),
                 jax.random.PRNGKey(2),
                 bank=validation_bank,
-                n_samples=config.validation_n_iqp_samples,
+                n_samples=config.validation_mc_samples,
             ).loss
 
         fn = jax.jit(call)
@@ -279,11 +280,13 @@ def main() -> None:
         "config": {
             "steps": TRAIN.steps,
             "batch_size": TRAIN.batch_size,
-            "sigmas": TRAIN.sigmas,
+            "sigmas": (
+                list(TRAIN.sigmas) if TRAIN.sigmas is not None else "bodyness_default"
+            ),
             "n_ops": TRAIN.n_ops,
-            "n_iqp_samples": TRAIN.n_iqp_samples,
+            "mc_samples": TRAIN.mc_samples,
             "validation_n_ops": TRAIN.validation_n_ops,
-            "validation_n_iqp_samples": TRAIN.validation_n_iqp_samples,
+            "validation_mc_samples": TRAIN.validation_mc_samples,
         },
     }
 

@@ -52,11 +52,12 @@ def main() -> None:
         seed=0,
     )
     model = iqc.ConditionalModel(ansatz, encoders)
+    sigmas = config.resolved_sigmas(n_visible)
     generators = jnp.asarray(ansatz.generators)
     params = iqc.random_parameters(ansatz.n_parameters, 0)
     batch = jnp.asarray(targets[:, : config.batch_size])
     bank: OperatorBank = operator_bank(
-        config.sigmas,
+        sigmas,
         config.n_ops,
         n_conditions,
         n_visible,
@@ -70,9 +71,9 @@ def main() -> None:
     encoder = iqc.encoders.select_encoder(encoders, condition)
     masks, _weights = bank.entry(0, condition)
     model_masks = pad_visible_masks(masks, model.n_ancillas)
-    samples = encoder.sample(key, config.n_iqp_samples)
+    samples = encoder.sample(key, config.mc_samples)
     report["stages_ms"] = {
-        "sample": bench(lambda: encoder.sample(key, config.n_iqp_samples)),
+        "sample": bench(lambda: encoder.sample(key, config.mc_samples)),
         "amplitude_ratios": bench(
             lambda: encoder.amplitude_ratios(samples, model_masks),
         ),
@@ -86,7 +87,7 @@ def main() -> None:
                 encoder,
                 model_masks,
                 key=key,
-                n_samples=config.n_iqp_samples,
+                n_samples=config.mc_samples,
             ),
         ),
     }
@@ -98,7 +99,7 @@ def main() -> None:
             target_batch,
             step_key,
             bank=bank,
-            n_samples=config.n_iqp_samples,
+            n_samples=config.mc_samples,
         ).loss
 
     def shared(current_params, target_batch, step_key):
@@ -107,7 +108,7 @@ def main() -> None:
             target_batch,
             step_key,
             bank=bank,
-            n_samples=config.n_iqp_samples,
+            n_samples=config.mc_samples,
             shared_samples=True,
         ).loss
 
@@ -116,9 +117,9 @@ def main() -> None:
             current_params,
             target_batch,
             step_key,
-            sigmas=config.sigmas,
+            sigmas=sigmas,
             n_ops=config.n_ops,
-            n_samples=config.n_iqp_samples,
+            n_samples=config.mc_samples,
         ).loss
 
     variants = {
@@ -135,7 +136,7 @@ def main() -> None:
     report["bank_build_ms"] = {
         "operator_bank": bench(
             lambda: operator_bank(
-                config.sigmas,
+                sigmas,
                 config.n_ops,
                 n_conditions,
                 n_visible,
@@ -151,7 +152,7 @@ def main() -> None:
                     n_visible,
                     sigma,
                 )
-                for sigma in config.sigmas
+                for sigma in sigmas
             ],
             repeats=10,
         ),

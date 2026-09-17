@@ -59,7 +59,15 @@ def old_style_bank(sigmas, n_ops, n_conditions, n_visible, seed, caps):
 
 
 def main() -> None:
-    config = iqc.TrainingConfig()
+    # Pinned to the regime the recorded numbers were taken in (64 operators,
+    # 8192 Monte Carlo samples, fixed sigma triple).  The library defaults have
+    # since moved to 512/1000 and the width-aware bodyness schedule, and the
+    # tight-cap baseline below is only meaningful at this draw budget.
+    config = iqc.TrainingConfig(
+        n_ops=64,
+        mc_samples=8_192,
+        sigmas=(1.0, 2.0, 4.0),
+    )
     ansatz, encoders, targets = problem(
         n_visible=12,
         n_conditions=5,
@@ -69,8 +77,8 @@ def main() -> None:
     params = iqc.random_parameters(ansatz.n_parameters, 0)
     batch = jnp.asarray(targets[:, : config.batch_size])
     key = jax.random.PRNGKey(0)
-    sigmas = config.sigmas
     n_ops, n_conditions, n_visible = config.n_ops, 5, 12
+    sigmas = config.resolved_sigmas(n_visible)
     report: dict = {}
 
     # ------------------------------------------------------------- bank build
@@ -117,7 +125,7 @@ def main() -> None:
                 target_batch,
                 step_key,
                 bank=current_bank,
-                n_samples=config.n_iqp_samples,
+                n_samples=config.mc_samples,
             ).loss
 
         value_and_grad = jax.jit(jax.value_and_grad(loss))
@@ -138,7 +146,7 @@ def main() -> None:
     # Samples and masks are jit arguments, not closures: closed-over arrays are
     # compile-time constants and XLA would fold the whole ratio away.
     masks = natural.entry(0, 0)[0]
-    samples = encoders.sample(key, config.n_iqp_samples)
+    samples = encoders.sample(key, config.mc_samples)
     complex_enc = iqc.ProductEncoder(
         name="product",
         angles=encoders.angles,

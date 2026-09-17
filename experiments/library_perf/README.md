@@ -16,10 +16,10 @@ subprocess (includes the JAX runtime).
 
 ## Experiment regime (1000-2000 operators, 500-1000 samples)
 
-The shipped `TrainingConfig` defaults (64 operators, 8192 samples) were the
-preliminary campaign settings.  The current experiments use 1000-2000
-operators and 500-1000 samples; bank construction is a much larger share
-there, and mixed precision pays more.  Per-step breakdown (idle host):
+The perf benchmarks below use 1000-2000 operators and 500-1000 samples; bank
+construction is a much larger share there than at the library defaults, and
+mixed precision pays more.  The campaign itself ran 2000 masks and 8192
+reference draws per condition and bandwidth.  Per-step breakdown (idle host):
 
 | case | bank build | step f64 | step f32-GEMM | validation |
 |---|---|---|---|---|
@@ -46,9 +46,11 @@ rejection-free uint32 sampler rewrite.
 ## Headline numbers (2026-09-17, idle `strix-halo2`)
 
 Idle 32-core x86, 124 GiB, JAX 0.11 CPU backend, float64. Problem: 12 visible
-qubits, 5 conditions, complete two-local ansatz (78 generators), defaults
-`n_ops=64`, `n_iqp_samples=8192`, validation `n_ops=256`,
-`n_iqp_samples=16384`, `sigma in {1, 2, 4}`.
+qubits, 5 conditions, complete two-local ansatz (78 generators). These numbers
+were measured with the then-default `n_ops=64`, `mc_samples=8192`, validation
+`n_ops=256`/`mc_samples=16384`, and `sigmas=(1, 2, 4)`; the library defaults
+have since moved to 512 masks, 1000 Monte Carlo samples, and the width-aware
+bodyness schedule, so rerun the harness for current absolute times.
 
 | measurement | value |
 |---|---|
@@ -75,7 +77,7 @@ Reading:
   paper scale on this CPU host, with gradient error ~1e-7; on GPUs the same
   estimator structure gains 15-28x.  See `review.md` and `precision.py`.
 - **Sample-axis streaming** (`sample_chunk`, `chunking.py`) bounds the live
-  `(samples, masks, qubits)` ratio tensor.  At the 8192-sample defaults it is
+  `(samples, masks, qubits)` ratio tensor.  At 8192 samples it is
   3.5% faster with no ancillas and 14.9% faster with ten, at 8% lower peak
   RSS, and identically valued; at small sample budgets it costs a little, so
   it is off by default.

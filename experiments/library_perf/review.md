@@ -1,8 +1,10 @@
 # Performance review and step-mode optimisation
 
 Date: 2026-09-17 · Subject: `packages/iqp-cond`. Production problem unless
-stated: 12 visible qubits, 5 conditions, complete two-local ansatz,
-`TrainingConfig` defaults (`n_ops=64`, `n_iqp_samples=8192`, `sigmas=(1,2,4)`).
+stated: 12 visible qubits, 5 conditions, complete two-local ansatz. The
+numbers below were taken with the then-default (`n_ops=64`, `mc_samples=8192`,
+`sigmas=(1,2,4)`); the library defaults have since become 512 masks, 1000
+Monte Carlo samples, and the width-aware bodyness schedule.
 
 Hosts: `strix-halo2` (32-core x86, 124 GiB, idle, JAX 0.11 CPU, float64) for all
 headline numbers; Apple M3 Max for cross-checks (the laptop runs background load
