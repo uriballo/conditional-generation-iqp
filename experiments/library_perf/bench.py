@@ -39,7 +39,6 @@ PAPER = dict(
     n_conditions=10,
     n_ancillas=10,
     n_targets=2048,
-    family="spin_flip",
 )
 
 

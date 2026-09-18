@@ -60,7 +60,6 @@ def problem(
     n_ancillas: int = 0,
     n_targets: int = 2048,
     seed: int = 0,
-    family: str = "product",
 ):
     """Build a complete-ansatz problem: ansatz, encoders, target samples."""
     import iqp_cond as iqc
@@ -69,9 +68,7 @@ def problem(
     ansatz = iqc.complete_ansatz(n_qubits)
     rng = np.random.default_rng(seed)
     angles = rng.uniform(0.4, 1.6, size=(n_conditions, n_qubits))
-    if family == "spin_flip":
-        angles = np.broadcast_to(angles[:, :1], angles.shape)
-    encoders = iqc.encoder(family, angles)
+    encoders = iqc.encoder(iqc.PRODUCT, angles)
     targets = rng.integers(0, 2, size=(n_conditions, n_targets, n_visible)).astype(
         np.float64,
     )
