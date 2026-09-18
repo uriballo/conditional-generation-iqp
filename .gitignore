@@ -201,7 +201,10 @@ Overleaf/mainNotes.bib
 archive/
 artifacts/
 output/
-paper/
 results/
 tmp/
 watch_*
+
+# Manuscript placeholder; the paper source is dropped in when due
+paper/*
+!paper/.gitkeep
