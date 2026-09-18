@@ -1,0 +1,4 @@
+[submodule "packages/iqp-cond"]
+	path = packages/iqp-cond
+	url = https://github.com/uriballo/iqp-cond.git
+	branch = main
