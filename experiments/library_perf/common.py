@@ -62,13 +62,13 @@ def problem(
     seed: int = 0,
 ):
     """Build a complete-ansatz problem: ansatz, encoders, target samples."""
-    import iqp_cond as iqc
+    import iqp_cond as ciqp
 
     n_qubits = n_visible + n_ancillas
-    ansatz = iqc.complete_ansatz(n_qubits)
+    ansatz = ciqp.complete_ansatz(n_qubits)
     rng = np.random.default_rng(seed)
     angles = rng.uniform(0.4, 1.6, size=(n_conditions, n_qubits))
-    encoders = iqc.encoder(iqc.PRODUCT, angles)
+    encoders = ciqp.angle_encoder(angles[:, None, :], axes=("Y" * n_qubits,))
     targets = rng.integers(0, 2, size=(n_conditions, n_targets, n_visible)).astype(
         np.float64,
     )

@@ -18,6 +18,7 @@ the shipped float64 estimator, and a sample-budget scaling sweep.
 
 from __future__ import annotations
 
+import dataclasses
 import statistics
 import time
 
@@ -25,11 +26,11 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 from common import block, problem, save
+from iqp_cond.core import pad_visible_masks
 from iqp_cond.loss import mmd
 from iqp_cond.operators import operator_bank
 
-import iqp_cond as iqc
-from iqp_cond.ancilla import pad_visible_masks
+import iqp_cond as ciqp
 
 
 def interleaved(variants: dict[str, object], rounds: int = 21) -> dict[str, float]:
@@ -44,19 +45,19 @@ def interleaved(variants: dict[str, object], rounds: int = 21) -> dict[str, floa
     return {name: statistics.median(values) for name, values in samples.items()}
 
 
-def cast_encoder(encoders: iqc.ProductEncoder, dtype: jnp.dtype) -> iqc.ProductEncoder:
-    return iqc.ProductEncoder(
-        name=encoders.name,
+def cast_encoder(encoders: ciqp.AngleEncoder, dtype: jnp.dtype) -> ciqp.AngleEncoder:
+    return dataclasses.replace(
+        encoders,
         angles=jnp.asarray(encoders.angles, dtype=dtype),
         amp_zero=jnp.asarray(encoders.amp_zero, dtype=dtype),
         amp_one=jnp.asarray(encoders.amp_one, dtype=dtype),
     )
 
 
-def select(encoders: iqc.ProductEncoder, condition: int) -> iqc.ProductEncoder:
+def select(encoders: ciqp.AngleEncoder, condition: int) -> ciqp.AngleEncoder:
     row = slice(condition, condition + 1)
-    return iqc.ProductEncoder(
-        name=encoders.name,
+    return dataclasses.replace(
+        encoders,
         angles=encoders.angles[row],
         amp_zero=encoders.amp_zero[row],
         amp_one=encoders.amp_one[row],
@@ -66,7 +67,7 @@ def select(encoders: iqc.ProductEncoder, condition: int) -> iqc.ProductEncoder:
 def entry_mmd(
     params: jnp.ndarray,
     generators: jnp.ndarray,
-    encoder: iqc.Encoder,
+    encoder: ciqp.Encoder,
     target: jnp.ndarray,
     masks: jnp.ndarray,
     weights: jnp.ndarray,
@@ -112,9 +113,9 @@ def entry_mmd(
 def everything_f32_loss(
     params: jnp.ndarray,
     generators: jnp.ndarray,
-    encoders: iqc.ProductEncoder,
+    encoders: ciqp.AngleEncoder,
     targets: jnp.ndarray,
-    bank: iqc.OperatorBank,
+    bank: ciqp.OperatorBank,
     n_samples: int,
     key: jax.Array,
 ) -> jnp.ndarray:
@@ -145,7 +146,7 @@ def everything_f32_loss(
 
 
 def main() -> None:
-    config = iqc.TrainingConfig()
+    config = ciqp.TrainingConfig()
     n_visible, n_conditions = 12, 5
     ansatz, encoders, targets = problem(
         n_visible=n_visible,
@@ -153,7 +154,7 @@ def main() -> None:
         n_targets=2048,
         seed=0,
     )
-    params = iqc.random_parameters(ansatz.n_parameters, 0)
+    params = ciqp.random_parameters(ansatz.n_parameters, 0)
     batch = jnp.asarray(targets[:, : config.batch_size])
     key = jax.random.PRNGKey(0)
     sigmas = config.resolved_sigmas(n_visible)
@@ -259,7 +260,7 @@ def main() -> None:
     report["sample_sweep_ms"] = sweep
 
     # ------------------------------------------------------- paper scale
-    paper_config = iqc.TrainingConfig(batch_size=2048, n_ops=256, mc_samples=16384)
+    paper_config = ciqp.TrainingConfig(batch_size=2048, n_ops=256, mc_samples=16384)
     paper_ansatz, paper_encoders, paper_targets = problem(
         n_visible=12,
         n_conditions=10,
@@ -267,7 +268,7 @@ def main() -> None:
         n_targets=2048,
         seed=1,
     )
-    paper_params = iqc.random_parameters(paper_ansatz.n_parameters, 0)
+    paper_params = ciqp.random_parameters(paper_ansatz.n_parameters, 0)
     paper_batch = jnp.asarray(paper_targets)
     paper_bank = operator_bank(
         paper_config.resolved_sigmas(12),

@@ -20,13 +20,14 @@ dependencies = [
     "scikit-learn>=1.6.0",
 ]
 
-# The campaign tree is run from source (`PYTHONPATH=src`); only the `iqp-cond`
-# library is installed, pinned to a released tag of its own repository.
+# The campaign tree is run from source (`PYTHONPATH=src`); the `iqp-cond`
+# library is installed editable from the submodule at packages/iqp-cond, which
+# tracks the library's main branch.
 [tool.uv]
 package = false
 
 [tool.uv.sources]
-iqp-cond = { git = "https://github.com/uriballo/iqp-cond.git", tag = "v0.1.0" }
+iqp-cond = { path = "packages/iqp-cond", editable = true }
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

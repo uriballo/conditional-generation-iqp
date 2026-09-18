@@ -25,10 +25,10 @@ import optax
 from common import problem, save
 from iqp_cond.operators import operator_bank
 
-import iqp_cond as iqc
+import iqp_cond as ciqp
 
 
-def _batches(targets: np.ndarray, config: iqc.TrainingConfig, seed: int) -> np.ndarray:
+def _batches(targets: np.ndarray, config: ciqp.TrainingConfig, seed: int) -> np.ndarray:
     rng = np.random.default_rng(seed)
     return rng.integers(
         0,
@@ -38,14 +38,14 @@ def _batches(targets: np.ndarray, config: iqc.TrainingConfig, seed: int) -> np.n
 
 
 def train_with_jax_masks(
-    model: iqc.ConditionalModel,
+    model: ciqp.ConditionalModel,
     training_targets: np.ndarray,
-    config: iqc.TrainingConfig,
+    config: ciqp.TrainingConfig,
     seed: int,
 ) -> tuple[np.ndarray, np.ndarray, float]:
     """The trainer loop with fresh in-JAX masks as the objective."""
     sigmas = config.resolved_sigmas(model.visible)
-    params = iqc.random_parameters(model.ansatz.n_parameters, seed)
+    params = ciqp.random_parameters(model.ansatz.n_parameters, seed)
     schedule = optax.cosine_decay_schedule(
         init_value=config.learning_rate,
         decay_steps=config.steps,
@@ -94,7 +94,7 @@ def train_with_jax_masks(
 
 
 def main() -> None:
-    config = iqc.TrainingConfig(steps=500, validation_interval=25)
+    config = ciqp.TrainingConfig(steps=500, validation_interval=25)
     sigmas = config.resolved_sigmas(12)
     seeds = (0, 1)
     report: dict = {"config": {"steps": config.steps, "seeds": list(seeds)}}
@@ -105,7 +105,7 @@ def main() -> None:
             n_targets=2048,
             seed=seed,
         )
-        model = iqc.ConditionalModel(ansatz, encoders)
+        model = ciqp.ConditionalModel(ansatz, encoders)
         validation = targets[:, :512]
         common_bank = operator_bank(
             sigmas,
@@ -135,9 +135,9 @@ def main() -> None:
 
         run: dict = {}
         results: dict = {}
-        for name, refresh in (("step", iqc.STEP), ("cache", iqc.CACHE)):
+        for name, refresh in (("step", ciqp.STEP), ("cache", ciqp.CACHE)):
             start = time.perf_counter()
-            result = iqc.train(
+            result = ciqp.train(
                 model,
                 targets,
                 validation,

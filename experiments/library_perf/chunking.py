@@ -27,13 +27,13 @@ import time
 import jax
 import jax.numpy as jnp
 import numpy as np
+from iqp_cond.core import pad_visible_masks
 from iqp_cond.encoders import select_encoder
 from iqp_cond.estimator import estimate_pauli_z_unchecked
 from iqp_cond.loss import mmd, target_moments
 from iqp_cond.operators import operator_bank
 
-import iqp_cond as iqc
-from iqp_cond.ancilla import pad_visible_masks
+import iqp_cond as ciqp
 
 TRAINING_CONDITIONS = (0.0, 0.25, 0.5, 0.75, 1.0)
 
@@ -41,17 +41,17 @@ TRAINING_CONDITIONS = (0.0, 0.25, 0.5, 0.75, 1.0)
 def build(ancillas: int, samples: int, n_ops: int) -> dict:
     n_visible, n_conditions = 12, len(TRAINING_CONDITIONS)
     n_model = n_visible + ancillas
-    ansatz = iqc.complete_ansatz(n_model)
+    ansatz = ciqp.complete_ansatz(n_model)
     conditions = np.asarray(TRAINING_CONDITIONS)
     angles = np.repeat(
         (np.pi * (0.35 - 0.70 * conditions))[:, None],
         n_model,
         axis=1,
     )
-    encoders = iqc.encoder(iqc.PRODUCT, angles)
+    encoders = ciqp.angle_encoder(angles[:, None, :], axes=("Y" * n_model,))
     rng = np.random.default_rng(0)
     targets = rng.integers(0, 2, size=(n_conditions, 100, n_visible)).astype(float)
-    params = iqc.random_parameters(ansatz.n_parameters, 0)
+    params = ciqp.random_parameters(ansatz.n_parameters, 0)
     bank = operator_bank((1.0, 2.0, 4.0), n_ops, n_conditions, n_visible, seed=0)
     return {
         "ansatz": ansatz,

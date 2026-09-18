@@ -32,7 +32,7 @@ import numpy as np
 from common import REPO, save
 from iqp_cond.operators import operator_bank
 
-import iqp_cond as iqc
+import iqp_cond as ciqp
 
 TRAINING_CONDITIONS = (0.0, 0.25, 0.5, 0.75, 1.0)
 DEFAULT_DATA = (
@@ -78,7 +78,7 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=100)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--ancillas", type=int, default=0)
-    parser.add_argument("--refresh", choices=[iqc.STEP, iqc.CACHE], default=iqc.STEP)
+    parser.add_argument("--refresh", choices=[ciqp.STEP, ciqp.CACHE], default=ciqp.STEP)
     parser.add_argument(
         "--gemm-dtype", choices=["float64", "float32"], default="float64"
     )
@@ -100,26 +100,29 @@ def main() -> None:
     validation = np.asarray(data["validation"], dtype=np.float64)[selected]
     held_out_targets = np.asarray(data["test"], dtype=np.float64)[held_out]
 
-    ansatz = iqc.complete_ansatz(n_model)
+    ansatz = ciqp.complete_ansatz(n_model)
     generators = np.asarray(ansatz.generators)
-    encoders = iqc.encoder(iqc.PRODUCT, condition_angles(conditions[selected], n_model))
-    held_out_encoders = iqc.encoder(
-        iqc.PRODUCT,
-        condition_angles(conditions[held_out], n_model),
+    encoders = ciqp.angle_encoder(
+        condition_angles(conditions[selected], n_model)[:, None, :],
+        axes=("Y" * n_model,),
     )
-    initial_params = iqc.parameters_from_data(
+    held_out_encoders = ciqp.angle_encoder(
+        condition_angles(conditions[held_out], n_model)[:, None, :],
+        axes=("Y" * n_model,),
+    )
+    initial_params = ciqp.parameters_from_data(
         training[0],
         generators,
         n_visible=n_visible,
         seed=args.seed,
     )
-    model = iqc.ConditionalModel(
+    model = ciqp.ConditionalModel(
         ansatz,
         encoders,
         n_visible=n_visible if args.ancillas else None,
     )
 
-    config = iqc.TrainingConfig(
+    config = ciqp.TrainingConfig(
         steps=args.steps,
         batch_size=args.batch_size,
         sigmas=(1.0, 2.0, 4.0),
@@ -133,7 +136,7 @@ def main() -> None:
     )
 
     start = time.perf_counter()
-    result = iqc.train(
+    result = ciqp.train(
         model,
         training,
         validation,
@@ -153,7 +156,7 @@ def main() -> None:
         seed=args.seed + 31,
     )
     held_out_score = float(
-        iqc.mmd(
+        ciqp.mmd(
             result.best_params,
             ansatz.generators,
             held_out_encoders,
@@ -174,7 +177,7 @@ def main() -> None:
         seed=args.seed + 1,
     )
     reproduced = float(
-        iqc.mmd(
+        ciqp.mmd(
             result.best_params,
             ansatz.generators,
             encoders,

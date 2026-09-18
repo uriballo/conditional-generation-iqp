@@ -24,7 +24,7 @@ from common import block, problem
 from iqp_cond.loss import mmd
 from iqp_cond.operators import operator_bank
 
-import iqp_cond as iqc
+import iqp_cond as ciqp
 
 SIGMAS = (1.0, 2.0, 4.0)
 CHUNKS = (256, 512, 1024)
@@ -60,7 +60,7 @@ def main() -> None:
         seed=0,
         n_ancillas=args.ancillas,
     )
-    params = iqc.random_parameters(ansatz.n_parameters, 0)
+    params = ciqp.random_parameters(ansatz.n_parameters, 0)
     generators = jnp.asarray(ansatz.generators)
     bank = operator_bank(
         SIGMAS,

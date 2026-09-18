@@ -11,6 +11,7 @@ measured under identical conditions.
 
 from __future__ import annotations
 
+import dataclasses
 import statistics
 import time
 
@@ -21,7 +22,7 @@ from common import block, problem, save
 from iqp_cond.loss import mmd
 from iqp_cond.operators import _assemble_bank, _draw_entrywise, operator_bank
 
-import iqp_cond as iqc
+import iqp_cond as ciqp
 
 
 def interleaved(variants: dict[str, object], rounds: int = 15) -> dict[str, float]:
@@ -63,7 +64,7 @@ def main() -> None:
     # 8192 Monte Carlo samples, fixed sigma triple).  The library defaults have
     # since moved to 512/1000 and the width-aware bodyness schedule, and the
     # tight-cap baseline below is only meaningful at this draw budget.
-    config = iqc.TrainingConfig(
+    config = ciqp.TrainingConfig(
         n_ops=64,
         mc_samples=8_192,
         sigmas=(1.0, 2.0, 4.0),
@@ -74,7 +75,7 @@ def main() -> None:
         n_targets=2048,
         seed=0,
     )
-    params = iqc.random_parameters(ansatz.n_parameters, 0)
+    params = ciqp.random_parameters(ansatz.n_parameters, 0)
     batch = jnp.asarray(targets[:, : config.batch_size])
     key = jax.random.PRNGKey(0)
     n_ops, n_conditions, n_visible = config.n_ops, 5, 12
@@ -147,9 +148,8 @@ def main() -> None:
     # compile-time constants and XLA would fold the whole ratio away.
     masks = natural.entry(0, 0)[0]
     samples = encoders.sample(key, config.mc_samples)
-    complex_enc = iqc.ProductEncoder(
-        name="product",
-        angles=encoders.angles,
+    complex_enc = dataclasses.replace(
+        encoders,
         amp_zero=encoders.amp_zero.astype(jnp.complex128),
         amp_one=encoders.amp_one.astype(jnp.complex128),
     )

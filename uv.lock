@@ -258,7 +258,7 @@ requires-dist = [
     { name = "aiohttp", specifier = ">=3.12.0" },
     { name = "fsspec", specifier = ">=2026.2.0" },
     { name = "h5py", specifier = ">=3.14.0" },
-    { name = "iqp-cond", git = "https://github.com/uriballo/iqp-cond.git?tag=v0.1.0" },
+    { name = "iqp-cond", editable = "packages/iqp-cond" },
     { name = "jax", specifier = ">=0.10.1" },
     { name = "jaxlib", specifier = ">=0.10.1" },
     { name = "matplotlib", specifier = ">=3.11.0" },
@@ -531,14 +531,27 @@ wheels = [
 
 [[package]]
 name = "iqp-cond"
-version = "0.1.0"
-source = { git = "https://github.com/uriballo/iqp-cond.git?tag=v0.1.0#ccdb081a73f0d5eb8e6015ec2667109e2d74d74f" }
+version = "0.3.0"
+source = { editable = "packages/iqp-cond" }
 dependencies = [
     { name = "jax" },
-    { name = "jaxlib" },
-    { name = "networkx" },
     { name = "numpy" },
     { name = "optax" },
+    { name = "pennylane" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "jax", specifier = ">=0.10.1" },
+    { name = "numpy", specifier = ">=2.0" },
+    { name = "optax", specifier = ">=0.2.8" },
+    { name = "pennylane", specifier = ">=0.45" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=9.0.3" },
+    { name = "ruff", specifier = ">=0.15.17" },
 ]
 
 [[package]]

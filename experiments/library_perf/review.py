@@ -23,11 +23,11 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 from common import problem, save
+from iqp_cond.core import pad_visible_masks
 from iqp_cond.estimator import _phase_differences, estimate_pauli_z_unchecked
 from iqp_cond.operators import OperatorBank, operator_bank, sample_nonidentity_masks
 
-import iqp_cond as iqc
-from iqp_cond.ancilla import pad_visible_masks
+import iqp_cond as ciqp
 
 
 def bench(fn, repeats: int = 20) -> float:
@@ -43,7 +43,7 @@ def bench(fn, repeats: int = 20) -> float:
 
 
 def main() -> None:
-    config = iqc.TrainingConfig()
+    config = ciqp.TrainingConfig()
     n_visible, n_conditions = 12, 5
     ansatz, encoders, targets = problem(
         n_visible=n_visible,
@@ -51,10 +51,10 @@ def main() -> None:
         n_targets=2048,
         seed=0,
     )
-    model = iqc.ConditionalModel(ansatz, encoders)
+    model = ciqp.ConditionalModel(ansatz, encoders)
     sigmas = config.resolved_sigmas(n_visible)
     generators = jnp.asarray(ansatz.generators)
-    params = iqc.random_parameters(ansatz.n_parameters, 0)
+    params = ciqp.random_parameters(ansatz.n_parameters, 0)
     batch = jnp.asarray(targets[:, : config.batch_size])
     bank: OperatorBank = operator_bank(
         sigmas,
@@ -68,7 +68,7 @@ def main() -> None:
 
     # ---------------------------------------------------------------- stages
     condition = 0
-    encoder = iqc.encoders.select_encoder(encoders, condition)
+    encoder = ciqp.encoders.select_encoder(encoders, condition)
     masks, _weights = bank.entry(0, condition)
     model_masks = pad_visible_masks(masks, model.n_ancillas)
     samples = encoder.sample(key, config.mc_samples)

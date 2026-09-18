@@ -29,9 +29,9 @@ from common import PYTHON, block, problem, save, timeit
 from iqp_cond.loss import mmd
 from iqp_cond.operators import operator_bank
 
-import iqp_cond as iqc
+import iqp_cond as ciqp
 
-TRAIN = iqc.TrainingConfig()
+TRAIN = ciqp.TrainingConfig()
 PRODUCTION = dict(n_visible=12, n_conditions=5, n_targets=2048)
 SMALL = dict(n_visible=8, n_conditions=3, n_targets=1024)
 PAPER = dict(
@@ -55,7 +55,7 @@ def _losses(problem_case: dict):
         n_visible,
         seed=0,
     )
-    params = iqc.random_parameters(ansatz.n_parameters, 0)
+    params = ciqp.random_parameters(ansatz.n_parameters, 0)
     generators = jnp.asarray(ansatz.generators)
     batch = jnp.asarray(targets[:, : config.batch_size])
 
@@ -161,16 +161,16 @@ def bench_validate(case: dict) -> dict:
     }
 
 
-def bench_e2e(case: dict, steps: int, refresh: str = iqc.STEP) -> dict:
+def bench_e2e(case: dict, steps: int, refresh: str = ciqp.STEP) -> dict:
     ansatz, encoders, targets = problem(**case)
-    model = iqc.ConditionalModel(ansatz, encoders)
+    model = ciqp.ConditionalModel(ansatz, encoders)
     config = dataclasses.replace(
-        iqc.TrainingConfig(steps=steps),
+        ciqp.TrainingConfig(steps=steps),
         mask_refresh=refresh,
     )
     validation = targets[:, : max(1, targets.shape[1] // 4)]
     start = time.perf_counter()
-    result = iqc.train(model, targets, validation, seed=0, config=config)
+    result = ciqp.train(model, targets, validation, seed=0, config=config)
     wall = time.perf_counter() - start
     return {
         "case": case,
@@ -266,7 +266,7 @@ def main() -> None:
     parser.add_argument("case", nargs="?", default="{}")
     parser.add_argument("--steps", type=int, default=2000)
     parser.add_argument("--label", default="baseline")
-    parser.add_argument("--refresh", choices=[iqc.STEP, iqc.CACHE], default=iqc.STEP)
+    parser.add_argument("--refresh", choices=[ciqp.STEP, ciqp.CACHE], default=ciqp.STEP)
     args = parser.parse_args()
 
     if args.command == "memory-case":
