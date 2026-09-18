@@ -1,37 +1,31 @@
 [project]
 name = "conditional-generation-iqp"
-version = "0.1.0"
-description = "Campaign code for conditional generation with IQP circuits."
+version = "0.2.0"
+description = "Experiments for conditional generation with IQP circuits."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "aiohttp>=3.12.0",
-    "fsspec>=2026.2.0",
-    "h5py>=3.14.0",
     "iqp-cond",
-    "jax>=0.10.1",
-    "jaxlib>=0.10.1",
     "matplotlib>=3.11.0",
-    "networkx>=3.5",
     "numpy>=2.0",
-    "optax>=0.2.8",
-    "pennylane>=0.45.0",
-    "scipy>=1.16.0",
-    "scikit-learn>=1.6.0",
 ]
 
-# The campaign tree is run from source (`PYTHONPATH=src`); the `iqp-cond`
+# The repository is an experiment workspace, not a package.  The `iqp-cond`
 # library is installed editable from the submodule at iqp-cond, which tracks the
-# library's main branch.
+# library's main branch; jax, optax, and pennylane arrive through it.
 [tool.uv]
 package = false
 
 [tool.uv.sources]
 iqp-cond = { path = "iqp-cond", editable = true }
 
+# Planned, not installed yet:
+#   tracking = ["mlflow>=2.0"]   # mirror run directories into MLflow
+#   hpo = ["optuna>=4.0"]        # sweep runner in experiments/common/sweeps.py
+
 [tool.pytest.ini_options]
-pythonpath = ["src"]
-testpaths = ["tests"]
+pythonpath = ["."]
+testpaths = ["experiments/tests"]
 
 [tool.ruff]
 target-version = "py313"
@@ -39,9 +33,6 @@ line-length = 88
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "B", "UP", "RUF"]
-
-[tool.ruff.lint.per-file-ignores]
-"src/iqp_cond/__init__.py" = ["E402"]
 
 [tool.ruff.format]
 quote-style = "double"

@@ -1,103 +1,58 @@
-# Conditional IQP generation
+# conditional-generation-iqp
 
-This repository studies conditional generative models built from a fixed IQP
-circuit and a condition-dependent, classically tractable input state. Training
-uses sampled Pauli-character estimates of a multiscale Hamming-RBF MMD. Exact
-visible-distribution TVD is the main evaluation metric.
+Experiments for conditional generation with instantaneous quantum
+polynomial-time circuits, built on the standalone [`iqp-cond`](https://github.com/uriballo/iqp-cond)
+library.
 
-The current paper uses three benchmarks:
+## Layout
 
-- a translated discrete Gaussian over Hamming weight, with a broadcast
-  product-state encoder;
-- the finite-size Curie--Weiss model, with either a product-state encoder or a
-  spin-flip-symmetric two-branch encoder;
-- a two-parameter discrete Gaussian whose prescribed weight mean and width move
-  independently, with a permutation-symmetric shell reference whose mean and
-  width are set by two affine maps.
+- `iqp-cond/`: the library as a git submodule tracking its `main` branch.  It is
+  installed editable by `uv sync`; initialize it with
+  `git submodule update --init` and pull the latest library commit with
+  `git submodule update --remote iqp-cond` (then commit the updated pointer).
+  The repository is private, so access needs credentials.
+- `experiments/`: studies and shared infrastructure.
+  - `common/`: datasets, encoder maps, run config and harness, metrics,
+    tracking, sweeps, and plotting style.
+  - `gaussian/`: one-parameter Gaussian Hamming-profile study.
+  - `gaussian2d/`: two-parameter Gaussian study (joint mean and width).
+  - `tests/`: framework tests, including the public-API boundary check.
+- `paper/`: placeholder for the manuscript source; its content is ignored until
+  it is dropped in.
+- `results/`: local run outputs, ignored by git.  Each run writes
+  `results/<study>/<run_id>/` with `config.json`, `run.json` (paper and library
+  revisions), `metrics.json`, and `checkpoint.npz`; `results/index.jsonl`
+  indexes completed runs.
 
-MFC, MNIST, beta-binomial, grid-Ising and Ashkin--Teller experiments are no
-longer part of the paper.
-
-## Repository map
-
-- `Overleaf/`: canonical manuscript package. Upload this directory directly to
-  Overleaf and compile `main.tex` with pdfLaTeX.
-- `iqp-cond/`: the `iqp-cond` library as a git submodule tracking `main`
-  (encoder interface, conditional Pauli estimator, conditional MMD, trainer,
-  ancilla conventions, PennyLane sampling).  It is installed editable by
-  `uv sync`; initialize it with `git submodule update --init` and pull the
-  latest library commit with `git submodule update --remote iqp-cond`, then
-  commit the updated pointer.  The repository is private, so access needs
-  credentials.  `experiments/library_perf/` benchmarks it against the campaign
-  code.
-- `configs/exact_tvd_ancilla_v1.json`: frozen Exact-TVD campaign manifest.
-- `src/iqp_cond/exact_tvd_*`: campaign planning, training, evaluation, and
-  result processing.
-- `results/exact-tvd-ancilla-v1/`: active Gaussian and Curie--Weiss artifacts.
-- `configs/curie_encoder_ablation_v1.json` and
-  `results/curie-encoder-ablation-v1/`: the eight-qubit encoder ablation.
-- `configs/gaussian2d_v1.json` and `src/iqp_cond/gaussian2d*.py`: the
-  two-parameter Gaussian benchmark, its campaign layer and its ablation arms.
-- `results/gaussian2d-v1/`: two-parameter benchmark artifacts.
-- `scripts/{run,report,plot}_gaussian2d*.py`: campaign, summary, and figure
-  entry points for that benchmark.
-- `docs/exact-tvd-ancilla-v1.md`: campaign protocol and execution stages.
-- `CONTEXT.md`: current terminology and interpretation rules.
-
-Historical result stores and abandoned experimental lines are intentionally
-absent from the working tree. Git history remains the source for tracked legacy
-files.
-
-## Setup
+## Workflow
 
 ```bash
-uv sync --group dev
-uv run pytest
-uv run ruff check src scripts tests
+uv sync                     # library (editable) plus dev tools
+uv run pytest               # framework and study tests
+uv run ruff check .         # lint
+uv run python -m experiments.gaussian.study --smoke
+uv run python -m experiments.gaussian2d.study --smoke --encoder two_block
 ```
 
-Python 3.13 is required. The main numerical stack is JAX, Optax, NumPy, and
-SciPy.
+A full run drops `--smoke`; budgets and seed lists come from each study's
+`config.json`.  `--seeds 1,2,3` overrides them.
 
-## Exact-TVD campaign
+## Adding a study
 
-Inspect the frozen plan and the current atomic-wave status with:
+1. Add the target family under `experiments/common/datasets.py` (or a study-local
+   module) and the encoder map under `experiments/common/encoders.py`.
+2. Create `experiments/<study>/` with a `Study` descriptor (conditions, target
+   generator, encoder factory), a `config.json` of frozen parameters, and a
+   `study.py` entry point that calls `experiments.common.runner`.
+3. Cover the new pieces in `experiments/tests/`.
 
-```bash
-uv run python scripts/run_exact_tvd_campaign.py plan
-uv run python scripts/status_atomic_campaign.py
-```
+Experiments use only the public `iqp_cond` API; anything the library cannot
+express belongs in the library repository, not here.
 
-The original manifest declares 4,300 fits, including 400 MFC fits. The paper
-reports the complete 8- and 12-visible-qubit subset: 2,600 Gaussian and
-Curie--Weiss fits and exact evaluations. The 16-qubit extension is deferred
-for computational reasons; the frozen manifest and historical artifacts are
-unchanged. Both Strix queues completed on 4 September 2026.
+## Planned integrations
 
-The production settings are 2,000 optimizer updates, 8,192 estimator samples,
-2,000 sampled character operators per bandwidth, three fixed bandwidths, and
-ten matched seeds. Exact TVD uses the full visible distribution after immediate
-ancilla marginalization.
-
-## Manuscript figures
-
-The manuscript reads publication figures from `Overleaf/figures/`. Plotting
-scripts regenerate those files from retained campaign artifacts. Do not restore
-the old `paper/` tree. It belonged to a superseded manuscript.
-
-See [the complete-result audit and reproduction commands](docs/paper_8_12/README.md)
-for the verified data scope, paired numerical summaries, and figure workflow.
-
-## Cleanup boundary
-
-The in-scope Exact-TVD campaign has finished. Retained shared modules and
-figure scripts reproduce the Gaussian and Curie-Weiss results. Retired
-confirmatory, phase-OOD, latent-input, and MFC execution code has been removed;
-Git history preserves those implementations.
-
-The frozen plan still contains all 4,300 original identities. Data preparation
-and default training/evaluation shards now execute only Gaussian and
-Curie-Weiss, preserving their original indices. Explicit MFC execution is
-unsupported. Historical development plans and selectors retain MFC cells so
-archived calibration and optimizer-selection evidence can still be checked;
-re-running those MFC cells requires the historical source bundle.
+- **MLflow** tracking via `experiments/common/tracking.py:log_mlflow`, mirroring
+  each run directory into a local MLflow experiment once the dependency is
+  added.
+- **Optuna** sweeps via `experiments/common/sweeps.py:optuna_objective`, with
+  the run harness as the objective.
