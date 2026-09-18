@@ -4,10 +4,10 @@ Measures the shipped library at the default `TrainingConfig` so the cost of the
 mask-refresh protocol is a number, not a preference.
 
 ```bash
-PYTHONPATH=packages/iqp-cond/src .venv/bin/python experiments/library_perf/bench.py step
-PYTHONPATH=packages/iqp-cond/src .venv/bin/python experiments/library_perf/bench.py validate
-PYTHONPATH=packages/iqp-cond/src .venv/bin/python experiments/library_perf/bench.py e2e --steps 2000 --refresh step
-PYTHONPATH=packages/iqp-cond/src .venv/bin/python experiments/library_perf/bench.py memory
+.venv/bin/python experiments/library_perf/bench.py step
+.venv/bin/python experiments/library_perf/bench.py validate
+.venv/bin/python experiments/library_perf/bench.py e2e --steps 2000 --refresh step
+.venv/bin/python experiments/library_perf/bench.py memory
 ```
 
 Each command writes `results/<label>-<command>.json`; timing is the median of

@@ -5,28 +5,38 @@ circuit and a condition-dependent, classically tractable input state. Training
 uses sampled Pauli-character estimates of a multiscale Hamming-RBF MMD. Exact
 visible-distribution TVD is the main evaluation metric.
 
-The current paper uses two benchmarks:
+The current paper uses three benchmarks:
 
 - a translated discrete Gaussian over Hamming weight, with a broadcast
   product-state encoder;
 - the finite-size Curie--Weiss model, with either a product-state encoder or a
-  spin-flip-symmetric two-branch encoder.
+  spin-flip-symmetric two-branch encoder;
+- a two-parameter discrete Gaussian whose prescribed weight mean and width move
+  independently, with a permutation-symmetric shell reference whose mean and
+  width are set by two affine maps.
 
-We are testing grid Ising models as a possible third benchmark. MFC, MNIST, and
-beta-binomial experiments are no longer part of the paper.
+MFC, MNIST, beta-binomial, grid-Ising and Ashkin--Teller experiments are no
+longer part of the paper.
 
 ## Repository map
 
 - `Overleaf/`: canonical manuscript package. Upload this directory directly to
   Overleaf and compile `main.tex` with pdfLaTeX.
+- `iqp-cond` (external, pinned in `pyproject.toml`): the standalone library
+  (encoder interface, conditional Pauli estimator, conditional MMD, trainer,
+  ancilla conventions), developed at `github.com/uriballo/iqp-cond`;
+  `experiments/library_perf/` benchmarks it against the campaign code.
 - `configs/exact_tvd_ancilla_v1.json`: frozen Exact-TVD campaign manifest.
 - `src/iqp_cond/exact_tvd_*`: campaign planning, training, evaluation, and
   result processing.
 - `results/exact-tvd-ancilla-v1/`: active Gaussian and Curie--Weiss artifacts.
 - `configs/curie_encoder_ablation_v1.json` and
   `results/curie-encoder-ablation-v1/`: the eight-qubit encoder ablation.
-- `src/iqp_cond/grid_ising*`, matching manifests, and matching result folders:
-  exploratory third-benchmark pilots.
+- `configs/gaussian2d_v1.json` and `src/iqp_cond/gaussian2d*.py`: the
+  two-parameter Gaussian benchmark, its campaign layer and its ablation arms.
+- `results/gaussian2d-v1/`: two-parameter benchmark artifacts.
+- `scripts/{run,report,plot}_gaussian2d*.py`: campaign, summary, and figure
+  entry points for that benchmark.
 - `docs/exact-tvd-ancilla-v1.md`: campaign protocol and execution stages.
 - `CONTEXT.md`: current terminology and interpretation rules.
 

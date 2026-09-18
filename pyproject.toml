@@ -1,13 +1,14 @@
 [project]
-name = "iqp-cond"
+name = "conditional-generation-iqp"
 version = "0.1.0"
-description = "Classically trainable conditional IQP generation with product-state encodings."
+description = "Campaign code for conditional generation with IQP circuits."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "aiohttp>=3.12.0",
     "fsspec>=2026.2.0",
     "h5py>=3.14.0",
+    "iqp-cond",
     "jax>=0.10.1",
     "jaxlib>=0.10.1",
     "matplotlib>=3.11.0",
@@ -19,21 +20,13 @@ dependencies = [
     "scikit-learn>=1.6.0",
 ]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+# The campaign tree is run from source (`PYTHONPATH=src`); only the `iqp-cond`
+# library is installed, pinned to a released tag of its own repository.
+[tool.uv]
+package = false
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/iqp_cond"]
-
-[tool.hatch.build.targets.sdist]
-include = [
-    "/README.md",
-    "/pyproject.toml",
-    "/uv.lock",
-    "/src",
-    "/tests",
-]
+[tool.uv.sources]
+iqp-cond = { git = "https://github.com/uriballo/iqp-cond.git", tag = "v0.1.0" }
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

@@ -7,7 +7,7 @@ instead, because the ancilla axis multiplies that tensor's qubit dimension.
 
 This script measures one configuration per process and prints JSON:
 
-    PYTHONPATH=packages/iqp-cond/src .venv/bin/python \
+    .venv/bin/python \
         experiments/library_perf/chunking.py --ancillas 10 --samples 16384 \
         --chunk 4096
 

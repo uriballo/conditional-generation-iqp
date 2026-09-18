@@ -7,7 +7,7 @@ Reports, for one (ancillas, n_ops, samples) case:
     validation_ms   one fixed-bank validation pass
     chunk_*_ms      the same step with sample_chunk set (only when smaller)
 
-    PYTHONPATH=packages/iqp-cond/src .venv/bin/python \
+    .venv/bin/python \
         experiments/library_perf/regime.py --n-ops 2000 --samples 1000 --ancillas 10
 """
 

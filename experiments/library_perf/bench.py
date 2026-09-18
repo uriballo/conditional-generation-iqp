@@ -25,7 +25,7 @@ from pathlib import Path
 
 import jax
 import jax.numpy as jnp
-from common import PYTHON, REPO, block, problem, save, timeit
+from common import PYTHON, block, problem, save, timeit
 from iqp_cond.loss import mmd
 from iqp_cond.operators import operator_bank
 
@@ -238,7 +238,6 @@ def memory(cases: list[tuple[str, dict]]) -> list[dict]:
         payload = {"name": name, "case": case}
         script = Path(__file__).resolve()
         env = os.environ.copy()
-        env["PYTHONPATH"] = str(REPO / "packages" / "iqp-cond" / "src")
         proc = subprocess.run(
             [
                 str(PYTHON),

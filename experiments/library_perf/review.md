@@ -1,6 +1,6 @@
 # Performance review and step-mode optimisation
 
-Date: 2026-09-17 · Subject: `packages/iqp-cond`. Production problem unless
+Date: 2026-09-17 · Subject: the `iqp-cond` library. Production problem unless
 stated: 12 visible qubits, 5 conditions, complete two-local ansatz. The
 numbers below were taken with the then-default (`n_ops=64`, `mc_samples=8192`,
 `sigmas=(1,2,4)`); the library defaults have since become 512 masks, 1000
@@ -205,12 +205,12 @@ document this in `tests/test_pennylane_crosscheck.py`.
 
 ## Reproduction
 
-On the idle Strix host (`uribagi@192.168.1.67`), with the package and harness
-rsynced to `/home/uribagi/iqp-cond-perf`:
+On the idle Strix host (`uribagi@192.168.1.67`), with the repository and its
+environment installed at `/home/uribagi/iqp-cond-perf` (the `iqp-cond` library
+comes from the pinned dependency):
 
 ```bash
 cd experiments/library_perf
-export PYTHONPATH=../../packages/iqp-cond/src
 ../../.venv/bin/python review.py
 ../../.venv/bin/python step_improve.py
 ../../.venv/bin/python pipeline.py

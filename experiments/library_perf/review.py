@@ -11,7 +11,7 @@ so optimisation choices rest on numbers:
 
 Run:
 
-    PYTHONPATH=packages/iqp-cond/src .venv/bin/python experiments/library_perf/review.py
+    .venv/bin/python experiments/library_perf/review.py
 """
 
 from __future__ import annotations

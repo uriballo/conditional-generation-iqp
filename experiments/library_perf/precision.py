@@ -12,7 +12,7 @@ Variants, all sharing one bank and one problem:
 Reports interleaved step times, loss deviation and gradient agreement against
 the shipped float64 estimator, and a sample-budget scaling sweep.
 
-    PYTHONPATH=packages/iqp-cond/src .venv/bin/python \
+    .venv/bin/python \
         experiments/library_perf/precision.py
 """
 

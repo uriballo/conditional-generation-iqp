@@ -2,7 +2,7 @@
 
 Run from the repo root as
 
-    PYTHONPATH=packages/iqp-cond/src .venv/bin/python experiments/library_perf/bench.py
+    .venv/bin/python experiments/library_perf/bench.py
 
 with the research tree *not* on `sys.path`, so the library under test is the
 standalone package.  Numbers are saved to `results/` as JSON.

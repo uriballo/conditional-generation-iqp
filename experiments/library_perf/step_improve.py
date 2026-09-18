@@ -5,7 +5,7 @@ tens of percent between runs.  This harness compiles every variant once and then
 interleaves them round-robin within one process, so the comparisons are ratios
 measured under identical conditions.
 
-    PYTHONPATH=packages/iqp-cond/src .venv/bin/python \
+    .venv/bin/python \
         experiments/library_perf/step_improve.py
 """
 

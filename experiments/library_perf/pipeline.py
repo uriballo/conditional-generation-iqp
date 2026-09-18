@@ -8,7 +8,7 @@ trajectories, and a common independent score, then verifies that the returned
 ``best_params`` reproduce the returned ``best_validation_loss`` against the
 trainer's own validation bank.
 
-    PYTHONPATH=packages/iqp-cond/src .venv/bin/python \
+    .venv/bin/python \
         experiments/library_perf/pipeline.py
 """
 

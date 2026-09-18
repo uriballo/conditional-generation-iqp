@@ -6,7 +6,7 @@ conditions ``[0, 0.25, 0.5, 0.75, 1.0]``, 1000 samples each, and
 the eight interleaved held-out conditions for a generalization score.  The
 encoder is the broadcast product-state map ``alpha(c) = pi (0.35 - 0.70 c)``.
 
-    PYTHONPATH=packages/iqp-cond/src .venv/bin/python \
+    .venv/bin/python \
         experiments/library_perf/gaussian_fit.py --steps 2000 --n-ops 1000 \
         --samples 500 --label gaussian-n12
 
