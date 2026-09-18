@@ -202,6 +202,7 @@ archive/
 artifacts/
 output/
 results/
+profiling/
 tmp/
 watch_*
 
