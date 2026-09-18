@@ -18,7 +18,7 @@ import iqp_cond as ciqp
 import numpy as np
 
 from experiments.common import runner, tracking
-from experiments.common.config import RunConfig
+from experiments.common.config import RunConfig, study_run_config
 from experiments.common.datasets import gaussian_target
 from experiments.common.encoders import scalar_broadcast_encoder
 from experiments.common.runner import Study
@@ -142,23 +142,14 @@ def main(argv: list[str] | None = None) -> None:
             seeds=seeds,
         )
     else:
-        training = defaults["training"]
-        config = RunConfig(
-            study="gaussian",
+        config = study_run_config(
+            "gaussian",
+            defaults,
             encoder="broadcast",
             n_visible=args.n_visible,
             n_ancillas=args.ancillas,
             width_factor=args.width_factor,
-            n_train=defaults["data"]["train_samples"],
-            n_validation=defaults["data"]["validation_samples"],
-            n_test=defaults["data"]["test_samples"],
             steps=args.steps,
-            batch_size=training["batch_size"],
-            n_ops=training["n_ops"],
-            mc_samples=training["n_samples"],
-            learning_rate=training["learning_rate"],
-            final_learning_rate=training["final_learning_rate"],
-            validation_interval=training["validation_interval"],
             seeds=seeds,
         )
 

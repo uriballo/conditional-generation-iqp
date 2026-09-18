@@ -4,6 +4,17 @@ A run is fully described by its :class:`RunConfig`; the canonical JSON digest
 of the config identifies the run directory and the tracked metadata, so a
 result can always be traced back to the exact settings and library commit that
 produced it.
+
+The Monte Carlo and compression settings the library exposes are part of the
+config rather than library defaults, so a run directory states the budget that
+actually produced it.  ``gemm_dtype`` and ``sample_chunk`` are the two
+performance levers measured on the Strix hosts: the phase contraction in
+``float32`` and streaming the draws in slices are worth about a third of the
+training step, with the reductions unchanged in ``float64``.
+
+Frozen study budgets live in each study's ``config.json``; a study states only
+the keys it wants to pin, and :func:`study_run_config` fills the rest from the
+library defaults.
 """
 
 from __future__ import annotations
@@ -13,8 +24,13 @@ import json
 from dataclasses import asdict, dataclass
 
 import iqp_cond as ciqp
+import jax.numpy as jnp
 
-__all__ = ["RunConfig"]
+__all__ = ["RunConfig", "study_run_config"]
+
+#: Accepted ``gemm_dtype`` values: ``"float64"`` leaves the contraction in
+#: float64 (the library default) and ``"float32"`` casts only the contraction.
+CONTRACTION_DTYPES = ("float32", "float64")
 
 
 def _canonical(value: object) -> bytes:
@@ -41,6 +57,10 @@ class RunConfig:
     final_learning_rate: float = 1e-3
     validation_interval: int = 25
     mask_refresh: str = ciqp.STEP
+    gemm_dtype: str = "float64"
+    sample_chunk: int | None = None
+    validation_n_ops: int = 512
+    validation_mc_samples: int = 1000
     seeds: tuple[int, ...] = (0,)
 
     def __post_init__(self) -> None:
@@ -50,6 +70,13 @@ class RunConfig:
             raise ValueError("n_ancillas must be nonnegative")
         if self.n_train < 2 or self.n_validation < 2 or self.n_test < 2:
             raise ValueError("every data split needs at least two samples")
+        if self.gemm_dtype not in CONTRACTION_DTYPES:
+            raise ValueError(
+                f"gemm_dtype must be one of {CONTRACTION_DTYPES}, "
+                f"got {self.gemm_dtype!r}",
+            )
+        if self.sample_chunk is not None and self.sample_chunk < 1:
+            raise ValueError("sample_chunk must be positive or None")
         if not self.seeds:
             raise ValueError("at least one seed is required")
         # Validate the training budgets through the library config.
@@ -67,6 +94,10 @@ class RunConfig:
             batch_size=self.batch_size,
             n_ops=self.n_ops,
             mc_samples=self.mc_samples,
+            validation_n_ops=self.validation_n_ops,
+            validation_mc_samples=self.validation_mc_samples,
+            gemm_dtype=jnp.float32 if self.gemm_dtype == "float32" else None,
+            sample_chunk=self.sample_chunk,
             learning_rate=self.learning_rate,
             final_learning_rate=self.final_learning_rate,
             validation_interval=self.validation_interval,
@@ -80,3 +111,53 @@ class RunConfig:
     def digest(self) -> str:
         """Return the canonical content digest of the config."""
         return hashlib.sha256(_canonical(self.as_dict())).hexdigest()
+
+
+def study_run_config(
+    study: str,
+    defaults: dict,
+    *,
+    encoder: str,
+    n_visible: int,
+    n_ancillas: int,
+    seeds: tuple[int, ...],
+    steps: int | None = None,
+    width_factor: float | None = None,
+) -> RunConfig:
+    """Build a production run config from a study's frozen ``config.json``.
+
+    Both entry points build their configs here so that a key added to one
+    ``config.json`` cannot go unread by the code that is supposed to apply it.
+    Keys a study does not state keep the :class:`RunConfig` default.
+    """
+    training = defaults["training"]
+    data = defaults["data"]
+    fields: dict[str, object] = {
+        "study": study,
+        "encoder": encoder,
+        "n_visible": n_visible,
+        "n_ancillas": n_ancillas,
+        "n_train": data["train_samples"],
+        "n_validation": data["validation_samples"],
+        "n_test": data["test_samples"],
+        "steps": training["updates"] if steps is None else steps,
+        "batch_size": training["batch_size"],
+        "n_ops": training["n_ops"],
+        "mc_samples": training["n_samples"],
+        "learning_rate": training["learning_rate"],
+        "final_learning_rate": training["final_learning_rate"],
+        "validation_interval": training["validation_interval"],
+        "seeds": seeds,
+    }
+    for name in (
+        "gemm_dtype",
+        "sample_chunk",
+        "validation_n_ops",
+        "validation_mc_samples",
+        "mask_refresh",
+    ):
+        if name in training:
+            fields[name] = training[name]
+    if width_factor is not None:
+        fields["width_factor"] = width_factor
+    return RunConfig(**fields)
