@@ -4,6 +4,33 @@ Experiments for conditional generation with instantaneous quantum
 polynomial-time circuits, built on the standalone [`iqp-cond`](https://github.com/uriballo/iqp-cond)
 library.
 
+## Two repositories
+
+The work is deliberately split across two private repositories:
+
+- **`iqp-cond`** ([github.com/uriballo/iqp-cond](https://github.com/uriballo/iqp-cond))
+  is the library: encoder interface, conditional Pauli estimator, MMD loss,
+  trainer, ancilla conventions, and the PennyLane/Lightning sampling bridge.  It
+  has its own tests, README, tags (`v0.1.0` through `v0.3.0`), and release
+  cadence.
+- **`conditional-generation-iqp`** (this repository) is the experiment
+  workspace: shared infrastructure in `experiments/common`, the Gaussian and
+  two-parameter Gaussian studies, and the run harness.  It ships no importable
+  package and consumes the library editable from the submodule at `iqp-cond/`.
+
+The link is a git submodule tracking the library's `main` plus an editable uv
+source, so `uv sync` installs exactly the recorded checkout and adopting a new
+library commit is an explicit change here.
+
+| task | repository |
+|---|---|
+| target dataset, encoder map, study, metric, sweep | this one |
+| estimator, MMD loss, trainer, encoder protocol, sampling bridge | `iqp-cond` |
+
+Experiments import only the public `iqp_cond` API
+(`experiments/tests/test_api_boundary.py` enforces this), so the library can
+evolve and release on its own schedule.
+
 ## Layout
 
 - `iqp-cond/`: the library as a git submodule tracking its `main` branch.  It is
