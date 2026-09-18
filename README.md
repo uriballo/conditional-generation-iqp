@@ -22,14 +22,14 @@ longer part of the paper.
 
 - `Overleaf/`: canonical manuscript package. Upload this directory directly to
   Overleaf and compile `main.tex` with pdfLaTeX.
-- `packages/iqp-cond/`: the `iqp-cond` library as a git submodule tracking
-  `main` (encoder interface, conditional Pauli estimator, conditional MMD,
-  trainer, ancilla conventions, PennyLane sampling).  It is installed editable
-  by `uv sync`; initialize it with `git submodule update --init` and pull the
-  latest library commit with
-  `git submodule update --remote packages/iqp-cond`, then commit the updated
-  pointer.  The repository is private, so access needs credentials.
-  `experiments/library_perf/` benchmarks it against the campaign code.
+- `iqp-cond/`: the `iqp-cond` library as a git submodule tracking `main`
+  (encoder interface, conditional Pauli estimator, conditional MMD, trainer,
+  ancilla conventions, PennyLane sampling).  It is installed editable by
+  `uv sync`; initialize it with `git submodule update --init` and pull the
+  latest library commit with `git submodule update --remote iqp-cond`, then
+  commit the updated pointer.  The repository is private, so access needs
+  credentials.  `experiments/library_perf/` benchmarks it against the campaign
+  code.
 - `configs/exact_tvd_ancilla_v1.json`: frozen Exact-TVD campaign manifest.
 - `src/iqp_cond/exact_tvd_*`: campaign planning, training, evaluation, and
   result processing.

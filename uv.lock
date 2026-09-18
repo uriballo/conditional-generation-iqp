@@ -258,7 +258,7 @@ requires-dist = [
     { name = "aiohttp", specifier = ">=3.12.0" },
     { name = "fsspec", specifier = ">=2026.2.0" },
     { name = "h5py", specifier = ">=3.14.0" },
-    { name = "iqp-cond", editable = "packages/iqp-cond" },
+    { name = "iqp-cond", editable = "iqp-cond" },
     { name = "jax", specifier = ">=0.10.1" },
     { name = "jaxlib", specifier = ">=0.10.1" },
     { name = "matplotlib", specifier = ">=3.11.0" },
@@ -532,7 +532,7 @@ wheels = [
 [[package]]
 name = "iqp-cond"
 version = "0.3.0"
-source = { editable = "packages/iqp-cond" }
+source = { editable = "iqp-cond" }
 dependencies = [
     { name = "jax" },
     { name = "numpy" },
