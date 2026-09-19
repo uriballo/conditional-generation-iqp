@@ -197,6 +197,7 @@ Overleaf/main.pdf
 Overleaf/mainNotes.bib
 
 # Local experiment and research artifacts
+prototypes/
 .scratch/
 archive/
 artifacts/

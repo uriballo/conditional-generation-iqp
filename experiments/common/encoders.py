@@ -2,8 +2,9 @@
 
 Every encoder here is a product state, so it is built with a single all-``Y``
 layer of :func:`iqp_cond.angle_encoder`.  The maps are frozen designs: the
-scalar broadcast map of the one-parameter study and the two-block and
-broadcast maps of the two-parameter study.
+scalar broadcast map, the anti-phase two-block map that is the current choice
+for the one-parameter study, and the two-block and broadcast maps of the
+two-parameter study.
 """
 
 from __future__ import annotations
@@ -19,6 +20,8 @@ __all__ = [
     "ENCODER_MAPS",
     "LOCATION_COEFFICIENTS",
     "WIDTH_COEFFICIENTS",
+    "anti_block_angles",
+    "anti_block_encoder",
     "block_assignment",
     "broadcast_angles",
     "encoder_for",
@@ -54,6 +57,36 @@ def scalar_broadcast_encoder(
 ) -> ciqp.AngleEncoder:
     """One-parameter study: one broadcast angle per scalar condition."""
     return _one_y_layer(condition_angle_matrix(conditions, n_qubits))
+
+
+def anti_block_angles(conditions: np.ndarray, total_qubits: int) -> np.ndarray:
+    """Return the ``(conditions, total_qubits)`` anti-phase block angles.
+
+    Even-indexed qubits get ``pi c`` and odd-indexed qubits ``pi (1 - c)``, so
+    the condition sets the contrast between the two halves while the expected
+    total excitation stays at ``total_qubits / 2`` for every condition.  At
+    ``c = 0`` the state is the alternating half-filled pattern, at
+    ``c = 1/2`` every qubit sits at ``p = 1/2``, and at ``c = 1`` the blocks
+    are swapped.
+    """
+    values = np.asarray(conditions, dtype=np.float64)
+    if values.ndim != 1 or not np.all((0.0 <= values) & (values <= 1.0)):
+        raise ValueError("conditions must be a one-dimensional array in [0, 1]")
+    if total_qubits < 2:
+        raise ValueError("the anti-phase encoder needs at least two qubits")
+    even = np.pi * values[:, None]
+    odd = np.pi * (1.0 - values)[:, None]
+    parity = (np.arange(total_qubits) % 2 == 0)[None, :]
+    return np.where(parity, even, odd)
+
+
+def anti_block_encoder(conditions: np.ndarray, n_qubits: int) -> ciqp.AngleEncoder:
+    """One-parameter study: anti-phase two-block broadcast map.
+
+    The current choice for the Gaussian studies: no target calibration, and
+    the condition enters as a contrast between qubit halves.
+    """
+    return _one_y_layer(anti_block_angles(conditions, n_qubits))
 
 
 def block_assignment(total_qubits: int) -> np.ndarray:

@@ -30,9 +30,19 @@ generator over the visible and ancillary qubits.
 
 **Angle encoder**
 
-A product-state input built from stacked single-qubit rotations, provided by the
-library.  A single all-`Y` layer is the plain `RY` product state; the studies
-use one layer with condition-dependent angles.
+A product-state input built from stacked single-qubit rotations, provided by
+the library.  A single all-`Y` layer is the plain `RY` product state; the
+studies use one layer with condition-dependent angles.
+
+**Anti-phase two-block encoder**
+
+The current choice for the one-parameter Gaussian study
+(`experiments/common/encoders.py:anti_block_encoder`).  One all-`Y` layer
+where even-indexed qubits get angle `pi c` and odd-indexed qubits `pi (1 - c)`,
+so the condition sets the contrast between the two qubit halves while the
+expected total excitation stays at `n/2`.  It uses no target statistics, and
+with random initialization it reaches 0.088 held-out / 0.083 endpoints over
+ten seeds at `r = 0`.
 
 **Encoder arm**
 

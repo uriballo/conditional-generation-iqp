@@ -19,6 +19,29 @@ def test_scalar_broadcast_encoder_is_a_circuit_encoder() -> None:
     assert all(operation.name == "RY" for operation in ops)
 
 
+def test_anti_block_encoder_is_a_circuit_encoder() -> None:
+    conditions = np.linspace(0.0, 1.0, 3)
+    states = encoders.anti_block_encoder(conditions, 5)
+    assert isinstance(states, ciqp.CircuitEncoder)
+    assert states.n_conditions == 3
+    assert states.n_qubits == 5
+    ops = states.preparation_ops(0)
+    assert len(ops) == 5
+    assert all(operation.name == "RY" for operation in ops)
+
+
+def test_anti_block_angles_are_anti_phase() -> None:
+    angles = encoders.anti_block_angles(np.asarray([0.25]), 4)[0]
+    assert np.allclose(angles, [np.pi * 0.25, np.pi * 0.75, np.pi * 0.25, np.pi * 0.75])
+
+
+def test_anti_block_swap_reverses_the_condition() -> None:
+    low = encoders.anti_block_angles(np.asarray([0.0]), 8)[0]
+    high = encoders.anti_block_angles(np.asarray([1.0]), 8)[0]
+    # c = 0 and c = 1 differ by swapping the two block assignments.
+    assert np.allclose(low, np.roll(high, 1))
+
+
 def test_two_block_angles_stay_inside_the_frozen_branch() -> None:
     conditions = datasets.training_conditions()
     angles = encoders.two_block_angles(conditions, 12)
