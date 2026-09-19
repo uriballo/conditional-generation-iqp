@@ -56,7 +56,7 @@ class RunConfig:
     learning_rate: float = 1e-2
     final_learning_rate: float = 1e-3
     validation_interval: int = 25
-    mask_refresh: str = ciqp.STEP
+    mask_refresh: str = "step"
     gemm_dtype: str = "float64"
     sample_chunk: int | None = None
     validation_n_ops: int = 512

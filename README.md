@@ -11,7 +11,7 @@ The work is deliberately split across two private repositories:
 - **`iqp-cond`** ([github.com/uriballo/iqp-cond](https://github.com/uriballo/iqp-cond))
   is the library: encoder interface, conditional Pauli estimator, MMD loss,
   trainer, ancilla conventions, and the PennyLane/Lightning sampling bridge.  It
-  has its own tests, README, tags (`v0.1.0` through `v0.3.0`), and release
+  has its own tests, README, tags (`v0.1.0` through `v0.5.0`), and release
   cadence.
 - **`conditional-generation-iqp`** (this repository) is the experiment
   workspace: shared infrastructure in `experiments/common`, the Gaussian and

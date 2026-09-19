@@ -87,11 +87,11 @@ def _evaluate(
 ) -> dict[str, object]:
     encoder = study.make_encoder(conditions, config)
     model = ciqp.ConditionalModel(
-        ciqp.complete_ansatz(config.n_total),
+        ciqp.Ansatz.complete(config.n_total),
         encoder,
         n_visible=config.n_visible if config.n_ancillas else None,
     )
-    probabilities = ciqp.simulation.probabilities(model, params)
+    probabilities = model.probabilities(params)
     target_probabilities = study.target_probabilities(conditions, config.n_visible)
     tvds = bitstring_tvd(probabilities, target_probabilities)
     mean_error, std_error = moment_errors(
@@ -146,7 +146,7 @@ def run(
 
     encoder = study.make_encoder(study.training_conditions, config)
     model = ciqp.ConditionalModel(
-        ciqp.complete_ansatz(config.n_total),
+        ciqp.Ansatz.complete(config.n_total),
         encoder,
         n_visible=config.n_visible if config.n_ancillas else None,
     )

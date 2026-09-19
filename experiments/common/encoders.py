@@ -1,7 +1,7 @@
 """Encoder maps from conditions to the library's angle encoder.
 
 Every encoder here is a product state, so it is built with a single all-``Y``
-layer of :func:`iqp_cond.angle_encoder`.  The maps are frozen designs: the
+layer of :class:`iqp_cond.AngleEncoder`. The maps are frozen designs: the
 scalar broadcast map, the anti-phase two-block map that is the current choice
 for the one-parameter study, and the two-block and broadcast maps of the
 two-parameter study.
@@ -45,7 +45,7 @@ def _one_y_layer(angles: np.ndarray) -> ciqp.AngleEncoder:
     values = np.asarray(angles, dtype=np.float64)
     if values.ndim != 2 or values.shape[1] < 1:
         raise ValueError("angles must have shape (conditions, qubits)")
-    return ciqp.angle_encoder(
+    return ciqp.AngleEncoder(
         values[:, None, :],
         axes=("Y" * values.shape[1],),
     )

@@ -8,10 +8,10 @@ import numpy as np
 from experiments.common import datasets, encoders
 
 
-def test_scalar_broadcast_encoder_is_a_circuit_encoder() -> None:
+def test_scalar_broadcast_encoder_satisfies_the_protocol() -> None:
     conditions = np.linspace(0.0, 1.0, 3)
     states = encoders.scalar_broadcast_encoder(conditions, 5)
-    assert isinstance(states, ciqp.CircuitEncoder)
+    assert isinstance(states, ciqp.Encoder)
     assert states.n_conditions == 3
     assert states.n_qubits == 5
     ops = states.preparation_ops(0)
@@ -19,10 +19,10 @@ def test_scalar_broadcast_encoder_is_a_circuit_encoder() -> None:
     assert all(operation.name == "RY" for operation in ops)
 
 
-def test_anti_block_encoder_is_a_circuit_encoder() -> None:
+def test_anti_block_encoder_satisfies_the_protocol() -> None:
     conditions = np.linspace(0.0, 1.0, 3)
     states = encoders.anti_block_encoder(conditions, 5)
-    assert isinstance(states, ciqp.CircuitEncoder)
+    assert isinstance(states, ciqp.Encoder)
     assert states.n_conditions == 3
     assert states.n_qubits == 5
     ops = states.preparation_ops(0)
@@ -63,7 +63,7 @@ def test_encoder_for_dispatches_named_arms() -> None:
     conditions = datasets.training_conditions()
     for name in ("two_block", "broadcast"):
         states = encoders.encoder_for(name, conditions, 8)
-        assert isinstance(states, ciqp.CircuitEncoder)
+        assert isinstance(states, ciqp.Encoder)
         assert states.n_conditions == conditions.shape[0]
     try:
         encoders.encoder_for("nope", conditions, 8)
