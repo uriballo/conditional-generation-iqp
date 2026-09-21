@@ -44,7 +44,8 @@ def append_index(record: dict[str, object], results_root: Path | None = None) ->
             json.loads(line) for line in handle.read().splitlines() if line.strip()
         ]
         if run_id is not None and any(
-            existing_record.get("run_id") == run_id for existing_record in existing
+            existing_record.get("run_id") == run_id
+            for existing_record in existing
         ):
             return path
         handle.seek(0, 2)

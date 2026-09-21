@@ -314,14 +314,10 @@ ENCODER_MAPS = {
     "broadcast_ramp": broadcast_ramp_encoder,
     "target_mean": target_mean_encoder,
     "skew_minus": lambda conditions, n_qubits: skew_encoder(
-        conditions,
-        n_qubits,
-        -0.1,
+        conditions, n_qubits, -0.1,
     ),
     "skew_plus": lambda conditions, n_qubits: skew_encoder(
-        conditions,
-        n_qubits,
-        0.1,
+        conditions, n_qubits, 0.1,
     ),
     "zero": zero_encoder,
 }
