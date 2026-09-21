@@ -1,6 +1,6 @@
 {
   "classical_anchor_interpolation_baseline": "deterministic analysis; no training job",
-  "created_utc": "2026-09-21T19:12:16.155823+00:00",
+  "created_utc": "2026-09-21T19:31:25.241564+00:00",
   "enabled": false,
   "encoder_only_baseline": "deterministic analysis; no training job",
   "frozen_gates_path": "../review/frozen_gates.json",
@@ -92117,7 +92117,7 @@
       "split": "audit"
     }
   ],
-  "library_revision": "a971effb8621c658fe97119708b354f99e7c7a54",
+  "library_revision": "40fb93788fcbc7f01083a4e1f7bc03a4c1658490",
   "phase": "production",
   "production": true,
   "production_enabled": false,
@@ -92147,13 +92147,13 @@
     "pyproject.toml": "6324e2d13755ec17b269a47636c723aca6f6711702b9ca7ed5a3e8cdada1abad",
     "uv.lock": "33c0e5a5a3d3edb90b760157466afde3d9ae98fc41553b2523018cdfdec859ce"
   },
-  "source_snapshot_sha256": "8c9d52cf89ce640d21001c01a477b5c67efb9ca9afba350edc643d8cb0535027",
+  "source_snapshot_sha256": "fb39b244e6d98aef715afb45e9f064fcc931ce37d748424b1480d0b33f4a8c83",
   "split": "audit",
   "state": {
-    "library_revision": "a971effb8621c658fe97119708b354f99e7c7a54",
+    "library_revision": "40fb93788fcbc7f01083a4e1f7bc03a4c1658490",
     "library_version": "0.7.0",
     "paper_dirty": false,
-    "paper_revision": "c8ff62408f3bfd7c2323d819b24610d9374c6d0a"
+    "paper_revision": "9a46192c2940a6d5f6825ea56a1e0ce05e9ff601"
   },
   "study": "scalar_gaussian_translation"
 }
