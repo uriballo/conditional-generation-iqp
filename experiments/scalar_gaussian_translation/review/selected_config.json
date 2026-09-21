@@ -1,0 +1,205 @@
+{
+  "hyperparameter_id": "stage2-04",
+  "hyperparameters": {
+    "kernel_bodyness": [
+      2,
+      4
+    ],
+    "learning_rate": 0.03,
+    "restarts": 2,
+    "updates": 600
+  },
+  "library_revision": "ce6cd382e9fe62550ee18f1a9daeebf9d00f1eb4",
+  "manifest_sha256": "d26028e1c88177174f8f2cc497c392263d9e38d4c46f67983ac0e686543b14b3",
+  "protocol_sha256": "0093ef159236793ef10fa0a22646a5febaab115645cf3b408a23352e6f2f6ebc",
+  "ranking": [
+    {
+      "compute": 1200,
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "id": "stage2-04",
+      "median_held_interpolation_tvd": 0.2855674395434579,
+      "rejection_reasons": [],
+      "seed_means": {
+        "201": 0.2971858933292407,
+        "202": 0.2855674395434579,
+        "203": 0.28390996037490357
+      },
+      "worst_seed_held_mean_tvd": 0.2971858933292407
+    },
+    {
+      "compute": 1800,
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 600
+      },
+      "id": "stage2-07",
+      "median_held_interpolation_tvd": 0.2927644462116757,
+      "rejection_reasons": [
+        "ranked below stage2-04 by median held interpolation TVD"
+      ],
+      "seed_means": {
+        "201": 0.2904974136707727,
+        "202": 0.2941651614940498,
+        "203": 0.2927644462116757
+      },
+      "worst_seed_held_mean_tvd": 0.2941651614940498
+    },
+    {
+      "compute": 900,
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 300
+      },
+      "id": "stage2-08",
+      "median_held_interpolation_tvd": 0.2969989272203706,
+      "rejection_reasons": [
+        "ranked below stage2-07 by median held interpolation TVD"
+      ],
+      "seed_means": {
+        "201": 0.2894390573414082,
+        "202": 0.3008051393831518,
+        "203": 0.2969989272203706
+      },
+      "worst_seed_held_mean_tvd": 0.3008051393831518
+    },
+    {
+      "compute": 600,
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 300
+      },
+      "id": "stage2-02",
+      "median_held_interpolation_tvd": 0.2999555923759897,
+      "rejection_reasons": [
+        "ranked below stage2-08 by median held interpolation TVD"
+      ],
+      "seed_means": {
+        "201": 0.2999555923759897,
+        "202": 0.3001119503283536,
+        "203": 0.29679965568888206
+      },
+      "worst_seed_held_mean_tvd": 0.3001119503283536
+    },
+    {
+      "compute": 1200,
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 600
+      },
+      "id": "stage2-03",
+      "median_held_interpolation_tvd": 0.30024384567849116,
+      "rejection_reasons": [
+        "ranked below stage2-02 by median held interpolation TVD"
+      ],
+      "seed_means": {
+        "201": 0.2859056081084869,
+        "202": 0.30024384567849116,
+        "203": 0.3030330505950923
+      },
+      "worst_seed_held_mean_tvd": 0.3030330505950923
+    },
+    {
+      "compute": 600,
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "id": "stage2-06",
+      "median_held_interpolation_tvd": 0.3065809958280477,
+      "rejection_reasons": [
+        "ranked below stage2-03 by median held interpolation TVD"
+      ],
+      "seed_means": {
+        "201": 0.3065809958280477,
+        "202": 0.29735381270292216,
+        "203": 0.3460742728601603
+      },
+      "worst_seed_held_mean_tvd": 0.3460742728601603
+    },
+    {
+      "compute": 600,
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "id": "stage2-01",
+      "median_held_interpolation_tvd": 0.3138834706793602,
+      "rejection_reasons": [
+        "ranked below stage2-06 by median held interpolation TVD"
+      ],
+      "seed_means": {
+        "201": 0.3138834706793602,
+        "202": 0.31612219411299913,
+        "203": 0.3114958964889197
+      },
+      "worst_seed_held_mean_tvd": 0.31612219411299913
+    },
+    {
+      "compute": 900,
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 3,
+        "updates": 300
+      },
+      "id": "stage2-05",
+      "median_held_interpolation_tvd": 0.3138834706793602,
+      "rejection_reasons": [
+        "ranked below stage2-01 by compute"
+      ],
+      "seed_means": {
+        "201": 0.3138834706793602,
+        "202": 0.31612219411299913,
+        "203": 0.3114958964889197
+      },
+      "worst_seed_held_mean_tvd": 0.31612219411299913
+    }
+  ],
+  "rationale": "One common configuration is selected jointly across both general RY encoders and all development seeds, preserving a controlled encoder comparison.",
+  "source_hashes": {
+    "protocol.json": "0093ef159236793ef10fa0a22646a5febaab115645cf3b408a23352e6f2f6ebc",
+    "source_snapshot": "f11cfe51989367c699bbeaa7a6989b2254534a06b8ee09b692514c47bfaba4da"
+  },
+  "source_snapshot_sha256": "f11cfe51989367c699bbeaa7a6989b2254534a06b8ee09b692514c47bfaba4da"
+}

@@ -1,0 +1,124 @@
+{
+  "study": "scalar_gaussian_translation",
+  "status": "protocol_only",
+  "production_manifest_enabled": false,
+  "production_manifest_reason": "No production campaign is approved in this protocol.",
+  "n_visible": 8,
+  "n_ancillas": 0,
+  "forbidden_visible_sizes": [12],
+  "ansatz": "ciqp.Ansatz.complete(8)",
+  "ansatz_parameters": 36,
+  "width_factor": 0.5,
+  "target": "experiments.common.datasets.gaussian_target",
+  "target_diagnostics": {
+    "reported": ["nominal_mean", "exponent_width", "actual_mean", "actual_std", "boundary_shell_mass"],
+    "moment_note": "actual mean is calibrated to nominal mean; actual standard deviation can differ from exponent width because the distribution is truncated to shells 0..8"
+  },
+  "encoders": {
+    "broadcast_affine": "RY(pi*(0.32-0.68*c)) on all wires",
+    "qubit_affine": "RY(pi*((0.28+0.06*t_j)-(0.62+0.08*t_j)*c)), t_j=j/7",
+    "anti_block": "existing experiments.common.encoders.anti_block construction",
+    "condition_blind": "RY(0) on all wires",
+    "exponential_fallback": {
+      "preparation": "RY(pi/2) on all wires, then RZ(3**j*s*c) for j<k",
+      "choices": {"k": [2, 3, 4], "s": ["pi/54", "pi/27"]},
+      "remaining_rz": 0,
+      "excluded_raw_range": "The raw 8-qubit range is excluded because oscillation and aliasing make it unsuitable."
+    }
+  },
+  "intervals": {
+    "interpolation": [0.0, 1.0],
+    "near": [0.0, 0.8],
+    "far": [0.0, 0.5],
+    "mirror_near": [0.2, 1.0],
+    "mirror_far": [0.5, 1.0]
+  },
+  "anchor_counts": [2, 3, 4, 5],
+  "placements": {
+    "even": "linspace over the closed interval, endpoints included",
+    "random": "fixed endpoints plus sorted deterministic uniform interior draws",
+    "layout_seeds": [1101, 1102, 1103],
+    "layout_seed_role": "separate from optimizer seeds"
+  },
+  "evaluation_grids": {
+    "dev": "sorted union of {(6*k+1)/128, 1-(6*k+1)/128} for k=0..9",
+    "validation": "sorted union of {(6*k+2)/128, 1-(6*k+2)/128} for k=0..9",
+    "audit": "sorted union of {(6*k+3)/128, 1-(6*k+3)/128} for k=0..9",
+    "immutable": true,
+    "disjoint": true
+  },
+  "optimizer_seeds": {
+    "dev": [201, 202, 203],
+    "validation": [301, 302, 303],
+    "audit": [401, 402, 403]
+  },
+  "data": {
+    "train_samples": 512,
+    "validation_samples": 512,
+    "test_samples": 512
+  },
+  "training": {
+    "validation_n_ops": 64,
+    "validation_mc_samples": 256,
+    "gemm_dtype": "float32",
+    "sample_chunk": 128,
+    "initialization": "random",
+    "init_scale": 0.5,
+    "selection_metric": "exact_training_tvd",
+    "objective": "sampled conditional multiscale Hamming-RBF MMD"
+  },
+  "stage1": {
+    "protocol": "interpolation",
+    "anchors": 3,
+    "placement": "even",
+    "updates": 150,
+    "learning_rate": 0.02,
+    "final_learning_rate": 0.002,
+    "restarts": 2,
+    "batch_size": 64,
+    "n_ops": 64,
+    "mc_samples": 256,
+    "validation_interval": 10,
+    "kernel_bodyness": [2, 4]
+  },
+  "stage1_development_gate": {
+    "scope": "across the three dev optimizer seeds",
+    "advance_ry_encoder_if_all": {
+      "median_train_tvd_at_most": 0.45,
+      "median_held_interpolation_tvd_at_most": 0.45,
+      "worst_seed_held_mean_tvd_at_most": 0.60,
+      "median_absolute_improvement_over_own_encoder_only_held_mean_tvd_at_least": 0.05,
+      "generated_mean_movement_c0_to_c1": "correct sign and at least 40% of target movement"
+    },
+    "invoke_exponential_fallback_only_if_both_ry_encoders_fail": true
+  },
+  "stage2": {
+    "candidates_only": true,
+    "additional_candidates_require_authorization": true,
+    "final_learning_rate": "learning_rate/10",
+    "other_budgets": "same as Stage 1",
+    "candidates": [
+      {"learning_rate": 0.01, "updates": 300, "restarts": 2, "kernel_bodyness": [2, 4]},
+      {"learning_rate": 0.03, "updates": 300, "restarts": 2, "kernel_bodyness": [2, 4]},
+      {"learning_rate": 0.01, "updates": 600, "restarts": 2, "kernel_bodyness": [2, 4]},
+      {"learning_rate": 0.03, "updates": 600, "restarts": 2, "kernel_bodyness": [2, 4]},
+      {"learning_rate": 0.01, "updates": 300, "restarts": 3, "kernel_bodyness": [2, 4]},
+      {"learning_rate": 0.01, "updates": 300, "restarts": 2, "kernel_bodyness": [1, 2]},
+      {"learning_rate": 0.03, "updates": 600, "restarts": 3, "kernel_bodyness": [1, 2]},
+      {"learning_rate": 0.03, "updates": 300, "restarts": 3, "kernel_bodyness": [1, 2]}
+    ]
+  },
+  "main": {
+    "encoders": ["broadcast_affine", "qubit_affine", "anti_block"],
+    "condition_blind_baseline": true,
+    "exponential_fallback": "conditional fallback only if both RY encoders fail",
+    "budget_selection": "selected from Stage 2 later",
+    "budget_modes": ["fixed_total", "matched_exposure"],
+    "matched_exposure_updates": "fixed_updates*anchor_count/3; require exact divisibility"
+  },
+  "mirrored_diagnostic": {
+    "anchor_counts": [3, 5],
+    "placement": "even",
+    "budget_mode": "fixed_total"
+  }
+}

@@ -1,0 +1,5723 @@
+{
+  "classical_anchor_interpolation_baseline": "deterministic analysis; no training job",
+  "created_utc": "2026-09-21T15:44:28.551825+00:00",
+  "enabled": true,
+  "encoder_only_baseline": "deterministic analysis; no training job",
+  "frozen_gates_path": "../review/frozen_gates.json",
+  "frozen_gates_sha256": "571246e7143cfc1c0b5cec19a512106d2670c8d45fdd338f95e46347d8214130",
+  "groups": {
+    "condition_blind:direct": 189
+  },
+  "job_count": 189,
+  "jobs": [
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.0
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "3b9828e25da45ae7b056",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.0
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ed85c24ea18703748285",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.0
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "a0af07758c5faa0a7b3f",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.0234375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "a35a20902135cb33fc71",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.0234375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "b4c832f1f7230a249575",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.0234375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1dea54ddc0befc1143dc",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.02629741407881847
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "43df9c590947ebb768cf",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.02629741407881847
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f5105b0ffb5b92c7a4b8",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.02629741407881847
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f0736e3f59609ab472ad",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.035482385379154824
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "c4a6828b4a6a86ff94e6",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.035482385379154824
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "a3adbf47e503d3f07779",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.035482385379154824
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ed2d2cbf75cf18f80da9",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.04207586252610956
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "cd2035a31393277756fc",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.04207586252610956
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "37a928e3f2f8d0107cae",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.04207586252610956
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "2917bf8a8aa7806654bd",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.05259482815763694
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "194045933265ecea5829",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.05259482815763694
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "804c85e053127c3b1205",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.05259482815763694
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "e8bc2ab61623f532a0c5",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.05677181660664772
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "e2abd539d4df5abbf4b5",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.05677181660664772
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "29e82cb4c015a898f6f9",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.05677181660664772
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "00c59c25a3085ba3c30c",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.0703125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "72297ba63cbc984e175f",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.0703125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "b51564dbd91354549fee",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.0703125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "50c0ac8d6242cf0cb240",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.07096477075830965
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "0c3ebce5e1a21714cffb",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.07096477075830965
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "0941525765bf66c5df72",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.07096477075830965
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "7ebca8fdb72aea6acc24",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.11428215650633533
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "e99d10fbd69504797e6b",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.11428215650633533
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "980a0773adf40f803c7b",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.11428215650633533
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "97bda40fac71f1be9813",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.1171875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "786ba15de0b1f20c5f43",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.1171875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "37e74c3eec9aa677f9e6",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.1171875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1917f7486cf4b490a360",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "cad28336106b796752b7",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1f3b7b0898d503ccd0ff",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "5a7ded0e0ac2cc7bf5ea",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.1640625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "79b684996318ed4e953d",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.1640625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "b72d8e1419c70e7491d5",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.1640625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "354da43f37ed039b0609",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.16666666666666666
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f12f784f10245555ade7",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.16666666666666666
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "8e9ef817904e1c61ad80",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.16666666666666666
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "350b60b703005b96c2f3",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.18285145041013653
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "6189423cd3af89041d08",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.18285145041013653
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "5f10e7fe6575c0c453d6",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.18285145041013653
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "cdf4fe590d8a5d1434be",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "d1264e7414019a2c6690",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1ef8acbe17f40e264aa1",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "4d79c1d764ae40e60a7b",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2109375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "4c46e91573436fb603d3",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2109375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "52cecf3dc0b33c5869b1",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2109375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "2e5a172e04a10a9d88a8",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.22856431301267066
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "d9244414076a36551cd0",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.22856431301267066
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "5e13655d91f0599d90ce",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.22856431301267066
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "df158ef1649bc6f32844",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.25
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f9caa5efc4ce5bbf8ff3",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.25
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "943aba40c81f57791f04",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.25
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "61289913a0d33565790a",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2578125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "26c41a2dee7aa6998c07",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2578125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ef9bd75534ebdb7bfb4e",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2578125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "749c9eb159f92d728815",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.26666666666666666
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "e2fd3596bcbf0fd8b86b",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.26666666666666666
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "6f0e6f14fbaa4eb3e6de",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.26666666666666666
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "acec6524f9fdf8b2c69f",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2717559021408029
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "02d201154dc36323b16c",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2717559021408029
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "bd2c614032d6f68cef8d",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.2717559021408029
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ecfda4f53a62a9d3bcc2",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.291062301672619
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "a017b1bb6e0dfa80515e",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.291062301672619
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "e54b9c9202dbcb76ad18",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.291062301672619
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "9a135fa11f7b2cd80af4",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3046875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "801c8a72191a4d72f163",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3046875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f88f360cc207c5afa16c",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3046875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "cbf9eb5a94f4375bca75",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3333333333333333
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "6412c978087015bf8cef",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3333333333333333
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "8850015efe192603e38f",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3333333333333333
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "526b53f60b05be1887b4",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3515625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1119b0aee01f432affe7",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3515625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "770835e408bd7d47801d",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3515625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "da4b1c95fa47ebb50d63",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.37215309032818267
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "903d04138db31c916ddb",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.37215309032818267
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ed348f7f88769012d6dd",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.37215309032818267
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f8144513ab938f348ff5",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "cd35a99e1dbda625ed9a",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "a9ada02cd88fe5374de9",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "98c70caa5156c7182dda",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3984375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1aa5a50795a713f29203",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3984375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "05215c1afe96579c994f",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.3984375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "8e1f5069adae291b279c",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "49b2c11eb55ec697c72c",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "131b08e38b55dfb111f1",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "c0c1ef62db63ac922ee5",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4074790488770544
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "7dae1e2aaf6df1c031b8",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4074790488770544
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "c3648aecca9cd3d3f305",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4074790488770544
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "6e263f4179de8eb1713e",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.40987055600953365
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "7ed2ea320dbb9667667d",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.40987055600953365
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "26d8a0198be23c8cbac4",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.40987055600953365
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "dcb2d8c966e66e981189",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4348094434252847
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "fdcab64306c71df1f2f7",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4348094434252847
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "e04429e673c57a5661a0",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4348094434252847
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "444e8f287a7eb0a7b1af",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4440795155493935
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "67f3b74aa6c4ce9c9865",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4440795155493935
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "7400ce763442e7453c5a",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4440795155493935
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "fe55ef852e67c3227c6d",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4453125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "4f4769878c188fee59f9",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4453125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "a1df3ce1f6d1f17a1a2b",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4453125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "5d199cefda2830e973d8",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4656996826761904
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "97a881f5f81a9c937f7c",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4656996826761904
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "9271e1ce1ff873d359d2",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.4656996826761904
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "d6d5123a8482ff009c55",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ebbff62bb0b0def0fd34",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "b05a260546ef7de54e7e",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "c733e985bf3b0ee0d12a",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5333333333333333
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "de759d7b7fb455b8b08b",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5333333333333333
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "c2ff300241daf2182019",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5333333333333333
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "3e28ad1f32968f982b57",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5435118042816058
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "5231bb298834d09cdaac",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5435118042816058
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1e7b9ac7aacfffbb5611",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5435118042816058
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "baa603ffc72f96810465",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5546875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "8b2e96e336a02994971a",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5546875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "d36e584e0784f328753e",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5546875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "33b6d63e7264f6576d53",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.582124603345238
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1b63235f66ce70c5bfc2",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.582124603345238
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "4334e3f94508bbd3f667",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.582124603345238
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "311024e4f610033cc93c",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5954449445250923
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "7e4d7b7b22c29c2e0749",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5954449445250923
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "2be31cec3c9930c75d73",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.5954449445250923
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f46fc0a3872963d64852",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6000000000000001
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "a4b203744cbc2b7f0c41",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6000000000000001
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "e8ac2f2e7af5783f5bb0",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6000000000000001
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "67b7798dd72da4ad9f06",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6015625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ac2727c32ae9e992e0a8",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6015625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "308038d895d45fbbf6a7",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6015625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "161df12ddb48fe390315",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6484375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "c88c1e7e620f6606423b",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6484375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "cc73143bfb38b3aa6e7f",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6484375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "281690866191ddec6558",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.651966478203287
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "c90f672d0bc3fd4c1e53",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.651966478203287
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "bfa5055f3a8283a53244",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.651966478203287
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "153832d04ccfe8422ff2",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6557928896152538
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "eb3987a6bf2d2bb0faf7",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6557928896152538
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "dca786440b73d540d7d9",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6557928896152538
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "55b1b859646276b6f4c3",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6666666666666666
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "00e67f47c1fe34ac8f41",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6666666666666666
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "9ade0b9e8f6d9607d348",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6666666666666666
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "cd5aa4084717a1591b6a",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6953125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "681f98fa8e7e02319586",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6953125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "e79b6e43b847ea23ac37",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.6953125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f401eb335c1be2eae4e3",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7105272248790296
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "d32cbf45104daac9f307",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7105272248790296
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "30452b79947067b1b3cf",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7105272248790296
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "2d596fa10d425f3ddefd",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7421875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "459c5810a5d0606f020a",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7421875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f35c2d169debe1aff5e3",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7421875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "09545bee8b91569cbd38",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7443061806563653
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "de1a57948dfe78bcc00a",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7443061806563653
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "c585e8a70cb6a29e2ac0",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7443061806563653
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "010a709ff3158b3d22bb",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.75
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "56b8860670927b75d722",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.75
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "5534fd9375ba564a89b4",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.75
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "54971e1cc0980e4afab6",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7890625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "7e153dfdd193bdf33a61",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7890625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "226d17bc76b51857c97c",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.7890625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "918c283f77d4585fc7dd",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "4068d5a6c8ab3f613493",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "eacc3debad1ee3fecc62",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "309eee5ff5eb1dc9e962",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8149580977541088
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "a657c30db9773fefc701",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8149580977541088
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "be165d368189d825703f",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8149580977541088
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1f89deb4b3c94c1df7cd",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8197411120190673
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1c15f3747bc8741b66d5",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8197411120190673
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "d0e84a45280cb2ae3c62",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8197411120190673
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ebf7ec5cde0d49f9624c",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8359375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "2336f31648673c3e0bf8",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8359375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "cab62249e73591aae4b4",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8359375
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "1071c544dc39f2c447d3",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8828125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "4e38240202d3f3a00af5",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8828125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "8daed4f26b772b8a6a4e",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.8828125
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f8bc1aae43bb833379c2",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.888159031098787
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ebd3b130348df9e109d6",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.888159031098787
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "d39c23cd795142f62937",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.888159031098787
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "8d550005525277af59c9",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.9296875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "d9e04eccab4498778b79",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.9296875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "c39488fb8b4eb139a2ee",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.9296875
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "b10d88a008df7f5c97b4",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.9765625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "df848315ba674c39b6c1",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.9765625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "7579e3e0f83f8129fec5",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        0.9765625
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "e83b07c7af26948ce4f9",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        1.0
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "f3eca1f3c73444fbcdd2",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 401,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        1.0
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "b7728fe6f6618ddb64aa",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 402,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    },
+    {
+      "anchor_count": 2,
+      "anchors": [
+        0.0,
+        1.0
+      ],
+      "budget_mode": "direct",
+      "encoder": "condition_blind",
+      "fit_condition": [
+        1.0
+      ],
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "2558cb910df3d137c864",
+      "layout_seed": null,
+      "model_kind": "independent_direct",
+      "optimizer_seed": 403,
+      "phase": "direct",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "audit"
+    }
+  ],
+  "library_revision": "ce6cd382e9fe62550ee18f1a9daeebf9d00f1eb4",
+  "phase": "direct",
+  "production": false,
+  "production_enabled": false,
+  "protocol_sha256": "0093ef159236793ef10fa0a22646a5febaab115645cf3b408a23352e6f2f6ebc",
+  "source_file_sha256": {
+    "experiments/common/config.py": "1a0a2d7646a8695fb000f48184ae9a7542115bd66c5ff005c4d417c484001d71",
+    "experiments/common/datasets.py": "e7f2f58f61282dad4a0440c07a7ffc39b8308d67b6e20e9bc4980c162e2f8353",
+    "experiments/common/encoders.py": "93e6b0a33d370917be229bda2b645bc412db90b38c5abbc7c6bc94fd9d69b74f",
+    "experiments/common/metrics.py": "6573a810aee9e7b2abf7109ea206875c2ece3d78ed5f8e0033e94801606bc42b",
+    "experiments/common/runner.py": "25341f7cc3288ee152e7f329fa0377e97e2d27477f4ef3bb0efe6517f0055c6d",
+    "experiments/common/tracking.py": "68bb7f4aa7cc19ee3c95726c24483209b9f8db593a61beb3db62bbbc5fa5dca0",
+    "experiments/scalar_gaussian_translation/__init__.py": "b8cca13b0cc6f9da0faa9d447a5c42fc13697be2c7a958f6caf4d0fb9cf15995",
+    "experiments/scalar_gaussian_translation/campaign.py": "ad0138417d7dfd5df6b0b8262ac84cf495e0fe5157767e9738aca430ff8661ad",
+    "experiments/scalar_gaussian_translation/protocol.json": "0093ef159236793ef10fa0a22646a5febaab115645cf3b408a23352e6f2f6ebc",
+    "experiments/scalar_gaussian_translation/protocol.py": "b21c3550a64302aba2a45323a01c7b6739d7ae377ded4a991c446de038afc8d5",
+    "experiments/scalar_gaussian_translation/study.py": "2dc7b00ce6bdb490e781e2f31e68a6a48af0d240fc89a8476bf44cf8555134d3",
+    "iqp-cond/src/iqp_cond/__init__.py": "65effe05eb2003e8efa227f45f1cdb4b9b8ba5ddbaceea4c0c2052c9ea653622",
+    "iqp-cond/src/iqp_cond/encoders.py": "905fc43acc061aa8956918c668c0aaae3c8f66097afe8947f74b12d98f615596",
+    "iqp-cond/src/iqp_cond/estimator.py": "b0de1693e485b0384d004e3428ffa622ced3682e8342238bf74bb2f054d69a35",
+    "iqp-cond/src/iqp_cond/initialization.py": "e4c6093e579167041d060ed6070165f49d54701bacba08c8b0e765abcbba8b78",
+    "iqp-cond/src/iqp_cond/loss.py": "b04cd7d00ae3ed12fff7c99a73700aa42f24e304075e3996ccd71462124cacc4",
+    "iqp-cond/src/iqp_cond/model.py": "7a68863957cff1ee83b722a36c7ecf7bb9f475f2b1bf7f41a5d2c6461e92dddc",
+    "iqp-cond/src/iqp_cond/operators.py": "4dad3c8499ec03213dc41ddef3b0fad9da1945404e988f0d5ebcc77e738093a6",
+    "iqp-cond/src/iqp_cond/simulation.py": "557907d01516975053a98c209b1ca79628eb8582f22c9b8eda99388d92358520",
+    "iqp-cond/src/iqp_cond/training.py": "40635c29a1dfe4afb881cf14b62d7ca5d4f28c97cc522306c9834ef26bd59d30",
+    "iqp-cond/src/iqp_cond/verification.py": "ddcd6fe847578abdc51f3675077d644e0a46c51848f20e243cecdf7f7ca7b6af",
+    "pyproject.toml": "6324e2d13755ec17b269a47636c723aca6f6711702b9ca7ed5a3e8cdada1abad",
+    "uv.lock": "33c0e5a5a3d3edb90b760157466afde3d9ae98fc41553b2523018cdfdec859ce"
+  },
+  "source_snapshot_sha256": "f11cfe51989367c699bbeaa7a6989b2254534a06b8ee09b692514c47bfaba4da",
+  "split": "audit",
+  "state": {
+    "library_revision": "ce6cd382e9fe62550ee18f1a9daeebf9d00f1eb4",
+    "library_version": "0.7.0",
+    "paper_dirty": true,
+    "paper_revision": "f33ee7ae51948d5b3b58c74e869221fbcdf8bb71"
+  },
+  "study": "scalar_gaussian_translation"
+}

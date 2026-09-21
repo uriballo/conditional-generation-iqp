@@ -1,0 +1,5599 @@
+{
+  "classical_anchor_interpolation": {
+    "aggregates": [
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "max": 0.7092472412131153,
+        "mean": 0.4040169483312789,
+        "median": 0.41197829909511097,
+        "n": 10,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "max": 0.22877256018907613,
+        "mean": 0.1607781612773659,
+        "median": 0.17616593446910384,
+        "n": 10,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "max": 0.7092472412131153,
+        "mean": 0.4040169483312789,
+        "median": 0.41197829909511097,
+        "n": 10,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "max": 0.07262230147614945,
+        "mean": 0.04555197246154905,
+        "median": 0.04754865463253764,
+        "n": 10,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "max": 0.7092472412131153,
+        "mean": 0.4040169483312789,
+        "median": 0.41197829909511097,
+        "n": 10,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "max": 0.03500055924985095,
+        "mean": 0.02052459825581394,
+        "median": 0.021908137660063883,
+        "n": 10,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "max": 0.7092472412131153,
+        "mean": 0.4040169483312789,
+        "median": 0.41197829909511097,
+        "n": 10,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "max": 0.02047198363495272,
+        "mean": 0.011828176479739622,
+        "median": 0.013523503969753424,
+        "n": 10,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "max": 0.5992804219030097,
+        "mean": 0.4019311172447674,
+        "median": 0.4529194470296693,
+        "n": 20,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "max": 0.22877256018907668,
+        "mean": 0.1607781612773667,
+        "median": 0.17616593446910503,
+        "n": 20,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "max": 0.11472277162122113,
+        "mean": 0.07291517706895,
+        "median": 0.07959581916431889,
+        "n": 20,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "max": 0.0726223014761509,
+        "mean": 0.04555197246154917,
+        "median": 0.047548654632537456,
+        "n": 20,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "max": 0.4600150298521478,
+        "mean": 0.29121444770241245,
+        "median": 0.3227387798259832,
+        "n": 16,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "near_extrapolation",
+        "max": 0.3181056797506981,
+        "mean": 0.18618462461333818,
+        "median": 0.18221452984312123,
+        "n": 4,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "max": 0.15164645336032723,
+        "mean": 0.09521988157809909,
+        "median": 0.10901922495352342,
+        "n": 16,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "near_extrapolation",
+        "max": 0.3181056797506981,
+        "mean": 0.18618462461333818,
+        "median": 0.18221452984312123,
+        "n": 4,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "max": 0.08056036160701001,
+        "mean": 0.04852636071708415,
+        "median": 0.05316979404680153,
+        "n": 16,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "near_extrapolation",
+        "max": 0.3181056797506981,
+        "mean": 0.18618462461333818,
+        "median": 0.18221452984312123,
+        "n": 4,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "max": 0.04718025437235032,
+        "mean": 0.026307228567017324,
+        "median": 0.028463149934117388,
+        "n": 16,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "near_extrapolation",
+        "max": 0.3181056797506981,
+        "mean": 0.18618462461333818,
+        "median": 0.18221452984312123,
+        "n": 4,
+        "placement": "even",
+        "protocol": "near"
+      }
+    ],
+    "anchor_counts": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "by_condition": [
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "condition": 0.5546875,
+        "max": 0.08627075350764718,
+        "mean": 0.08627075350764718,
+        "median": 0.08627075350764718,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "condition": 0.6015625,
+        "max": 0.1627908936533359,
+        "mean": 0.1627908936533359,
+        "median": 0.1627908936533359,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "condition": 0.6484375,
+        "max": 0.239046840913395,
+        "mean": 0.239046840913395,
+        "median": 0.239046840913395,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "condition": 0.6953125,
+        "max": 0.3125613049770858,
+        "mean": 0.3125613049770858,
+        "median": 0.3125613049770858,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "condition": 0.7421875,
+        "max": 0.38110361666780646,
+        "mean": 0.38110361666780646,
+        "median": 0.38110361666780646,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "condition": 0.7890625,
+        "max": 0.4428529815224155,
+        "mean": 0.4428529815224155,
+        "median": 0.4428529815224155,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "condition": 0.8359375,
+        "max": 0.49649456746223014,
+        "mean": 0.49649456746223014,
+        "median": 0.49649456746223014,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "condition": 0.8828125,
+        "max": 0.5676525177618235,
+        "mean": 0.5676525177618235,
+        "median": 0.5676525177618235,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "condition": 0.9296875,
+        "max": 0.6421487656339335,
+        "mean": 0.6421487656339335,
+        "median": 0.6421487656339335,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "far_extrapolation",
+        "condition": 0.9765625,
+        "max": 0.7092472412131153,
+        "mean": 0.7092472412131153,
+        "median": 0.7092472412131153,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.04397631985628771,
+        "mean": 0.04397631985628771,
+        "median": 0.04397631985628771,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.11304510049236556,
+        "mean": 0.11304510049236556,
+        "median": 0.11304510049236556,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.16044798809290847,
+        "mean": 0.16044798809290847,
+        "median": 0.16044798809290847,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.1956794089920905,
+        "mean": 0.1956794089920905,
+        "median": 0.1956794089920905,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.22040889092994895,
+        "mean": 0.22040889092994895,
+        "median": 0.22040889092994895,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.22877256018907613,
+        "mean": 0.22877256018907613,
+        "median": 0.22877256018907613,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.21929075053403518,
+        "mean": 0.21929075053403518,
+        "median": 0.21929075053403518,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.19188388084529923,
+        "mean": 0.19188388084529923,
+        "median": 0.19188388084529923,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.1472743658504601,
+        "mean": 0.1472743658504601,
+        "median": 0.1472743658504601,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.08700234699118732,
+        "mean": 0.08700234699118732,
+        "median": 0.08700234699118732,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "condition": 0.5546875,
+        "max": 0.08627075350764718,
+        "mean": 0.08627075350764718,
+        "median": 0.08627075350764718,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "condition": 0.6015625,
+        "max": 0.1627908936533359,
+        "mean": 0.1627908936533359,
+        "median": 0.1627908936533359,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "condition": 0.6484375,
+        "max": 0.239046840913395,
+        "mean": 0.239046840913395,
+        "median": 0.239046840913395,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "condition": 0.6953125,
+        "max": 0.3125613049770858,
+        "mean": 0.3125613049770858,
+        "median": 0.3125613049770858,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "condition": 0.7421875,
+        "max": 0.38110361666780646,
+        "mean": 0.38110361666780646,
+        "median": 0.38110361666780646,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "condition": 0.7890625,
+        "max": 0.4428529815224155,
+        "mean": 0.4428529815224155,
+        "median": 0.4428529815224155,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "condition": 0.8359375,
+        "max": 0.49649456746223014,
+        "mean": 0.49649456746223014,
+        "median": 0.49649456746223014,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "condition": 0.8828125,
+        "max": 0.5676525177618235,
+        "mean": 0.5676525177618235,
+        "median": 0.5676525177618235,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "condition": 0.9296875,
+        "max": 0.6421487656339335,
+        "mean": 0.6421487656339335,
+        "median": 0.6421487656339335,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "far_extrapolation",
+        "condition": 0.9765625,
+        "max": 0.7092472412131153,
+        "mean": 0.7092472412131153,
+        "median": 0.7092472412131153,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.026700926840444922,
+        "mean": 0.026700926840444922,
+        "median": 0.026700926840444922,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.06121892144483723,
+        "mean": 0.06121892144483723,
+        "median": 0.06121892144483723,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.07262230147614945,
+        "mean": 0.07262230147614945,
+        "median": 0.07262230147614945,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.0632318575568239,
+        "mean": 0.0632318575568239,
+        "median": 0.0632318575568239,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.03541274060477307,
+        "mean": 0.03541274060477307,
+        "median": 0.03541274060477307,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.007311980696917686,
+        "mean": 0.007311980696917686,
+        "median": 0.007311980696917686,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.04069350900810092,
+        "mean": 0.04069350900810092,
+        "median": 0.04069350900810092,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.05614997728558918,
+        "mean": 0.05614997728558918,
+        "median": 0.05614997728558918,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.05440380025697436,
+        "mean": 0.05440380025697436,
+        "median": 0.05440380025697436,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.03777370944487976,
+        "mean": 0.03777370944487976,
+        "median": 0.03777370944487976,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "condition": 0.5546875,
+        "max": 0.08627075350764718,
+        "mean": 0.08627075350764718,
+        "median": 0.08627075350764718,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "condition": 0.6015625,
+        "max": 0.1627908936533359,
+        "mean": 0.1627908936533359,
+        "median": 0.1627908936533359,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "condition": 0.6484375,
+        "max": 0.239046840913395,
+        "mean": 0.239046840913395,
+        "median": 0.239046840913395,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "condition": 0.6953125,
+        "max": 0.3125613049770858,
+        "mean": 0.3125613049770858,
+        "median": 0.3125613049770858,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "condition": 0.7421875,
+        "max": 0.38110361666780646,
+        "mean": 0.38110361666780646,
+        "median": 0.38110361666780646,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "condition": 0.7890625,
+        "max": 0.4428529815224155,
+        "mean": 0.4428529815224155,
+        "median": 0.4428529815224155,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "condition": 0.8359375,
+        "max": 0.49649456746223014,
+        "mean": 0.49649456746223014,
+        "median": 0.49649456746223014,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "condition": 0.8828125,
+        "max": 0.5676525177618235,
+        "mean": 0.5676525177618235,
+        "median": 0.5676525177618235,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "condition": 0.9296875,
+        "max": 0.6421487656339335,
+        "mean": 0.6421487656339335,
+        "median": 0.6421487656339335,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "far_extrapolation",
+        "condition": 0.9765625,
+        "max": 0.7092472412131153,
+        "mean": 0.7092472412131153,
+        "median": 0.7092472412131153,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.0179614727754495,
+        "mean": 0.0179614727754495,
+        "median": 0.0179614727754495,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.03500055924985095,
+        "mean": 0.03500055924985095,
+        "median": 0.03500055924985095,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.02892503115117239,
+        "mean": 0.02892503115117239,
+        "median": 0.02892503115117239,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.0020556791018559494,
+        "mean": 0.0020556791018559494,
+        "median": 0.0020556791018559494,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.021481993345666812,
+        "mean": 0.021481993345666812,
+        "median": 0.021481993345666812,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.027656053544707244,
+        "mean": 0.027656053544707244,
+        "median": 0.027656053544707244,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.01598463482957946,
+        "mean": 0.01598463482957946,
+        "median": 0.01598463482957946,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.009808303775471924,
+        "mean": 0.009808303775471924,
+        "median": 0.009808303775471924,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.024037972809924188,
+        "mean": 0.024037972809924188,
+        "median": 0.024037972809924188,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.022334281974460954,
+        "mean": 0.022334281974460954,
+        "median": 0.022334281974460954,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "condition": 0.5546875,
+        "max": 0.08627075350764718,
+        "mean": 0.08627075350764718,
+        "median": 0.08627075350764718,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "condition": 0.6015625,
+        "max": 0.1627908936533359,
+        "mean": 0.1627908936533359,
+        "median": 0.1627908936533359,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "condition": 0.6484375,
+        "max": 0.239046840913395,
+        "mean": 0.239046840913395,
+        "median": 0.239046840913395,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "condition": 0.6953125,
+        "max": 0.3125613049770858,
+        "mean": 0.3125613049770858,
+        "median": 0.3125613049770858,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "condition": 0.7421875,
+        "max": 0.38110361666780646,
+        "mean": 0.38110361666780646,
+        "median": 0.38110361666780646,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "condition": 0.7890625,
+        "max": 0.4428529815224155,
+        "mean": 0.4428529815224155,
+        "median": 0.4428529815224155,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "condition": 0.8359375,
+        "max": 0.49649456746223014,
+        "mean": 0.49649456746223014,
+        "median": 0.49649456746223014,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "condition": 0.8828125,
+        "max": 0.5676525177618235,
+        "mean": 0.5676525177618235,
+        "median": 0.5676525177618235,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "condition": 0.9296875,
+        "max": 0.6421487656339335,
+        "mean": 0.6421487656339335,
+        "median": 0.6421487656339335,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "far_extrapolation",
+        "condition": 0.9765625,
+        "max": 0.7092472412131153,
+        "mean": 0.7092472412131153,
+        "median": 0.7092472412131153,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.01311861423715013,
+        "mean": 0.01311861423715013,
+        "median": 0.01311861423715013,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.02047198363495272,
+        "mean": 0.02047198363495272,
+        "median": 0.02047198363495272,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.004710738459675337,
+        "mean": 0.004710738459675337,
+        "median": 0.004710738459675337,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.014011292100532265,
+        "mean": 0.014011292100532265,
+        "median": 0.014011292100532265,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.013928393702356719,
+        "mean": 0.013928393702356719,
+        "median": 0.013928393702356719,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.003727612542435155,
+        "mean": 0.003727612542435155,
+        "median": 0.003727612542435155,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.015602931926723134,
+        "mean": 0.015602931926723134,
+        "median": 0.015602931926723134,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.009553191277316193,
+        "mean": 0.009553191277316193,
+        "median": 0.009553191277316193,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.008698290316594122,
+        "mean": 0.008698290316594122,
+        "median": 0.008698290316594122,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.014458716599660451,
+        "mean": 0.014458716599660451,
+        "median": 0.014458716599660451,
+        "n": 1,
+        "placement": "even",
+        "protocol": "far"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.05476939161105356,
+        "mean": 0.05476939161105356,
+        "median": 0.05476939161105356,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.15944753280295587,
+        "mean": 0.15944753280295587,
+        "median": 0.15944753280295587,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.25694654238885173,
+        "mean": 0.25694654238885173,
+        "median": 0.25694654238885173,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.3447021204876208,
+        "mean": 0.3447021204876208,
+        "median": 0.3447021204876208,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.4210595470356272,
+        "mean": 0.4210595470356272,
+        "median": 0.4210595470356272,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.4847793470237057,
+        "mean": 0.4847793470237057,
+        "median": 0.4847793470237057,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.534951980833448,
+        "mean": 0.534951980833448,
+        "median": 0.534951980833448,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.5709521396584321,
+        "mean": 0.5709521396584321,
+        "median": 0.5709521396584321,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.5924221487029588,
+        "mean": 0.5924221487029588,
+        "median": 0.5924221487029588,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.5992804219030088,
+        "mean": 0.5992804219030088,
+        "median": 0.5992804219030088,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.5546875,
+        "max": 0.5992804219030097,
+        "mean": 0.5992804219030097,
+        "median": 0.5992804219030097,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.6015625,
+        "max": 0.5924221487029595,
+        "mean": 0.5924221487029595,
+        "median": 0.5924221487029595,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.6484375,
+        "max": 0.5709521396584329,
+        "mean": 0.5709521396584329,
+        "median": 0.5709521396584329,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.6953125,
+        "max": 0.5349519808334491,
+        "mean": 0.5349519808334491,
+        "median": 0.5349519808334491,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.7421875,
+        "max": 0.48477934702370595,
+        "mean": 0.48477934702370595,
+        "median": 0.48477934702370595,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.7890625,
+        "max": 0.4210595470356329,
+        "mean": 0.4210595470356329,
+        "median": 0.4210595470356329,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.8359375,
+        "max": 0.34470212048762416,
+        "mean": 0.34470212048762416,
+        "median": 0.34470212048762416,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.8828125,
+        "max": 0.2569465423888553,
+        "mean": 0.2569465423888553,
+        "median": 0.2569465423888553,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.9296875,
+        "max": 0.15944753280295712,
+        "mean": 0.15944753280295712,
+        "median": 0.15944753280295712,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.9765625,
+        "max": 0.054769391611058094,
+        "mean": 0.054769391611058094,
+        "median": 0.054769391611058094,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.04397631985628771,
+        "mean": 0.04397631985628771,
+        "median": 0.04397631985628771,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.11304510049236556,
+        "mean": 0.11304510049236556,
+        "median": 0.11304510049236556,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.16044798809290847,
+        "mean": 0.16044798809290847,
+        "median": 0.16044798809290847,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.1956794089920905,
+        "mean": 0.1956794089920905,
+        "median": 0.1956794089920905,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.22040889092994895,
+        "mean": 0.22040889092994895,
+        "median": 0.22040889092994895,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.22877256018907613,
+        "mean": 0.22877256018907613,
+        "median": 0.22877256018907613,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.21929075053403518,
+        "mean": 0.21929075053403518,
+        "median": 0.21929075053403518,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.19188388084529923,
+        "mean": 0.19188388084529923,
+        "median": 0.19188388084529923,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.1472743658504601,
+        "mean": 0.1472743658504601,
+        "median": 0.1472743658504601,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.08700234699118732,
+        "mean": 0.08700234699118732,
+        "median": 0.08700234699118732,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.5546875,
+        "max": 0.08700234699118758,
+        "mean": 0.08700234699118758,
+        "median": 0.08700234699118758,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.6015625,
+        "max": 0.14727436585046055,
+        "mean": 0.14727436585046055,
+        "median": 0.14727436585046055,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.6484375,
+        "max": 0.19188388084529984,
+        "mean": 0.19188388084529984,
+        "median": 0.19188388084529984,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.6953125,
+        "max": 0.21929075053403604,
+        "mean": 0.21929075053403604,
+        "median": 0.21929075053403604,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.7421875,
+        "max": 0.22877256018907668,
+        "mean": 0.22877256018907668,
+        "median": 0.22877256018907668,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.7890625,
+        "max": 0.2204088909299532,
+        "mean": 0.2204088909299532,
+        "median": 0.2204088909299532,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.8359375,
+        "max": 0.19567940899209235,
+        "mean": 0.19567940899209235,
+        "median": 0.19567940899209235,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.8828125,
+        "max": 0.16044798809291083,
+        "mean": 0.16044798809291083,
+        "median": 0.16044798809291083,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.9296875,
+        "max": 0.11304510049236656,
+        "mean": 0.11304510049236656,
+        "median": 0.11304510049236656,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.9765625,
+        "max": 0.04397631985629048,
+        "mean": 0.04397631985629048,
+        "median": 0.04397631985629048,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.03405677170678732,
+        "mean": 0.03405677170678732,
+        "median": 0.03405677170678732,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.08328645604386445,
+        "mean": 0.08328645604386445,
+        "median": 0.08328645604386445,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.1094015258078615,
+        "mean": 0.1094015258078615,
+        "median": 0.1094015258078615,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.11472277162122066,
+        "mean": 0.11472277162122066,
+        "median": 0.11472277162122066,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.1017718267869582,
+        "mean": 0.1017718267869582,
+        "median": 0.1017718267869582,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.07590518228477261,
+        "mean": 0.07590518228477261,
+        "median": 0.07590518228477261,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.03331449942844857,
+        "mean": 0.03331449942844857,
+        "median": 0.03331449942844857,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.020517212265179174,
+        "mean": 0.020517212265179174,
+        "median": 0.020517212265179174,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.06395555444232838,
+        "mean": 0.06395555444232838,
+        "median": 0.06395555444232838,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.09221997030207543,
+        "mean": 0.09221997030207543,
+        "median": 0.09221997030207543,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.5546875,
+        "max": 0.09221997030207549,
+        "mean": 0.09221997030207549,
+        "median": 0.09221997030207549,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.6015625,
+        "max": 0.06395555444232834,
+        "mean": 0.06395555444232834,
+        "median": 0.06395555444232834,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.6484375,
+        "max": 0.02051721226517919,
+        "mean": 0.02051721226517919,
+        "median": 0.02051721226517919,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.6953125,
+        "max": 0.03331449942844874,
+        "mean": 0.03331449942844874,
+        "median": 0.03331449942844874,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.7421875,
+        "max": 0.07590518228477333,
+        "mean": 0.07590518228477333,
+        "median": 0.07590518228477333,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.7890625,
+        "max": 0.1017718267869594,
+        "mean": 0.1017718267869594,
+        "median": 0.1017718267869594,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.8359375,
+        "max": 0.11472277162122113,
+        "mean": 0.11472277162122113,
+        "median": 0.11472277162122113,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.8828125,
+        "max": 0.1094015258078626,
+        "mean": 0.1094015258078626,
+        "median": 0.1094015258078626,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.9296875,
+        "max": 0.08328645604386528,
+        "mean": 0.08328645604386528,
+        "median": 0.08328645604386528,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.9765625,
+        "max": 0.03405677170679006,
+        "mean": 0.03405677170679006,
+        "median": 0.03405677170679006,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.026700926840444922,
+        "mean": 0.026700926840444922,
+        "median": 0.026700926840444922,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.06121892144483723,
+        "mean": 0.06121892144483723,
+        "median": 0.06121892144483723,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.07262230147614945,
+        "mean": 0.07262230147614945,
+        "median": 0.07262230147614945,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.0632318575568239,
+        "mean": 0.0632318575568239,
+        "median": 0.0632318575568239,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.03541274060477307,
+        "mean": 0.03541274060477307,
+        "median": 0.03541274060477307,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.007311980696917686,
+        "mean": 0.007311980696917686,
+        "median": 0.007311980696917686,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.04069350900810092,
+        "mean": 0.04069350900810092,
+        "median": 0.04069350900810092,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.05614997728558918,
+        "mean": 0.05614997728558918,
+        "median": 0.05614997728558918,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.05440380025697436,
+        "mean": 0.05440380025697436,
+        "median": 0.05440380025697436,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.03777370944487976,
+        "mean": 0.03777370944487976,
+        "median": 0.03777370944487976,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.5546875,
+        "max": 0.0377737094448795,
+        "mean": 0.0377737094448795,
+        "median": 0.0377737094448795,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.6015625,
+        "max": 0.05440380025697399,
+        "mean": 0.05440380025697399,
+        "median": 0.05440380025697399,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.6484375,
+        "max": 0.05614997728558873,
+        "mean": 0.05614997728558873,
+        "median": 0.05614997728558873,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.6953125,
+        "max": 0.04069350900810036,
+        "mean": 0.04069350900810036,
+        "median": 0.04069350900810036,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.7421875,
+        "max": 0.007311980696916493,
+        "mean": 0.007311980696916493,
+        "median": 0.007311980696916493,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.7890625,
+        "max": 0.03541274060477197,
+        "mean": 0.03541274060477197,
+        "median": 0.03541274060477197,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.8359375,
+        "max": 0.06323185755682484,
+        "mean": 0.06323185755682484,
+        "median": 0.06323185755682484,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.8828125,
+        "max": 0.0726223014761509,
+        "mean": 0.0726223014761509,
+        "median": 0.0726223014761509,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.9296875,
+        "max": 0.06121892144483834,
+        "mean": 0.06121892144483834,
+        "median": 0.06121892144483834,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.9765625,
+        "max": 0.026700926840447736,
+        "mean": 0.026700926840447736,
+        "median": 0.026700926840447736,
+        "n": 1,
+        "placement": "even",
+        "protocol": "interpolation"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.05229901643335926,
+        "mean": 0.05229901643335926,
+        "median": 0.05229901643335926,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.1505832771716241,
+        "mean": 0.1505832771716241,
+        "median": 0.1505832771716241,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.2386220058034471,
+        "mean": 0.2386220058034471,
+        "median": 0.2386220058034471,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.3133139702344948,
+        "mean": 0.3133139702344948,
+        "median": 0.3133139702344948,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.3724948247751162,
+        "mean": 0.3724948247751162,
+        "median": 0.3724948247751162,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.4146553682220584,
+        "mean": 0.4146553682220584,
+        "median": 0.4146553682220584,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.43897043275483216,
+        "mean": 0.43897043275483216,
+        "median": 0.43897043275483216,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.45412232890771653,
+        "mean": 0.45412232890771653,
+        "median": 0.45412232890771653,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.4600150298521478,
+        "mean": 0.4600150298521478,
+        "median": 0.4600150298521478,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.45129599495210226,
+        "mean": 0.45129599495210226,
+        "median": 0.45129599495210226,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.5546875,
+        "max": 0.37823255152393187,
+        "mean": 0.37823255152393187,
+        "median": 0.37823255152393187,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.6015625,
+        "max": 0.33216358941747154,
+        "mean": 0.33216358941747154,
+        "median": 0.33216358941747154,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.6484375,
+        "max": 0.2709207009936091,
+        "mean": 0.2709207009936091,
+        "median": 0.2709207009936091,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.6953125,
+        "max": 0.19680304122298808,
+        "mean": 0.19680304122298808,
+        "median": 0.19680304122298808,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.7421875,
+        "max": 0.11268491045467424,
+        "mean": 0.11268491045467424,
+        "median": 0.11268491045467424,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "held_out_interpolation",
+        "condition": 0.7890625,
+        "max": 0.022254120519026352,
+        "mean": 0.022254120519026352,
+        "median": 0.022254120519026352,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "near_extrapolation",
+        "condition": 0.8359375,
+        "max": 0.06220375901641215,
+        "mean": 0.06220375901641215,
+        "median": 0.06220375901641215,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "near_extrapolation",
+        "condition": 0.8828125,
+        "max": 0.141403796344496,
+        "mean": 0.141403796344496,
+        "median": 0.141403796344496,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "near_extrapolation",
+        "condition": 0.9296875,
+        "max": 0.22302526334174644,
+        "mean": 0.22302526334174644,
+        "median": 0.22302526334174644,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 2,
+        "category": "near_extrapolation",
+        "condition": 0.9765625,
+        "max": 0.3181056797506981,
+        "mean": 0.3181056797506981,
+        "median": 0.3181056797506981,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.03882447356603268,
+        "mean": 0.03882447356603268,
+        "median": 0.03882447356603268,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.09758956162160055,
+        "mean": 0.09758956162160055,
+        "median": 0.09758956162160055,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.13324003510408838,
+        "mean": 0.13324003510408838,
+        "median": 0.13324003510408838,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.14834629457684195,
+        "mean": 0.14834629457684195,
+        "median": 0.14834629457684195,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.15164645336032723,
+        "mean": 0.15164645336032723,
+        "median": 0.15164645336032723,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.13686305920777928,
+        "mean": 0.13686305920777928,
+        "median": 0.13686305920777928,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.10845546883118033,
+        "mean": 0.10845546883118033,
+        "median": 0.10845546883118033,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.06399701734200514,
+        "mean": 0.06399701734200514,
+        "median": 0.06399701734200514,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.002335920546726898,
+        "mean": 0.002335920546726898,
+        "median": 0.002335920546726898,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.056292255511253025,
+        "mean": 0.056292255511253025,
+        "median": 0.056292255511253025,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.5546875,
+        "max": 0.12683596452377105,
+        "mean": 0.12683596452377105,
+        "median": 0.12683596452377105,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.6015625,
+        "max": 0.1327210440336034,
+        "mean": 0.1327210440336034,
+        "median": 0.1327210440336034,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.6484375,
+        "max": 0.12975333520778648,
+        "mean": 0.12975333520778648,
+        "median": 0.12975333520778648,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.6953125,
+        "max": 0.10958298107586652,
+        "mean": 0.10958298107586652,
+        "median": 0.10958298107586652,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.7421875,
+        "max": 0.07148756691025102,
+        "mean": 0.07148756691025102,
+        "median": 0.07148756691025102,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "held_out_interpolation",
+        "condition": 0.7890625,
+        "max": 0.015546673830471296,
+        "mean": 0.015546673830471296,
+        "median": 0.015546673830471296,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "near_extrapolation",
+        "condition": 0.8359375,
+        "max": 0.06220375901641215,
+        "mean": 0.06220375901641215,
+        "median": 0.06220375901641215,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "near_extrapolation",
+        "condition": 0.8828125,
+        "max": 0.141403796344496,
+        "mean": 0.141403796344496,
+        "median": 0.141403796344496,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "near_extrapolation",
+        "condition": 0.9296875,
+        "max": 0.22302526334174644,
+        "mean": 0.22302526334174644,
+        "median": 0.22302526334174644,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 3,
+        "category": "near_extrapolation",
+        "condition": 0.9765625,
+        "max": 0.3181056797506981,
+        "mean": 0.3181056797506981,
+        "median": 0.3181056797506981,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.02828853886661703,
+        "mean": 0.02828853886661703,
+        "median": 0.02828853886661703,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.06598175752335353,
+        "mean": 0.06598175752335353,
+        "median": 0.06598175752335353,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.08056036160701001,
+        "mean": 0.08056036160701001,
+        "median": 0.08056036160701001,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.07434514174002863,
+        "mean": 0.07434514174002863,
+        "median": 0.07434514174002863,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.04970124884032204,
+        "mean": 0.04970124884032204,
+        "median": 0.04970124884032204,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.009201028082635693,
+        "mean": 0.009201028082635693,
+        "median": 0.009201028082635693,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.03203778543492065,
+        "mean": 0.03203778543492065,
+        "median": 0.03203778543492065,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.05531288006737013,
+        "mean": 0.05531288006737013,
+        "median": 0.05531288006737013,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.06276264129944562,
+        "mean": 0.06276264129944562,
+        "median": 0.06276264129944562,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.055213784539089684,
+        "mean": 0.055213784539089684,
+        "median": 0.055213784539089684,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.5546875,
+        "max": 0.019156542260993413,
+        "mean": 0.019156542260993413,
+        "median": 0.019156542260993413,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.6015625,
+        "max": 0.05112580355451338,
+        "mean": 0.05112580355451338,
+        "median": 0.05112580355451338,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.6484375,
+        "max": 0.06743256098359962,
+        "mean": 0.06743256098359962,
+        "median": 0.06743256098359962,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.6953125,
+        "max": 0.06653667310658276,
+        "mean": 0.06653667310658276,
+        "median": 0.06653667310658276,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.7421875,
+        "max": 0.047715725195870404,
+        "mean": 0.047715725195870404,
+        "median": 0.047715725195870404,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "held_out_interpolation",
+        "condition": 0.7890625,
+        "max": 0.011049298370993867,
+        "mean": 0.011049298370993867,
+        "median": 0.011049298370993867,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "near_extrapolation",
+        "condition": 0.8359375,
+        "max": 0.06220375901641215,
+        "mean": 0.06220375901641215,
+        "median": 0.06220375901641215,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "near_extrapolation",
+        "condition": 0.8828125,
+        "max": 0.141403796344496,
+        "mean": 0.141403796344496,
+        "median": 0.141403796344496,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "near_extrapolation",
+        "condition": 0.9296875,
+        "max": 0.22302526334174644,
+        "mean": 0.22302526334174644,
+        "median": 0.22302526334174644,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 4,
+        "category": "near_extrapolation",
+        "condition": 0.9765625,
+        "max": 0.3181056797506981,
+        "mean": 0.3181056797506981,
+        "median": 0.3181056797506981,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.0234375,
+        "max": 0.021612517419685073,
+        "mean": 0.021612517419685073,
+        "median": 0.021612517419685073,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.0703125,
+        "max": 0.04595369318255769,
+        "mean": 0.04595369318255769,
+        "median": 0.04595369318255769,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.1171875,
+        "max": 0.04718025437235032,
+        "mean": 0.04718025437235032,
+        "median": 0.04718025437235032,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.1640625,
+        "max": 0.027612991611505034,
+        "mean": 0.027612991611505034,
+        "median": 0.027612991611505034,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.2109375,
+        "max": 0.008298424462865297,
+        "mean": 0.008298424462865297,
+        "median": 0.008298424462865297,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.2578125,
+        "max": 0.033175391681497225,
+        "mean": 0.033175391681497225,
+        "median": 0.033175391681497225,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.3046875,
+        "max": 0.04020687998596095,
+        "mean": 0.04020687998596095,
+        "median": 0.04020687998596095,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.3515625,
+        "max": 0.029313308256729738,
+        "mean": 0.029313308256729738,
+        "median": 0.029313308256729738,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.3984375,
+        "max": 0.001217091221395441,
+        "mean": 0.001217091221395441,
+        "median": 0.001217091221395441,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.4453125,
+        "max": 0.027067004634638424,
+        "mean": 0.027067004634638424,
+        "median": 0.027067004634638424,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.5546875,
+        "max": 0.027067004634638514,
+        "mean": 0.027067004634638514,
+        "median": 0.027067004634638514,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.6015625,
+        "max": 0.0012170912213953808,
+        "mean": 0.0012170912213953808,
+        "median": 0.0012170912213953808,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.6484375,
+        "max": 0.02931330825672993,
+        "mean": 0.02931330825672993,
+        "median": 0.02931330825672993,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.6953125,
+        "max": 0.040206879985961466,
+        "mean": 0.040206879985961466,
+        "median": 0.040206879985961466,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.7421875,
+        "max": 0.03317539168149745,
+        "mean": 0.03317539168149745,
+        "median": 0.03317539168149745,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "held_out_interpolation",
+        "condition": 0.7890625,
+        "max": 0.008298424462869256,
+        "mean": 0.008298424462869256,
+        "median": 0.008298424462869256,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "near_extrapolation",
+        "condition": 0.8359375,
+        "max": 0.06220375901641215,
+        "mean": 0.06220375901641215,
+        "median": 0.06220375901641215,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "near_extrapolation",
+        "condition": 0.8828125,
+        "max": 0.141403796344496,
+        "mean": 0.141403796344496,
+        "median": 0.141403796344496,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "near_extrapolation",
+        "condition": 0.9296875,
+        "max": 0.22302526334174644,
+        "mean": 0.22302526334174644,
+        "median": 0.22302526334174644,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      },
+      {
+        "anchor_count": 5,
+        "category": "near_extrapolation",
+        "condition": 0.9765625,
+        "max": 0.3181056797506981,
+        "mean": 0.3181056797506981,
+        "median": 0.3181056797506981,
+        "n": 1,
+        "placement": "even",
+        "protocol": "near"
+      }
+    ],
+    "grid_size": 20,
+    "placement": "even",
+    "protocols": [
+      "interpolation",
+      "near",
+      "far"
+    ],
+    "split": "audit"
+  },
+  "complement_covariance": {
+    "by_protocol_category": {
+      "anti_block": [
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 6.887394300714167e-16,
+          "mean": 2.3173677106601785e-16,
+          "median": 2.2544406577971804e-16,
+          "n": 960,
+          "protocol": "far",
+          "protocols": [
+            "far"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 3.3263322651855276e-16,
+          "mean": 2.2558633202181727e-16,
+          "median": 2.1185310450366757e-16,
+          "n": 96,
+          "protocol": "far",
+          "protocols": [
+            "far"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 5.828670879282072e-16,
+          "mean": 2.247665323827983e-16,
+          "median": 2.215516317497293e-16,
+          "n": 960,
+          "protocol": "interpolation",
+          "protocols": [
+            "interpolation"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.0,
+              "complement": 1.0
+            },
+            {
+              "c": 0.25,
+              "complement": 0.75
+            },
+            {
+              "c": 0.3333333333333333,
+              "complement": 0.6666666666666667
+            },
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 4.1880019417683823e-16,
+          "mean": 1.822888055035906e-16,
+          "median": 1.7747578264842916e-16,
+          "n": 120,
+          "protocol": "interpolation",
+          "protocols": [
+            "interpolation"
+          ]
+        },
+        {
+          "categories": [
+            "mirrored_diagnostic"
+          ],
+          "category": "mirrored_diagnostic",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 5.399326818977812e-16,
+          "mean": 2.267222764371422e-16,
+          "median": 2.253293986944835e-16,
+          "n": 60,
+          "protocol": "mirror_far",
+          "protocols": [
+            "mirror_far"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 2.3158558404290375e-16,
+          "mean": 1.9949319973733282e-16,
+          "median": 2.0599841277224584e-16,
+          "n": 6,
+          "protocol": "mirror_far",
+          "protocols": [
+            "mirror_far"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 4.187188790139018e-16,
+          "mean": 2.2588260532381247e-16,
+          "median": 2.1415025785662123e-16,
+          "n": 36,
+          "protocol": "mirror_near",
+          "protocols": [
+            "mirror_near"
+          ]
+        },
+        {
+          "categories": [
+            "mirrored_diagnostic"
+          ],
+          "category": "mirrored_diagnostic",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            }
+          ],
+          "max": 2.997276905836177e-16,
+          "mean": 2.2814444210860423e-16,
+          "median": 2.2381913894952907e-16,
+          "n": 24,
+          "protocol": "mirror_near",
+          "protocols": [
+            "mirror_near"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.2,
+              "complement": 0.8
+            },
+            {
+              "c": 0.4,
+              "complement": 0.6
+            }
+          ],
+          "max": 1.2417367481476482e-15,
+          "mean": 5.78687262677823e-16,
+          "median": 4.050071096637492e-16,
+          "n": 6,
+          "protocol": "mirror_near",
+          "protocols": [
+            "mirror_near"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 8.409072049797572e-16,
+          "mean": 2.355477567742245e-16,
+          "median": 2.2994911638880844e-16,
+          "n": 960,
+          "protocol": "near",
+          "protocols": [
+            "near"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.2,
+              "complement": 0.8
+            },
+            {
+              "c": 0.4,
+              "complement": 0.6
+            }
+          ],
+          "max": 9.723125082850004e-16,
+          "mean": 5.390726611120023e-16,
+          "median": 4.492323939057907e-16,
+          "n": 12,
+          "protocol": "near",
+          "protocols": [
+            "near"
+          ]
+        }
+      ],
+      "broadcast_affine": [
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.6615934274741605,
+          "mean": 0.2936477827809008,
+          "median": 0.2624424984369116,
+          "n": 960,
+          "protocol": "far",
+          "protocols": [
+            "far"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 0.46724171590256086,
+          "mean": 0.2582111933943764,
+          "median": 0.25749426419091326,
+          "n": 96,
+          "protocol": "far",
+          "protocols": [
+            "far"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.37256523204680403,
+          "mean": 0.16033229530203522,
+          "median": 0.13502805381954747,
+          "n": 960,
+          "protocol": "interpolation",
+          "protocols": [
+            "interpolation"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.0,
+              "complement": 1.0
+            },
+            {
+              "c": 0.25,
+              "complement": 0.75
+            },
+            {
+              "c": 0.3333333333333333,
+              "complement": 0.6666666666666667
+            },
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 0.24638454551126854,
+          "mean": 0.13435112572696017,
+          "median": 0.12653049514320275,
+          "n": 120,
+          "protocol": "interpolation",
+          "protocols": [
+            "interpolation"
+          ]
+        },
+        {
+          "categories": [
+            "mirrored_diagnostic"
+          ],
+          "category": "mirrored_diagnostic",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.6144636362462514,
+          "mean": 0.48843149020381266,
+          "median": 0.5137764842527323,
+          "n": 60,
+          "protocol": "mirror_far",
+          "protocols": [
+            "mirror_far"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 0.48115449685520295,
+          "mean": 0.408647017757976,
+          "median": 0.4091971413459899,
+          "n": 6,
+          "protocol": "mirror_far",
+          "protocols": [
+            "mirror_far"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.27257971185932367,
+          "mean": 0.1986363217224825,
+          "median": 0.19994811236586177,
+          "n": 36,
+          "protocol": "mirror_near",
+          "protocols": [
+            "mirror_near"
+          ]
+        },
+        {
+          "categories": [
+            "mirrored_diagnostic"
+          ],
+          "category": "mirrored_diagnostic",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            }
+          ],
+          "max": 0.239549844874059,
+          "mean": 0.1338281193824596,
+          "median": 0.12634887624068264,
+          "n": 24,
+          "protocol": "mirror_near",
+          "protocols": [
+            "mirror_near"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.2,
+              "complement": 0.8
+            },
+            {
+              "c": 0.4,
+              "complement": 0.6
+            }
+          ],
+          "max": 0.2001864215186053,
+          "mean": 0.1611490734144838,
+          "median": 0.1708319337197748,
+          "n": 6,
+          "protocol": "mirror_near",
+          "protocols": [
+            "mirror_near"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.47936884211099917,
+          "mean": 0.291092205824985,
+          "median": 0.2793648790251878,
+          "n": 960,
+          "protocol": "near",
+          "protocols": [
+            "near"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.2,
+              "complement": 0.8
+            },
+            {
+              "c": 0.4,
+              "complement": 0.6
+            }
+          ],
+          "max": 0.2017773506547664,
+          "mean": 0.16726532030195754,
+          "median": 0.1600193087488433,
+          "n": 12,
+          "protocol": "near",
+          "protocols": [
+            "near"
+          ]
+        }
+      ],
+      "condition_blind": [
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.7313353337543373,
+          "mean": 0.7040978644050137,
+          "median": 0.6976697830352394,
+          "n": 120,
+          "protocol": "far",
+          "protocols": [
+            "far"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 0.7313353337543373,
+          "mean": 0.7040978644050137,
+          "median": 0.6976697830352394,
+          "n": 12,
+          "protocol": "far",
+          "protocols": [
+            "far"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.37194314993460587,
+          "mean": 0.2405051901275836,
+          "median": 0.26688722632221157,
+          "n": 120,
+          "protocol": "interpolation",
+          "protocols": [
+            "interpolation"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.0,
+              "complement": 1.0
+            },
+            {
+              "c": 0.25,
+              "complement": 0.75
+            },
+            {
+              "c": 0.3333333333333333,
+              "complement": 0.6666666666666667
+            },
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 0.37194314993460587,
+          "mean": 0.2730912227005233,
+          "median": 0.30480314268047043,
+          "n": 24,
+          "protocol": "interpolation",
+          "protocols": [
+            "interpolation"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.4984832031483398,
+          "mean": 0.42762713515620715,
+          "median": 0.4232928083070794,
+          "n": 120,
+          "protocol": "near",
+          "protocols": [
+            "near"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.2,
+              "complement": 0.8
+            },
+            {
+              "c": 0.4,
+              "complement": 0.6
+            }
+          ],
+          "max": 0.48825983583638144,
+          "mean": 0.4348504482812123,
+          "median": 0.4292557950844376,
+          "n": 6,
+          "protocol": "near",
+          "protocols": [
+            "near"
+          ]
+        }
+      ],
+      "qubit_affine": [
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.574835147612652,
+          "mean": 0.330036176692497,
+          "median": 0.3416246438293012,
+          "n": 960,
+          "protocol": "far",
+          "protocols": [
+            "far"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 0.4320671284976566,
+          "mean": 0.2890138470510045,
+          "median": 0.315246795260603,
+          "n": 96,
+          "protocol": "far",
+          "protocols": [
+            "far"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.42263310752771827,
+          "mean": 0.15972770876454156,
+          "median": 0.13798026998556523,
+          "n": 960,
+          "protocol": "interpolation",
+          "protocols": [
+            "interpolation"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.0,
+              "complement": 1.0
+            },
+            {
+              "c": 0.25,
+              "complement": 0.75
+            },
+            {
+              "c": 0.3333333333333333,
+              "complement": 0.6666666666666667
+            },
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 0.2445768879741635,
+          "mean": 0.1369246539895845,
+          "median": 0.13160518265368212,
+          "n": 120,
+          "protocol": "interpolation",
+          "protocols": [
+            "interpolation"
+          ]
+        },
+        {
+          "categories": [
+            "mirrored_diagnostic"
+          ],
+          "category": "mirrored_diagnostic",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.6100588016297642,
+          "mean": 0.4456958891296318,
+          "median": 0.444592514356878,
+          "n": 60,
+          "protocol": "mirror_far",
+          "protocols": [
+            "mirror_far"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.5,
+              "complement": 0.5
+            }
+          ],
+          "max": 0.4349905405508251,
+          "mean": 0.3501489240638118,
+          "median": 0.3528793508863337,
+          "n": 6,
+          "protocol": "mirror_far",
+          "protocols": [
+            "mirror_far"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.24929808164948836,
+          "mean": 0.19326549093943982,
+          "median": 0.19480143123009677,
+          "n": 36,
+          "protocol": "mirror_near",
+          "protocols": [
+            "mirror_near"
+          ]
+        },
+        {
+          "categories": [
+            "mirrored_diagnostic"
+          ],
+          "category": "mirrored_diagnostic",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            }
+          ],
+          "max": 0.22651436345455847,
+          "mean": 0.1354564196740231,
+          "median": 0.12760920938022857,
+          "n": 24,
+          "protocol": "mirror_near",
+          "protocols": [
+            "mirror_near"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.2,
+              "complement": 0.8
+            },
+            {
+              "c": 0.4,
+              "complement": 0.6
+            }
+          ],
+          "max": 0.21601947216626344,
+          "mean": 0.16370795599495805,
+          "median": 0.16638365123970747,
+          "n": 6,
+          "protocol": "mirror_near",
+          "protocols": [
+            "mirror_near"
+          ]
+        },
+        {
+          "categories": [
+            "held_out_interpolation"
+          ],
+          "category": "held_out_interpolation",
+          "condition_pairs": [
+            {
+              "c": 0.0234375,
+              "complement": 0.9765625
+            },
+            {
+              "c": 0.0703125,
+              "complement": 0.9296875
+            },
+            {
+              "c": 0.1171875,
+              "complement": 0.8828125
+            },
+            {
+              "c": 0.1640625,
+              "complement": 0.8359375
+            },
+            {
+              "c": 0.2109375,
+              "complement": 0.7890625
+            },
+            {
+              "c": 0.2578125,
+              "complement": 0.7421875
+            },
+            {
+              "c": 0.3046875,
+              "complement": 0.6953125
+            },
+            {
+              "c": 0.3515625,
+              "complement": 0.6484375
+            },
+            {
+              "c": 0.3984375,
+              "complement": 0.6015625
+            },
+            {
+              "c": 0.4453125,
+              "complement": 0.5546875
+            }
+          ],
+          "max": 0.5177866737523662,
+          "mean": 0.29751717220132007,
+          "median": 0.277269673615756,
+          "n": 960,
+          "protocol": "near",
+          "protocols": [
+            "near"
+          ]
+        },
+        {
+          "categories": [
+            "training"
+          ],
+          "category": "training",
+          "condition_pairs": [
+            {
+              "c": 0.2,
+              "complement": 0.8
+            },
+            {
+              "c": 0.4,
+              "complement": 0.6
+            }
+          ],
+          "max": 0.2051659297756508,
+          "mean": 0.16369949730525113,
+          "median": 0.16293386089733788,
+          "n": 12,
+          "protocol": "near",
+          "protocols": [
+            "near"
+          ]
+        }
+      ]
+    },
+    "overall": {
+      "anti_block": {
+        "categories": [
+          "held_out_interpolation",
+          "mirrored_diagnostic",
+          "training"
+        ],
+        "condition_pairs": [
+          {
+            "c": 0.0,
+            "complement": 1.0
+          },
+          {
+            "c": 0.0234375,
+            "complement": 0.9765625
+          },
+          {
+            "c": 0.0703125,
+            "complement": 0.9296875
+          },
+          {
+            "c": 0.1171875,
+            "complement": 0.8828125
+          },
+          {
+            "c": 0.1640625,
+            "complement": 0.8359375
+          },
+          {
+            "c": 0.2,
+            "complement": 0.8
+          },
+          {
+            "c": 0.2109375,
+            "complement": 0.7890625
+          },
+          {
+            "c": 0.25,
+            "complement": 0.75
+          },
+          {
+            "c": 0.2578125,
+            "complement": 0.7421875
+          },
+          {
+            "c": 0.3046875,
+            "complement": 0.6953125
+          },
+          {
+            "c": 0.3333333333333333,
+            "complement": 0.6666666666666667
+          },
+          {
+            "c": 0.3515625,
+            "complement": 0.6484375
+          },
+          {
+            "c": 0.3984375,
+            "complement": 0.6015625
+          },
+          {
+            "c": 0.4,
+            "complement": 0.6
+          },
+          {
+            "c": 0.4453125,
+            "complement": 0.5546875
+          },
+          {
+            "c": 0.5,
+            "complement": 0.5
+          }
+        ],
+        "max": 1.2417367481476482e-15,
+        "mean": 2.3032360927313938e-16,
+        "median": 2.244501784952335e-16,
+        "n": 3240,
+        "protocols": [
+          "far",
+          "interpolation",
+          "mirror_far",
+          "mirror_near",
+          "near"
+        ]
+      },
+      "broadcast_affine": {
+        "categories": [
+          "held_out_interpolation",
+          "mirrored_diagnostic",
+          "training"
+        ],
+        "condition_pairs": [
+          {
+            "c": 0.0,
+            "complement": 1.0
+          },
+          {
+            "c": 0.0234375,
+            "complement": 0.9765625
+          },
+          {
+            "c": 0.0703125,
+            "complement": 0.9296875
+          },
+          {
+            "c": 0.1171875,
+            "complement": 0.8828125
+          },
+          {
+            "c": 0.1640625,
+            "complement": 0.8359375
+          },
+          {
+            "c": 0.2,
+            "complement": 0.8
+          },
+          {
+            "c": 0.2109375,
+            "complement": 0.7890625
+          },
+          {
+            "c": 0.25,
+            "complement": 0.75
+          },
+          {
+            "c": 0.2578125,
+            "complement": 0.7421875
+          },
+          {
+            "c": 0.3046875,
+            "complement": 0.6953125
+          },
+          {
+            "c": 0.3333333333333333,
+            "complement": 0.6666666666666667
+          },
+          {
+            "c": 0.3515625,
+            "complement": 0.6484375
+          },
+          {
+            "c": 0.3984375,
+            "complement": 0.6015625
+          },
+          {
+            "c": 0.4,
+            "complement": 0.6
+          },
+          {
+            "c": 0.4453125,
+            "complement": 0.5546875
+          },
+          {
+            "c": 0.5,
+            "complement": 0.5
+          }
+        ],
+        "max": 0.6615934274741605,
+        "mean": 0.24730692421443673,
+        "median": 0.20597192223168767,
+        "n": 3240,
+        "protocols": [
+          "far",
+          "interpolation",
+          "mirror_far",
+          "mirror_near",
+          "near"
+        ]
+      },
+      "condition_blind": {
+        "categories": [
+          "held_out_interpolation",
+          "training"
+        ],
+        "condition_pairs": [
+          {
+            "c": 0.0,
+            "complement": 1.0
+          },
+          {
+            "c": 0.0234375,
+            "complement": 0.9765625
+          },
+          {
+            "c": 0.0703125,
+            "complement": 0.9296875
+          },
+          {
+            "c": 0.1171875,
+            "complement": 0.8828125
+          },
+          {
+            "c": 0.1640625,
+            "complement": 0.8359375
+          },
+          {
+            "c": 0.2,
+            "complement": 0.8
+          },
+          {
+            "c": 0.2109375,
+            "complement": 0.7890625
+          },
+          {
+            "c": 0.25,
+            "complement": 0.75
+          },
+          {
+            "c": 0.2578125,
+            "complement": 0.7421875
+          },
+          {
+            "c": 0.3046875,
+            "complement": 0.6953125
+          },
+          {
+            "c": 0.3333333333333333,
+            "complement": 0.6666666666666667
+          },
+          {
+            "c": 0.3515625,
+            "complement": 0.6484375
+          },
+          {
+            "c": 0.3984375,
+            "complement": 0.6015625
+          },
+          {
+            "c": 0.4,
+            "complement": 0.6
+          },
+          {
+            "c": 0.4453125,
+            "complement": 0.5546875
+          },
+          {
+            "c": 0.5,
+            "complement": 0.5
+          }
+        ],
+        "max": 0.7313353337543373,
+        "mean": 0.45343305763685704,
+        "median": 0.4190828175073237,
+        "n": 402,
+        "protocols": [
+          "far",
+          "interpolation",
+          "near"
+        ]
+      },
+      "qubit_affine": {
+        "categories": [
+          "held_out_interpolation",
+          "mirrored_diagnostic",
+          "training"
+        ],
+        "condition_pairs": [
+          {
+            "c": 0.0,
+            "complement": 1.0
+          },
+          {
+            "c": 0.0234375,
+            "complement": 0.9765625
+          },
+          {
+            "c": 0.0703125,
+            "complement": 0.9296875
+          },
+          {
+            "c": 0.1171875,
+            "complement": 0.8828125
+          },
+          {
+            "c": 0.1640625,
+            "complement": 0.8359375
+          },
+          {
+            "c": 0.2,
+            "complement": 0.8
+          },
+          {
+            "c": 0.2109375,
+            "complement": 0.7890625
+          },
+          {
+            "c": 0.25,
+            "complement": 0.75
+          },
+          {
+            "c": 0.2578125,
+            "complement": 0.7421875
+          },
+          {
+            "c": 0.3046875,
+            "complement": 0.6953125
+          },
+          {
+            "c": 0.3333333333333333,
+            "complement": 0.6666666666666667
+          },
+          {
+            "c": 0.3515625,
+            "complement": 0.6484375
+          },
+          {
+            "c": 0.3984375,
+            "complement": 0.6015625
+          },
+          {
+            "c": 0.4,
+            "complement": 0.6
+          },
+          {
+            "c": 0.4453125,
+            "complement": 0.5546875
+          },
+          {
+            "c": 0.5,
+            "complement": 0.5
+          }
+        ],
+        "max": 0.6100588016297642,
+        "mean": 0.25986540231156197,
+        "median": 0.2170198470372899,
+        "n": 3240,
+        "protocols": [
+          "far",
+          "interpolation",
+          "mirror_far",
+          "mirror_near",
+          "near"
+        ]
+      }
+    }
+  },
+  "condition_blind": [
+    {
+      "anchor_count": 2,
+      "category": "far_extrapolation",
+      "equal_configuration_max": 0.707434008030414,
+      "equal_configuration_mean": 0.7032258418452146,
+      "equal_configuration_median": 0.7038569973960904,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 2,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.35108440056513246,
+      "equal_configuration_mean": 0.3446821645701925,
+      "equal_configuration_median": 0.34441012809547733,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 2,
+      "category": "training",
+      "equal_configuration_max": 0.4304507078381557,
+      "equal_configuration_mean": 0.4279949757715264,
+      "equal_configuration_median": 0.4291597605082987,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 3,
+      "category": "far_extrapolation",
+      "equal_configuration_max": 0.7137163382408981,
+      "equal_configuration_mean": 0.7005953215907256,
+      "equal_configuration_median": 0.6945040680868497,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 3,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.3282624995071769,
+      "equal_configuration_mean": 0.3183589497442243,
+      "equal_configuration_median": 0.31886118011688264,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 3,
+      "category": "training",
+      "equal_configuration_max": 0.39090084091490757,
+      "equal_configuration_mean": 0.38361312623408717,
+      "equal_configuration_median": 0.38300100423933653,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 4,
+      "category": "far_extrapolation",
+      "equal_configuration_max": 0.7139057737589883,
+      "equal_configuration_mean": 0.7092540141417586,
+      "equal_configuration_median": 0.7110932197147408,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 4,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.30947223416769537,
+      "equal_configuration_mean": 0.30589057691050575,
+      "equal_configuration_median": 0.307222060495408,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 4,
+      "category": "training",
+      "equal_configuration_max": 0.3568241076484519,
+      "equal_configuration_mean": 0.3539134179887909,
+      "equal_configuration_median": 0.35514347432430776,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 5,
+      "category": "far_extrapolation",
+      "equal_configuration_max": 0.7219474912469103,
+      "equal_configuration_mean": 0.7131523796260456,
+      "equal_configuration_median": 0.7098897102850357,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 5,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.3136627421998727,
+      "equal_configuration_mean": 0.3084251458209319,
+      "equal_configuration_median": 0.30617988064911794,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 5,
+      "category": "training",
+      "equal_configuration_max": 0.35055919591701884,
+      "equal_configuration_mean": 0.34614943937031684,
+      "equal_configuration_median": 0.34475795456456376,
+      "n_configurations": 3,
+      "protocol": "far"
+    },
+    {
+      "anchor_count": 2,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.56326623626291,
+      "equal_configuration_mean": 0.5432364707532445,
+      "equal_configuration_median": 0.5579221119303222,
+      "n_configurations": 3,
+      "protocol": "interpolation"
+    },
+    {
+      "anchor_count": 2,
+      "category": "training",
+      "equal_configuration_max": 0.5278670681491675,
+      "equal_configuration_mean": 0.5099437732374936,
+      "equal_configuration_median": 0.5072068328007044,
+      "n_configurations": 3,
+      "protocol": "interpolation"
+    },
+    {
+      "anchor_count": 3,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.49328349835432783,
+      "equal_configuration_mean": 0.48671514882695205,
+      "equal_configuration_median": 0.4856328725741865,
+      "n_configurations": 3,
+      "protocol": "interpolation"
+    },
+    {
+      "anchor_count": 3,
+      "category": "training",
+      "equal_configuration_max": 0.5426053324839233,
+      "equal_configuration_mean": 0.5355008680945637,
+      "equal_configuration_median": 0.534217006199926,
+      "n_configurations": 3,
+      "protocol": "interpolation"
+    },
+    {
+      "anchor_count": 4,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.47913724077571834,
+      "equal_configuration_mean": 0.4678960841345894,
+      "equal_configuration_median": 0.4718662615640145,
+      "n_configurations": 3,
+      "protocol": "interpolation"
+    },
+    {
+      "anchor_count": 4,
+      "category": "training",
+      "equal_configuration_max": 0.5191954168778694,
+      "equal_configuration_mean": 0.5108044507018531,
+      "equal_configuration_median": 0.5152059068389054,
+      "n_configurations": 3,
+      "protocol": "interpolation"
+    },
+    {
+      "anchor_count": 5,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.4726261525081246,
+      "equal_configuration_mean": 0.4635398331380102,
+      "equal_configuration_median": 0.4656433715554053,
+      "n_configurations": 3,
+      "protocol": "interpolation"
+    },
+    {
+      "anchor_count": 5,
+      "category": "training",
+      "equal_configuration_max": 0.5017267726493038,
+      "equal_configuration_mean": 0.4967446182320172,
+      "equal_configuration_median": 0.5013142549548141,
+      "n_configurations": 3,
+      "protocol": "interpolation"
+    },
+    {
+      "anchor_count": 2,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.5231491240283506,
+      "equal_configuration_mean": 0.4971761873626141,
+      "equal_configuration_median": 0.5035060360787402,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 2,
+      "category": "near_extrapolation",
+      "equal_configuration_max": 0.5801121172995841,
+      "equal_configuration_mean": 0.5089636784489048,
+      "equal_configuration_median": 0.4767808441532728,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 2,
+      "category": "training",
+      "equal_configuration_max": 0.49999504088439983,
+      "equal_configuration_mean": 0.49614869940231693,
+      "equal_configuration_median": 0.49949987511039196,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 3,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.4708809418509728,
+      "equal_configuration_mean": 0.4471028793216436,
+      "equal_configuration_median": 0.4503030114033181,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 3,
+      "category": "near_extrapolation",
+      "equal_configuration_max": 0.625740246682698,
+      "equal_configuration_mean": 0.572783458907474,
+      "equal_configuration_median": 0.5542217471492249,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 3,
+      "category": "training",
+      "equal_configuration_max": 0.5112687083361404,
+      "equal_configuration_mean": 0.4983122629141175,
+      "equal_configuration_median": 0.4991160377177186,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 4,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.44172747294629866,
+      "equal_configuration_mean": 0.4341824836334722,
+      "equal_configuration_median": 0.43163110537161276,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 4,
+      "category": "near_extrapolation",
+      "equal_configuration_max": 0.6370637345396337,
+      "equal_configuration_mean": 0.6200479456046268,
+      "equal_configuration_median": 0.6263709483685593,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 4,
+      "category": "training",
+      "equal_configuration_max": 0.480038606432566,
+      "equal_configuration_mean": 0.4735118629774175,
+      "equal_configuration_median": 0.4714570936930027,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 5,
+      "category": "held_out_interpolation",
+      "equal_configuration_max": 0.4487451570615676,
+      "equal_configuration_mean": 0.4464298452576749,
+      "equal_configuration_median": 0.4476587218357335,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 5,
+      "category": "near_extrapolation",
+      "equal_configuration_max": 0.671631124591449,
+      "equal_configuration_mean": 0.6290141002549049,
+      "equal_configuration_median": 0.6408822272267837,
+      "n_configurations": 3,
+      "protocol": "near"
+    },
+    {
+      "anchor_count": 5,
+      "category": "training",
+      "equal_configuration_max": 0.4790800239784551,
+      "equal_configuration_mean": 0.47577709477008695,
+      "equal_configuration_median": 0.4790667930253251,
+      "n_configurations": 3,
+      "protocol": "near"
+    }
+  ],
+  "direct_reference": {
+    "by_condition": [
+      {
+        "condition": 0.0,
+        "max": 0.0923461719845015,
+        "mean": 0.07205117573957948,
+        "median": 0.06389357317396177,
+        "n": 3
+      },
+      {
+        "condition": 0.0234375,
+        "max": 0.1060485195379023,
+        "mean": 0.08467438119464477,
+        "median": 0.07542093699649852,
+        "n": 3
+      },
+      {
+        "condition": 0.02629741407881847,
+        "max": 0.09389764417692198,
+        "mean": 0.08330963792773621,
+        "median": 0.07990366530174314,
+        "n": 3
+      },
+      {
+        "condition": 0.035482385379154824,
+        "max": 0.09431398912413938,
+        "mean": 0.08664013468778092,
+        "median": 0.08800515236137672,
+        "n": 3
+      },
+      {
+        "condition": 0.04207586252610956,
+        "max": 0.1118660115794392,
+        "mean": 0.10170997553266807,
+        "median": 0.09999421482217617,
+        "n": 3
+      },
+      {
+        "condition": 0.05259482815763694,
+        "max": 0.10545680856867398,
+        "mean": 0.09002562198969462,
+        "median": 0.08601122159915786,
+        "n": 3
+      },
+      {
+        "condition": 0.05677181660664772,
+        "max": 0.10260829220358683,
+        "mean": 0.09647679811870631,
+        "median": 0.09820790523097488,
+        "n": 3
+      },
+      {
+        "condition": 0.0703125,
+        "max": 0.1150191253410013,
+        "mean": 0.10432962546371631,
+        "median": 0.11355844507604913,
+        "n": 3
+      },
+      {
+        "condition": 0.07096477075830965,
+        "max": 0.12831895814623684,
+        "mean": 0.1133862179361705,
+        "median": 0.10617702743722132,
+        "n": 3
+      },
+      {
+        "condition": 0.11428215650633533,
+        "max": 0.16190540006132043,
+        "mean": 0.13666884289201967,
+        "median": 0.14711719873496226,
+        "n": 3
+      },
+      {
+        "condition": 0.1171875,
+        "max": 0.14544245487094049,
+        "mean": 0.13831511865930887,
+        "median": 0.14368764462665296,
+        "n": 3
+      },
+      {
+        "condition": 0.125,
+        "max": 0.15140750302408443,
+        "mean": 0.13637257050605203,
+        "median": 0.13793461642764146,
+        "n": 3
+      },
+      {
+        "condition": 0.1640625,
+        "max": 0.2077197318431298,
+        "mean": 0.17766803273127119,
+        "median": 0.18769486911329836,
+        "n": 3
+      },
+      {
+        "condition": 0.16666666666666666,
+        "max": 0.19150318133776104,
+        "mean": 0.17629940644157718,
+        "median": 0.16880331176851388,
+        "n": 3
+      },
+      {
+        "condition": 0.18285145041013653,
+        "max": 0.20381547933550276,
+        "mean": 0.19692702510372687,
+        "median": 0.19953747518361348,
+        "n": 3
+      },
+      {
+        "condition": 0.2,
+        "max": 0.2305653885350001,
+        "mean": 0.2195757872774113,
+        "median": 0.21776308245821283,
+        "n": 3
+      },
+      {
+        "condition": 0.2109375,
+        "max": 0.22728506599741743,
+        "mean": 0.20835242581756863,
+        "median": 0.2026341839935632,
+        "n": 3
+      },
+      {
+        "condition": 0.22856431301267066,
+        "max": 0.24105667433850933,
+        "mean": 0.23230501613602064,
+        "median": 0.22973767716754726,
+        "n": 3
+      },
+      {
+        "condition": 0.25,
+        "max": 0.2653715963826593,
+        "mean": 0.25510534460793804,
+        "median": 0.25186879576406623,
+        "n": 3
+      },
+      {
+        "condition": 0.2578125,
+        "max": 0.25233644232395763,
+        "mean": 0.24930751536218,
+        "median": 0.24946791209113559,
+        "n": 3
+      },
+      {
+        "condition": 0.26666666666666666,
+        "max": 0.25807480764705765,
+        "mean": 0.2393699588055723,
+        "median": 0.23317936840705092,
+        "n": 3
+      },
+      {
+        "condition": 0.2717559021408029,
+        "max": 0.2605449414132451,
+        "mean": 0.2493393021285307,
+        "median": 0.2571104585856163,
+        "n": 3
+      },
+      {
+        "condition": 0.291062301672619,
+        "max": 0.26572907134487966,
+        "mean": 0.2621185392647177,
+        "median": 0.26312104235077316,
+        "n": 3
+      },
+      {
+        "condition": 0.3046875,
+        "max": 0.2625797690559966,
+        "mean": 0.2483688286505088,
+        "median": 0.25513932919760307,
+        "n": 3
+      },
+      {
+        "condition": 0.3333333333333333,
+        "max": 0.2852695271336232,
+        "mean": 0.2683726167149192,
+        "median": 0.2675563902800511,
+        "n": 3
+      },
+      {
+        "condition": 0.3515625,
+        "max": 0.2884801760439315,
+        "mean": 0.2767063507076178,
+        "median": 0.2850989109378441,
+        "n": 3
+      },
+      {
+        "condition": 0.37215309032818267,
+        "max": 0.28522103011715905,
+        "mean": 0.2773260602358734,
+        "median": 0.27702192665428493,
+        "n": 3
+      },
+      {
+        "condition": 0.375,
+        "max": 0.2859089454334717,
+        "mean": 0.277227210242384,
+        "median": 0.2818373191720148,
+        "n": 3
+      },
+      {
+        "condition": 0.3984375,
+        "max": 0.29295619279986457,
+        "mean": 0.2823668800311057,
+        "median": 0.2835268742913826,
+        "n": 3
+      },
+      {
+        "condition": 0.4,
+        "max": 0.2916762123429709,
+        "mean": 0.28276930631686964,
+        "median": 0.2819946875679531,
+        "n": 3
+      },
+      {
+        "condition": 0.4074790488770544,
+        "max": 0.26747550849068474,
+        "mean": 0.2544088907675987,
+        "median": 0.2508588232528123,
+        "n": 3
+      },
+      {
+        "condition": 0.40987055600953365,
+        "max": 0.2890384573037036,
+        "mean": 0.27895289147840424,
+        "median": 0.2760939942311776,
+        "n": 3
+      },
+      {
+        "condition": 0.4348094434252847,
+        "max": 0.27819156247188603,
+        "mean": 0.26088481927836005,
+        "median": 0.27035483630760293,
+        "n": 3
+      },
+      {
+        "condition": 0.4440795155493935,
+        "max": 0.2883476369115521,
+        "mean": 0.24242220493989505,
+        "median": 0.2865333326928013,
+        "n": 3
+      },
+      {
+        "condition": 0.4453125,
+        "max": 0.27657649220130864,
+        "mean": 0.24068265236989705,
+        "median": 0.23451448011028642,
+        "n": 3
+      },
+      {
+        "condition": 0.4656996826761904,
+        "max": 0.2806420405026293,
+        "mean": 0.26325924865725575,
+        "median": 0.274557437059149,
+        "n": 3
+      },
+      {
+        "condition": 0.5,
+        "max": 0.24883166609992463,
+        "mean": 0.19410435212770605,
+        "median": 0.19607388454583763,
+        "n": 3
+      },
+      {
+        "condition": 0.5333333333333333,
+        "max": 0.26911967723089925,
+        "mean": 0.24640961268466835,
+        "median": 0.23754614513710787,
+        "n": 3
+      },
+      {
+        "condition": 0.5435118042816058,
+        "max": 0.2812282674173314,
+        "mean": 0.270914498574549,
+        "median": 0.2764404962054287,
+        "n": 3
+      },
+      {
+        "condition": 0.5546875,
+        "max": 0.27628501791091514,
+        "mean": 0.27252953909087924,
+        "median": 0.2744994193960216,
+        "n": 3
+      },
+      {
+        "condition": 0.582124603345238,
+        "max": 0.2900243082107806,
+        "mean": 0.27773964963319636,
+        "median": 0.2791749694738149,
+        "n": 3
+      },
+      {
+        "condition": 0.5954449445250923,
+        "max": 0.2897412488389557,
+        "mean": 0.2767227866959349,
+        "median": 0.2776170275555118,
+        "n": 3
+      },
+      {
+        "condition": 0.6000000000000001,
+        "max": 0.2687024613409358,
+        "mean": 0.24029492707997444,
+        "median": 0.2644095149878627,
+        "n": 3
+      },
+      {
+        "condition": 0.6015625,
+        "max": 0.280165951623838,
+        "mean": 0.26568867026230886,
+        "median": 0.26302002438008226,
+        "n": 3
+      },
+      {
+        "condition": 0.6484375,
+        "max": 0.2752319252772748,
+        "mean": 0.25976536769666553,
+        "median": 0.2618598354796822,
+        "n": 3
+      },
+      {
+        "condition": 0.651966478203287,
+        "max": 0.27412613048301826,
+        "mean": 0.25996474015530086,
+        "median": 0.25680375905333125,
+        "n": 3
+      },
+      {
+        "condition": 0.6557928896152538,
+        "max": 0.2819577046587743,
+        "mean": 0.2744293518024133,
+        "median": 0.2738866721285022,
+        "n": 3
+      },
+      {
+        "condition": 0.6666666666666666,
+        "max": 0.2618640090376626,
+        "mean": 0.26014856574721146,
+        "median": 0.26133124032888855,
+        "n": 3
+      },
+      {
+        "condition": 0.6953125,
+        "max": 0.27832917215441627,
+        "mean": 0.2469133320910013,
+        "median": 0.24452476839748744,
+        "n": 3
+      },
+      {
+        "condition": 0.7105272248790296,
+        "max": 0.25889122734757847,
+        "mean": 0.25289466239182046,
+        "median": 0.25357788171525764,
+        "n": 3
+      },
+      {
+        "condition": 0.7421875,
+        "max": 0.2532976607479809,
+        "mean": 0.24992607806263548,
+        "median": 0.24863281674385052,
+        "n": 3
+      },
+      {
+        "condition": 0.7443061806563653,
+        "max": 0.2663768563018283,
+        "mean": 0.2356084732742657,
+        "median": 0.2320182088257302,
+        "n": 3
+      },
+      {
+        "condition": 0.75,
+        "max": 0.27201297143176817,
+        "mean": 0.24518411964589637,
+        "median": 0.23229812667662375,
+        "n": 3
+      },
+      {
+        "condition": 0.7890625,
+        "max": 0.23224152041059132,
+        "mean": 0.22744059122886803,
+        "median": 0.2319081052680496,
+        "n": 3
+      },
+      {
+        "condition": 0.8,
+        "max": 0.2268382539850638,
+        "mean": 0.2092228359705245,
+        "median": 0.2098215985903876,
+        "n": 3
+      },
+      {
+        "condition": 0.8149580977541088,
+        "max": 0.22064531787550518,
+        "mean": 0.19939763434244895,
+        "median": 0.18916166082620556,
+        "n": 3
+      },
+      {
+        "condition": 0.8197411120190673,
+        "max": 0.19461821180228517,
+        "mean": 0.1857396188983572,
+        "median": 0.18770866287110566,
+        "n": 3
+      },
+      {
+        "condition": 0.8359375,
+        "max": 0.2064871675257967,
+        "mean": 0.17650620907677783,
+        "median": 0.17444348664884074,
+        "n": 3
+      },
+      {
+        "condition": 0.8828125,
+        "max": 0.17814732962159685,
+        "mean": 0.13263742861348427,
+        "median": 0.11769598846890209,
+        "n": 3
+      },
+      {
+        "condition": 0.888159031098787,
+        "max": 0.1571032975632231,
+        "mean": 0.12768455663944503,
+        "median": 0.11337060825903619,
+        "n": 3
+      },
+      {
+        "condition": 0.9296875,
+        "max": 0.1464537424913256,
+        "mean": 0.11075094653130463,
+        "median": 0.09639845924760641,
+        "n": 3
+      },
+      {
+        "condition": 0.9765625,
+        "max": 0.09764470454028183,
+        "mean": 0.09398133130346902,
+        "median": 0.09670097771997202,
+        "n": 3
+      },
+      {
+        "condition": 1.0,
+        "max": 0.07367632619600292,
+        "mean": 0.0668671407093911,
+        "median": 0.07059444263082049,
+        "n": 3
+      }
+    ],
+    "global": {
+      "max": 0.29295619279986457,
+      "mean": 0.20672291166739334,
+      "median": 0.23224152041059132,
+      "n": 189
+    }
+  },
+  "equal_configuration_sensitivity": {
+    "encoders": {
+      "anti_block": {
+        "far_extrapolation": {
+          "equal_configuration_max": 0.21661324073157867,
+          "equal_configuration_mean": 0.12217244537161187,
+          "equal_configuration_median": 0.0992449784119634,
+          "n_configurations": 96,
+          "n_rows": 960,
+          "raw_row_mean": 0.12217244537161188,
+          "raw_row_median": 0.1093713027644849
+        },
+        "held_out_interpolation": {
+          "equal_configuration_max": 0.2402619183581427,
+          "equal_configuration_mean": 0.11272401565315221,
+          "equal_configuration_median": 0.08961052504874602,
+          "n_configurations": 288,
+          "n_rows": 4416,
+          "raw_row_mean": 0.11334348197829115,
+          "raw_row_median": 0.099224002320101
+        },
+        "near_extrapolation": {
+          "equal_configuration_max": 0.20588409851997708,
+          "equal_configuration_mean": 0.11552447408099702,
+          "equal_configuration_median": 0.10873044263795817,
+          "n_configurations": 96,
+          "n_rows": 384,
+          "raw_row_mean": 0.11552447408099702,
+          "raw_row_median": 0.11157356917090536
+        },
+        "training": {
+          "equal_configuration_max": 0.15526614888827026,
+          "equal_configuration_mean": 0.07626608949817952,
+          "equal_configuration_median": 0.07468829275127664,
+          "n_configurations": 288,
+          "n_rows": 1008,
+          "raw_row_mean": 0.07650128922162013,
+          "raw_row_median": 0.08049964519840494
+        }
+      },
+      "broadcast_affine": {
+        "far_extrapolation": {
+          "equal_configuration_max": 0.5488721430047173,
+          "equal_configuration_mean": 0.3271046437042988,
+          "equal_configuration_median": 0.2688741566627681,
+          "n_configurations": 96,
+          "n_rows": 960,
+          "raw_row_mean": 0.3271046437042988,
+          "raw_row_median": 0.29039537096637136
+        },
+        "held_out_interpolation": {
+          "equal_configuration_max": 0.37186083942905845,
+          "equal_configuration_mean": 0.27079647692010006,
+          "equal_configuration_median": 0.26446326656557195,
+          "n_configurations": 288,
+          "n_rows": 4416,
+          "raw_row_mean": 0.2794315086446523,
+          "raw_row_median": 0.24861243653264697
+        },
+        "near_extrapolation": {
+          "equal_configuration_max": 0.3008695671948122,
+          "equal_configuration_mean": 0.27657281537106476,
+          "equal_configuration_median": 0.2753272073294894,
+          "n_configurations": 96,
+          "n_rows": 384,
+          "raw_row_mean": 0.27657281537106476,
+          "raw_row_median": 0.2568094266593055
+        },
+        "training": {
+          "equal_configuration_max": 0.3859220823126699,
+          "equal_configuration_mean": 0.27042358679290357,
+          "equal_configuration_median": 0.2599876856618492,
+          "n_configurations": 288,
+          "n_rows": 1008,
+          "raw_row_mean": 0.26321693847434946,
+          "raw_row_median": 0.2432047051232713
+        }
+      },
+      "condition_blind": {
+        "far_extrapolation": {
+          "equal_configuration_max": 0.7219474912469103,
+          "equal_configuration_mean": 0.7065568893009361,
+          "equal_configuration_median": 0.7075269726883023,
+          "n_configurations": 12,
+          "n_rows": 120,
+          "raw_row_mean": 0.7065568893009361,
+          "raw_row_median": 0.7149651167604056
+        },
+        "held_out_interpolation": {
+          "equal_configuration_max": 0.56326623626291,
+          "equal_configuration_mean": 0.4219696474561713,
+          "equal_configuration_median": 0.44820193944865055,
+          "n_configurations": 36,
+          "n_rows": 552,
+          "raw_row_mean": 0.44130207302565727,
+          "raw_row_median": 0.44667782712860327
+        },
+        "near_extrapolation": {
+          "equal_configuration_max": 0.671631124591449,
+          "equal_configuration_mean": 0.5827022958039777,
+          "equal_configuration_median": 0.5884106356026357,
+          "n_configurations": 12,
+          "n_rows": 48,
+          "raw_row_mean": 0.5827022958039776,
+          "raw_row_median": 0.5883350833754462
+        },
+        "training": {
+          "equal_configuration_max": 0.5426053324839233,
+          "equal_configuration_mean": 0.4590345491412157,
+          "equal_configuration_median": 0.4822953245605298,
+          "n_configurations": 36,
+          "n_rows": 126,
+          "raw_row_mean": 0.45396972278774583,
+          "raw_row_median": 0.4481954997323946
+        }
+      },
+      "qubit_affine": {
+        "far_extrapolation": {
+          "equal_configuration_max": 0.4877459346857075,
+          "equal_configuration_mean": 0.3460776349550328,
+          "equal_configuration_median": 0.32751656175184624,
+          "n_configurations": 96,
+          "n_rows": 960,
+          "raw_row_mean": 0.3460776349550328,
+          "raw_row_median": 0.31921239543083996
+        },
+        "held_out_interpolation": {
+          "equal_configuration_max": 0.3740389239989032,
+          "equal_configuration_mean": 0.2749153541386108,
+          "equal_configuration_median": 0.27679879953876596,
+          "n_configurations": 288,
+          "n_rows": 4416,
+          "raw_row_mean": 0.28215605523369086,
+          "raw_row_median": 0.2559570536268353
+        },
+        "near_extrapolation": {
+          "equal_configuration_max": 0.29854217015037343,
+          "equal_configuration_mean": 0.27421263715727867,
+          "equal_configuration_median": 0.2720756056405824,
+          "n_configurations": 96,
+          "n_rows": 384,
+          "raw_row_mean": 0.27421263715727867,
+          "raw_row_median": 0.2628533308260034
+        },
+        "training": {
+          "equal_configuration_max": 0.37074354622924677,
+          "equal_configuration_mean": 0.2677722050585959,
+          "equal_configuration_median": 0.262395834144242,
+          "n_configurations": 288,
+          "n_rows": 1008,
+          "raw_row_mean": 0.2619070543323473,
+          "raw_row_median": 0.25562729867662526
+        }
+      }
+    },
+    "estimand": "Raw-row summaries weight condition rows equally within each group. Equal-configuration summaries average conditions within configurations, then weight configurations equally. A configuration is identified by protocol, anchor_count, placement, layout_seed, budget_mode, optimizer_seed, hyperparameter_id, and model_kind. Mirrored protocols are excluded."
+  }
+}

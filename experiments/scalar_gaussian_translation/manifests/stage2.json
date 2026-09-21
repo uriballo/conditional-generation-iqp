@@ -1,0 +1,1446 @@
+{
+  "classical_anchor_interpolation_baseline": "deterministic analysis; no training job",
+  "created_utc": "2026-09-21T15:31:34.523812+00:00",
+  "enabled": true,
+  "encoder_only_baseline": "deterministic analysis; no training job",
+  "frozen_gates_path": null,
+  "frozen_gates_sha256": null,
+  "groups": {
+    "broadcast_affine:fixed_total": 24,
+    "qubit_affine:fixed_total": 24
+  },
+  "job_count": 48,
+  "jobs": [
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-01",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "d7fb92600b60d937727e",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-01",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "ea6693fda354deddaa34",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-01",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "4f4fa7c828fc1ae531b5",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-02",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "6bca98853a2cc370bb4b",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-02",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "7a93b109e6a4aabd1865",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-02",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "ee4a13ffda91e5e76e8a",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-03",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "589ff4dcfdda591fc243",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-03",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "0c0c53d883f315dca7e7",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-03",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "5be1af36017e7851c260",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "787ac4ae6637913fa56c",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "474983c59c01aa6da2da",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ab113a51a9bb88ef1b44",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-05",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "6fe9c24a29371d95316e",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-05",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "83ac976d28c66e734a17",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-05",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "b17778a4dab7ffcfb54c",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-06",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "ae948fc25d79f90d99cf",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-06",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "5e2c1ea281f68deda21a",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-06",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "9b6dd3104b06e52e81c2",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-07",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 600
+      },
+      "job_id": "96e63b9813bc17d66981",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-07",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 600
+      },
+      "job_id": "0faaff3deb9278b3cb42",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-07",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 600
+      },
+      "job_id": "631ed6c332088ad4ac81",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-08",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "7a4de84d2c2c3473b07f",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-08",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "532077fe60c932e32935",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "broadcast_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-08",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "e7974251732c0b8a10c9",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-01",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "d0fc23c283519e414743",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-01",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "387be1de8f9f0c58c4b1",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-01",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "406cfa7ce9d77dba3466",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-02",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "eb2fedec08718b125f2c",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-02",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "339ad5e4585369e5455c",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-02",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "1e37e8cae4ada75fd47c",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-03",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "3d3cd1ef6925e58f0da3",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-03",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "0a7ac6f30226c2327c40",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-03",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "ec91960086f3ef3eb7b8",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "e405bc81e84ca6acf7ce",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "dc4d57066547296bece1",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-04",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.03,
+        "restarts": 2,
+        "updates": 600
+      },
+      "job_id": "74d130e8eaa896d8b11b",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-05",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "708aed1debbfc54ebea7",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-05",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "1c476875aacfca105bb1",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-05",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          2,
+          4
+        ],
+        "learning_rate": 0.01,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "c9756c78416310f81281",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-06",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "525e32d692f9f7b0f312",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-06",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "cd55cb653c483e4bcc5d",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-06",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.01,
+        "restarts": 2,
+        "updates": 300
+      },
+      "job_id": "b392aadb11e15fe2ed11",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-07",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 600
+      },
+      "job_id": "6ef25d1075a63f30b07d",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-07",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 600
+      },
+      "job_id": "7b820d01241a8aaac4fd",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-07",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 600
+      },
+      "job_id": "54d95607909d0ecc0f3d",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-08",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "08da3c52165565a7da48",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 201,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-08",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "7407f49c685f7d50e179",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 202,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    },
+    {
+      "anchor_count": 3,
+      "anchors": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "budget_mode": "fixed_total",
+      "encoder": "qubit_affine",
+      "fit_condition": null,
+      "hyperparameter_id": "stage2-08",
+      "hyperparameters": {
+        "kernel_bodyness": [
+          1,
+          2
+        ],
+        "learning_rate": 0.03,
+        "restarts": 3,
+        "updates": 300
+      },
+      "job_id": "e6f8e64a60b6618b74e9",
+      "layout_seed": null,
+      "model_kind": "conditional",
+      "optimizer_seed": 203,
+      "phase": "stage2",
+      "placement": "even",
+      "protocol": "interpolation",
+      "split": "dev"
+    }
+  ],
+  "library_revision": "ce6cd382e9fe62550ee18f1a9daeebf9d00f1eb4",
+  "phase": "stage2",
+  "production": false,
+  "production_enabled": false,
+  "protocol_sha256": "0093ef159236793ef10fa0a22646a5febaab115645cf3b408a23352e6f2f6ebc",
+  "source_file_sha256": {
+    "experiments/common/config.py": "1a0a2d7646a8695fb000f48184ae9a7542115bd66c5ff005c4d417c484001d71",
+    "experiments/common/datasets.py": "e7f2f58f61282dad4a0440c07a7ffc39b8308d67b6e20e9bc4980c162e2f8353",
+    "experiments/common/encoders.py": "93e6b0a33d370917be229bda2b645bc412db90b38c5abbc7c6bc94fd9d69b74f",
+    "experiments/common/metrics.py": "6573a810aee9e7b2abf7109ea206875c2ece3d78ed5f8e0033e94801606bc42b",
+    "experiments/common/runner.py": "25341f7cc3288ee152e7f329fa0377e97e2d27477f4ef3bb0efe6517f0055c6d",
+    "experiments/common/tracking.py": "68bb7f4aa7cc19ee3c95726c24483209b9f8db593a61beb3db62bbbc5fa5dca0",
+    "experiments/scalar_gaussian_translation/__init__.py": "b8cca13b0cc6f9da0faa9d447a5c42fc13697be2c7a958f6caf4d0fb9cf15995",
+    "experiments/scalar_gaussian_translation/campaign.py": "ad0138417d7dfd5df6b0b8262ac84cf495e0fe5157767e9738aca430ff8661ad",
+    "experiments/scalar_gaussian_translation/protocol.json": "0093ef159236793ef10fa0a22646a5febaab115645cf3b408a23352e6f2f6ebc",
+    "experiments/scalar_gaussian_translation/protocol.py": "b21c3550a64302aba2a45323a01c7b6739d7ae377ded4a991c446de038afc8d5",
+    "experiments/scalar_gaussian_translation/study.py": "2dc7b00ce6bdb490e781e2f31e68a6a48af0d240fc89a8476bf44cf8555134d3",
+    "iqp-cond/src/iqp_cond/__init__.py": "65effe05eb2003e8efa227f45f1cdb4b9b8ba5ddbaceea4c0c2052c9ea653622",
+    "iqp-cond/src/iqp_cond/encoders.py": "905fc43acc061aa8956918c668c0aaae3c8f66097afe8947f74b12d98f615596",
+    "iqp-cond/src/iqp_cond/estimator.py": "b0de1693e485b0384d004e3428ffa622ced3682e8342238bf74bb2f054d69a35",
+    "iqp-cond/src/iqp_cond/initialization.py": "e4c6093e579167041d060ed6070165f49d54701bacba08c8b0e765abcbba8b78",
+    "iqp-cond/src/iqp_cond/loss.py": "b04cd7d00ae3ed12fff7c99a73700aa42f24e304075e3996ccd71462124cacc4",
+    "iqp-cond/src/iqp_cond/model.py": "7a68863957cff1ee83b722a36c7ecf7bb9f475f2b1bf7f41a5d2c6461e92dddc",
+    "iqp-cond/src/iqp_cond/operators.py": "4dad3c8499ec03213dc41ddef3b0fad9da1945404e988f0d5ebcc77e738093a6",
+    "iqp-cond/src/iqp_cond/simulation.py": "557907d01516975053a98c209b1ca79628eb8582f22c9b8eda99388d92358520",
+    "iqp-cond/src/iqp_cond/training.py": "40635c29a1dfe4afb881cf14b62d7ca5d4f28c97cc522306c9834ef26bd59d30",
+    "iqp-cond/src/iqp_cond/verification.py": "ddcd6fe847578abdc51f3675077d644e0a46c51848f20e243cecdf7f7ca7b6af",
+    "pyproject.toml": "6324e2d13755ec17b269a47636c723aca6f6711702b9ca7ed5a3e8cdada1abad",
+    "uv.lock": "33c0e5a5a3d3edb90b760157466afde3d9ae98fc41553b2523018cdfdec859ce"
+  },
+  "source_snapshot_sha256": "f11cfe51989367c699bbeaa7a6989b2254534a06b8ee09b692514c47bfaba4da",
+  "split": "dev",
+  "state": {
+    "library_revision": "ce6cd382e9fe62550ee18f1a9daeebf9d00f1eb4",
+    "library_version": "0.7.0",
+    "paper_dirty": true,
+    "paper_revision": "f33ee7ae51948d5b3b58c74e869221fbcdf8bb71"
+  },
+  "study": "scalar_gaussian_translation"
+}

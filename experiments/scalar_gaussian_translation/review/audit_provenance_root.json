@@ -1,0 +1,19 @@
+{
+  "audit_manifest_sha256": "9a5e89a3a18deeaca98413e040b258de1e853db77eef4555c511d6a465371ea4",
+  "content_sha256": "61e01f81018599943f2e735d388dcb275c761373da50703ca8e2b86a6907a905",
+  "frozen_gates_sha256": "571246e7143cfc1c0b5cec19a512106d2670c8d45fdd338f95e46347d8214130",
+  "identity": {
+    "phase": "audit",
+    "split": "audit",
+    "study": "scalar_gaussian_translation"
+  },
+  "job_count": 936,
+  "paths": {
+    "audit_manifest": "../manifests/audit.json",
+    "frozen_gates": "frozen_gates.json",
+    "protocol": "../protocol.json"
+  },
+  "protocol_sha256": "0093ef159236793ef10fa0a22646a5febaab115645cf3b408a23352e6f2f6ebc",
+  "schema_version": 1,
+  "source_snapshot_sha256": "f11cfe51989367c699bbeaa7a6989b2254534a06b8ee09b692514c47bfaba4da"
+}

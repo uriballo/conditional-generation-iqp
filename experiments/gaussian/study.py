@@ -1,9 +1,9 @@
 """One-parameter Gaussian study: translated Hamming-profile targets.
 
 The target at a scalar condition ``c`` is the truncated discrete Gaussian over
-Hamming weight with mean ``n (0.15 + 0.70 c)`` and width ``0.5 sqrt(n)``; the
-encoder broadcasts one angle per condition, ``pi (0.35 - 0.70 c)``.  Runs write
-to ``results/gaussian/<run_id>/`` through the shared harness.
+Hamming weight with mean ``n (0.15 + 0.70 c)`` and width ``0.5 sqrt(n)``. The
+main model uses the paired anti-phase encoder. Named protocol and encoder arms
+support the performance matrix, ablations, and no-input independent baselines.
 
     uv run python -m experiments.gaussian.study --smoke
 """
@@ -20,11 +20,16 @@ import numpy as np
 from experiments.common import runner, tracking
 from experiments.common.config import RunConfig, study_run_config
 from experiments.common.datasets import gaussian_target
-from experiments.common.encoders import scalar_broadcast_encoder
+from experiments.common.encoders import encoder_for
 from experiments.common.runner import Study
 
-TRAINING_CONDITIONS = (0.0, 0.25, 0.5, 0.75, 1.0)
-HELD_OUT_CONDITIONS = (0.0625, 0.1875, 0.3125, 0.4375, 0.5625, 0.6875, 0.8125, 0.9375)
+CONDITION_PROTOCOLS = {
+    "full3": (0.0, 0.5, 1.0),
+    "half3": (0.0, 0.25, 0.5),
+    "full5": (0.0, 0.25, 0.5, 0.75, 1.0),
+}
+TRAINING_CONDITIONS = CONDITION_PROTOCOLS["full5"]
+HELD_OUT_CONDITIONS = tuple((2 * index + 1) / 32 for index in range(16))
 CONFIG_PATH = Path(__file__).with_name("config.json")
 
 
@@ -72,8 +77,8 @@ def target_probabilities(
 
 
 def make_encoder(conditions: np.ndarray, config: RunConfig) -> ciqp.Encoder:
-    """Broadcast scalar angle map on the joint register."""
-    return scalar_broadcast_encoder(np.asarray(conditions).ravel(), config.n_total)
+    """Build the named scalar encoder on the joint register."""
+    return encoder_for(config.encoder, np.asarray(conditions).ravel(), config.n_total)
 
 
 def build_study(width_factor: float = 0.5) -> Study:
@@ -95,6 +100,11 @@ def build_study(width_factor: float = 0.5) -> Study:
             width_factor,
         ),
         make_encoder=make_encoder,
+        condition_protocols={
+            name: np.asarray(conditions, dtype=np.float64)
+            for name, conditions in CONDITION_PROTOCOLS.items()
+        },
+        condition_dimension=1,
     )
 
 
@@ -109,9 +119,31 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--n-visible", type=int, default=defaults["visible_qubits"][0])
     parser.add_argument("--ancillas", type=int, default=0)
+    parser.add_argument("--encoder", default="anti_block")
+    parser.add_argument(
+        "--protocol",
+        choices=tuple(CONDITION_PROTOCOLS),
+        default="full5",
+    )
+    parser.add_argument(
+        "--model-kind",
+        choices=("conditional", "encoder_only", "independent_direct"),
+        default="conditional",
+    )
+    parser.add_argument(
+        "--fit-condition",
+        type=float,
+        default=None,
+        help="required scalar condition for an independent_direct fit",
+    )
     parser.add_argument("--seed", type=int, default=defaults["seeds"][0])
     parser.add_argument("--seeds", default=None, help="comma-separated overrides")
     parser.add_argument("--steps", type=int, default=defaults["training"]["updates"])
+    parser.add_argument(
+        "--restarts",
+        type=int,
+        default=defaults["training"]["restarts"],
+    )
     parser.add_argument("--width-factor", type=float, default=defaults["width"])
     parser.add_argument(
         "--smoke", action="store_true", help="tiny budgets for a quick run"
@@ -127,7 +159,12 @@ def main(argv: list[str] | None = None) -> None:
     if args.smoke:
         config = RunConfig(
             study="gaussian",
-            encoder="broadcast",
+            encoder=args.encoder,
+            condition_protocol=args.protocol,
+            model_kind=args.model_kind,
+            fit_condition=(
+                (args.fit_condition,) if args.fit_condition is not None else None
+            ),
             n_visible=args.n_visible,
             n_ancillas=args.ancillas,
             width_factor=args.width_factor,
@@ -139,15 +176,22 @@ def main(argv: list[str] | None = None) -> None:
             n_ops=16,
             mc_samples=64,
             validation_interval=5,
+            restarts=min(args.restarts, 1),
             seeds=seeds,
         )
     else:
         config = study_run_config(
             "gaussian",
             defaults,
-            encoder="broadcast",
+            encoder=args.encoder,
             n_visible=args.n_visible,
             n_ancillas=args.ancillas,
+            condition_protocol=args.protocol,
+            model_kind=args.model_kind,
+            fit_condition=(
+                (args.fit_condition,) if args.fit_condition is not None else None
+            ),
+            restarts=args.restarts,
             width_factor=args.width_factor,
             steps=args.steps,
             seeds=seeds,

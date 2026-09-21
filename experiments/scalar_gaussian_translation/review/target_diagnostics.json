@@ -1,0 +1,168 @@
+{
+  "rows": [
+    {
+      "actual_mean": 1.2875000000000003,
+      "actual_std": 1.1036095479351669,
+      "boundary_shell_mass": 0.2793342603779331,
+      "condition": 0.015625,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 1.2874999999999999
+    },
+    {
+      "actual_mean": 1.550000000000002,
+      "actual_std": 1.1813342280555377,
+      "boundary_shell_mass": 0.2102133570728418,
+      "condition": 0.0625,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 1.5499999999999998
+    },
+    {
+      "actual_mean": 1.8125,
+      "actual_std": 1.2425127465907302,
+      "boundary_shell_mass": 0.15579200688051992,
+      "condition": 0.109375,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 1.8125
+    },
+    {
+      "actual_mean": 2.0750000000000037,
+      "actual_std": 1.2900992307357877,
+      "boundary_shell_mass": 0.11343154119619904,
+      "condition": 0.15625,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 2.075
+    },
+    {
+      "actual_mean": 2.3375000000000004,
+      "actual_std": 1.32648531803145,
+      "boundary_shell_mass": 0.08096850971386446,
+      "condition": 0.203125,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 2.3375
+    },
+    {
+      "actual_mean": 2.600000000000001,
+      "actual_std": 1.3536967287742765,
+      "boundary_shell_mass": 0.05658431771254268,
+      "condition": 0.25,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 2.5999999999999996
+    },
+    {
+      "actual_mean": 2.8624999999999963,
+      "actual_std": 1.3734815192780765,
+      "boundary_shell_mass": 0.03873623201784776,
+      "condition": 0.296875,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 2.8625
+    },
+    {
+      "actual_mean": 3.1250000000000067,
+      "actual_std": 1.3873375779757975,
+      "boundary_shell_mass": 0.026127941999288348,
+      "condition": 0.34375,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 3.125
+    },
+    {
+      "actual_mean": 3.387499999999987,
+      "actual_std": 1.3965046226846713,
+      "boundary_shell_mass": 0.017705670521950243,
+      "condition": 0.390625,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 3.3875
+    },
+    {
+      "actual_mean": 3.649999999999991,
+      "actual_std": 1.4019377107675706,
+      "boundary_shell_mass": 0.012669153539076277,
+      "condition": 0.4375,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 3.6499999999999995
+    },
+    {
+      "actual_mean": 4.3500000000000085,
+      "actual_std": 1.4019377107675703,
+      "boundary_shell_mass": 0.012669153539076277,
+      "condition": 0.5625,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 4.35
+    },
+    {
+      "actual_mean": 4.612500000000012,
+      "actual_std": 1.3965046226846711,
+      "boundary_shell_mass": 0.017705670521950236,
+      "condition": 0.609375,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 4.6125
+    },
+    {
+      "actual_mean": 4.874999999999994,
+      "actual_std": 1.3873375779757975,
+      "boundary_shell_mass": 0.026127941999288345,
+      "condition": 0.65625,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 4.875
+    },
+    {
+      "actual_mean": 5.137500000000011,
+      "actual_std": 1.3734815192780758,
+      "boundary_shell_mass": 0.038736232017848135,
+      "condition": 0.703125,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 5.137499999999999
+    },
+    {
+      "actual_mean": 5.399999999999992,
+      "actual_std": 1.353696728774277,
+      "boundary_shell_mass": 0.056584317712542145,
+      "condition": 0.75,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 5.3999999999999995
+    },
+    {
+      "actual_mean": 5.662499999999981,
+      "actual_std": 1.3264853180314522,
+      "boundary_shell_mass": 0.08096850971386246,
+      "condition": 0.796875,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 5.6625
+    },
+    {
+      "actual_mean": 5.9250000000000025,
+      "actual_std": 1.2900992307357868,
+      "boundary_shell_mass": 0.11343154119619989,
+      "condition": 0.84375,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 5.925
+    },
+    {
+      "actual_mean": 6.187499999999995,
+      "actual_std": 1.2425127465907313,
+      "boundary_shell_mass": 0.1557920068805189,
+      "condition": 0.890625,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 6.1875
+    },
+    {
+      "actual_mean": 6.450000000000005,
+      "actual_std": 1.1813342280555355,
+      "boundary_shell_mass": 0.2102133570728435,
+      "condition": 0.9375,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 6.45
+    },
+    {
+      "actual_mean": 6.712500000000001,
+      "actual_std": 1.1036095479351664,
+      "boundary_shell_mass": 0.27933426037793374,
+      "condition": 0.984375,
+      "exponent_width": 1.4142135623730951,
+      "nominal_mean": 6.7124999999999995
+    }
+  ],
+  "translation_to_std_contraction_ratio": {
+    "far_extrapolation_0.5_to_1.0": 8.458134246161357,
+    "near_extrapolation_0.8_to_1.0": 4.462514688085265
+  }
+}

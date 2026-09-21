@@ -11,6 +11,7 @@ optional dependency.  Nothing here requires MLflow today.
 
 from __future__ import annotations
 
+import fcntl
 import json
 from pathlib import Path
 
@@ -27,12 +28,28 @@ def _index_path(results_root: Path | None = None) -> Path:
 
 
 def append_index(record: dict[str, object], results_root: Path | None = None) -> Path:
-    """Append one run record to the local JSON-lines index."""
+    """Append one run record unless its immutable run id is already indexed.
+
+    The advisory lock makes the read-check-append transaction safe when the
+    Strix campaign runs several worker processes against one results root.
+    """
     path = _index_path(results_root)
     path.parent.mkdir(parents=True, exist_ok=True)
     entry = {key: value for key, value in record.items() if key != "directory"}
-    with path.open("a", encoding="utf-8") as handle:
+    run_id = entry.get("run_id")
+    with path.open("a+", encoding="utf-8") as handle:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        handle.seek(0)
+        existing = [
+            json.loads(line) for line in handle.read().splitlines() if line.strip()
+        ]
+        if run_id is not None and any(
+            existing_record.get("run_id") == run_id for existing_record in existing
+        ):
+            return path
+        handle.seek(0, 2)
         handle.write(json.dumps(entry, sort_keys=True, default=str) + "\n")
+        handle.flush()
     return path
 
 

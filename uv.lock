@@ -283,7 +283,7 @@ wheels = [
 
 [[package]]
 name = "iqp-cond"
-version = "0.5.0"
+version = "0.7.0"
 source = { editable = "iqp-cond" }
 dependencies = [
     { name = "jax" },
@@ -302,6 +302,8 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "jupyterlab", specifier = ">=4.4" },
+    { name = "nbconvert", specifier = ">=7.16" },
     { name = "pytest", specifier = ">=9.0.3" },
     { name = "ruff", specifier = ">=0.15.17" },
 ]
