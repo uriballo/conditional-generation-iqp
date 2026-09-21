@@ -1,0 +1,559 @@
+{
+  "encoders": {
+    "anti_block": {
+      "check_details": {
+        "far_extrapolation.median_seed_mean": {
+          "observed": 0.1208956030771133,
+          "pass": true,
+          "threshold": 0.4
+        },
+        "far_extrapolation.worst_condition": {
+          "observed": 0.3120661523815435,
+          "pass": true,
+          "threshold": 0.82
+        },
+        "far_extrapolation.worst_seed_mean": {
+          "observed": 0.127033252429369,
+          "pass": true,
+          "threshold": 0.43
+        },
+        "held_out_interpolation.median_seed_mean": {
+          "observed": 0.112636341910909,
+          "pass": true,
+          "threshold": 0.32
+        },
+        "held_out_interpolation.worst_condition": {
+          "observed": 0.3424298208342241,
+          "pass": true,
+          "threshold": 0.6
+        },
+        "held_out_interpolation.worst_seed_mean": {
+          "observed": 0.12166186359444778,
+          "pass": true,
+          "threshold": 0.34
+        },
+        "near_extrapolation.median_seed_mean": {
+          "observed": 0.12140913331863142,
+          "pass": true,
+          "threshold": 0.33
+        },
+        "near_extrapolation.worst_condition": {
+          "observed": 0.21913110817639178,
+          "pass": true,
+          "threshold": 0.55
+        },
+        "near_extrapolation.worst_seed_mean": {
+          "observed": 0.12325335570158782,
+          "pass": true,
+          "threshold": 0.35
+        },
+        "training.median_seed_mean": {
+          "observed": 0.07592536147156556,
+          "pass": true,
+          "threshold": 0.3
+        },
+        "training.worst_condition": {
+          "observed": 0.18327732658144152,
+          "pass": true,
+          "threshold": 0.52
+        },
+        "training.worst_seed_mean": {
+          "observed": 0.08040982222121074,
+          "pass": true,
+          "threshold": 0.32
+        }
+      },
+      "checks": {
+        "far_extrapolation.median_seed_mean": true,
+        "far_extrapolation.worst_condition": true,
+        "far_extrapolation.worst_seed_mean": true,
+        "held_out_interpolation.median_seed_mean": true,
+        "held_out_interpolation.worst_condition": true,
+        "held_out_interpolation.worst_seed_mean": true,
+        "near_extrapolation.median_seed_mean": true,
+        "near_extrapolation.worst_condition": true,
+        "near_extrapolation.worst_seed_mean": true,
+        "training.median_seed_mean": true,
+        "training.worst_condition": true,
+        "training.worst_seed_mean": true
+      },
+      "pass": null,
+      "reasons": [],
+      "seed_mean_tvd": {
+        "far_extrapolation": {
+          "401": 0.127033252429369,
+          "402": 0.1185884806083533,
+          "403": 0.1208956030771133
+        },
+        "held_out_interpolation": {
+          "401": 0.12166186359444778,
+          "402": 0.10573224042951666,
+          "403": 0.112636341910909
+        },
+        "near_extrapolation": {
+          "401": 0.12140913331863142,
+          "402": 0.1019109332227718,
+          "403": 0.12325335570158782
+        },
+        "training": {
+          "401": 0.08040982222121074,
+          "402": 0.07316868397208405,
+          "403": 0.07592536147156556
+        }
+      }
+    },
+    "broadcast_affine": {
+      "check_details": {
+        "encoder_only_improvement.median": {
+          "observed": 0.5193537939157749,
+          "pass": true,
+          "threshold": 0.3
+        },
+        "encoder_only_improvement.worst_group": {
+          "observed": 0.3747047776938436,
+          "pass": true,
+          "threshold": 0.25
+        },
+        "far_extrapolation.median_seed_mean": {
+          "observed": 0.3421377872550981,
+          "pass": true,
+          "threshold": 0.4
+        },
+        "far_extrapolation.worst_condition": {
+          "observed": 0.7906852289290223,
+          "pass": true,
+          "threshold": 0.82
+        },
+        "far_extrapolation.worst_seed_mean": {
+          "observed": 0.3572543611959471,
+          "pass": true,
+          "threshold": 0.43
+        },
+        "held_out_interpolation.median_seed_mean": {
+          "observed": 0.2795486040437708,
+          "pass": true,
+          "threshold": 0.32
+        },
+        "held_out_interpolation.worst_condition": {
+          "observed": 0.5357513634203075,
+          "pass": true,
+          "threshold": 0.6
+        },
+        "held_out_interpolation.worst_seed_mean": {
+          "observed": 0.2839314771904653,
+          "pass": true,
+          "threshold": 0.34
+        },
+        "mean_movement.correct_sign_fraction": {
+          "observed": 1.0,
+          "pass": true,
+          "threshold": 0.95
+        },
+        "mean_movement.median_ratio": {
+          "observed": 0.6262679152799511,
+          "pass": true,
+          "threshold": 0.5
+        },
+        "mean_movement.worst_seed_median_ratio": {
+          "observed": 0.6194082758309646,
+          "pass": true,
+          "threshold": 0.45
+        },
+        "near_extrapolation.median_seed_mean": {
+          "observed": 0.2773857245781892,
+          "pass": true,
+          "threshold": 0.33
+        },
+        "near_extrapolation.worst_condition": {
+          "observed": 0.4465646856737447,
+          "pass": true,
+          "threshold": 0.55
+        },
+        "near_extrapolation.worst_seed_mean": {
+          "observed": 0.2789913507959578,
+          "pass": true,
+          "threshold": 0.35
+        },
+        "reliability.optimizer_seed_range": {
+          "observed": 0.01526213407588295,
+          "pass": true,
+          "threshold": 0.1
+        },
+        "reliability.random_layout.far_extrapolation": {
+          "observed": {
+            "maximum": 0.3153940980603196,
+            "per_layout_median_tvd": {
+              "1101": 0.3153940980603196,
+              "1102": 0.26536811623584305,
+              "1103": 0.305540180281883
+            }
+          },
+          "pass": true,
+          "threshold": 0.45
+        },
+        "reliability.random_layout.held_out_interpolation": {
+          "observed": {
+            "maximum": 0.30182538656157487,
+            "per_layout_median_tvd": {
+              "1101": 0.30182538656157487,
+              "1102": 0.2560197912958453,
+              "1103": 0.24372773071179143
+            }
+          },
+          "pass": true,
+          "threshold": 0.35
+        },
+        "reliability.random_layout.near_extrapolation": {
+          "observed": {
+            "maximum": 0.2711451489934473,
+            "per_layout_median_tvd": {
+              "1101": 0.2673178727303729,
+              "1102": 0.2541637655000773,
+              "1103": 0.2711451489934473
+            }
+          },
+          "pass": true,
+          "threshold": 0.38
+        },
+        "reliability.random_layout.training": {
+          "observed": {
+            "maximum": 0.29981417115064296,
+            "per_layout_median_tvd": {
+              "1101": 0.22569415693485437,
+              "1102": 0.29981417115064296,
+              "1103": 0.23325374451143732
+            }
+          },
+          "pass": true,
+          "threshold": 0.33
+        },
+        "structure.profile": {
+          "observed": 0.15939770227701716,
+          "pass": true,
+          "threshold": 0.22
+        },
+        "structure.profile_worst_seed_mean": {
+          "observed": 0.2074371008044808,
+          "pass": true,
+          "threshold": 0.28
+        },
+        "structure.shell": {
+          "observed": 0.14863180663409037,
+          "pass": true,
+          "threshold": 0.2
+        },
+        "structure.shell_worst_seed_mean": {
+          "observed": 0.17225638662445064,
+          "pass": true,
+          "threshold": 0.25
+        },
+        "training.median_seed_mean": {
+          "observed": 0.263101866505525,
+          "pass": true,
+          "threshold": 0.3
+        },
+        "training.worst_condition": {
+          "observed": 0.47408551933045073,
+          "pass": true,
+          "threshold": 0.52
+        },
+        "training.worst_seed_mean": {
+          "observed": 0.26663706146826693,
+          "pass": true,
+          "threshold": 0.32
+        },
+        "width.median": {
+          "observed": 0.11573265452792669,
+          "pass": true,
+          "threshold": 0.18
+        },
+        "width.worst_seed_mean": {
+          "observed": 0.19274815628599537,
+          "pass": true,
+          "threshold": 0.28
+        }
+      },
+      "checks": {
+        "encoder_only_improvement.median": true,
+        "encoder_only_improvement.worst_group": true,
+        "far_extrapolation.median_seed_mean": true,
+        "far_extrapolation.worst_condition": true,
+        "far_extrapolation.worst_seed_mean": true,
+        "held_out_interpolation.median_seed_mean": true,
+        "held_out_interpolation.worst_condition": true,
+        "held_out_interpolation.worst_seed_mean": true,
+        "mean_movement.correct_sign_fraction": true,
+        "mean_movement.median_ratio": true,
+        "mean_movement.worst_seed_median_ratio": true,
+        "near_extrapolation.median_seed_mean": true,
+        "near_extrapolation.worst_condition": true,
+        "near_extrapolation.worst_seed_mean": true,
+        "reliability.optimizer_seed_range": true,
+        "reliability.random_layout.far_extrapolation": true,
+        "reliability.random_layout.held_out_interpolation": true,
+        "reliability.random_layout.near_extrapolation": true,
+        "reliability.random_layout.training": true,
+        "structure.profile": true,
+        "structure.profile_worst_seed_mean": true,
+        "structure.shell": true,
+        "structure.shell_worst_seed_mean": true,
+        "training.median_seed_mean": true,
+        "training.worst_condition": true,
+        "training.worst_seed_mean": true,
+        "width.median": true,
+        "width.worst_seed_mean": true
+      },
+      "pass": true,
+      "reasons": [],
+      "seed_mean_tvd": {
+        "far_extrapolation": {
+          "401": 0.3572543611959471,
+          "402": 0.2819217826618511,
+          "403": 0.3421377872550981
+        },
+        "held_out_interpolation": {
+          "401": 0.2795486040437708,
+          "402": 0.2748144446997209,
+          "403": 0.2839314771904653
+        },
+        "near_extrapolation": {
+          "401": 0.2789913507959578,
+          "402": 0.2773857245781892,
+          "403": 0.2733413707390472
+        },
+        "training": {
+          "401": 0.263101866505525,
+          "402": 0.2599118874492565,
+          "403": 0.26663706146826693
+        }
+      }
+    },
+    "qubit_affine": {
+      "check_details": {
+        "encoder_only_improvement.median": {
+          "observed": 0.5096651511250159,
+          "pass": true,
+          "threshold": 0.3
+        },
+        "encoder_only_improvement.worst_group": {
+          "observed": 0.3743436525628027,
+          "pass": true,
+          "threshold": 0.25
+        },
+        "far_extrapolation.median_seed_mean": {
+          "observed": 0.3534211545801592,
+          "pass": true,
+          "threshold": 0.4
+        },
+        "far_extrapolation.worst_condition": {
+          "observed": 0.6874387835116615,
+          "pass": true,
+          "threshold": 0.82
+        },
+        "far_extrapolation.worst_seed_mean": {
+          "observed": 0.38436382663557134,
+          "pass": true,
+          "threshold": 0.43
+        },
+        "held_out_interpolation.median_seed_mean": {
+          "observed": 0.2833190878541984,
+          "pass": true,
+          "threshold": 0.32
+        },
+        "held_out_interpolation.worst_condition": {
+          "observed": 0.5301045790261611,
+          "pass": true,
+          "threshold": 0.6
+        },
+        "held_out_interpolation.worst_seed_mean": {
+          "observed": 0.2843243254079916,
+          "pass": true,
+          "threshold": 0.34
+        },
+        "mean_movement.correct_sign_fraction": {
+          "observed": 1.0,
+          "pass": true,
+          "threshold": 0.95
+        },
+        "mean_movement.median_ratio": {
+          "observed": 0.6408627184597624,
+          "pass": true,
+          "threshold": 0.5
+        },
+        "mean_movement.worst_seed_median_ratio": {
+          "observed": 0.6393637249968642,
+          "pass": true,
+          "threshold": 0.45
+        },
+        "near_extrapolation.median_seed_mean": {
+          "observed": 0.2738509424290507,
+          "pass": true,
+          "threshold": 0.33
+        },
+        "near_extrapolation.worst_condition": {
+          "observed": 0.4337878284914658,
+          "pass": true,
+          "threshold": 0.55
+        },
+        "near_extrapolation.worst_seed_mean": {
+          "observed": 0.27752551520636776,
+          "pass": true,
+          "threshold": 0.35
+        },
+        "reliability.optimizer_seed_range": {
+          "observed": 0.015333206868085814,
+          "pass": true,
+          "threshold": 0.1
+        },
+        "reliability.random_layout.far_extrapolation": {
+          "observed": {
+            "maximum": 0.3944889325280971,
+            "per_layout_median_tvd": {
+              "1101": 0.3944889325280971,
+              "1102": 0.27706251459629516,
+              "1103": 0.31348665105387635
+            }
+          },
+          "pass": true,
+          "threshold": 0.45
+        },
+        "reliability.random_layout.held_out_interpolation": {
+          "observed": {
+            "maximum": 0.3052706748595808,
+            "per_layout_median_tvd": {
+              "1101": 0.3052706748595808,
+              "1102": 0.2630853967055323,
+              "1103": 0.24298907384980595
+            }
+          },
+          "pass": true,
+          "threshold": 0.35
+        },
+        "reliability.random_layout.near_extrapolation": {
+          "observed": {
+            "maximum": 0.26764402894679407,
+            "per_layout_median_tvd": {
+              "1101": 0.26146621149938926,
+              "1102": 0.25392924169440245,
+              "1103": 0.26764402894679407
+            }
+          },
+          "pass": true,
+          "threshold": 0.38
+        },
+        "reliability.random_layout.training": {
+          "observed": {
+            "maximum": 0.29494760973167133,
+            "per_layout_median_tvd": {
+              "1101": 0.2534841732298853,
+              "1102": 0.29494760973167133,
+              "1103": 0.23814311607331334
+            }
+          },
+          "pass": true,
+          "threshold": 0.33
+        },
+        "structure.profile": {
+          "observed": 0.16539614868598287,
+          "pass": true,
+          "threshold": 0.22
+        },
+        "structure.profile_worst_seed_mean": {
+          "observed": 0.21190920485854395,
+          "pass": true,
+          "threshold": 0.28
+        },
+        "structure.shell": {
+          "observed": 0.15614972731080512,
+          "pass": true,
+          "threshold": 0.2
+        },
+        "structure.shell_worst_seed_mean": {
+          "observed": 0.17674820698246885,
+          "pass": true,
+          "threshold": 0.25
+        },
+        "training.median_seed_mean": {
+          "observed": 0.26291071012566763,
+          "pass": true,
+          "threshold": 0.3
+        },
+        "training.worst_condition": {
+          "observed": 0.46479997171894716,
+          "pass": true,
+          "threshold": 0.52
+        },
+        "training.worst_seed_mean": {
+          "observed": 0.2646417347783497,
+          "pass": true,
+          "threshold": 0.32
+        },
+        "width.median": {
+          "observed": 0.12115305966632917,
+          "pass": true,
+          "threshold": 0.18
+        },
+        "width.worst_seed_mean": {
+          "observed": 0.21254050524873988,
+          "pass": true,
+          "threshold": 0.28
+        }
+      },
+      "checks": {
+        "encoder_only_improvement.median": true,
+        "encoder_only_improvement.worst_group": true,
+        "far_extrapolation.median_seed_mean": true,
+        "far_extrapolation.worst_condition": true,
+        "far_extrapolation.worst_seed_mean": true,
+        "held_out_interpolation.median_seed_mean": true,
+        "held_out_interpolation.worst_condition": true,
+        "held_out_interpolation.worst_seed_mean": true,
+        "mean_movement.correct_sign_fraction": true,
+        "mean_movement.median_ratio": true,
+        "mean_movement.worst_seed_median_ratio": true,
+        "near_extrapolation.median_seed_mean": true,
+        "near_extrapolation.worst_condition": true,
+        "near_extrapolation.worst_seed_mean": true,
+        "reliability.optimizer_seed_range": true,
+        "reliability.random_layout.far_extrapolation": true,
+        "reliability.random_layout.held_out_interpolation": true,
+        "reliability.random_layout.near_extrapolation": true,
+        "reliability.random_layout.training": true,
+        "structure.profile": true,
+        "structure.profile_worst_seed_mean": true,
+        "structure.shell": true,
+        "structure.shell_worst_seed_mean": true,
+        "training.median_seed_mean": true,
+        "training.worst_condition": true,
+        "training.worst_seed_mean": true,
+        "width.median": true,
+        "width.worst_seed_mean": true
+      },
+      "pass": true,
+      "reasons": [],
+      "seed_mean_tvd": {
+        "far_extrapolation": {
+          "401": 0.38436382663557134,
+          "402": 0.30044792364936784,
+          "403": 0.3534211545801592
+        },
+        "held_out_interpolation": {
+          "401": 0.2833190878541984,
+          "402": 0.2788247524388825,
+          "403": 0.2843243254079916
+        },
+        "near_extrapolation": {
+          "401": 0.2738509424290507,
+          "402": 0.27752551520636776,
+          "403": 0.27126145383641764
+        },
+        "training": {
+          "401": 0.26291071012566763,
+          "402": 0.2581687180930246,
+          "403": 0.2646417347783497
+        }
+      }
+    }
+  },
+  "frozen_gates_sha256": "571246e7143cfc1c0b5cec19a512106d2670c8d45fdd338f95e46347d8214130"
+}
