@@ -1,12 +1,12 @@
 {
-  "content_sha256": "a70910c05e2c61bc1be615b507e32ea606015e71bc57b0ddb8b470734ab3a1ce",
+  "content_sha256": "357b3a6050c2d9b17b2b6ef228dbfa14b9be8b874da9679959d96988dcc13360",
   "current": {
-    "library_revision": "a971effb8621c658fe97119708b354f99e7c7a54",
+    "library_revision": "40fb93788fcbc7f01083a4e1f7bc03a4c1658490",
     "repository_state": {
-      "library_revision": "a971effb8621c658fe97119708b354f99e7c7a54",
+      "library_revision": "40fb93788fcbc7f01083a4e1f7bc03a4c1658490",
       "library_version": "0.7.0",
       "paper_dirty": false,
-      "paper_revision": "b0a0854e38bf5e76dcb414ad43e0d61283281c35"
+      "paper_revision": "9a7898753be7e85f99387ce5e4b1158bad8d72fc"
     },
     "source_file_sha256": {
       "experiments/common/config.py": "1a0a2d7646a8695fb000f48184ae9a7542115bd66c5ff005c4d417c484001d71",
@@ -33,7 +33,7 @@
       "pyproject.toml": "6324e2d13755ec17b269a47636c723aca6f6711702b9ca7ed5a3e8cdada1abad",
       "uv.lock": "33c0e5a5a3d3edb90b760157466afde3d9ae98fc41553b2523018cdfdec859ce"
     },
-    "source_snapshot_sha256": "8c9d52cf89ce640d21001c01a477b5c67efb9ca9afba350edc643d8cb0535027"
+    "source_snapshot_sha256": "fb39b244e6d98aef715afb45e9f064fcc931ce37d748424b1480d0b33f4a8c83"
   },
   "original": {
     "library_revision": "ce6cd382e9fe62550ee18f1a9daeebf9d00f1eb4",
