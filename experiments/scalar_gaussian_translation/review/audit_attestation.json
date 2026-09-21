@@ -15,7 +15,7 @@
       403
     ]
   },
-  "content_sha256": "5186f14174103a81c57bed10df8a80a87de97c489094ca467f21bffb0005e6dd",
+  "content_sha256": "d5a60d2e96686b09e8d9f1319eebf15a3e5eb1a1f1f7defaa2257597f13d9c0b",
   "evaluator": {
     "path": "analysis.py",
     "sha256": "52fbd495b5535f0897d7f1d71b2d5253fe69a2248c1adfbf4bc6efd16319be4f"
@@ -3805,10 +3805,10 @@
     "path": "audit_provenance_root.json"
   },
   "repository_state": {
-    "library_revision": "a971effb8621c658fe97119708b354f99e7c7a54",
+    "library_revision": "40fb93788fcbc7f01083a4e1f7bc03a4c1658490",
     "library_version": "0.7.0",
     "paper_dirty": false,
-    "paper_revision": "0fe4df747770e7521e765880c3f6927d893b5d03"
+    "paper_revision": "976376f548239b18696f2c7461dff3807b7c4ea3"
   },
   "row_verification": {
     "canonical_csv_sha256": "2c85365cbc16b37abdc22f8cdfcf1dc31f7b4e178f5dd7e607b9b0ae60e86a12",
@@ -3817,8 +3817,8 @@
   },
   "schema_version": 1,
   "source_provenance": {
-    "bridge_content_sha256": "a70910c05e2c61bc1be615b507e32ea606015e71bc57b0ddb8b470734ab3a1ce",
-    "bridge_file_sha256": "27b6a3c41fe2f97a58692536cb567a8229546475f570baca76894538220ec894",
+    "bridge_content_sha256": "357b3a6050c2d9b17b2b6ef228dbfa14b9be8b874da9679959d96988dcc13360",
+    "bridge_file_sha256": "3292add2f5c6b35f079ed31ae694438421e4e54c9898c5de8b8f4b7366e7f67f",
     "method": "source_equivalence_bridge",
     "validated": true
   }
