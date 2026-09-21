@@ -1,10 +1,17 @@
 # n=8 production launch plan
 
+> Status: executed successfully on 2026-09-21 after explicit author approval.
+> The frozen 3,120-job matrix, results, and post-run integrity checks are
+> documented in [the production report](review/PRODUCTION_REPORT.md). This file
+> remains the pre-launch plan and authorization record.
+
 ## Decision and scope
 
-The corrected locked audit supports planning the full n=8 campaign. It does
-not authorize execution. The production run remains a 3,120-job replication
-and precision campaign over optimizer seeds 501–510; it is not a second blind
+The corrected locked audit supported the full n=8 campaign. At the time this
+plan was frozen, it did not authorize execution. The author later granted
+explicit approval, and the campaign ran through the separate fail-closed
+authorization path. The production run is a 3,120-job replication and
+precision campaign over optimizer seeds 501–510; it is not a second blind
 audit and does not expand the claim to n=12, ancillas, hardware sampling, or a
 new circuit family.
 

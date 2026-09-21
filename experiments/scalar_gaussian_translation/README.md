@@ -1,8 +1,10 @@
 # Scalar Gaussian translation benchmark
 
-This directory freezes the protocol; production runs remain disabled. The
-register has eight visible qubits, no ancillas, and `Ansatz.complete(8)` (36
-parameters). Targets use the shared width-0.5 truncated Gaussian.
+This directory freezes the protocol. The author-approved n=8 production
+campaign completed on 2026-09-21 through the external authorization path; the
+proposal remains disabled for the legacy runner by design. The register has
+eight visible qubits, no ancillas, and `Ansatz.complete(8)` (36 parameters).
+Targets use the shared width-0.5 truncated Gaussian.
 
 The general broadcast map is `theta(c)=pi*(0.32-0.68*c)`. The wire-dependent
 map uses `t_j=j/7` and
@@ -51,20 +53,18 @@ the mirrored far diagnostic exposed directional bias in both general encoders.
 This is a proof-of-concept result, not a competitive-performance or quantum-
 advantage claim.
 
-The complete evidence, risks, decision, and reproduction commands are in the
-[`review report`](review/REPORT.md). Machine-readable artifacts include the
+The audit evidence, risks, decision, and reproduction commands are in the
+[`review report`](review/REPORT.md). The completed campaign and its limits are
+in the [`production report`](review/PRODUCTION_REPORT.md). Machine-readable
+artifacts include the
 [`frozen gates`](review/frozen_gates.json),
 [`audit provenance root`](review/audit_provenance_root.json),
 [`audit result`](review/audit_gate_check.json),
 [`audit attestation`](review/audit_attestation.json),
 [`review summaries`](review/review_summaries.json),
 [`bounded-search decision`](review/selected_config.json), and
-[`optimization diagnostics`](review/optimization_diagnostics.json). The four
-review figure classes are in `review/figures/` as PDF and PNG. Production
-remains disabled in `manifests/production_proposal.json`; the
-[`production launch plan`](PRODUCTION_LAUNCH_PLAN.md) requires a clean source
-commit with the author-approved provenance root, a byte-identical
-source-equivalence bridge to the untouched audit manifest (or a clean audit
-rerun if equivalence fails), a launch-valid regenerated attestation and
-manifest, and explicit author approval. The bridge cannot be generated until
-the intended source changes are committed and both repositories are clean.
+[`optimization diagnostics`](review/optimization_diagnostics.json),
+[`production authorization`](review/production_authorization.json), and
+[`production attestation`](review/production_attestation.json). The four audit
+figure classes are in `review/figures/`; production figures and the 3,120 raw
+runs are under `results/scalar_gaussian_translation_production/`.

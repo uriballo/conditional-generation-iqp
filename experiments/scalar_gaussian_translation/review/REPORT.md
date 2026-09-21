@@ -1,5 +1,9 @@
 # Scalar Gaussian Translation Benchmark: review report
 
+> This is the pre-production adversarial review. The author later approved and
+> completed the n=8 campaign. See the
+> [production report](PRODUCTION_REPORT.md) for the final replication results.
+
 ## Decision
 
 The n=8, zero-ancilla benchmark is **scientifically positive after a post-audit evaluator correction**. A threshold-preserving re-evaluation of the saved checkpoints shows that both general affine RY encoders pass all 28 frozen locked-audit checks. The evidence supports a narrow proof-of-concept claim: one shared IQP unitary learns a substantial correction to predeclared affine product encoders that do not consume target statistics at runtime, and it retains controlled accuracy at unseen conditions.
