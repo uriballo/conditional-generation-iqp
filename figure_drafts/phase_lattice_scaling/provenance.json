@@ -1,0 +1,25 @@
+{
+  "export_date": "2026-09-30",
+  "frozen_campaign_manifest_sha256": "6a686a2df72b43ee48224b780ff74974f46ed5364c8cc322e1b556daaf6dc6bb",
+  "source_archive_sha256": "712fd1475119f75d231a6d4ad712aea6a7afeb73cfb799958495da40b647d684",
+  "scaling_audit_sha256": "56410e1b8543be82d84112d79c630e835f647178cd743f445de313a95745434e",
+  "ancilla_audit_sha256": "40ee8284d40abd36f5cc92414777b4b05ea02ec2ad147e5e9eecb737f5206094",
+  "original_plotting_source_sha256": "607f4a2a799f6d0cc35dd40f66651b19aa7fade88a72431057c309a111d65205",
+  "source_of_truth": "reviewed complete-size audit export; raw checkpoints remain local",
+  "review": "all five plot PDF pages rendered and visually inspected; independent checkpoint replay at n64/n128/n1024/n2048 seed100 discrepancy zero; 29 focused experiment tests passed",
+  "files": {
+    "figure_drafts/phase_lattice_scaling/train_held_out_mmd.pdf": "ed04353c8eabe645319ff2693f6cab653615bea298fcddff91fbf7e4481fe3e7",
+    "figure_drafts/phase_lattice_scaling/per_condition_mmd.pdf": "0d8bb98e05388ab7452c833d2696d167f166094c5bebb37432735611922453d8",
+    "figure_drafts/phase_lattice_scaling/per_condition_mmd_training.png": "56ec2127b636d93bef3f36826ae19ba84a7c511201fb6321c43083e0a5500040",
+    "figure_drafts/phase_lattice_scaling/train_held_out_mmd.png": "6310a4ca3a931fc71f6c7b8be2869f151e03f00e6bf927bcdeeaa32554a128f7",
+    "figure_drafts/phase_lattice_scaling/per_condition_mmd_held_out.png": "559e7966697c34d6c860dd6afd111078e69b4162eba474d8b0d10627292388cd",
+    "figure_drafts/phase_lattice_scaling/render.py": "9ce6e5aab0ccd9c6f169024942307f79fbed62121e96c7dc3c60b308a29a0f3b",
+    "figure_drafts/phase_lattice_scaling/figure_data.json": "4ddc2fd3d449b4f0d55c486d7525a6e3b196c714cfd28c542dda8c95bd0118b5",
+    "figure_drafts/phase_lattice_scaling/README.md": "393613ddd09e6601cd007e6d1161c95991ebad2a6d069afcf4cebc769311c799",
+    "paper/figures/curie_weiss_scaling.pdf": "8cae6b444fd8be43ffb4e1ff808d5e718dd6990c7ebc73bdff07f6acc1d35d94",
+    "paper/figures/curie_weiss_scaling.png": "056eb32c486a0398adffe6addabdaa4c4a5d5b5cbf7e3fc11977d34ab751802b",
+    "paper/figures/curie_weiss_ancilla.pdf": "91a57ac6f25236349d693b968db175d47036a17615a515d630b537617d8e4dcb",
+    "paper/figures/curie_weiss_ancilla.png": "7858aaf3b0a081e57877c8dbaf73f6dcb34ae659e0384ceb52e5b80603c9c3f2"
+  },
+  "standalone_renderer_validation": "All five PNG previews reproduced pixel for pixel from exported arrays with the standalone PDF/PNG renderer; Ruff passed. Reviewed original PDFs are committed, not regenerated copies."
+}

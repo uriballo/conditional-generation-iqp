@@ -1,13 +1,19 @@
 {
-  "manuscript": "author-supplied draft, lattice revision 2026-09-30",
+  "manuscript": "handcrafted author draft, separate phase-lattice scaling and ancillary figures, 2026-09-30",
   "pdf_sha256": {
     "F1.pdf": "c77826553adc66a0126fcfc8aad78f7b3469eebde192b6e222534aba5c600522",
     "gaussian_intro.pdf": "b3ca1d5832a72dd47e3835ed915409a8c726a82acb5206b1cb28a0e939c207c6",
     "curie_phase_comparison_flip.pdf": "8e8989aec913082e54d6560d871fb76ba503e579ba49b891b31182c1e82ce49c",
-    "curie_weiss_ancilla_scaling.pdf": "bf901d4a3270d9c61536c1d06c6affaaba01511204a608fb56b0d69491bc9325"
+    "curie_weiss_ancilla.pdf": "91a57ac6f25236349d693b968db175d47036a17615a515d630b537617d8e4dcb",
+    "curie_weiss_scaling.pdf": "8cae6b444fd8be43ffb4e1ff808d5e718dd6990c7ebc73bdff07f6acc1d35d94"
   },
   "gaussian_manifest_sha256": "814f6ddbf6a5eea02feb09fc213283fb9d159eb035b95d4b47e4364356d1b4a9",
   "cw_manifest_sha256": "9d5165767be1fc36257bba60a7abc3903bd0d56e6b7c8698976427d878484aba",
-  "scope": "four includegraphics assets used in author_draft.tex; exploratory lattice Curie-Weiss plots excluded",
-  "symmetry_illustration": "inline LaTeX in manuscript, not a separate PDF asset"
+  "scope": "five current includegraphics assets; separate ancilla/scaling panels; diagnostics under figure_drafts/phase_lattice_scaling; previous combined figure archived",
+  "symmetry_illustration": "inline LaTeX in manuscript, not a separate PDF asset",
+  "archived_pdf_sha256": {
+    "curie_weiss_ancilla_scaling.pdf": "bf901d4a3270d9c61536c1d06c6affaaba01511204a608fb56b0d69491bc9325"
+  },
+  "phase_lattice_scaling_manifest_sha256": "6a686a2df72b43ee48224b780ff74974f46ed5364c8cc322e1b556daaf6dc6bb",
+  "phase_lattice_scaling_export": "../../figure_drafts/phase_lattice_scaling/provenance.json"
 }
