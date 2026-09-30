@@ -1,0 +1,144 @@
+\documentclass[border=1.5mm]{standalone}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots,fillbetween}
+\usetikzlibrary{calc}
+\pgfplotsset{compat=1.18}
+
+% Editable Figure 1 draft: native TikZ and pgfplots with vector text and curves.
+\definecolor{dark}{HTML}{26313C}
+\definecolor{purple}{HTML}{55518E}
+\definecolor{muted}{HTML}{626D79}
+\definecolor{teal}{HTML}{007E87}
+\definecolor{purplefill}{HTML}{F0EFF7}
+\definecolor{encodergray}{HTML}{87919B}
+
+\pgfplotsset{
+  every axis/.append style={
+    font=\sffamily,
+    axis line style={draw=dark,line width=.45pt},
+    axis x line=bottom,
+    axis y line=left,
+    tick style={draw=muted,line width=.4pt},
+    tick label style={font=\scriptsize,text=muted},
+    label style={font=\scriptsize,text=dark},
+    title style={font=\footnotesize,text=dark,yshift=-1pt},
+    ymajorgrids=false,
+    xmajorgrids=false,
+    clip=true,
+    scaled ticks=false,
+  },
+  targetline/.style={dark,line width=.85pt,dashed},
+  trainedline/.style={purple,line width=.95pt,mark=*,mark size=1.05pt,
+    mark options={fill=purple,draw=purple}},
+  encoderline/.style={encodergray,line width=.8pt,densely dotted},
+  medianline/.style={purple,line width=.95pt},
+}
+
+% One shared legend serves both panels. Teal triangles mark training conditions.
+\newcommand{\profilelegend}{%
+  \begin{tikzpicture}[baseline=-.45ex]
+    \draw[draw=dark,line width=.85pt,dashed] (0,0)--(5mm,0);
+  \end{tikzpicture}\,Target\hspace{2mm}
+  \begin{tikzpicture}[baseline=-.45ex]
+    \draw[draw=purple,line width=.95pt] (0,0)--(5mm,0);
+    \fill[purple] (2.5mm,0) circle (.65pt);
+  \end{tikzpicture}\,Trained\hspace{2mm}
+  \begin{tikzpicture}[baseline=-.45ex]
+    \draw[draw=encodergray,line width=.8pt,densely dotted] (0,0)--(5mm,0);
+  \end{tikzpicture}\,Encoder-only\hspace{2mm}
+  \begin{tikzpicture}[baseline=-.45ex]
+    \fill[teal] (2.5mm,1mm)--(1.5mm,-.8mm)--(3.5mm,-.8mm)--cycle;
+  \end{tikzpicture}\,Training conditions%
+}
+
+\pgfplotstableread[col sep=comma]{data/profile_10.csv}\profileten
+\pgfplotstableread[col sep=comma]{data/profile_40.csv}\profileforty
+\pgfplotstableread[col sep=comma]{data/profile_70.csv}\profileseventy
+\pgfplotstableread[col sep=comma]{data/errors.csv}\errors
+
+\begin{document}
+\sffamily
+\begin{minipage}{180mm}
+\noindent
+\begin{minipage}[t]{111mm}
+  \vspace{0pt}\textbf{(a) Conditional translation}\\[-1mm]
+  {\scriptsize\color{muted}One shared unitary}
+\end{minipage}\hfill
+\begin{minipage}[t]{66mm}
+  \vspace{0pt}\textbf{(b) Held-out TVD}\\[-1mm]
+  {\scriptsize\color{muted}10-seed median and IQR}
+\end{minipage}
+
+\vspace{1mm}
+\begin{center}
+  {\scriptsize\profilelegend}
+\end{center}
+\vspace{-1mm}
+
+\noindent
+\begin{minipage}[t]{111mm}
+  \vspace{0pt}
+  \begin{tikzpicture}[baseline=(left-axis-top)]
+    \begin{groupplot}[
+      group style={group size=3 by 1,horizontal sep=5mm},
+      scale only axis,
+      width=28.8mm,height=32mm,
+      xmin=0,xmax=16,ymin=0,ymax=.30,
+      xtick={0,8,16},ytick={0,.1,.2,.3},
+      xlabel={},
+      enlargelimits=false,
+      scaled y ticks=false,
+    ]
+      \nextgroupplot[title={$c=0.129$},ylabel={$P(K=k)$}]
+        \coordinate (left-axis-top) at (rel axis cs:0,1);
+        \addplot[targetline] table[x=k,y=target] {\profileten};
+        \addplot[trainedline] table[x=k,y=trained] {\profileten};
+        \addplot[encoderline] table[x=k,y=encoder] {\profileten};
+      \nextgroupplot[title={$c=0.504$},yticklabels=\empty]
+        \addplot[targetline] table[x=k,y=target] {\profileforty};
+        \addplot[trainedline] table[x=k,y=trained] {\profileforty};
+        \addplot[encoderline] table[x=k,y=encoder] {\profileforty};
+      \nextgroupplot[title={$c=0.879$},yticklabels=\empty]
+        \addplot[targetline] table[x=k,y=target] {\profileseventy};
+        \addplot[trainedline] table[x=k,y=trained] {\profileseventy};
+        \addplot[encoderline] table[x=k,y=encoder] {\profileseventy};
+    \end{groupplot}
+    \node[font=\scriptsize,text=dark] at ($(group c2r1.south)+(0,-4.5mm)$)
+      {Hamming weight $k$};
+  \end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[t]{66mm}
+  \vspace{-1.6mm}
+  \begin{tikzpicture}[baseline=(right-axis-top)]
+    \begin{axis}[
+      scale only axis,
+      width=46.5mm,height=32mm,
+      xmin=0,xmax=1,ymin=0,ymax=.15,
+      xtick={0,.25,.5,.75,1},
+      xticklabels={$0$,$.25$,$.5$,$.75$,$1$},
+      ytick={0,.05,.10,.15},yticklabels={$0$,$0.05$,$0.10$,$0.15$},
+      xlabel={Condition $c$},ylabel={Hamming-profile TVD},
+      title={\strut},
+      enlargelimits=false,
+      scaled y ticks=false,
+      clip=false,
+    ]
+      \coordinate (right-axis-top) at (rel axis cs:0,1);
+      \addplot[name path=upper,draw=none] table[x=c,y=q75] {\errors};
+      \addplot[name path=lower,draw=none] table[x=c,y=q25] {\errors};
+      \addplot[draw=none,fill=purple,fill opacity=.15] fill between[of=upper and lower];
+      \addplot[medianline] table[x=c,y=median] {\errors};
+      \addplot[
+        only marks,mark=triangle*,mark size=1.4pt,color=teal,
+        mark options={fill=teal,draw=teal},
+      ] coordinates {
+        (0,0.002) (0.25,0.002) (0.5,0.002) (0.75,0.002) (1,0.002)
+      };
+    \end{axis}
+  \end{tikzpicture}
+\end{minipage}
+\end{minipage}
+\end{document}
