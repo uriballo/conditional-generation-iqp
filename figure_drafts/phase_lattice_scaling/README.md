@@ -1,6 +1,6 @@
 # Phase-encoded lattice plots
 
-These plots use the frozen September 30 phase-encoded scaling campaign. The paper assets are `../../paper/figures/curie_weiss_scaling.pdf` and `curie_weiss_ancilla.pdf`, each with a PNG preview. The adjacent `per_condition_mmd.pdf` has separate training and held-out pages; `train_held_out_mmd.pdf` compares the grid averages. These diagnostics are not manuscript figures.
+These plots use the frozen September 30 phase-encoded scaling campaign. The paper assets are `../../paper/figures/curie_weiss_lattice_scaling_mmd.pdf` and `curie_weiss_ancilla_tvd.pdf`, each with a PNG preview. The adjacent `per_condition_mmd.pdf` has separate training and held-out pages; `train_held_out_mmd.pdf` compares the grid averages. These diagnostics are not manuscript figures.
 
 `figure_data.json` contains the exact plotted per-seed arrays, input audit hashes and original plotting-source hash. `provenance.json` binds these arrays and delivered files to the sealed campaign. Full run directories and checkpoints are local results and are not part of this export.
 
@@ -27,8 +27,10 @@ To regenerate with NumPy, Matplotlib and optional LaTeX, run from the repository
 python figure_drafts/phase_lattice_scaling/render.py --output-root /tmp/phase-lattice-plots
 ```
 
+Only the ancillary and held-out scaling plots are written to the requested output root. Training and condition diagnostics stay in this source directory.
+
 The standalone renderer needs neither the IQP library nor JAX nor raw experiment runs. It reproduces the exported curves and design from the recorded arrays. The committed PDFs are the reviewed publication assets; a later regeneration can differ in metadata and font rendering across software environments. Y axes autoscale to the curves and IQR bands; per-condition panels may have different y limits.
 
-The aggregate training plot, `curie_weiss_scaling_train.pdf`, uses the same design and seed median/IQR aggregation as the held-out plot. It averages the four training temperatures; the held-out plot averages its five different temperatures.
+The optional aggregate training plot, `training_mmd.pdf`, stored in this source directory, uses the same design and seed median/IQR aggregation as the held-out plot. It averages the four training temperatures; the held-out plot averages its five different temperatures.
 
 The ancilla and aggregate scaling plots have no panel titles.

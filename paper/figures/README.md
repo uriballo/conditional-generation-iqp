@@ -1,25 +1,15 @@
 # Manuscript figures
 
-The following PDFs are the current manuscript assets and approved alternatives. The complete-graph Curie-Weiss benchmark remains in the paper. The Gaussian uses its updated lattice; the ancilla and scaling panels are now separate and use the general product phase encoder.
+This directory contains only the five figures included in the handcrafted manuscript. PNGs are previews of the same figures. All numerical fit plots and metrics use raw distributions without probability postprocessing.
 
-| Asset | Content |
+| PDF | Content |
 | --- | --- |
-| `F1.pdf` | Conditional IQP workflow, retained unchanged. |
-| `gaussian_intro.pdf` | Open 4 by 4 lattice, 40 phases; seed 17100 profiles at three held-out conditions, with no TVD panel. |
-| `curie_phase_comparison_raw.pdf` | Author-approved raw comparison, 136-phase complete graph; encoder, shared, independent conditional and independent ordinary-input panels. Exact profiles are averaged across three seeds without postprocessing. New training budget: 2,048 masks, 2,048 reference draws, expected weights 2, 4, 6. |
-| `curie_phase_comparison_flip.pdf` | Compatibility alias containing the identical raw figure. The legacy filename no longer denotes global-flip mixing. Existing manuscript includegraphics calls continue to work. |
-| `curie_weiss_ancilla.pdf` | Sixteen visible qubits, mixed visible-ancilla phases, general product phase input on every wire; three seeds, exact raw bitstring TVD after ancillary marginalization. Only the mixed coupling curve is shown, with the visible-qubit count annotated inside the top right. |
-| `curie_weiss_scaling.pdf` | General product phase input, open lattices, no ancillas; independent held-out MMD trajectories for 64, 128, 256, 512, 1024, 2048 qubits, three seeds per size, without a panel title. |
-| `curie_weiss_scaling_train.pdf` | Optional training-grid counterpart with the same six sizes, seed median/IQR design, separate temperature-grid averages, automatic y-range, and no panel title. |
+| `conditional_iqp_workflow.pdf` | Conditional input encoder, shared IQP unitary, and training workflow. |
+| `gaussian_translation_profiles.pdf` | Sixteen-qubit Gaussian translation with an open 4 by 4 lattice and 40 phases. |
+| `curie_weiss_model_comparison.pdf` | Raw encoder-only, shared conditional, independent conditional, and independent ordinary-input profiles. New 2,048-mask/2,048-reference budget and expected weights 2, 4, 6. |
+| `curie_weiss_ancilla_tvd.pdf` | Exact raw visible-bitstring TVD with sixteen visible lattice qubits and mixed visible-ancilla coupling. Prior accepted training protocol retained until replacement results are reviewed. |
+| `curie_weiss_lattice_scaling_mmd.pdf` | Held-out sampled MMD trajectories for open lattices from 64 to 2048 qubits. Prior accepted training protocol retained until replacement results are reviewed. |
 
-The former `curie_weiss_ancilla_scaling.pdf` and JSON sidecar remain archived. They are superseded by the two separate plots and their associated export; their informed-input scaling results are not used in the current manuscript.
+The symmetry illustration remains inline in the manuscript LaTeX. It describes actual output symmetry rather than postprocessing. Shared Curie--Weiss predictions are held out; independent comparisons are in-sample.
 
-Editable Gaussian TikZ/pgfplots source and audited CSVs are in `../../figure_drafts/gaussian_intro/`. The separate ancilla/scaling export, standalone renderer, per-condition diagnostics and train/held-out comparison are in `../../figure_drafts/phase_lattice_scaling/`. Curie-Weiss JSON sidecars preserve per-seed profile inputs. `provenance.json` binds publication PDFs to checksums and campaign identities. Full checkpoints remain local run artifacts.
-
-Mixed ancilla banks have 40+16r phases. The ancilla plot shows the median/IQR across seeds 410, 411, 412 of exact raw bitstring TVD first averaged across the three evaluation temperatures. Scaling plots show the median/IQR across seeds 100, 101, 102 after averaging five independent evaluation banks within each seed. MMD values are not comparable between sizes; high-beta discrepancies remain. The inline three-qubit symmetry circuit and bar chart stay in the manuscript LaTeX.
-
-## Raw distribution policy
-
-All current numerical-fit figures and reported fit metrics use raw model distributions. No global-bit-flip mixing or other probability postprocessing is applied. The input-induced symmetry illustration concerns the circuit's actual output symmetry and does not require postprocessing. The new main comparison and its raw-only source export are in `../../figure_drafts/curie_weiss_balanced/`. The ancestor version of the main comparison remains available in Git history. Ancilla and scaling figures currently retain their earlier training protocol; those raw plots will be updated separately after review of the replacement results.
-
-The updated shared model's mean exact raw profile TVDs at beta 0.4, 1.0, 1.6 are 0.137101, 0.058510, 0.244712. These are means of per-seed TVDs, not TVDs of the mean plotted profile. Handcrafted manuscript numerical claims must be manually reconciled with the raw-only JSON sidecar. Shared predictions are held out; independent fits are in-sample.
+The [filename migration and checksums](../../figure_drafts/paper_figures/provenance.json) bind the renamed assets to the same reviewed PDF/PNG bytes. The [LaTeX filename list](../../figure_drafts/paper_figures/figure_paths.tex) supports manual manuscript integration. The Gaussian editable source is in `../../figure_drafts/gaussian_intro/`, the raw comparison export in `../../figure_drafts/curie_weiss_balanced/`, and the ancillary/scaling export in `../../figure_drafts/phase_lattice_scaling/`. Optional training/condition diagnostics are kept with that export; the old combined panel is in `../../figure_drafts/archived_ancilla_scaling/`.

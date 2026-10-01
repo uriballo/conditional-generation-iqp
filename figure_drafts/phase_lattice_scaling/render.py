@@ -256,13 +256,12 @@ def main():
     args = parser.parse_args()
     ancilla, scaling = _validate(json.loads(args.data.read_text()))
     args.output_root.mkdir(parents=True, exist_ok=True)
-    render_ancilla(ancilla, args.output_root / "curie_weiss_ancilla")
-    render_scaling(scaling, args.output_root / "curie_weiss_scaling")
-    render_scaling(
-        scaling, args.output_root / "curie_weiss_scaling_train", grid="training"
-    )
-    render_diagnostics(scaling, args.output_root / "per_condition_mmd")
-    render_train_comparison(scaling, args.output_root / "train_held_out_mmd")
+    render_ancilla(ancilla, args.output_root / "curie_weiss_ancilla_tvd")
+    render_scaling(scaling, args.output_root / "curie_weiss_lattice_scaling_mmd")
+    draft_dir = Path(__file__).parent
+    render_scaling(scaling, draft_dir / "training_mmd", grid="training")
+    render_diagnostics(scaling, draft_dir / "per_condition_mmd")
+    render_train_comparison(scaling, draft_dir / "train_held_out_mmd")
 
 
 if __name__ == "__main__":

@@ -175,7 +175,7 @@ def main() -> None:
     )
     args = parser.parse_args()
     data = _validate(json.loads(args.data.read_text()))
-    render_comparison(data, args.output / "curie_phase_comparison_raw")
+    render_comparison(data, args.output / "curie_weiss_model_comparison")
 
 
 if __name__ == "__main__":

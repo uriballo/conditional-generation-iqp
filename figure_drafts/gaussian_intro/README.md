@@ -1,7 +1,7 @@
 # Gaussian introductory figure
 
 This editable source generates the installed manuscript figure
-`paper/figures/gaussian_intro.pdf`. It uses the default 40-parameter open 4x4
+`paper/figures/gaussian_translation_profiles.pdf`. It uses the default 40-parameter open 4x4
 square lattice: 16 one-body phases and 24 horizontal/vertical nearest-neighbor
 phases. The campaign has 10 seeds, 300 optimization updates, and 30 jobs for
 trained, encoder-only, and frozen-initial-phase arms.
@@ -33,6 +33,7 @@ Build with:
 
 ```sh
 latexmk -pdf -interaction=nonstopmode -halt-on-error gaussian_intro.tex
+cp gaussian_intro.pdf ../../paper/figures/gaussian_translation_profiles.pdf
 ```
 
 To regenerate the CSV data from audited run files:
