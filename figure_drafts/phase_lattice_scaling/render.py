@@ -68,7 +68,6 @@ def _axes(ax):
     ax.set_xlabel("Optimizer update")
     ax.set_xticks((0, 1000, 2000, 3000, 4000, 5000))
     ax.ticklabel_format(axis="y", style="sci", scilimits=(-2, 2))
-    ax.axhline(0, color=".6", lw=0.6, ls=":")
 
 
 def _validate(payload: dict) -> tuple[dict, dict]:
@@ -129,26 +128,28 @@ def render_ancilla(ancilla: dict, output: Path):
     ax.set_xlabel("Ancilla qubits $r$")
     ax.set_ylabel("Exact bitstring TVD")
     ax.set_xticks((0, 1, 3, 6, 10))
-    ax.set_ylim(bottom=0)
     ax.spines[["top", "right"]].set_visible(False)
     fig.savefig(output.with_suffix(".pdf"))
     fig.savefig(output.with_suffix(".png"))
     plt.close(fig)
 
 
-def render_scaling(data: dict, output: Path):
+def render_scaling(data: dict, output: Path, *, grid: str = "held_out"):
+    if grid not in ("training", "held_out"):
+        raise ValueError("grid must be training or held_out")
     fig, scale = plt.subplots(figsize=(85 * MM, 70 * MM), layout="constrained")
     for n in data["sizes"]:
         color = OKABE_ITO[list(SIZES).index(n)]
         _curve(
             scale,
             STEPS,
-            data["curves"][str(n)]["held_out"]["overall_per_seed"],
+            data["curves"][str(n)][grid]["overall_per_seed"],
             color,
             rf"$n={n}$",
         )
-    scale.set_title("Lattice scaling", fontsize=9)
-    scale.set_ylabel("Held-out sampled MMD$^2$")
+    label = "Held-out" if grid == "held_out" else "Training"
+    scale.set_title(f"Lattice scaling ({label.lower()})", fontsize=9)
+    scale.set_ylabel(f"{label} sampled MMD$^2$")
     _axes(scale)
     scale.legend(fontsize=7, ncol=2)
     if data["partial"]:
@@ -252,6 +253,9 @@ def main():
     args.output_root.mkdir(parents=True, exist_ok=True)
     render_ancilla(ancilla, args.output_root / "curie_weiss_ancilla")
     render_scaling(scaling, args.output_root / "curie_weiss_scaling")
+    render_scaling(
+        scaling, args.output_root / "curie_weiss_scaling_train", grid="training"
+    )
     render_diagnostics(scaling, args.output_root / "per_condition_mmd")
     render_train_comparison(scaling, args.output_root / "train_held_out_mmd")
 

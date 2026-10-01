@@ -4,8 +4,8 @@
     "F1.pdf": "c77826553adc66a0126fcfc8aad78f7b3469eebde192b6e222534aba5c600522",
     "gaussian_intro.pdf": "b3ca1d5832a72dd47e3835ed915409a8c726a82acb5206b1cb28a0e939c207c6",
     "curie_phase_comparison_flip.pdf": "8e8989aec913082e54d6560d871fb76ba503e579ba49b891b31182c1e82ce49c",
-    "curie_weiss_ancilla.pdf": "735f7619586e733702c5747aeb0c2cd1dfe02f160f8baccc320a40c1547bf99b",
-    "curie_weiss_scaling.pdf": "6c4899cc2e291b0619ed451991632a2275e0847f3e4758713662f62bd35f8d0b"
+    "curie_weiss_ancilla.pdf": "0b6e29a0ca63589d0603c0b0c0fc921a0e2b86b96007165584a79ce8d1029536",
+    "curie_weiss_scaling.pdf": "d571597a893c9528f5634bf2649639dfef14d1abde8571ae1d24497e8ab1d7a3"
   },
   "gaussian_manifest_sha256": "814f6ddbf6a5eea02feb09fc213283fb9d159eb035b95d4b47e4364356d1b4a9",
   "cw_manifest_sha256": "9d5165767be1fc36257bba60a7abc3903bd0d56e6b7c8698976427d878484aba",
@@ -16,5 +16,9 @@
   },
   "phase_lattice_scaling_manifest_sha256": "6a686a2df72b43ee48224b780ff74974f46ed5364c8cc322e1b556daaf6dc6bb",
   "phase_lattice_scaling_export": "../../figure_drafts/phase_lattice_scaling/provenance.json",
-  "regeneration_date": "2026-10-01"
+  "regeneration_date": "2026-10-01",
+  "alternate_pdf_sha256": {
+    "curie_weiss_scaling_train.pdf": "0081871068b54db6da2318e9770ecd8c6bbe3877b8e7476687b0b5babbcbdceb"
+  },
+  "y_axis_limits": "automatic; curves and IQR bands"
 }

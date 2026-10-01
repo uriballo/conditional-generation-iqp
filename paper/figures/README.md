@@ -9,6 +9,7 @@ These five PDFs are the current assets referenced by the handcrafted author draf
 | `curie_phase_comparison_flip.pdf` | Retained 136-phase complete graph; encoder, shared, independent conditional and independent ordinary-input panels. Curves average profiles from three seeds after equal global-flip mixing. Manuscript TVDs use raw laws. |
 | `curie_weiss_ancilla.pdf` | Sixteen visible qubits, mixed visible-ancilla phases, general product phase input on every wire; three seeds, exact raw bitstring TVD after ancillary marginalization. Only the mixed coupling curve is shown. |
 | `curie_weiss_scaling.pdf` | General product phase input, open lattices, no ancillas; independent held-out MMD trajectories for 64, 128, 256, 512, 1024, 2048 qubits, three seeds per size. |
+| `curie_weiss_scaling_train.pdf` | Optional training-grid counterpart with the same six sizes, seed median/IQR design, separate temperature-grid averages, and automatic y-range. |
 
 The former `curie_weiss_ancilla_scaling.pdf` and JSON sidecar remain archived. They are superseded by the two separate plots and their associated export; their informed-input scaling results are not used in the current manuscript.
 

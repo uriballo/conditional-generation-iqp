@@ -27,4 +27,6 @@ To regenerate with NumPy, Matplotlib and optional LaTeX, run from the repository
 python figure_drafts/phase_lattice_scaling/render.py --output-root /tmp/phase-lattice-plots
 ```
 
-The standalone renderer needs neither the IQP library nor JAX nor raw experiment runs. It reproduces the exported curves and design from the recorded arrays. The original PDFs remain the reviewed publication assets; a later regeneration can differ in metadata and font rendering across software environments.
+The standalone renderer needs neither the IQP library nor JAX nor raw experiment runs. It reproduces the exported curves and design from the recorded arrays. The committed PDFs are the reviewed publication assets; a later regeneration can differ in metadata and font rendering across software environments. Y axes autoscale to the curves and IQR bands; per-condition panels may have different y limits.
+
+The aggregate training plot, `curie_weiss_scaling_train.pdf`, uses the same design and seed median/IQR aggregation as the held-out plot. It averages the four training temperatures; the held-out plot averages its five different temperatures.
