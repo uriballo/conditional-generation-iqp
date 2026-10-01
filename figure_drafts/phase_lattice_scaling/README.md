@@ -19,7 +19,7 @@ Each of seeds 100, 101, 102 has three 5000-update restarts. The training protoco
 
 Independent reporting uses five evaluation banks per seed. The displayed line and band are the seed median and IQR after averaging banks within each seed. Training conditions are beta 0.6, 0.8, 1.2, 1.4. Held-out conditions are beta 0.95, 1, 1.05, 0.4, 1.6. Unbiased negative estimates are retained. The train and held-out curves average different temperature grids, so their difference is not a conventional generalization gap. Bandwidths vary with size, making absolute MMD values unsuitable for cross-size fidelity comparison. Convergence supports classical optimization feasibility; substantial high-beta residuals remain.
 
-The ancilla figure has sixteen visible qubits on an open 4 by 4 lattice. The same phase encoder acts on all 16+r wires. Every visible qubit couples to every ancilla, with 40+16r parameters and no ancilla-only phases. Only the mixed coupling bank is shown, at r=0, 1, 3, 6, 10. Exact raw bitstring TVD is averaged over beta 0.4, 1, 1.6 within each seed410,411,412, then summarized by seed median and IQR. The ancillas are marginalized. Increasing parameter count prevents interpreting this as a parameter-matched ancilla advantage.
+The ancilla figure has sixteen visible qubits on an open 4 by 4 lattice. The same phase encoder acts on all 16+r wires. Every visible qubit couples to every ancilla, with 40+16r parameters and no ancilla-only phases. Only the mixed coupling bank is shown, at r=0, 1, 3, 6, 10. Exact raw bitstring TVD is averaged over beta 0.4, 1, 1.6 within each seed 410, 411, 412, then summarized by seed median and IQR. The annotation "16 visible qubits" is placed inside the plot at the top right. The ancillas are marginalized. Increasing parameter count prevents interpreting this as a parameter-matched ancilla advantage.
 
 To regenerate with NumPy, Matplotlib and optional LaTeX, run from the repository root:
 
@@ -30,3 +30,5 @@ python figure_drafts/phase_lattice_scaling/render.py --output-root /tmp/phase-la
 The standalone renderer needs neither the IQP library nor JAX nor raw experiment runs. It reproduces the exported curves and design from the recorded arrays. The committed PDFs are the reviewed publication assets; a later regeneration can differ in metadata and font rendering across software environments. Y axes autoscale to the curves and IQR bands; per-condition panels may have different y limits.
 
 The aggregate training plot, `curie_weiss_scaling_train.pdf`, uses the same design and seed median/IQR aggregation as the held-out plot. It averages the four training temperatures; the held-out plot averages its five different temperatures.
+
+The ancilla and aggregate scaling plots have no panel titles.

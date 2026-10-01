@@ -7,10 +7,13 @@ phases. The campaign has 10 seeds, 300 optimization updates, and 30 jobs for
 trained, encoder-only, and frozen-initial-phase arms.
 
 The three profile panels use the lattice checkpoint from seed 17100 at
-conditions 0.1291667, 0.5041667, and 0.8791667. The error panel shows the
-pointwise median and interquartile range across all ten seeds. All 80 plotted
-conditions were held out from training and checkpoint selection. The editable
-TVD axis uses a 0 to 0.15 range.
+conditions 0.1291667, 0.5041667, and 0.8791667. These three conditions belong to the 80-condition held-out evaluation grid
+and were excluded from training and checkpoint selection. The figure follows the
+Curie--Weiss print style: serif Computer Modern text, black axes and labels,
+inward major and minor ticks, blue trained curves, neutral dashed targets, and
+dotted grey encoder-only curves. The retained `errors.csv` contains the
+ten-seed median and interquartile-range data as supporting data for the
+profiles-only figure, although it is not plotted here.
 
 The audited summary reports median seed-mean Hamming-profile TVD of 0.06697
 for the trained lattice, 0.29216 for encoder-only, and 0.30241 for frozen
@@ -32,6 +35,8 @@ Build with:
 latexmk -pdf -interaction=nonstopmode -halt-on-error gaussian_intro.tex
 ```
 
-The committed CSVs are the audited inputs for this PDF. Regenerating them
-from checkpoints requires the local campaign artifacts and experiment exporter,
-which are outside this figures-only commit.
+To regenerate the CSV data from audited run files:
+
+```sh
+uv run python figure_drafts/gaussian_intro/export_data.py
+```

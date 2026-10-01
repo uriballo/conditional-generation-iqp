@@ -124,7 +124,15 @@ def render_ancilla(ancilla: dict, output: Path):
         OKABE_ITO[0],
         "Mixed visible-ancilla coupling",
     )
-    ax.set_title("16 visible qubits", fontsize=9)
+    ax.text(
+        0.97,
+        0.97,
+        "16 visible qubits",
+        transform=ax.transAxes,
+        ha="right",
+        va="top",
+        fontsize=8,
+    )
     ax.set_xlabel("Ancilla qubits $r$")
     ax.set_ylabel("Exact bitstring TVD")
     ax.set_xticks((0, 1, 3, 6, 10))
@@ -148,12 +156,9 @@ def render_scaling(data: dict, output: Path, *, grid: str = "held_out"):
             rf"$n={n}$",
         )
     label = "Held-out" if grid == "held_out" else "Training"
-    scale.set_title(f"Lattice scaling ({label.lower()})", fontsize=9)
     scale.set_ylabel(f"{label} sampled MMD$^2$")
     _axes(scale)
     scale.legend(fontsize=7, ncol=2)
-    if data["partial"]:
-        scale.set_title("Lattice scaling (interim)", fontsize=9)
     fig.savefig(output.with_suffix(".pdf"))
     fig.savefig(output.with_suffix(".png"), dpi=300)
     plt.close(fig)

@@ -2,10 +2,10 @@
   "manuscript": "handcrafted author draft, separate phase-lattice scaling and ancillary figures, 2026-09-30",
   "pdf_sha256": {
     "F1.pdf": "c77826553adc66a0126fcfc8aad78f7b3469eebde192b6e222534aba5c600522",
-    "gaussian_intro.pdf": "b3ca1d5832a72dd47e3835ed915409a8c726a82acb5206b1cb28a0e939c207c6",
+    "gaussian_intro.pdf": "ab7cef1d4766936ef1e8a3f6eb860fbc48c7e22933fa5f55b9a849e61bfff68c",
     "curie_phase_comparison_flip.pdf": "8e8989aec913082e54d6560d871fb76ba503e579ba49b891b31182c1e82ce49c",
-    "curie_weiss_ancilla.pdf": "0b6e29a0ca63589d0603c0b0c0fc921a0e2b86b96007165584a79ce8d1029536",
-    "curie_weiss_scaling.pdf": "d571597a893c9528f5634bf2649639dfef14d1abde8571ae1d24497e8ab1d7a3"
+    "curie_weiss_ancilla.pdf": "b41371b48f9e0124273a30838c4c4da418353d2550cadfc69e427cc3d3b6b6d1",
+    "curie_weiss_scaling.pdf": "d6c7640a6f432fb3235e1353241dfa179a27b079f50fe1a9ac6508c323c9e11e"
   },
   "gaussian_manifest_sha256": "814f6ddbf6a5eea02feb09fc213283fb9d159eb035b95d4b47e4364356d1b4a9",
   "cw_manifest_sha256": "9d5165767be1fc36257bba60a7abc3903bd0d56e6b7c8698976427d878484aba",
@@ -18,7 +18,15 @@
   "phase_lattice_scaling_export": "../../figure_drafts/phase_lattice_scaling/provenance.json",
   "regeneration_date": "2026-10-01",
   "alternate_pdf_sha256": {
-    "curie_weiss_scaling_train.pdf": "0081871068b54db6da2318e9770ecd8c6bbe3877b8e7476687b0b5babbcbdceb"
+    "curie_weiss_scaling_train.pdf": "6bfbaedd4dc66e34e3ec4cff87e49dd3cf699c5f978fd0a5fcee7ea35b82dc9a"
   },
-  "y_axis_limits": "automatic; curves and IQR bands"
+  "y_axis_limits": "automatic; curves and IQR bands",
+  "presentation_revision": "Author-approved profiles-only Gaussian Figure 2 matching Curie--Weiss typography; ancilla/scaling titles removed, visible-qubit count inside ancilla plot. Scientific input arrays unchanged.",
+  "gaussian_source_sha256": "e47fd2e0fa98bf42e6dcefa01b4a5683d04110436cd423a241686598b5d93526",
+  "png_sha256": {
+    "gaussian_intro.png": "b70f7697a71870946cc055e003ffdec62a310b05302352458a15c43bbe37f0fa",
+    "curie_weiss_ancilla.png": "1da3814bbacd478b90f99959e9424493b94cde4a8368bdd4fff4b849e6025fb9",
+    "curie_weiss_scaling.png": "0b8c985f5eeaeb37036dc29a47e648f746f83031d9d1498fe2dab0e084c20e4c",
+    "curie_weiss_scaling_train.png": "926db7139755b20e83571445f22f8ca032ec73ed0b797e99f44c932d292ac800"
+  }
 }

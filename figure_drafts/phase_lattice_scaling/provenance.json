@@ -7,24 +7,24 @@
   "ancilla_audit_sha256": "40ee8284d40abd36f5cc92414777b4b05ea02ec2ad147e5e9eecb737f5206094",
   "original_plotting_source_sha256": "607f4a2a799f6d0cc35dd40f66651b19aa7fade88a72431057c309a111d65205",
   "source_of_truth": "reviewed complete-size audit export; raw checkpoints remain local",
-  "review": "Author-approved automatic-y held-out and aggregate training previews on 2026-10-01; all six PDF pages were visually reviewed by primary, and plots preserve the same input arrays and median/IQR summaries, with no zero baseline or data changes. Historical numerical replay and focused-test records are retained as historical validation.",
+  "review": "Author-approved title-free ancilla/scaling assets on 2026-10-01. Visible-qubit count is annotated inside the ancilla plot at top right. Input arrays and median/IQR summaries are unchanged.",
   "files": {
     "figure_drafts/phase_lattice_scaling/train_held_out_mmd.pdf": "576d16650d573bb80377257cedbe57af1405d4f19d767ae3df39babc2667f3dd",
     "figure_drafts/phase_lattice_scaling/per_condition_mmd.pdf": "5130962518eb297e5d84237babbaf3fc0b3d673ef04b1119b63bceff9f94e234",
     "figure_drafts/phase_lattice_scaling/per_condition_mmd_training.png": "c031c0e477aec72cbb647b2fa47a2c1032c2ae870d4e0ab24e121a058b419c96",
     "figure_drafts/phase_lattice_scaling/train_held_out_mmd.png": "9bed8ec17e589b029a1802ffc8b48ca51c32245d16eff3ca241ddfca25cdeeaf",
     "figure_drafts/phase_lattice_scaling/per_condition_mmd_held_out.png": "1db24068ef3c0c610b654bac1005d87a827b2ad401c5be9abd6247e03bac4a72",
-    "figure_drafts/phase_lattice_scaling/render.py": "3dcd21e68f4f4af6f2e7ccc11cd2cb1d494ebd46f5b872f98e5139682b4ac1b6",
+    "figure_drafts/phase_lattice_scaling/render.py": "11f56d7f019dc24e719c179b7130b2f8389ec26a4f0e2bf45ef37a3c247b7297",
     "figure_drafts/phase_lattice_scaling/figure_data.json": "4ddc2fd3d449b4f0d55c486d7525a6e3b196c714cfd28c542dda8c95bd0118b5",
-    "figure_drafts/phase_lattice_scaling/README.md": "141d40788d0ba00055c88e1393c60311937b3e26b90ac493b420bfa5f6803876",
-    "paper/figures/curie_weiss_scaling.pdf": "d571597a893c9528f5634bf2649639dfef14d1abde8571ae1d24497e8ab1d7a3",
-    "paper/figures/curie_weiss_scaling.png": "432f1aa030ae857f6c49fd81761aab5ba43d40cd19ac9d13efc6b28d905ee462",
-    "paper/figures/curie_weiss_scaling_train.pdf": "0081871068b54db6da2318e9770ecd8c6bbe3877b8e7476687b0b5babbcbdceb",
-    "paper/figures/curie_weiss_scaling_train.png": "33ada7fd3acd951f17dbd9d1080c3b97071efa45b434be32e7dcc869523095bf",
-    "paper/figures/curie_weiss_ancilla.pdf": "0b6e29a0ca63589d0603c0b0c0fc921a0e2b86b96007165584a79ce8d1029536",
-    "paper/figures/curie_weiss_ancilla.png": "fc15971161e0f915d9e8d43fc463e43e3b3a07f386737014a497be6c8515ec3a"
+    "figure_drafts/phase_lattice_scaling/README.md": "98bc5bf657b85352a54886cf21ca522e87ce272f677a96f6e8ac2541976f7544",
+    "paper/figures/curie_weiss_scaling.pdf": "d6c7640a6f432fb3235e1353241dfa179a27b079f50fe1a9ac6508c323c9e11e",
+    "paper/figures/curie_weiss_scaling.png": "0b8c985f5eeaeb37036dc29a47e648f746f83031d9d1498fe2dab0e084c20e4c",
+    "paper/figures/curie_weiss_scaling_train.pdf": "6bfbaedd4dc66e34e3ec4cff87e49dd3cf699c5f978fd0a5fcee7ea35b82dc9a",
+    "paper/figures/curie_weiss_scaling_train.png": "926db7139755b20e83571445f22f8ca032ec73ed0b797e99f44c932d292ac800",
+    "paper/figures/curie_weiss_ancilla.pdf": "b41371b48f9e0124273a30838c4c4da418353d2550cadfc69e427cc3d3b6b6d1",
+    "paper/figures/curie_weiss_ancilla.png": "1da3814bbacd478b90f99959e9424493b94cde4a8368bdd4fff4b849e6025fb9"
   },
   "standalone_renderer_validation": "Automatic-y held-out and aggregate training plots preserve the same saved input arrays, six-size median/IQR summaries, and design; no zero baseline or data changes. Five PNG identity and historical replay/test records retain their original historical scope; all six PDF pages were visually reviewed by primary.",
   "historical_numerical_validation": "Original campaign audit: initial/selected five-bank replays at n64/n128/n1024/n2048 seed100 discrepancy zero; 29 focused experiment checks passed before this presentation revision.",
-  "presentation_validation": "Six focused figure tests and Ruff passed for this axis/training-grid change; primary inspected all six final PDF pages. Approved aggregate held-out/training preview files retained byte for byte."
+  "presentation_validation": "Primary inspected PDF and PNG outputs; six focused figure tests and Ruff passed. Standalone renderer regenerated successfully from unchanged exported arrays."
 }

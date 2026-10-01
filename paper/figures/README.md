@@ -5,11 +5,11 @@ These five PDFs are the current assets referenced by the handcrafted author draf
 | Asset | Content |
 | --- | --- |
 | `F1.pdf` | Conditional IQP workflow, retained unchanged. |
-| `gaussian_intro.pdf` | Open 4 by 4 lattice, 40 phases; seed 17100 profiles and ten-seed pointwise median/IQR over 80 held-out conditions. |
+| `gaussian_intro.pdf` | Open 4 by 4 lattice, 40 phases; seed 17100 profiles at three held-out conditions, with no TVD panel. |
 | `curie_phase_comparison_flip.pdf` | Retained 136-phase complete graph; encoder, shared, independent conditional and independent ordinary-input panels. Curves average profiles from three seeds after equal global-flip mixing. Manuscript TVDs use raw laws. |
-| `curie_weiss_ancilla.pdf` | Sixteen visible qubits, mixed visible-ancilla phases, general product phase input on every wire; three seeds, exact raw bitstring TVD after ancillary marginalization. Only the mixed coupling curve is shown. |
-| `curie_weiss_scaling.pdf` | General product phase input, open lattices, no ancillas; independent held-out MMD trajectories for 64, 128, 256, 512, 1024, 2048 qubits, three seeds per size. |
-| `curie_weiss_scaling_train.pdf` | Optional training-grid counterpart with the same six sizes, seed median/IQR design, separate temperature-grid averages, and automatic y-range. |
+| `curie_weiss_ancilla.pdf` | Sixteen visible qubits, mixed visible-ancilla phases, general product phase input on every wire; three seeds, exact raw bitstring TVD after ancillary marginalization. Only the mixed coupling curve is shown, with the visible-qubit count annotated inside the top right. |
+| `curie_weiss_scaling.pdf` | General product phase input, open lattices, no ancillas; independent held-out MMD trajectories for 64, 128, 256, 512, 1024, 2048 qubits, three seeds per size, without a panel title. |
+| `curie_weiss_scaling_train.pdf` | Optional training-grid counterpart with the same six sizes, seed median/IQR design, separate temperature-grid averages, automatic y-range, and no panel title. |
 
 The former `curie_weiss_ancilla_scaling.pdf` and JSON sidecar remain archived. They are superseded by the two separate plots and their associated export; their informed-input scaling results are not used in the current manuscript.
 
