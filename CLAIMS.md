@@ -87,3 +87,9 @@ The manuscript figure directory now contains exactly five descriptive figure ass
 | Claim or decision | Evidence artifact | Figure | Limitation | Review status |
 | --- | --- | --- | --- | --- |
 | The workflow explicitly distinguishes reference-state sampling and amplitude ratios from classical evaluation of diagonal IQP phase differences and derivatives, with squared MMD losses averaged across matched conditions. The author retained the simpler output labels from the previous version. | `figure_drafts/conditional_iqp_overview/conditional_iqp_overview.tex`, `README.md` and `provenance.json`. | `paper/figures/conditional_iqp_workflow.pdf`. | The n-qubit circuit, computer icons and complete raw outcome strings are schematic. The generation pathway does not report a hardware experiment. Manuscript text and caption are integrated manually. | Author approved for publication, 2026-10-02. |
+
+## Author-approved workflow layout, 2026-10-02
+
+| Claim or qualification | Evidence | Figure | Limitation | Review status |
+| --- | --- | --- | --- | --- |
+| The workflow aligns the encoder columns, generation headings, and loss/data card heights; the sample heading wraps onto two lines. | `figure_drafts/conditional_iqp_overview/conditional_iqp_overview.tex`, `README.md`, and `provenance.json`. | `paper/figures/conditional_iqp_workflow.pdf`. | Layout revision only. Scientific labels, raw schematic outcomes, and circuit gate spacing are retained. The figure describes a generation pathway rather than a hardware experiment. | Author approved for publication, 2026-10-02. |

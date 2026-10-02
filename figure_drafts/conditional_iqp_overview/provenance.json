@@ -1,5 +1,5 @@
 {
-  "status": "Author-approved adversarial-review revision with simpler output wording; publication authorized 2026-10-02",
+  "status": "Author-approved aligned workflow prepared for publication on paper-figures-20260930.",
   "created": "2026-10-01",
   "inspiration": {
     "paper": "Train on classical, deploy on quantum: scaling generative quantum machine learning to a thousand qubits",
@@ -9,31 +9,35 @@
     "relationship": "Original native TikZ artwork inspired by abstract training-loop and deployment layout; no copied image assets"
   },
   "files": {
-    "README.md": "545b4d6c819096b170ef4db2b7a20a23e002657aee0ac95268c3a291aa4c7131",
-    "conditional_iqp_overview.pdf": "bc430067df344960a5e7cae45b78f5ea6ddbf5dd9838d3a9f882d81695925c2b",
-    "conditional_iqp_overview.png": "16e306f833182a98dd8efc22681968a40e6b6cb2349a7bc5711a0e6174248bac",
-    "conditional_iqp_overview.tex": "be87f625744137c9023f24511edef60785427a3addcf983c69125430adee9b3b"
+    "README.md": "b52ff38152ed5a6a5ccb989323478930772b7a4e2843a2ea5bd2a95d60de91ef",
+    "conditional_iqp_overview.pdf": "9a94322340333b816c866c0be032509364efdec4c3ec715a8ccfd1398e3ebb23",
+    "conditional_iqp_overview.png": "efd913d512d0d94ef035a2d0f4ce9897e2809ed52a9438cecd3ccccf6bb794c1",
+    "conditional_iqp_overview.tex": "e58c8dc3764bde2c3ef43b605cb7f49b755fff6d5f8dabc2410ce4ea3e89184f"
   },
   "checks": {
     "pdflatex": "Passed; no LaTeX/font/overfull/underfull warnings.",
-    "visual_review": "Latest 300-dpi PNG inspected after restoring Condition c_i=c_2 and Samples for chosen c_i: no overlaps or clipping; precise reference/phase labels and large gates retained.",
-    "fonts": "name                                 type              encoding         emb sub uni object ID\n------------------------------------ ----------------- ---------------- --- --- --- ---------\nJJYXRN+CMBX8                         Type 1            Builtin          yes yes yes      7  0\nZSKIQT+CMMI8                         Type 1            Builtin          yes yes yes      8  0\nPXZVCT+CMSY6                         Type 1            Builtin          yes yes yes      9  0\nEPVPHJ+CMMI6                         Type 1            Builtin          yes yes yes     10  0\nLMNAYA+CMSY8                         Type 1            Builtin          yes yes yes     11  0\nHADBXZ+CMR8                          Type 1            Builtin          yes yes yes     12  0\nDLQJTV+CMMIB8                        Type 1            Builtin          yes yes yes     13  0\nCDTZLJ+CMR10                         Type 1            Builtin          yes yes yes     14  0\nAXLZUG+CMR7                          Type 1            Builtin          yes yes yes     15  0\nXZJAYU+CMMI10                        Type 1            Builtin          yes yes yes     16  0\nVLJWOW+CMTT8                         Type 1            Builtin          yes yes yes     17  0\nNEUYYC+CMBX9                         Type 1            Builtin          yes yes yes     18  0\nURLTUL+CMMI7                         Type 1            Builtin          yes yes yes     19  0\nPJZRLC+CMR6                          Type 1            Builtin          yes yes yes     20  0\n",
+    "visual_review": "Full 300-dpi trial and equal-scale comparison inspected. Encoder columns and generation headings align, card heights match, arrows clear frame borders, and the two-line sample heading has space. Publication assets are byte-identical to the author-approved trial.",
+    "fonts": "name                                 type              encoding         emb sub uni object ID\n------------------------------------ ----------------- ---------------- --- --- --- ---------\nKNBGNQ+CMBX8                         Type 1            Builtin          yes yes yes      7  0\nNWKAUZ+CMMI8                         Type 1            Builtin          yes yes yes      8  0\nPXZVCT+CMSY6                         Type 1            Builtin          yes yes yes      9  0\nEPVPHJ+CMMI6                         Type 1            Builtin          yes yes yes     10  0\nLMNAYA+CMSY8                         Type 1            Builtin          yes yes yes     11  0\nHADBXZ+CMR8                          Type 1            Builtin          yes yes yes     12  0\nDLQJTV+CMMIB8                        Type 1            Builtin          yes yes yes     13  0\nCDTZLJ+CMR10                         Type 1            Builtin          yes yes yes     14  0\nAXLZUG+CMR7                          Type 1            Builtin          yes yes yes     15  0\nXZJAYU+CMMI10                        Type 1            Builtin          yes yes yes     16  0\nVLJWOW+CMTT8                         Type 1            Builtin          yes yes yes     17  0\nWWHZLW+CMBX9                         Type 1            Builtin          yes yes yes     18  0\nDAYBWG+CMMI9                         Type 1            Builtin          yes yes yes     19  0\nURLTUL+CMMI7                         Type 1            Builtin          yes yes yes     20  0\nPJZRLC+CMR6                          Type 1            Builtin          yes yes yes     21  0\n",
     "scientific_review": "Classical access uses H^{tensor n}|phi(c_i)>; upper phase evaluation uses D_G(theta), rather than depicting classical construction of the full output state. MMD squared averages condition-matched losses. Each schematic output string is a complete independent shot; n-qubit register shown schematically.",
     "illustrative_elements": "Raw bitstrings, n-qubit circuit wires and monitor/atom icons are schematic.",
     "original_paper_workflow_sha256": "c77826553adc66a0126fcfc8aad78f7b3469eebde192b6e222534aba5c600522",
     "existing_detailed_draft_retained": true,
-    "manuscript_source_updated": false
+    "manuscript_source_updated": false,
+    "approved_trial_byte_identity": true
   },
-  "pdfinfo": "Creator:         TeX\nProducer:        pdfTeX-1.40.29\nCreationDate:    Fri Oct  2 16:03:28 2026 CEST\nModDate:         Fri Oct  2 16:03:28 2026 CEST\nCustom Metadata: yes\nMetadata Stream: no\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           1\nEncrypted:       no\nPage size:       499.974 x 291.684 pts\nPage rot:        0\nFile size:       133449 bytes\nOptimized:       no\nPDF version:     1.7\n",
+  "pdfinfo": "Creator:         TeX\nProducer:        pdfTeX-1.40.29\nCreationDate:    Fri Oct  2 16:19:00 2026 CEST\nModDate:         Fri Oct  2 16:19:00 2026 CEST\nCustom Metadata: yes\nMetadata Stream: no\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           1\nEncrypted:       no\nPage size:       499.974 x 291.684 pts\nPage rot:        0\nFile size:       141828 bytes\nOptimized:       no\nPDF version:     1.7\n",
   "revision": {
     "date": "2026-10-02",
-    "reviewed_variant": "conditional_iqp_clarified_overview",
-    "author_decision": "Retain review revision with the previous bottom-right Condition c_i=c_2 and Samples for chosen c_i wording.",
+    "reviewed_variant": "conditional_iqp_column_aligned_overview",
+    "author_decision": "Approve aligned layout while retaining the previous bottom-right Condition c_i=c_2 and Samples for chosen c_i wording.",
+    "layout_approval": "Encoder columns, estimator outer-left alignment, generation baseline, MMD/data heights, and two-line samples heading reviewed and approved.",
     "requested_changes": [
-      "Publish author-approved adversarial-review improvements",
-      "Retain simpler original output labels"
+      "Align upper and lower encoder columns and outer left edges",
+      "Align generation headings on a common baseline",
+      "Match MMD and data-card heights",
+      "Wrap Conditional samples onto two lines"
     ],
-    "previous_pdf_sha256": "8fae7fab2851902f039f87c004f3900a619157f429b86d51f3dc67ad7d7699ad",
+    "previous_pdf_sha256": "bc430067df344960a5e7cae45b78f5ea6ddbf5dd9838d3a9f882d81695925c2b",
     "scientific_details": [
       "Reference state H^{tensor n}|phi(c_i)> explicit",
       "Classical evaluation of diagonal IQP phases distinct from full output-state construction",
@@ -47,8 +51,9 @@
     "branch": "paper-figures-20260930",
     "canonical_pdf": "../../paper/figures/conditional_iqp_workflow.pdf",
     "canonical_png": "../../paper/figures/conditional_iqp_workflow.png",
-    "previous_pdf_sha256": "8fae7fab2851902f039f87c004f3900a619157f429b86d51f3dc67ad7d7699ad",
-    "approved_pdf_sha256": "bc430067df344960a5e7cae45b78f5ea6ddbf5dd9838d3a9f882d81695925c2b",
-    "approved_png_sha256": "16e306f833182a98dd8efc22681968a40e6b6cb2349a7bc5711a0e6174248bac"
+    "previous_pdf_sha256": "bc430067df344960a5e7cae45b78f5ea6ddbf5dd9838d3a9f882d81695925c2b",
+    "approved_pdf_sha256": "9a94322340333b816c866c0be032509364efdec4c3ec715a8ccfd1398e3ebb23",
+    "approved_png_sha256": "efd913d512d0d94ef035a2d0f4ce9897e2809ed52a9438cecd3ccccf6bb794c1",
+    "previous_commit": "69ead98dd3c4352a36591a4f16c449e026cc5f15"
   }
 }

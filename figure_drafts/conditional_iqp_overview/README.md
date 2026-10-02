@@ -26,3 +26,5 @@ pdftoppm -png -singlefile -r 300 figure_drafts/conditional_iqp_overview/conditio
 ```
 
 Copy the reviewed PDF and PNG to their canonical paper paths. The PDF is vector artwork with embedded fonts. Build details, author approval and checksums are recorded in provenance.json.
+
+The author-approved layout aligns upper and lower encoder columns and outer left edges. The generation headings share a baseline; the MMD and training-data cards share top and bottom edges. Conditional samples wraps onto two lines. Scientific labels, raw schematic outcomes, circuit gates, and gate spacing are retained. The preceding publication is commit 69ead98d.
