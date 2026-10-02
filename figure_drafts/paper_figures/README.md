@@ -1,3 +1,5 @@
 # Paper figure inventory
 
 `provenance.json` records the five manuscript assets and their reviewed checksums. The original directory cleanup changed names and locations only. On 2026-10-02, the author approved replacing the workflow with the editable TikZ overview in `../conditional_iqp_overview/`; its exact reviewed PDF and PNG are the canonical workflow assets. Numerical plots are unchanged by this replacement. `figure_paths.tex` lists the new manuscript paths for manual integration. Legacy aliases are removed, so the handcrafted source needs these filename replacements. The author-approved raw-only comparison replaces the historical postprocessed main panel. Diagnostics and archived figures remain under their source exports rather than `paper/figures/`.
+
+The current workflow revision incorporates adversarial-review clarifications: the reference state is explicit, classical phase evaluation is distinct from the complete output state, squared MMD losses are matched by condition before averaging, and the generation circuit is schematic on n qubits. The author retained the simpler Condition c_i=c_2 and Samples for chosen c_i output wording.
