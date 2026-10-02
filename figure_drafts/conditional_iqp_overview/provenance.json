@@ -1,0 +1,60 @@
+{
+  "status": "Author-approved workflow; publication authorized 2026-10-02",
+  "created": "2026-10-01",
+  "inspiration": {
+    "paper": "Train on classical, deploy on quantum: scaling generative quantum machine learning to a thousand qubits",
+    "version": "arXiv:2503.02934v2",
+    "figure": 1,
+    "url": "https://arxiv.org/html/2503.02934v2#S1.F1",
+    "relationship": "Original native TikZ artwork inspired by abstract training-loop and deployment layout; no copied image assets"
+  },
+  "files": {
+    "README.md": "ef3a889732d2d4159e768b18e4fa8b2f91dd84509916de66e7933322f0bb1308",
+    "conditional_iqp_overview.pdf": "8fae7fab2851902f039f87c004f3900a619157f429b86d51f3dc67ad7d7699ad",
+    "conditional_iqp_overview.png": "497cce30603054147569468e1ca507957b02f413f0cf20754600f162781d9207",
+    "conditional_iqp_overview.tex": "ac5eae257748ca6ef9caeff2d69063358c1845d59ec97a955fa30620164359df"
+  },
+  "checks": {
+    "pdflatex": "Passed; no LaTeX/font warnings or overfull/underfull boxes",
+    "visual_review": "Final 300 dpi PNG inspected after removing the header note and spacing bottom-left boxes: both requested edits applied, no overlapping or clipped labels; source diff confirms all other geometry retained.",
+    "fonts": "name                                 type              encoding         emb sub uni object ID\n------------------------------------ ----------------- ---------------- --- --- --- ---------\nKRHNDE+CMBX10                        Type 1            Builtin          yes yes yes      7  0\nIZLHPO+CMBX8                         Type 1            Builtin          yes yes yes      8  0\nSFLUCH+CMMI10                        Type 1            Builtin          yes yes yes      9  0\nJZNSLW+CMMI7                         Type 1            Builtin          yes yes yes     10  0\nOVQCKB+CMR8                          Type 1            Builtin          yes yes yes     11  0\nWEKVKX+CMMI8                         Type 1            Builtin          yes yes yes     12  0\nEFDLOV+CMMI6                         Type 1            Builtin          yes yes yes     13  0\nLMNAYA+CMSY8                         Type 1            Builtin          yes yes yes     14  0\nHWFAFE+CMBX9                         Type 1            Builtin          yes yes yes     15  0\nYPSQTS+CMR6                          Type 1            Builtin          yes yes yes     16  0\nVLJWOW+CMTT8                         Type 1            Builtin          yes yes yes     17  0\nCDTZLJ+CMR10                         Type 1            Builtin          yes yes yes     18  0\nAXLZUG+CMR7                          Type 1            Builtin          yes yes yes     19  0\nYVQHSC+CMMIB6                        Type 1            Builtin          yes yes yes     20  0\n",
+    "scientific_review": "Scientific content unchanged. The compact data rows remain indexed by conditions. The outgoing arrow from highlighted c_2 depicts the chosen c_i, matching the output sample label. The shared learned phase vector is used by the estimator and generation; raw samples undergo no filtering or postprocessing.",
+    "illustrative_elements": "Condition boxes/tags, bitstrings and statistic bars are schematic; the c_2 arrow illustrates one conditioned call",
+    "original_paper_workflow_sha256": "c77826553adc66a0126fcfc8aad78f7b3469eebde192b6e222534aba5c600522",
+    "existing_detailed_draft_retained": true,
+    "manuscript_source_updated": false
+  },
+  "pdfinfo": "Creator:         TeX\nProducer:        pdfTeX-1.40.29\nCreationDate:    Thu Oct  1 17:58:11 2026 CEST\nModDate:         Thu Oct  1 17:58:11 2026 CEST\nCustom Metadata: yes\nMetadata Stream: no\nTagged:          no\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           1\nEncrypted:       no\nPage size:       496.657 x 312.547 pts\nPage rot:        0\nFile size:       133961 bytes\nOptimized:       no\nPDF version:     1.7\n",
+  "revision": {
+    "date": "2026-10-01",
+    "requested_changes": [
+      "Retain endorsed estimator, encoder, loss/optimizer/shared-parameter handoff and Conditional IQP layout",
+      "Remove generation selection dialog, Choose condition heading, Selected label and Example call label",
+      "Show plain vertical condition boxes with one outgoing arrow from highlighted c_2",
+      "Consolidate training examples into one compact condition-tagged card above MMD"
+    ],
+    "previous_artifacts": "results/conditional_iqp_compact_cards_20261001/before/",
+    "scientific_details": [
+      "Classical reference sampling and amplitude ratios come from the fixed encoder",
+      "Target data and model moments enter the MMD averaged over conditions",
+      "The optimizer updates shared theta; theta feeds the estimator and is reused after training",
+      "There is no direct loss-to-generation arrow",
+      "Generation illustrates c_i=c_2 through the highlighted box and its outgoing arrow; output labels match the supplied condition",
+      "Conditional IQP names the composite model, while only its learned unitary is required to have IQP form",
+      "Bitstrings and statistic bars are schematic, not empirical results"
+    ],
+    "cosmetic_refinements": [
+      "Removed One set of learned parameters text",
+      "Increased vertical condition-box center spacing from 0.57 to 0.75 coordinate units; middle box and its arrow remain aligned"
+    ]
+  },
+  "publication": {
+    "approved_date": "2026-10-02",
+    "branch": "paper-figures-20260930",
+    "canonical_pdf": "../../paper/figures/conditional_iqp_workflow.pdf",
+    "canonical_png": "../../paper/figures/conditional_iqp_workflow.png",
+    "previous_pdf_sha256": "c77826553adc66a0126fcfc8aad78f7b3469eebde192b6e222534aba5c600522",
+    "approved_pdf_sha256": "8fae7fab2851902f039f87c004f3900a619157f429b86d51f3dc67ad7d7699ad",
+    "approved_png_sha256": "497cce30603054147569468e1ca507957b02f413f0cf20754600f162781d9207"
+  }
+}

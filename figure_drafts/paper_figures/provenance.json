@@ -1,7 +1,7 @@
 {
   "manuscript": "handcrafted author draft, separate phase-lattice scaling and ancillary figures, 2026-09-30",
   "pdf_sha256": {
-    "conditional_iqp_workflow.pdf": "c77826553adc66a0126fcfc8aad78f7b3469eebde192b6e222534aba5c600522",
+    "conditional_iqp_workflow.pdf": "8fae7fab2851902f039f87c004f3900a619157f429b86d51f3dc67ad7d7699ad",
     "gaussian_translation_profiles.pdf": "ab7cef1d4766936ef1e8a3f6eb860fbc48c7e22933fa5f55b9a849e61bfff68c",
     "curie_weiss_model_comparison.pdf": "08d77dc25e6320717f9fd4bf539cb376d34150e9d2a997ad8bec77ce2a0a2107",
     "curie_weiss_ancilla_tvd.pdf": "b41371b48f9e0124273a30838c4c4da418353d2550cadfc69e427cc3d3b6b6d1",
@@ -27,7 +27,8 @@
     "gaussian_translation_profiles.png": "b70f7697a71870946cc055e003ffdec62a310b05302352458a15c43bbe37f0fa",
     "curie_weiss_ancilla_tvd.png": "1da3814bbacd478b90f99959e9424493b94cde4a8368bdd4fff4b849e6025fb9",
     "curie_weiss_lattice_scaling_mmd.png": "0b8c985f5eeaeb37036dc29a47e648f746f83031d9d1498fe2dab0e084c20e4c",
-    "curie_weiss_model_comparison.png": "87ab90bbe7e2651517730371b49a0f84b4b1bb4a44fb919c804f18c78bc6396c"
+    "curie_weiss_model_comparison.png": "87ab90bbe7e2651517730371b49a0f84b4b1bb4a44fb919c804f18c78bc6396c",
+    "conditional_iqp_workflow.png": "497cce30603054147569468e1ca507957b02f413f0cf20754600f162781d9207"
   },
   "historical_cw_manifest_sha256": "9d5165767be1fc36257bba60a7abc3903bd0d56e6b7c8698976427d878484aba",
   "balanced_main_export": "../curie_weiss_balanced/provenance.json",
@@ -51,5 +52,12 @@
     "curie_phase_comparison_raw.pdf": "curie_weiss_model_comparison.pdf",
     "curie_weiss_ancilla.pdf": "curie_weiss_ancilla_tvd.pdf",
     "curie_weiss_scaling.pdf": "curie_weiss_lattice_scaling_mmd.pdf"
+  },
+  "workflow_publication": {
+    "approved_date": "2026-10-02",
+    "source": "../conditional_iqp_overview/conditional_iqp_overview.tex",
+    "provenance": "../conditional_iqp_overview/provenance.json",
+    "previous_pdf_sha256": "c77826553adc66a0126fcfc8aad78f7b3469eebde192b6e222534aba5c600522",
+    "revision": "Author-approved editable workflow replaces the original artwork; numerical plots unchanged."
   }
 }
