@@ -1,0 +1,70 @@
+{
+  "manuscript": "handcrafted author draft, separate phase-lattice scaling and ancillary figures, 2026-09-30",
+  "pdf_sha256": {
+    "conditional_iqp_workflow.pdf": "9a94322340333b816c866c0be032509364efdec4c3ec715a8ccfd1398e3ebb23",
+    "gaussian_translation_profiles.pdf": "ab7cef1d4766936ef1e8a3f6eb860fbc48c7e22933fa5f55b9a849e61bfff68c",
+    "curie_weiss_model_comparison.pdf": "08d77dc25e6320717f9fd4bf539cb376d34150e9d2a997ad8bec77ce2a0a2107",
+    "curie_weiss_ancilla_tvd.pdf": "91b4160f9094964afc1584440e1ff9332869d375904b7d3e0931120698d0ce12",
+    "curie_weiss_lattice_scaling_mmd.pdf": "d6c7640a6f432fb3235e1353241dfa179a27b079f50fe1a9ac6508c323c9e11e"
+  },
+  "gaussian_manifest_sha256": "814f6ddbf6a5eea02feb09fc213283fb9d159eb035b95d4b47e4364356d1b4a9",
+  "cw_manifest_sha256": "e48a6304b06fadec89096386186d12cf3b5d4cb7b367da9060f2d8c2a1960cab",
+  "scope": "exactlyfive manuscriptfigures;PNGpreviews onlyofthese figures;metadataanddiagnostics outsidepaper/figures",
+  "symmetry_illustration": "inline LaTeX in manuscript, not a separate PDF asset",
+  "archived_pdf_sha256": {
+    "figure_drafts/archived_ancilla_scaling/curie_weiss_ancilla_scaling.pdf": "bf901d4a3270d9c61536c1d06c6affaaba01511204a608fb56b0d69491bc9325"
+  },
+  "phase_lattice_scaling_manifest_sha256": "6a686a2df72b43ee48224b780ff74974f46ed5364c8cc322e1b556daaf6dc6bb",
+  "phase_lattice_scaling_export": "../phase_lattice_scaling/provenance.json",
+  "regeneration_date": "2026-10-01",
+  "alternate_pdf_sha256": {
+    "figure_drafts/phase_lattice_scaling/training_mmd.pdf": "6bfbaedd4dc66e34e3ec4cff87e49dd3cf699c5f978fd0a5fcee7ea35b82dc9a"
+  },
+  "y_axis_limits": "automatic; curves and IQR bands",
+  "presentation_revision": "Descriptive filenames; unused figures outside paper/figures; legacy flip alias removed. Ancilla figure revised at author request from full visible-bitstring TVD to exact Hamming-profile TVD; primary visual review completed for the revised asset.",
+  "ancilla_metric_revision": {
+    "active_metric": "exact_raw_hamming_profile_tvd",
+    "historical_metric": "exact_raw_visible_bitstring_tvd",
+    "historical_pdf_sha256": "b41371b48f9e0124273a30838c4c4da418353d2550cadfc69e427cc3d3b6b6d1",
+    "historical_png_sha256": "1da3814bbacd478b90f99959e9424493b94cde4a8368bdd4fff4b849e6025fb9"
+  },
+  "gaussian_source_sha256": "e47fd2e0fa98bf42e6dcefa01b4a5683d04110436cd423a241686598b5d93526",
+  "png_sha256": {
+    "gaussian_translation_profiles.png": "b70f7697a71870946cc055e003ffdec62a310b05302352458a15c43bbe37f0fa",
+    "curie_weiss_ancilla_tvd.png": "3ae1f5ddfa3cf129231fdb20658d0bb6443495c055de90d1cc7abbd47e67f475",
+    "curie_weiss_lattice_scaling_mmd.png": "0b8c985f5eeaeb37036dc29a47e648f746f83031d9d1498fe2dab0e084c20e4c",
+    "curie_weiss_model_comparison.png": "87ab90bbe7e2651517730371b49a0f84b4b1bb4a44fb919c804f18c78bc6396c",
+    "conditional_iqp_workflow.png": "efd913d512d0d94ef035a2d0f4ce9897e2809ed52a9438cecd3ccccf6bb794c1"
+  },
+  "historical_cw_manifest_sha256": "9d5165767be1fc36257bba60a7abc3903bd0d56e6b7c8698976427d878484aba",
+  "balanced_main_export": "../curie_weiss_balanced/provenance.json",
+  "main_curie_weiss_postprocessing": "none; raw actual circuit probabilities",
+  "main_curie_weiss_review": "author approved raw preview 2026-10-01",
+  "main_training_protocol": {
+    "n_ops": 2048,
+    "mc_samples": 2048,
+    "bodyness_targets": [
+      2.0,
+      4.0,
+      6.0
+    ],
+    "steps": 2000,
+    "restarts": 3
+  },
+  "filename_migration": {
+    "F1.pdf": "conditional_iqp_workflow.pdf",
+    "gaussian_intro.pdf": "gaussian_translation_profiles.pdf",
+    "curie_phase_comparison_flip.pdf": "curie_weiss_model_comparison.pdf",
+    "curie_phase_comparison_raw.pdf": "curie_weiss_model_comparison.pdf",
+    "curie_weiss_ancilla.pdf": "curie_weiss_ancilla_tvd.pdf",
+    "curie_weiss_scaling.pdf": "curie_weiss_lattice_scaling_mmd.pdf"
+  },
+  "workflow_publication": {
+    "approved_date": "2026-10-02",
+    "source": "../conditional_iqp_overview/conditional_iqp_overview.tex",
+    "provenance": "../conditional_iqp_overview/provenance.json",
+    "previous_commit": "69ead98dd3c4352a36591a4f16c449e026cc5f15",
+    "previous_pdf_sha256": "bc430067df344960a5e7cae45b78f5ea6ddbf5dd9838d3a9f882d81695925c2b",
+    "revision": "Author-approved aligned layout: encoder columns and outer left edges aligned, generation headings share a baseline, MMD/data card heights match, and Conditional samples wraps onto two lines. Scientific content and circuit gate spacing retained."
+  }
+}

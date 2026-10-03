@@ -1,0 +1,31 @@
+{
+  "manifest_sha256": "e48a6304b06fadec89096386186d12cf3b5d4cb7b367da9060f2d8c2a1960cab",
+  "training_protocol": {
+    "n_ops": 2048,
+    "mc_samples": 2048,
+    "bodyness_targets": [
+      2.0,
+      4.0,
+      6.0
+    ],
+    "steps": 2000,
+    "restarts": 3,
+    "mask_refresh": "step"
+  },
+  "source_files": {
+    "figure_data.json": "bb3e41233936d5a09c1b3e3da4d167fbfc556e4b03ba3848eded9ac087dd3541",
+    "run_provenance.json": "cef9e710d233f939f516f1da604c559126166e5f0aa778ca100d67129140063b",
+    "render.py": "14e951e649f1fae261daf11ee5806e1cf41cfe6005c9f7a096d8d4e3af974d89"
+  },
+  "outputs": {
+    "curie_weiss_model_comparison.pdf": "08d77dc25e6320717f9fd4bf539cb376d34150e9d2a997ad8bec77ce2a0a2107",
+    "curie_weiss_model_comparison.png": "87ab90bbe7e2651517730371b49a0f84b4b1bb4a44fb919c804f18c78bc6396c"
+  },
+  "postprocessing": "none",
+  "summary": "mean raw Hamming-weight profiles across seeds410,411,412; exact per-seed raw TVD; encoder-only deterministic",
+  "evaluation_scope": "shared predictions held out; independent fits in-sample",
+  "review": "all27mainfit configs/generatororder/selectedrestart/checkpoints/rawprobabilities revalidated;14 focused campaign/analysis tests passed;PDF andPNG inspected;author approved the exactrawpreview",
+  "reproduction": "python figure_drafts/curie_weiss_balanced/render.py; raw comparison only",
+  "typography": "local LaTeX rendering; same figure as author-approved preview",
+  "scope": "maincomparisononly; ancillary/scaling priorapprovedassetsunchanged"
+}

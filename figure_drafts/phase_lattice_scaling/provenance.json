@@ -1,0 +1,65 @@
+{
+  "export_date": "2026-10-01",
+  "regenerated_from_same_saved_arrays": true,
+  "frozen_campaign_manifest_sha256": "6a686a2df72b43ee48224b780ff74974f46ed5364c8cc322e1b556daaf6dc6bb",
+  "source_archive_sha256": "712fd1475119f75d231a6d4ad712aea6a7afeb73cfb799958495da40b647d684",
+  "scaling_audit_sha256": "56410e1b8543be82d84112d79c630e835f647178cd743f445de313a95745434e",
+  "ancilla_audit_sha256": "40ee8284d40abd36f5cc92414777b4b05ea02ec2ad147e5e9eecb737f5206094",
+  "original_plotting_source_sha256": "607f4a2a799f6d0cc35dd40f66651b19aa7fade88a72431057c309a111d65205",
+  "source_of_truth": "reviewed complete-size audit export; raw checkpoints remain local",
+  "review": "Ancilla metric revised at author request on 2026-10-03 from historical full visible-bitstring TVD to exact raw Hamming-profile TVD. Condition order is beta 0.4, 1.0, 1.6; seed order is 410, 411, 412; aggregation is condition mean within seed followed by seed median/IQR. Primary independently verified all 45 profile TVDs and aggregation; inspected the final PNG and rendered PDF. The y-axis reads Hamming-profile TVD.",
+  "ancilla_active_metric": "exact_raw_hamming_profile_tvd",
+  "ancilla_historical_metric": "exact_raw_visible_bitstring_tvd",
+  "ancilla_historical_per_seed": [
+    [
+      0.47474408279798136,
+      0.4806230912722433,
+      0.47623057071310065
+    ],
+    [
+      0.3745386432365325,
+      0.3647353262083232,
+      0.3140262316757637
+    ],
+    [
+      0.22426410890255585,
+      0.23290726267193698,
+      0.22378547290638043
+    ],
+    [
+      0.1318779397380602,
+      0.13321898859013373,
+      0.12163442420579203
+    ],
+    [
+      0.14361722071293848,
+      0.09243831106598126,
+      0.13156419253954685
+    ]
+  ],
+  "ancilla_historical_figure_hashes": {
+    "pdf": "b41371b48f9e0124273a30838c4c4da418353d2550cadfc69e427cc3d3b6b6d1",
+    "png": "1da3814bbacd478b90f99959e9424493b94cde4a8368bdd4fff4b849e6025fb9"
+  },
+  "files": {
+    "figure_drafts/phase_lattice_scaling/train_held_out_mmd.pdf": "576d16650d573bb80377257cedbe57af1405d4f19d767ae3df39babc2667f3dd",
+    "figure_drafts/phase_lattice_scaling/per_condition_mmd.pdf": "5130962518eb297e5d84237babbaf3fc0b3d673ef04b1119b63bceff9f94e234",
+    "figure_drafts/phase_lattice_scaling/per_condition_mmd_training.png": "c031c0e477aec72cbb647b2fa47a2c1032c2ae870d4e0ab24e121a058b419c96",
+    "figure_drafts/phase_lattice_scaling/train_held_out_mmd.png": "9bed8ec17e589b029a1802ffc8b48ca51c32245d16eff3ca241ddfca25cdeeaf",
+    "figure_drafts/phase_lattice_scaling/per_condition_mmd_held_out.png": "1db24068ef3c0c610b654bac1005d87a827b2ad401c5be9abd6247e03bac4a72",
+    "figure_drafts/phase_lattice_scaling/render.py": "672eaefa262165d1ec3549be09e6838d28227eab0317bac91d10cb2a85779966",
+    "figure_drafts/phase_lattice_scaling/figure_data.json": "6d9b12ac7d4b55509136e955d7fae6df88df378b80bcd8f571ad3943bdb26ef8",
+    "figure_drafts/phase_lattice_scaling/README.md": "068df85d707ef8a46be5e130b7efdf0157857a810d5e5f44c9f1552bfe5d6f7c",
+    "paper/figures/curie_weiss_lattice_scaling_mmd.pdf": "d6c7640a6f432fb3235e1353241dfa179a27b079f50fe1a9ac6508c323c9e11e",
+    "paper/figures/curie_weiss_lattice_scaling_mmd.png": "0b8c985f5eeaeb37036dc29a47e648f746f83031d9d1498fe2dab0e084c20e4c",
+    "figure_drafts/phase_lattice_scaling/training_mmd.pdf": "6bfbaedd4dc66e34e3ec4cff87e49dd3cf699c5f978fd0a5fcee7ea35b82dc9a",
+    "figure_drafts/phase_lattice_scaling/training_mmd.png": "926db7139755b20e83571445f22f8ca032ec73ed0b797e99f44c932d292ac800",
+    "paper/figures/curie_weiss_ancilla_tvd.pdf": "91b4160f9094964afc1584440e1ff9332869d375904b7d3e0931120698d0ce12",
+    "paper/figures/curie_weiss_ancilla_tvd.png": "3ae1f5ddfa3cf129231fdb20658d0bb6443495c055de90d1cc7abbd47e67f475"
+  },
+  "standalone_renderer_validation": "Automatic-y held-out and aggregate training plots preserve the same saved input arrays, six-size median/IQR summaries, and design; no zero baseline or data changes. Five PNG identity and historical replay/test records retain their original historical scope; all six PDF pages were visually reviewed by primary.",
+  "historical_numerical_validation": "Original campaign audit: initial/selected five-bank replays at n64/n128/n1024/n2048 seed100 discrepancy zero; 29 focused experiment checks passed before this presentation revision.",
+  "filename_cleanup": "paperfigures onlymanuscript assets;optionaltraining anddiagnosticsremain infigure_drafts",
+  "historical_presentation_validation": "Primary inspected PDF and PNG outputs; six focused figure tests and Ruff passed. Standalone renderer regenerated successfully from unchanged exported arrays.",
+  "presentation_validation": "2026-10-03 ancillary revision: primary checked exact raw profile data, aggregation, final PNG and rendered PDF; seven focused tests and Ruff passed. Scaling data and assets unchanged."
+}
