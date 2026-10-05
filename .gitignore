@@ -207,6 +207,15 @@ profiling/
 tmp/
 watch_*
 
-# Manuscript placeholder; the paper source is dropped in when due
+# Current manuscript and review artifacts; keep build products and older drafts local
 paper/*
 !paper/.gitkeep
+!paper/main.tex
+!paper/references.bib
+!paper/main.pdf
+!paper/hpo-update-2026-10-04.md
+!paper/figures/
+!paper/figures/README.md
+!paper/figures/*.pdf
+!paper/figures/*.png
+!paper/figures/*.provenance.json
