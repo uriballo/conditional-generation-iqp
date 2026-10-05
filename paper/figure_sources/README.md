@@ -14,6 +14,9 @@ Condition labels use concise decimals, retaining the precision needed to
 identify each condition. Curie--Weiss legends use one decimal place; Gaussian
 panel labels retain three to distinguish the displayed evaluation points.
 Reported TVDs use four decimal places. Plot axes retain concise tick labels.
+The inline symmetry plot uses DejaVu Serif for labels and ticks, matching the
+numerical Curie--Weiss and scaling plots. Its font selection is scoped to the
+plot; circuit and mathematical notation retain the manuscript math font.
 
 ```sh
 mkdir -p /tmp/iqp-illustrations

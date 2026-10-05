@@ -18,6 +18,6 @@ Reviewed paper artifacts are never replaced automatically.
 Curie--Weiss curves average raw profiles across seeds 5400--5404; table errors
 average per-seed exact TVDs. Shared temperatures are excluded from current
 fitting and selection but have historical exposure; independent fits are
-in-sample. Scaling retains the original protocol and summarizes bank averages
-by median and interquartile range across seeds. Its size-dependent kernels
+in-sample. Scaling retains the original protocol and averages independent MMD estimates
+and summarizes the seed averages by their median and interquartile range. Its size-dependent kernels
 prevent direct fidelity comparisons between sizes.

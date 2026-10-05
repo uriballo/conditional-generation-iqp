@@ -34,7 +34,7 @@
 
 % Classical estimation and quantum generation use the same component columns.
 \draw[outline,fill=ink!3] (4.1,6.0) rectangle (12.85,9.9);
-\node[font=\fontsize{8}{9}\selectfont\bfseries] at (8.475,9.6) {Classical estimator};
+\node[font=\fontsize{9}{10.5}\selectfont\bfseries] at (8.475,9.6) {Classical estimator};
 \draw[outline,fill=ink!7] (4.3,9.35) rectangle (5.0,9.75);
 \draw[fill=white,draw=ink!45,line width=.4pt] (4.36,9.42) rectangle (4.94,9.68);
 \draw[ink!65,line width=.8pt] (4.65,9.27) -- (4.65,9.35);
@@ -90,7 +90,7 @@
 \draw[flow] (3.07,1.20) -- node[above,small] {$c_i$} (3.98,1.20);
 
 \draw[outline,draw=ink!65,fill=ink!3] (4.1,.1) rectangle (16.05,3.70);
-\node[font=\fontsize{9}{10.5}\selectfont\bfseries,text=modelblue,anchor=base] at (10.075,3.25) {Conditional IQP on $n$ qubits};
+\node[font=\fontsize{9}{10.5}\selectfont\bfseries,text=modelblue,anchor=base] at (10.075,3.25) {Conditional IQP};
 \begin{scope}[shift={(4.65,3.37)}]
   \foreach \angle in {0,60,-60} {
     \draw[ink!65,line width=.45pt,rotate=\angle] (0,0) ellipse[x radius=.24cm,y radius=.075cm];
@@ -131,9 +131,8 @@
 }
 \draw[flow] (16.17,1.20) -- (16.88,1.20);
 
-\node[label,anchor=base] at (18.15,3.65) {\textbf{Conditional}};
-\node[label,anchor=base] at (18.15,3.25) {\textbf{samples}};
-\node[small,text=condtwo!70!black] at (18.15,2.52) {Condition $c_i=c_2$};
+\node[label,anchor=base] at (18.15,3.25) {\textbf{Conditional}};
+\node[label,anchor=base] at (18.15,2.85) {\textbf{samples}};
 \node[font=\fontsize{8}{9}\selectfont\ttfamily,anchor=west] at (17.0,1.70) {100101 ...};
 \node[font=\fontsize{8}{9}\selectfont\ttfamily,anchor=west] at (17.0,1.20) {001101 ...};
 \node[font=\fontsize{8}{9}\selectfont\ttfamily,anchor=west] at (17.0,.70) {111000 ...};
