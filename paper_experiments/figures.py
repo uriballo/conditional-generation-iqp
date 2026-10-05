@@ -142,7 +142,7 @@ def _curie(data, output):
     for ax in axes[:, 0]:
         ax.set_ylabel("Probability mass")
     handles = [
-        plt.Line2D([], [], color=COLORS[i], label=rf"$\beta={beta:.2f}$")
+        plt.Line2D([], [], color=COLORS[i], label=rf"$\beta={beta:.3f}$")
         for i, beta in enumerate(payload["betas"])
     ]
     handles.insert(0, plt.Line2D([], [], color="0.3", ls="--", label="Target"))

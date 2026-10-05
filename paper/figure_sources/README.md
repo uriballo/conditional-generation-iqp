@@ -10,6 +10,10 @@ Build standalone sources from this directory with `pdflatex` and inspect the
 output before replacing any reviewed figure. Generated PDFs and previews stay
 in a temporary output directory:
 
+Reviewed numerical figures use three decimal places for condition labels and
+four decimal places for reported TVDs. Plot axes retain concise tick labels
+without padded zeroes.
+
 ```sh
 mkdir -p /tmp/iqp-illustrations
 pdflatex -interaction=nonstopmode -halt-on-error -output-directory=/tmp/iqp-illustrations conditional_iqp_overview.tex
