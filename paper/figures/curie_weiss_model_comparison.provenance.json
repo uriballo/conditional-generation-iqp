@@ -11,9 +11,9 @@
   "aggregation": "Mean raw profiles; table TVDs are means and sample standard deviations of per-seed errors.",
   "sha256": {
     "paper/data/curie-weiss/figure_data.json": "6a5afab0cb816b26fd165906cb0b74172eec7f2fc8eeb6d0f9001d2f23f4ae5b",
-    "paper_experiments/figures.py": "7b2d53e18f02f55f7d9b037e1560d2577e11137803fc8751ede4be911a5b6364",
-    "paper/figures/curie_weiss_model_comparison.pdf": "bf18805c2dff0132c7c61b65d21381c31dc97bdadedd140176d70310eadc381f",
-    "paper/figures/curie_weiss_model_comparison.png": "b1a1f43ee6d999a1dd50a446da7bd452aba098c02cb39f179faa95f5b40f2342"
+    "paper_experiments/figures.py": "cc6350c23ecbd1a6cbf66423d177c01a7510af888c864c292ce0a961f092939c",
+    "paper/figures/curie_weiss_model_comparison.pdf": "494330926dfc144cfd33fd79355f71d45a24a61ebedc26ed014f6f3124e103fe",
+    "paper/figures/curie_weiss_model_comparison.png": "a5ebc17de537fc01472449c28c69b469993cd58ae24959519938bc8721d409c5"
   },
   "horizontal_axis": "Dimensionless magnetization per spin m=(2k-16)/16"
 }

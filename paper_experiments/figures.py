@@ -60,7 +60,7 @@ def _gaussian(data, output):
         values = np.genfromtxt(data / f"profile_{index}.csv", delimiter=",", names=True)
         for column, style, color, label in [
             ("target", "--", "0.25", "Target"),
-            ("trained", "-", COLORS[0], "Conditional IQP"),
+            ("trained", "-", COLORS[0], "Trained"),
             ("encoder", ":", "0.45", "Encoder only"),
         ]:
             ax.plot(values["k"], values[column], style, color=color, label=label)
@@ -142,9 +142,10 @@ def _curie(data, output):
     for ax in axes[:, 0]:
         ax.set_ylabel("Probability mass")
     handles = [
-        plt.Line2D([], [], color=COLORS[i], label=rf"$\beta={beta:#.3g}$")
+        plt.Line2D([], [], color=COLORS[i], label=rf"$\beta={beta:.2f}$")
         for i, beta in enumerate(payload["betas"])
-    ] + [plt.Line2D([], [], color="0.3", ls="--", label="Target")]
+    ]
+    handles.insert(0, plt.Line2D([], [], color="0.3", ls="--", label="Target"))
     fig.legend(handles=handles, loc="outside upper center", ncol=4, fontsize=8)
     paths = _save(fig, output, "curie_weiss_model_comparison")
     rows = curie_tables(payload)
@@ -167,7 +168,7 @@ def _scaling(data, output):
             raise ValueError("scaling seed/step coverage differs")
         med = np.median(matrix, axis=0)
         lo, hi = np.quantile(matrix, (0.25, 0.75), axis=0)
-        ax.plot(payload["steps"], med, lw=1.3, label=f"{n}")
+        ax.plot(payload["steps"], med, lw=1.3, marker="o", ms=3, label=rf"$n={n}$")
         ax.fill_between(payload["steps"], lo, hi, alpha=0.13)
         rows.extend(
             dict(
@@ -180,8 +181,9 @@ def _scaling(data, output):
             for i, step in enumerate(payload["steps"])
         )
     ax.set_xlabel("Optimizer updates")
+    ax.ticklabel_format(axis="y", style="sci", scilimits=(0, 0), useMathText=True)
     ax.set_ylabel(r"Held-out sampled MMD$^2$")
-    ax.legend(fontsize=7, ncol=2)
+    ax.legend(ncol=2)
     ax.spines[["top", "right"]].set_visible(False)
     paths = _save(fig, output, "curie_weiss_lattice_scaling_mmd")
     table = output / "scaling_mmd.csv"
@@ -201,7 +203,7 @@ def _symmetry(data, output):
     ax.set_xlabel(r"Measured bitstring $x$")
     ax.set_ylabel("Probability")
     ax.set_xticks(x, payload["labels"])
-    ax.legend(fontsize=7)
+    ax.legend()
     ax.spines[["top", "right"]].set_visible(False)
     return _save(fig, output, "input_induced_pair_flip")
 
