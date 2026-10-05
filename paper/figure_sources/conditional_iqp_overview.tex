@@ -78,16 +78,16 @@
 
 % One explicit generation call with a selected condition.
 \node[label,anchor=base] at (2.3,3.25) {\textbf{Condition}};
-\foreach \yy/\col/\tag in {2.65/condone/c_1,1.15/condthree/c_3} {
+\foreach \yy/\col/\tag in {1.95/condone/c_1,.45/condthree/c_3} {
   \draw[draw=\col!60,fill=\col!5,line width=.5pt,rounded corners=2pt]
     (1.65,\yy-.27) rectangle (2.95,\yy+.27);
   \node[font=\fontsize{10}{11}\selectfont,text=\col!60!black] at (2.3,\yy) {$\tag$};
 }
 \draw[draw=condtwo,fill=condtwo!20,line width=.9pt,rounded corners=2pt]
-  (1.65,1.63) rectangle (2.95,2.17);
-\node[font=\fontsize{10}{11}\selectfont,text=condtwo!70!black] at (2.3,1.90) {$c_2$};
+  (1.65,.93) rectangle (2.95,1.47);
+\node[font=\fontsize{10}{11}\selectfont,text=condtwo!70!black] at (2.3,1.20) {$c_2$};
 \node[small,text=ink!70] at (2.3,-.30) {One condition\\at a time};
-\draw[flow] (3.07,1.90) -- node[above,small] {$c_i$} (3.98,1.90);
+\draw[flow] (3.07,1.20) -- node[above,small] {$c_i$} (3.98,1.20);
 
 \draw[outline,draw=ink!65,fill=ink!3] (4.1,.1) rectangle (16.05,3.70);
 \node[font=\fontsize{9}{10.5}\selectfont\bfseries,text=modelblue,anchor=base] at (10.075,3.25) {Conditional IQP on $n$ qubits};

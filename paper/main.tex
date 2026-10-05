@@ -790,7 +790,7 @@ We introduced a conditional formulation for IQP Born machines, combining a condi
 
 The Gaussian and Curie--Weiss experiments demonstrate learned conditional profiles. Supplementary runs establish classical optimization feasibility up to 2048 qubits. Input-state preparation also imposes an exact bit-flip symmetry in an unconditional example. These results extend the scope of classically trainable IQP Born machines and motivate further work on encoder expressivity, full-distribution accuracy, and quantum deployment.
 \section*{DATA AVAILABILITY}
-The code and data supporting the findings of this study are openly available in GitHub \cite{}.
+The code and data supporting this study are hosted in the \href{https://github.com/uriballo/conditional-generation-iqp}{GitHub repository}, which is currently private.
 
 \section*{Acknowledgments}
 OB is a fellow of Eurecat’s ``Vicente L\'opez'' PhD grant program.
@@ -807,13 +807,13 @@ OB is a fellow of Eurecat’s ``Vicente L\'opez'' PhD grant program.
 
 \subsection{Common training settings}
 
-Reported trained models minimize the unbiased squared-MMD estimator using Adam \cite{kingmaAdam2015}, with second-moment coefficient $0.999$ and numerical stabilizer $10^{-8}$. The first-moment coefficient is $0.900$ for the Gaussian and original scaling experiments and is tuned for Curie--Weiss. Learning rates follow a cosine decay, and parameters are initialized independently from $\mathcal N(0,s_\theta^2)$. Table~\ref{tab:training_hyperparams} lists the experiment-specific budgets. Restarts within each model and seed share target pools and stochastic sampling schedules.
+Reported trained models minimize the unbiased squared-MMD estimator using Adam \cite{kingmaAdam2015}, with second-moment coefficient $0.999$ and numerical stabilizer $10^{-8}$. The first-moment coefficient is $0.9$ for the Gaussian and original scaling experiments and is tuned for Curie--Weiss. Learning rates follow a cosine decay, and parameters are initialized independently from $\mathcal N(0,s_\theta^2)$. Table~\ref{tab:training_hyperparams} lists the experiment-specific budgets. Restarts within each model and seed share target pools and stochastic sampling schedules.
 
 Each update uniformly samples one training condition and one bandwidth, then draws a target minibatch with replacement from its training pool. Nonidentity masks are refreshed at every update, retaining the nonidentity-probability correction. Mask budgets include repetitions. Reference samples are independent of the target minibatch and shared across masks.
 
 \begin{table}[h!]
 \centering
-\caption{Training and sampled-test budgets per circuit. Updates are per restart. Curie--Weiss learning rates, initialization widths and first-moment coefficients are selected by HPO; Gaussian and scaling settings retain their original values. Test budgets refer to sampled MMD diagnostics; small-system TVDs use exact probabilities.}
+\caption{Training and sampled-test budgets per circuit. Updates are per restart. Curie--Weiss learning rates, initialization widths and first-moment coefficients are selected by HPO; Gaussian and scaling settings retain their original values. Tuned values are rounded to three significant figures; reproduction configurations retain full precision. Test budgets refer to sampled MMD diagnostics; small-system TVDs use exact probabilities.}
 \label{tab:training_hyperparams}
 \small
 \setlength{\tabcolsep}{3pt}
@@ -832,10 +832,10 @@ Each update uniformly samples one training condition and one bandwidth, then dra
 \hpCell{.25\textwidth}{Mask draws per update} & 1,024 & 2,048 & 2,048 & 2,048 & 512 \\
 \hpCell{.25\textwidth}{Reference draws per update} & 1,024 & 2,048 & 2,048 & 2,048 & 1,024 \\
 \hpCell{.25\textwidth}{Expected original mask weights} & $\{1\}$ & $\{2,4,6\}$ & $\{2,4,6\}$ & $\{2,4,6\}$ & $\{2,4\}$ \\
-\hpCell{.25\textwidth}{Initial learning rate} & $0.00500$ & $0.0401$ & $0.0400$ & $0.0324$ & $0.0100$ \\
-\hpCell{.25\textwidth}{Final learning rate} & $0.000500$ & $0.00326$ & $0.000783$ & $0.000365$ & $0.00100$ \\
-\hpCell{.25\textwidth}{Initial phase standard deviation $s_\theta$} & $0.0500$ & $0.430$ & $0.349$ & $0.0758$ & $0.100$ \\
-\hpCell{.25\textwidth}{First-moment coefficient $b_1$} & $0.900$ & $0.968$ & $0.812$ & $0.975$ & $0.900$ \\
+\hpCell{.25\textwidth}{Initial learning rate} & $5\times10^{-3}$ & $0.0401$ & $0.0400$ & $0.0324$ & $0.01$ \\
+\hpCell{.25\textwidth}{Final learning rate} & $5\times10^{-4}$ & $3.26\times10^{-3}$ & $7.83\times10^{-4}$ & $3.65\times10^{-4}$ & $10^{-3}$ \\
+\hpCell{.25\textwidth}{Initial phase standard deviation $s_\theta$} & $0.05$ & $0.430$ & $0.349$ & $0.0758$ & $0.1$ \\
+\hpCell{.25\textwidth}{First-moment coefficient $b_1$} & $0.9$ & $0.968$ & $0.812$ & $0.975$ & $0.9$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -876,33 +876,28 @@ Independent baselines fit a separate circuit at each reporting temperature, usin
 \subsubsection{Hyperparameter optimization}
 \label{sec:cw_hpo}
 
-We use Optuna's tree-structured Parzen estimator \cite{akibaOptuna2019} to tune optimizer settings and the Gaussian initialization width, while fixing the encoder, the 136-parameter ansatz, the training pools, kernel weights, and sampling budgets. The shared-model search compares cosine-decay Adam with Schedule-Free Adam \cite{defazioRoadLessScheduled2024}, using 48 trials per optimizer. Each trial completes 2,000 sampled-MMD updates on each of two screening seeds, with one restart and no early pruning. The trial score averages the best exact development-profile TVD across the two seeds. Checkpoints include initialization and every 25 updates; the development temperatures are $\{0.50,0.70,1.30,1.50\}$.
+We use Optuna's tree-structured Parzen estimator \cite{akibaOptuna2019} to tune cosine-decay Adam and the Gaussian initialization width, while fixing the encoder, the 136-parameter ansatz, the training pools, kernel weights, and sampling budgets. The shared-model search uses 48 trials, each completing 2,000 sampled-MMD updates on each of two screening seeds, with one restart and no early pruning. The score averages the best exact development-profile TVD across the two seeds. Checkpoint selection includes initialization and every 25 updates at development temperatures $\{0.50,0.70,1.30,1.50\}$. We also tried Schedule-Free Adam \cite{defazioRoadLessScheduled2024} with the same HPO trial budget, but it did not outperform cosine-decay Adam on the development-profile TVD.
 
-Table~\ref{tab:cw_hpo_ranges} gives the search ranges. Both searches include their original reference settings within the 48-trial budget and use 12 startup trials, with independently seeded samplers and batches of two proposals. Completion order does not change the order of sampler updates. The second-moment coefficient, numerical stabilizer, and weight decay are fixed at $0.999$, $10^{-8}$, and zero, respectively. Schedule-Free uses averaging exponent two, with gradients evaluated at its training parameters and checkpoints evaluated at its averaged parameters. Its interpolation coefficient and Adam's first-moment coefficient are both denoted by $b_1$ below but have different roles.
+Table~\ref{tab:cw_hpo_ranges} gives the Adam search ranges. Each study uses 12 startup trials and batches of two proposals, with sampler updates ordered independently of completion order. The second-moment coefficient, numerical stabilizer, and weight decay are fixed at $0.999$, $10^{-8}$, and zero. We confirm the two best distinct Adam configurations on three fresh seeds, with three restarts per seed, and select the lowest mean development-profile TVD. The selected settings in Table~\ref{tab:training_hyperparams} are then fixed for evaluation on five further independent seeds, with three restarts per seed and development-based checkpoint selection. Reporting temperatures $\{0.40,1.00,1.60\}$ do not enter this search or selection, although they had been examined in earlier experiments.
 
 \begin{table*}[t]
 \centering
-\caption{Curie--Weiss HPO search spaces. Continuous learning rates, initialization widths, and decay ratios are sampled logarithmically; $b_1$ is sampled uniformly. Independent baseline families use only the Adam space.}
+\caption{Adam HPO search ranges for the Curie--Weiss models. Learning rates, initialization widths, and decay ratios are sampled logarithmically; $b_1$ is sampled uniformly.}
 \label{tab:cw_hpo_ranges}
 \small
-\begin{tabular}{lcc}
+\begin{tabular}{lc}
 \toprule
-Setting & Cosine Adam & Schedule-Free Adam \\
+Setting & Search range \\
 \midrule
-Learning rate & $[0.000300,0.0500]$ & $[0.000300,0.100]$ \\
-Gaussian initialization width $s_\theta$ & $[0.0100,0.700]$ & $[0.0100,0.700]$ \\
-Coefficient $b_1$ & $[0.800,0.980]$ & $[0.800,0.980]$ \\
-Final/initial learning-rate ratio & $[0.0100,0.300]$ & --- \\
-Warmup updates & --- & $\{0,50,100,200,400\}$ \\
+Initial learning rate & $[3\times10^{-4},5\times10^{-2}]$ \\
+Gaussian initialization width $s_\theta$ & $[0.01,0.7]$ \\
+First-moment coefficient $b_1$ & $[0.8,0.98]$ \\
+Final/initial learning-rate ratio & $[0.01,0.3]$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-We confirm the two best distinct configurations per optimizer on three fresh seeds, with three restarts per seed, and select the configuration with the lowest mean development-profile TVD. Cosine Adam is selected. Its initial and final learning rates are $0.0401$ and $0.00326$, with final/initial ratio $0.0811$, initialization width $s_\theta=0.430$, and first-moment coefficient $b_1=0.968$. We then evaluate this fixed configuration on five further independent seeds, with three restarts per seed and the same development-based checkpoint selection. The reporting temperatures $\{0.40,1.00,1.60\}$ do not enter this search or selection, although they had been examined in earlier experiments.
-
-For the independent conditional IQP per condition and independent unconditional IQP per condition families, we run exactly one Adam-only HPO study per family, with 48 trials and the same ranges and per-circuit budgets. Each trial trains separate circuits at $\beta=0.40,1.00,1.60$ on both screening seeds and averages their best exact fitted-temperature profile TVDs into one score. Thus, one configuration is tuned for each entire family, rather than separately for each temperature. The original Adam settings and the selected shared-model settings are reference trials within each budget. We confirm the two best configurations per family on three fresh seeds with three restarts per circuit, then evaluate each selected family configuration on five further independent seeds with three restarts per circuit. These evaluations remain in-sample with respect to temperature. Equal trial counts require three times as many circuit fits for each independent family as for one shared-model optimizer search. Both studies use 12 TPE startup trials, batches of two proposals, and no pruning. Fitted-temperature checkpoint selection includes initialization and every 25 updates. Confirmation reverses the screening order for the conditional family: its second-ranked screening candidate scores $0.116$, compared with $0.126$ for the first-ranked candidate. The ordinary-input screening leader remains selected, scoring $0.127$ against $0.142$ for the other confirmed candidate.
-
-The selected independent conditional IQP per condition configuration has initial learning rate $0.0400$, cosine final/initial ratio $0.0195$, initialization width $s_\theta=0.349$, and $b_1=0.812$. The selected independent unconditional IQP per condition configuration has initial learning rate $0.0324$, final/initial ratio $0.0113$, initialization width $s_\theta=0.0758$, and $b_1=0.975$. The fixed $b_2$, stabilizer and weight decay are the same as in the shared-model search. Winners are frozen before the five-seed evaluation; fresh seeds measure optimization variability, not an untouched temperature test.
+For the independent conditional IQP per condition and independent unconditional IQP per condition families, we run one Adam HPO study per family, with 48 trials and the same search ranges and per-circuit budgets. Each trial trains separate circuits at $\beta=0.40,1.00,1.60$ on both screening seeds and averages their best fitted-temperature profile TVDs into one score. One configuration is therefore tuned for each family, rather than separately for each temperature. The original Adam settings and the selected shared-model settings are reference trials within each baseline budget; the shared-model search includes its original settings as a reference trial. We confirm the two best configurations per family on three fresh seeds with three restarts per circuit, then evaluate each selected configuration on five further independent seeds with three restarts per circuit. Selection includes initialization and every 25 updates at each fitted temperature. Equal trial counts require three times as many circuit fits per independent family as for the shared-model Adam search. These evaluations remain in-sample with respect to temperature; fresh seeds measure optimization variability.
 
 Full-bitstring TVD is a secondary exact diagnostic. At $\beta=0.40,1.00,1.60$, the shared conditional IQP across conditions gives $0.236\pm0.0293$, $0.210\pm0.0217$, and $0.234\pm0.0945$; the independent conditional IQP per condition gives $0.194\pm0.0221$, $0.234\pm0.00774$, and $0.483\pm0.0366$; the independent unconditional IQP per condition gives $0.141\pm0.0364$, $0.348\pm0.0355$, and $0.366\pm0.0227$. All spreads are sample standard deviations across the same five seeds. These diagnostics expose errors hidden by Hamming-shell aggregation and are not used to select the reported models.
 
@@ -926,7 +921,7 @@ Independent unconditional IQP per condition & 3 & 30,000 & 18,000 \\
 
 \subsection{Scaling}
 
-The scaling models use the Curie--Weiss encoder on every wire, with no ancillas and open lattices listed in Table~\ref{tab:scaling_architectures}. At size $n$, the target law is $p(x\mid\beta)\propto\exp[\beta(2|x|-n)^2/(2n)]$. Training uses $\beta\in\{0.60,0.80,1.20,1.40\}$, with 10,000 samples per condition and 40,000 per seed. Evaluation uses $\beta\in\{0.40,0.95,1.00,1.05,1.60\}$. We use three independent seeds at each size. The original configuration uses cosine Adam with initial learning rate $0.0100$, final rate $0.00100$, $b_1=0.900$, $b_2=0.999$, stabilizer $10^{-8}$, and initialization width $s_\theta=0.100$. Each restart has 5,000 updates, with three restarts per seed. These settings are retained independently of the sixteen-qubit HPO; their transfer or retuning has not been evaluated.
+The scaling models use the Curie--Weiss encoder on every wire, with no ancillas and open lattices listed in Table~\ref{tab:scaling_architectures}. At size $n$, the target law is $p(x\mid\beta)\propto\exp[\beta(2|x|-n)^2/(2n)]$. Training uses $\beta\in\{0.60,0.80,1.20,1.40\}$, with 10,000 samples per condition and 40,000 per seed. Evaluation uses $\beta\in\{0.40,0.95,1.00,1.05,1.60\}$. We use three independent seeds at each size. The original configuration uses cosine Adam with initial learning rate $0.01$, final rate $10^{-3}$, $b_1=0.9$, $b_2=0.999$, stabilizer $10^{-8}$, and initialization width $s_\theta=0.1$. Each restart has 5,000 updates, with three restarts per seed. These settings are retained independently of the sixteen-qubit HPO; their transfer or retuning has not been evaluated.
 
 \begin{table}[t]
 \centering
