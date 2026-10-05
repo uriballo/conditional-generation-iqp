@@ -10,9 +10,10 @@ Build standalone sources from this directory with `pdflatex` and inspect the
 output before replacing any reviewed figure. Generated PDFs and previews stay
 in a temporary output directory:
 
-Reviewed numerical figures use three decimal places for condition labels and
-four decimal places for reported TVDs. Plot axes retain concise tick labels
-without padded zeroes.
+Condition labels use concise decimals, retaining the precision needed to
+identify each condition. Curie--Weiss legends use one decimal place; Gaussian
+panel labels retain three to distinguish the displayed evaluation points.
+Reported TVDs use four decimal places. Plot axes retain concise tick labels.
 
 ```sh
 mkdir -p /tmp/iqp-illustrations
