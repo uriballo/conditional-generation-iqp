@@ -548,7 +548,7 @@ We evaluate the proposed architecture across two benchmarks: a translated Gaussi
 where $\rho(k)$ is the probability of observing a bitstring of weight $k$. The targets assign equal probability within each Hamming-weight shell. The learned circuit need not preserve this property, so profile TVD measures the weight distribution but does not resolve errors within shells.
 
 \subsection{Discrete Gaussian translation}
-\begin{figure*}[ht!]
+\begin{figure*}[!t]
     \centering
     \includegraphics[width=0.900\linewidth]{figures/gaussian_translation_profiles.pdf}
     \caption{Mean Hamming weight translation via conditioning. The three panels compare the target, the trained conditional IQP Born machine, and the encoder-only output. The displayed conditions were excluded from training and checkpoint selection. Dashed curves show the targets, solid blue curves show the trained model, and dotted grey curves show the encoder-only output. Model curves illustrate one run selected independently of held-out performance; the aggregate error reported in the text summarizes ten runs.}
@@ -569,7 +569,7 @@ We train at $c\in\{0.000,0.250,0.500,0.750,1.000\}$ using 1000 target samples pe
 
 \subsection{Curie-Weiss spin model}
 
-\begin{figure*}[ht!]
+\begin{figure*}[!t]
     \centering
     \includegraphics[width=0.900\linewidth]{figures/curie_weiss_model_comparison.pdf}
     \caption{Curie--Weiss magnetization profiles at sixteen qubits, with dimensionless magnetization per spin $m=(2k-16)/16$. Panels show (a) encoder only, (b) shared conditional IQP across conditions, (c) independent conditional IQP per condition, and (d) independent unconditional IQP per condition. Solid curves show mean exact raw profiles over the same five independent seeds; the encoder is deterministic. Dashed curves show exact targets at $\beta=0.400,1.000,1.600$. The shared conditional IQP across conditions excludes these temperatures from fitting and current hyperparameter and checkpoint selection; independent circuits fit and select checkpoints at their displayed temperature.}
@@ -588,13 +588,7 @@ We compare the shared conditional IQP across conditions with two independently t
 
 We select shared-model hyperparameters and checkpoints using exact profile TVD on development temperatures $\beta\in\{0.500,0.700,1.300,1.500\}$, without changing the fitting temperatures or the 10,000 training samples per temperature. Each independent family uses one Adam configuration selected across all three fitted temperatures. All final trained models use five fresh seeds with three restarts per circuit. Shared-model reporting temperatures are omitted from fitting and current selection, but were examined in earlier experiments; they are not a wholly untouched test. Appendix~\ref{sec:cw_hpo} specifies the HPO protocol.
 
-Table~\ref{tab:curie_weiss_profile_tvd} reports mean exact profile TVD and sample standard deviation across five seeds. The shared conditional IQP across conditions improves mean profile error over the encoder at all three reporting temperatures. The independent fits have lower mean errors at $\beta=0.400$ and $1.000$, while the shared conditional IQP across conditions has lower mean error at $\beta=1.600$. At this highest inverse temperature, shared-model errors range from $0.0843$ to $0.3743$, compared with $0.2633$--$0.3531$ for independent conditional IQP per condition and $0.3421$--$0.3624$ for independent unconditional IQP per condition. The shared conditional IQP across conditions has lower profile error than each independent family in four of the five paired seeds there. These comparisons describe this target family and protocol, rather than a general advantage of parameter sharing.
-
-The comparison has equal trial counts and per-circuit fitting budgets, but unequal aggregate compute and evaluation roles. Per final seed, the shared conditional IQP across conditions trains one circuit with 40,000 pool entries and 6,000 updates across restarts; each independent family trains three circuits with 30,000 pool entries and 18,000 updates. Independent checkpoint selection minimizes exact profile TVD at the fitted temperature, so its reported errors are in-sample.
-
-To assess errors hidden by Hamming-shell aggregation, we also compute the exact full-bitstring TVD, $\operatorname{TVD}(p,q)=\frac{1}{2}\sum_x|p(x)-q(x)|$, from the same selected circuits. At $\beta=0.400,1.000,1.600$, the shared model has mean full-bitstring TVDs of $0.2356$, $0.2102$, and $0.2345$, respectively. These values exceed the corresponding mean profile TVDs, since aggregating probabilities by Hamming weight can hide errors within shells. The target is uniform within each shell, but the learned circuit need not preserve this property. The full-bitstring diagnostics therefore show remaining distributional errors despite the improved profiles. Appendix~\ref{sec:cw_hpo} reports the corresponding variability and baseline values; these diagnostics do not enter model selection.
-
-\begin{table*}[ht!]
+\begin{table*}[!t]
 \centering
 \caption{Exact raw Curie--Weiss Hamming-profile TVD at sixteen qubits. Trained rows report mean $\pm$ sample standard deviation over five independent seeds, with three restarts per circuit. The encoder-only baseline is deterministic. Shared-model temperatures are excluded from fitting and current selection, but have historical exposure; independent circuits fit and select at their displayed temperature.}
 \label{tab:curie_weiss_profile_tvd}
@@ -630,18 +624,24 @@ Independent unconditional IQP per condition
 \end{tabular}
 \end{table*}
 
+Table~\ref{tab:curie_weiss_profile_tvd} reports mean exact profile TVD and sample standard deviation across five seeds. The shared conditional IQP across conditions improves mean profile error over the encoder at all three reporting temperatures. The independent fits have lower mean errors at $\beta=0.400$ and $1.000$, while the shared conditional IQP across conditions has lower mean error at $\beta=1.600$. At this highest inverse temperature, shared-model errors range from $0.0843$ to $0.3743$, compared with $0.2633$--$0.3531$ for independent conditional IQP per condition and $0.3421$--$0.3624$ for independent unconditional IQP per condition. The shared conditional IQP across conditions has lower profile error than each independent family in four of the five paired seeds there. These comparisons describe this target family and protocol, rather than a general advantage of parameter sharing.
+
+The comparison has equal trial counts and per-circuit fitting budgets, but unequal aggregate compute and evaluation roles. Per final seed, the shared conditional IQP across conditions trains one circuit with 40,000 pool entries and 6,000 updates across restarts; each independent family trains three circuits with 30,000 pool entries and 18,000 updates. Independent checkpoint selection minimizes exact profile TVD at the fitted temperature, so its reported errors are in-sample.
+
+To assess errors hidden by Hamming-shell aggregation, we also compute the exact full-bitstring TVD, $\operatorname{TVD}(p,q)=\frac{1}{2}\sum_x|p(x)-q(x)|$, from the same selected circuits. At $\beta=0.400,1.000,1.600$, the shared model has mean full-bitstring TVDs of $0.2356$, $0.2102$, and $0.2345$, respectively. These values exceed the corresponding mean profile TVDs, since aggregating probabilities by Hamming weight can hide errors within shells. The target is uniform within each shell, but the learned circuit need not preserve this property. The full-bitstring diagnostics therefore show remaining distributional errors despite the improved profiles. Appendix~\ref{sec:cw_hpo} reports the corresponding variability and baseline values; these diagnostics do not enter model selection.
+
 \subsection{Scaling}
 
 The scaling experiment retains its original optimizer and evaluation settings, which differ from the tuned sixteen-qubit comparison. It assesses computational feasibility rather than transfer of the tuned configuration. We have not tested such transfer.
 
-\begin{figure}[ht!]
+We evaluate the computational feasibility of classical training at $n\in\{64,128,256,512,1024,2048\}$ visible qubits, without ancillas. We retain the fixed product phase encoder $R_Z(0.750\beta)R_Y(\pi/2)$ on every qubit. The parameterized unitary contains independent one-body phases and horizontal and vertical nearest-neighbor pair phases on an open rectangular lattice. For an $L_x\times L_y$ lattice, the ansatz has $3n-L_x-L_y$ parameters, so the parameter count grows linearly with the number of qubits. The lattice dimensions and optimization hyperparameters are listed in Appendix~\ref{sec:appendix_hyperparams}.
+
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{figures/curie_weiss_lattice_scaling_mmd.pdf}
     \caption{Classical training of conditional IQP Born machines from 64 to 2048 qubits. Held-out sampled MMD$^2$ is evaluated at initialization and every 500 optimizer updates along the validation-selected restart for each run. Lines and shaded bands show the median and interquartile range across three independent runs after averaging evaluation banks within each run. Evaluation conditions are $\beta\in\{0.400,0.950,1.000,1.050,1.600\}$. The same bodyness targets $w\in\{2,4\}$ are used at every system size, implying different kernel bandwidths.}
     \label{fig:curie_weiss_qubit_scaling}
 \end{figure}
-
-We evaluate the computational feasibility of classical training at $n\in\{64,128,256,512,1024,2048\}$ visible qubits, without ancillas. We retain the fixed product phase encoder $R_Z(0.750\beta)R_Y(\pi/2)$ on every qubit. The parameterized unitary contains independent one-body phases and horizontal and vertical nearest-neighbor pair phases on an open rectangular lattice. For an $L_x\times L_y$ lattice, the ansatz has $3n-L_x-L_y$ parameters, so the parameter count grows linearly with the number of qubits. The lattice dimensions and optimization hyperparameters are listed in Appendix~\ref{sec:appendix_hyperparams}.
 
 At each size, we train at $\beta\in\{0.600,0.800,1.200,1.400\}$ using independent training runs and restarts, with 5000 optimizer updates per restart. Checkpoint selection uses sampled validation MMD$^2$ averaged over the training temperatures and bandwidths. We independently evaluate the selected restart at initialization and every 500 updates on $\beta\in\{0.400,0.950,1.000,1.050,1.600\}$, which are excluded from fitting and checkpoint selection. At each reporting point, we average independent evaluation banks within each run and summarize the averages by their median and interquartile range.
 
@@ -652,7 +652,32 @@ Figure~\ref{fig:curie_weiss_qubit_scaling} shows a decrease in held-out sampled 
 
 Encoder design determines both the dependence on a condition and the constraints satisfied by the output law. The conditional experiments illustrate the first role; we now demonstrate the second by preparing an input that enforces an exact bit-flip symmetry for every learned phase vector while preserving classical trainability. Such constraints provide inductive biases in variational quantum models \cite{meyerExploitingSymmetry2023}.
 
-\begin{figure}[htbp!]
+Choose any nonzero bit mask $s\in\{0,1\}^n$ and prepare
+\begin{equation}
+    \ket{\phi_s}
+    =\frac{\ket{0^n}+\ket{s}}{\sqrt{2}}.
+\end{equation}
+This state satisfies $X_s\ket{\phi_s}=\ket{\phi_s}$, where $X_s=\bigotimes_{i=1}^n X_i^{s_i}$ flips the qubits selected by $s$. Since the IQP unitary commutes with $X_s$, its output remains invariant under the same flip, even when all learned phases vary independently. Consequently,
+\begin{equation}
+    q_{\boldsymbol\theta}(x)
+    =q_{\boldsymbol\theta}(x\oplus s)
+    \qquad\text{for every }x\text{ and }\boldsymbol\theta.
+\end{equation}
+
+The reference amplitudes are uniform on the strings satisfying $s\cdot z=0$ and vanish elsewhere, evaluating the dot product modulo two. Sampling uniformly subject to this single parity constraint is efficient. For a sampled string $z$, the amplitude ratio is
+\begin{equation}
+    R_s(z,a)
+    =
+    \begin{cases}
+        1, & s\cdot a=0,\\
+        0, & s\cdot a=1.
+    \end{cases}
+\end{equation}
+The encoded input therefore satisfies the sampling-and-ratio interface, preserving classical access to the moments and gradients required for training.
+
+For example, $s=110$ on three qubits gives $\ket{\phi_s}=(\ket{000}+\ket{110})/\sqrt{2}$ and enforces $q_{\boldsymbol\theta}(x)=q_{\boldsymbol\theta}(x\oplus110)$. The ordinary $\ket{000}$ input does not enforce this relation: with only $\theta_1=\pi/6$ nonzero, it gives $q(000)=3/4$ and $q(110)=0$. Figure~\ref{fig:input-induced-pair-flip} compares the two inputs under the same unitary. This selected-subset construction illustrates the commuting-symmetry recipe of Recio-Armengol \textit{et al.}, whose demonstrated example enforces global bit-flip symmetry \cite{recio-armengolTrainClassicalDeploy2026}.
+
+\begin{figure}[!htbp]
 \centering
 \begin{quantikz}[row sep=0.17cm,column sep=0.20cm]
 \lstick{$\ket{0}$} & \gate{H} & \ctrl{1} & \gate[3]{U_{\boldsymbol\theta}} & \meter{} \\
@@ -699,31 +724,6 @@ Encoder design determines both the dependence on a condition and the constraints
 \label{fig:input-induced-pair-flip}
 \end{figure}
 
-Choose any nonzero bit mask $s\in\{0,1\}^n$ and prepare
-\begin{equation}
-    \ket{\phi_s}
-    =\frac{\ket{0^n}+\ket{s}}{\sqrt{2}}.
-\end{equation}
-This state satisfies $X_s\ket{\phi_s}=\ket{\phi_s}$, where $X_s=\bigotimes_{i=1}^n X_i^{s_i}$ flips the qubits selected by $s$. Since the IQP unitary commutes with $X_s$, its output remains invariant under the same flip, even when all learned phases vary independently. Consequently,
-\begin{equation}
-    q_{\boldsymbol\theta}(x)
-    =q_{\boldsymbol\theta}(x\oplus s)
-    \qquad\text{for every }x\text{ and }\boldsymbol\theta.
-\end{equation}
-
-The reference amplitudes are uniform on the strings satisfying $s\cdot z=0$ and vanish elsewhere, evaluating the dot product modulo two. Sampling uniformly subject to this single parity constraint is efficient. For a sampled string $z$, the amplitude ratio is
-\begin{equation}
-    R_s(z,a)
-    =
-    \begin{cases}
-        1, & s\cdot a=0,\\
-        0, & s\cdot a=1.
-    \end{cases}
-\end{equation}
-The encoded input therefore satisfies the sampling-and-ratio interface, preserving classical access to the moments and gradients required for training.
-
-For example, $s=110$ on three qubits gives $\ket{\phi_s}=(\ket{000}+\ket{110})/\sqrt{2}$ and enforces $q_{\boldsymbol\theta}(x)=q_{\boldsymbol\theta}(x\oplus110)$. The ordinary $\ket{000}$ input does not enforce this relation: with only $\theta_1=\pi/6$ nonzero, it gives $q(000)=3/4$ and $q(110)=0$. Figure~\ref{fig:input-induced-pair-flip} compares the two inputs under the same unitary. This selected-subset construction illustrates the commuting-symmetry recipe of Recio-Armengol \textit{et al.}, whose demonstrated example enforces global bit-flip symmetry \cite{recio-armengolTrainClassicalDeploy2026}.
-
 \section{Discussion}
 \label{sec:discussion}
 
@@ -757,6 +757,7 @@ OB is a fellow of Eurecat’s ``Vicente L\'opez'' PhD grant program.
 \onecolumngrid
 \appendix
 \newcommand{\hpCell}[2]{\parbox[t]{#1}{\raggedright #2\strut}}
+\raggedbottom
 
 \section{Hyperparameters used for the numerical experiments}
 \label{sec:appendix_hyperparams}
@@ -767,7 +768,7 @@ Reported trained models minimize the unbiased squared-MMD estimator using Adam \
 
 Each update uniformly samples one training condition and one bandwidth, then draws a target minibatch with replacement from its training pool. Nonidentity masks are refreshed at every update, retaining the nonidentity-probability correction. Mask budgets include repetitions. Reference samples are independent of the target minibatch and shared across masks.
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \centering
 \caption{Training and sampled-test budgets per circuit. Updates are per restart. Curie--Weiss learning rates, initialization widths and first-moment coefficients are selected by HPO; Gaussian and scaling settings retain their original values. Tuned values are rounded to three significant figures; reproduction configurations retain full precision. Test budgets refer to sampled MMD diagnostics; small-system TVDs use exact probabilities.}
 \label{tab:training_hyperparams}
@@ -829,35 +830,7 @@ The shared conditional IQP across conditions trains at $\beta\in\{0.600,0.800,1.
 
 Independent baselines fit a separate circuit at each reporting temperature, using either the corresponding conditional input or $\ket{0}^{\otimes16}$. Each circuit has 10,000 training samples and uses 2,000 updates per restart with three restarts in the final evaluation. Each baseline family therefore requires three circuits per seed. Table~\ref{tab:cw_baseline_budgets} distinguishes these aggregate budgets. Independent models are evaluated at fitted temperatures, whereas the shared conditional IQP across conditions is evaluated at temperatures omitted from fitting and selection. Auxiliary test-MMD diagnostics use 2,000 independently drawn targets per reported temperature. Profile TVDs use exact probabilities; final results report means and sample standard deviations across five independent seeds.
 
-\subsubsection{Hyperparameter optimization}
-\label{sec:cw_hpo}
-
-We use Optuna's tree-structured Parzen estimator \cite{akibaOptuna2019} to tune cosine-decay Adam and the Gaussian initialization width, while fixing the encoder, the 136-parameter ansatz, the training pools, kernel weights, and sampling budgets. The shared-model search uses 48 trials, each completing 2,000 sampled-MMD updates on each of two screening seeds, with one restart and no early pruning. The score averages the best exact development-profile TVD across the two seeds. Checkpoint selection includes initialization and every 25 updates at development temperatures $\{0.500,0.700,1.300,1.500\}$. We also tried Schedule-Free Adam \cite{defazioRoadLessScheduled2024} with the same HPO trial budget, but it did not outperform cosine-decay Adam on the development-profile TVD.
-
-Table~\ref{tab:cw_hpo_ranges} gives the Adam search ranges. Each study uses 12 startup trials and batches of two proposals, with sampler updates ordered independently of completion order. The second-moment coefficient, numerical stabilizer, and weight decay are fixed at $0.999$, $10^{-8}$, and zero. We confirm the two best distinct Adam configurations on three fresh seeds, with three restarts per seed, and select the lowest mean development-profile TVD. The selected settings in Table~\ref{tab:training_hyperparams} are then fixed for evaluation on five further independent seeds, with three restarts per seed and development-based checkpoint selection. Reporting temperatures $\{0.400,1.000,1.600\}$ do not enter this search or selection, although they had been examined in earlier experiments.
-
-\begin{table*}[t]
-\centering
-\caption{Adam HPO search ranges for the Curie--Weiss models. Learning rates, initialization widths, and decay ratios are sampled logarithmically; $b_1$ is sampled uniformly.}
-\label{tab:cw_hpo_ranges}
-\small
-\begin{tabular}{lc}
-\toprule
-Setting & Search range \\
-\midrule
-Initial learning rate & $[3\times10^{-4},5\times10^{-2}]$ \\
-Gaussian initialization width $s_\theta$ & $[0.01,0.7]$ \\
-First-moment coefficient $b_1$ & $[0.8,0.98]$ \\
-Final/initial learning-rate ratio & $[0.01,0.3]$ \\
-\bottomrule
-\end{tabular}
-\end{table*}
-
-For the independent conditional IQP per condition and independent unconditional IQP per condition families, we run one Adam HPO study per family, with 48 trials and the same search ranges and per-circuit budgets. Each trial trains separate circuits at $\beta=0.400,1.000,1.600$ on both screening seeds and averages their best fitted-temperature profile TVDs into one score. One configuration is therefore tuned for each family, rather than separately for each temperature. The original Adam settings and the selected shared-model settings are reference trials within each baseline budget; the shared-model search includes its original settings as a reference trial. We confirm the two best configurations per family on three fresh seeds with three restarts per circuit, then evaluate each selected configuration on five further independent seeds with three restarts per circuit. Selection includes initialization and every 25 updates at each fitted temperature. Equal trial counts require three times as many circuit fits per independent family as for the shared-model Adam search. These evaluations remain in-sample with respect to temperature; fresh seeds measure optimization variability.
-
-Full-bitstring TVD is a secondary exact diagnostic. At $\beta=0.400,1.000,1.600$, the shared conditional IQP across conditions gives $0.2356\pm0.0293$, $0.2102\pm0.0217$, and $0.2345\pm0.0945$; the independent conditional IQP per condition gives $0.1941\pm0.0221$, $0.2337\pm0.0077$, and $0.4829\pm0.0366$; the independent unconditional IQP per condition gives $0.1406\pm0.0364$, $0.3475\pm0.0355$, and $0.3660\pm0.0227$. All spreads are sample standard deviations across the same five seeds. These diagnostics expose errors hidden by Hamming-shell aggregation and are not used to select the reported models.
-
-\begin{table*}[t]
+\begin{table}[!htbp]
 \centering
 \caption{Curie--Weiss comparison budgets per seed, summed over fitting conditions. Training samples count target-pool entries, rather than repeated minibatch draws. Optimizer updates include all three restarts of every trained circuit.}
 \label{tab:cw_baseline_budgets}
@@ -873,13 +846,41 @@ Independent conditional IQP per condition & 3 & 30,000 & 18,000 \\
 Independent unconditional IQP per condition & 3 & 30,000 & 18,000 \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
+
+\subsubsection{Hyperparameter optimization}
+\label{sec:cw_hpo}
+
+We use Optuna's tree-structured Parzen estimator \cite{akibaOptuna2019} to tune cosine-decay Adam and the Gaussian initialization width, while fixing the encoder, the 136-parameter ansatz, the training pools, kernel weights, and sampling budgets. The shared-model search uses 48 trials, each completing 2,000 sampled-MMD updates on each of two screening seeds, with one restart and no early pruning. The score averages the best exact development-profile TVD across the two seeds. Checkpoint selection includes initialization and every 25 updates at development temperatures $\{0.500,0.700,1.300,1.500\}$. We also tried Schedule-Free Adam \cite{defazioRoadLessScheduled2024} with the same HPO trial budget, but it did not outperform cosine-decay Adam on the development-profile TVD.
+
+\begin{table}[!htbp]
+\centering
+\caption{Adam HPO search ranges for the Curie--Weiss models. Learning rates, initialization widths, and decay ratios are sampled logarithmically; $b_1$ is sampled uniformly.}
+\label{tab:cw_hpo_ranges}
+\small
+\begin{tabular}{lc}
+\toprule
+Setting & Search range \\
+\midrule
+Initial learning rate & $[3\times10^{-4},5\times10^{-2}]$ \\
+Gaussian initialization width $s_\theta$ & $[0.01,0.7]$ \\
+First-moment coefficient $b_1$ & $[0.8,0.98]$ \\
+Final/initial learning-rate ratio & $[0.01,0.3]$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:cw_hpo_ranges} gives the Adam search ranges. Each study uses 12 startup trials and batches of two proposals, with sampler updates ordered independently of completion order. The second-moment coefficient, numerical stabilizer, and weight decay are fixed at $0.999$, $10^{-8}$, and zero. We confirm the two best distinct Adam configurations on three fresh seeds, with three restarts per seed, and select the lowest mean development-profile TVD. The selected settings in Table~\ref{tab:training_hyperparams} are then fixed for evaluation on five further independent seeds, with three restarts per seed and development-based checkpoint selection. Reporting temperatures $\{0.400,1.000,1.600\}$ do not enter this search or selection, although they had been examined in earlier experiments.
+
+For the independent conditional IQP per condition and independent unconditional IQP per condition families, we run one Adam HPO study per family, with 48 trials and the same search ranges and per-circuit budgets. Each trial trains separate circuits at $\beta=0.400,1.000,1.600$ on both screening seeds and averages their best fitted-temperature profile TVDs into one score. One configuration is therefore tuned for each family, rather than separately for each temperature. The original Adam settings and the selected shared-model settings are reference trials within each baseline budget; the shared-model search includes its original settings as a reference trial. We confirm the two best configurations per family on three fresh seeds with three restarts per circuit, then evaluate each selected configuration on five further independent seeds with three restarts per circuit. Selection includes initialization and every 25 updates at each fitted temperature. Equal trial counts require three times as many circuit fits per independent family as for the shared-model Adam search. These evaluations remain in-sample with respect to temperature; fresh seeds measure optimization variability.
+
+Full-bitstring TVD is a secondary exact diagnostic. At $\beta=0.400,1.000,1.600$, the shared conditional IQP across conditions gives $0.2356\pm0.0293$, $0.2102\pm0.0217$, and $0.2345\pm0.0945$; the independent conditional IQP per condition gives $0.1941\pm0.0221$, $0.2337\pm0.0077$, and $0.4829\pm0.0366$; the independent unconditional IQP per condition gives $0.1406\pm0.0364$, $0.3475\pm0.0355$, and $0.3660\pm0.0227$. All spreads are sample standard deviations across the same five seeds. These diagnostics expose errors hidden by Hamming-shell aggregation and are not used to select the reported models.
 
 \subsection{Scaling}
 
 The scaling models use the Curie--Weiss encoder on every wire, with no ancillas and open lattices listed in Table~\ref{tab:scaling_architectures}. At size $n$, the target law is $p(x\mid\beta)\propto\exp[\beta(2|x|-n)^2/(2n)]$. Training uses $\beta\in\{0.600,0.800,1.200,1.400\}$, with 10,000 samples per condition and 40,000 per seed. Evaluation uses $\beta\in\{0.400,0.950,1.000,1.050,1.600\}$. We use three independent seeds at each size. The original configuration uses cosine Adam with initial learning rate $0.01$, final rate $10^{-3}$, $b_1=0.9$, $b_2=0.999$, stabilizer $10^{-8}$, and initialization width $s_\theta=0.1$. Each restart has 5,000 updates, with three restarts per seed. These settings are retained independently of the sixteen-qubit HPO; their transfer or retuning has not been evaluated.
 
-\begin{table}[t]
+\begin{table}[!htbp]
 \centering
 \caption{Scaling architectures, including single-qubit and nearest-neighbor pair phases.}
 \label{tab:scaling_architectures}
