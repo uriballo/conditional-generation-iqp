@@ -1,15 +1,13 @@
 \documentclass[pra,aps,10pt,twocolumn,floatfix,superscriptaddress, notitlepage,longbibliography]{revtex4-2}
 
-\usepackage{xcolor}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{graphicx,color}
+\usepackage{xcolor}
+\usepackage{graphicx}
 \usepackage{amsmath,amssymb,amsfonts}
-\usepackage{quantikz}
 \usepackage{amsthm}
-\newtheorem{definition}{Definition}
+\usepackage{quantikz}
 \usepackage{bm}
-\usepackage[colorlinks=true,citecolor=blue,linkcolor=magenta,urlcolor=blue]{hyperref}
 \usepackage{braket}
 \usepackage{tikz}
 \usepackage{booktabs}
@@ -17,17 +15,19 @@
 \usepackage{siunitx}
 \usepackage{eurosym}
 \usepackage{array}
-\usepackage{booktabs} % \toprule, \midrule, \bottomrule
+
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=magenta,urlcolor=blue]{hyperref}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\mmd}{\operatorname{MMD}}
 
 \sisetup{
   detect-mode,
   table-format=1.40,
   table-number-alignment = center
 }
-
-\newtheorem{proposition}{Proposition}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\mmd}{\operatorname{MMD}}
 
 \begin{document}
 
@@ -68,13 +68,13 @@ Instantaneous quantum polynomial-time (IQP) Born machines offer a scalable appro
 \end{figure*}
 
 \section{Introduction}
-Conditional generative models approximate a family of target distributions $p(\cdot\mid c)$ with a model $q_{\boldsymbol\theta}(\cdot\mid c)$ whose learned parameters are shared across conditions. Classical examples include conditional generative adversarial networks \cite{mirzaConditionalGAN2014} and conditional variational autoencoders \cite{sohnConditionalGenerative2015}. The model defines an output law throughout the encoder's domain, but evaluating their accuracy at conditions omitted from training remains necessary. Quantum Circuit Born Machines (QCBMs) \cite{liuDifferentiableLearning2018,benedettiGenerativeModeling2019} have also been adapted to conditional tasks. Benedetti \textit{et al.} use a conditional Born machine for posterior approximation \cite{benedettiVariationalInference2021}; Kiss \textit{et al.} prepare a condition-dependent input before a shared circuit for Monte Carlo event generation \cite{kissConditionalBornMachine2022}. Zeng \textit{et al.} study a hybrid conditional QCBM \cite{zengConditionalQCBM2023}, while Certo \textit{et al.} use conditional quantum adversarial generation for time-indexed distributions \cite{certoConditionalGenerativeModels2023}.
+Conditional generative models approximate a family of target distributions $p(\cdot\mid c)$ with a model $q_{\boldsymbol\theta}(\cdot\mid c)$ whose learned parameters are shared across conditions. Classical examples include conditional generative adversarial networks \cite{mirzaConditionalGAN2014, isolaImagetoImageTranslationConditional2018,miyatoCGANsProjectionDiscriminator2018}, conditional variational autoencoders \cite{sohnConditionalGenerative2015, walkerUncertainFutureForecasting2016, yanAttribute2ImageConditionalImage2016} and conditional diffusion models \cite{dhariwalDiffusionModelsBeat2021, hoClassifierFreeDiffusionGuidance2022, rombachHighResolutionImageSynthesis2022}. In the quantum domain, quantum circuit Born machines (QCBMs) \cite{liuDifferentiableLearning2018,benedettiGenerativeModeling2019} have also been adapted to conditional tasks \cite{heConditionalGenerativeModel2019}. The main strategy encodes the conditioning variables into the initial quantum state before a shared parameterized circuit \cite{benedettiVariationalInference2021,kissConditionalBornMachine2022}. Related hybrid frameworks encode labels on additional qubits \cite{zengConditionalQCBM2023} or use a condition register to select time-dependent output distributions \cite{certoConditionalGenerativeModels2023}. An alternative learns a joint Born distribution and obtains conditional samples by postselecting outcomes consistent with observed variables \cite{zengLearningInferenceGenerative2019}. Beyond QCBMs, quantum discrete diffusion models support conditional image completion by fixing observed bits during denoising \cite{chenOvercomingDimensionalFactorization2026}.
 
-A particularly promising architecture in this space is the instantaneous quantum polynomial-time (IQP) Born machine. Sampling from appropriate IQP output families is conjectured to be classically intractable under standard complexity-theoretic assumptions \cite{shepherdInstantaneousQuantumComputation2009,bremnerClassicalSimulationCommuting2011,bremnerAverageCaseComplexityApproximate2016,bremnerAchievingQuantumSupremacy2017,marshallImprovedSeparationQuantum2024}. Yet, for training via the maximum mean discrepancy (MMD) objective \cite{grettonKernelTwoSample2012}, which is common for QCBMs \cite{coyleBornSupremacyQuantum2020,liuDifferentiableLearning2018}, the required Pauli-$Z$ expectation values and parameter gradients admit efficient classical estimators \cite{recio-armengolTrainClassicalDeploy2026}. These estimators build on Van den Nest's techniques for computationally tractable states \cite{nestSimulatingQuantumComputers2011}. However, the standard formulation models a single target distribution per circuit. Extending IQP Born machines to conditional generation requires a conditioning mechanism that preserves classical access to the training observables.
+A particularly promising architecture in this space is the instantaneous quantum polynomial-time (IQP) Born machine. Sampling from certain IQP output families is conjectured to be classically intractable under standard complexity-theoretic assumptions \cite{shepherdInstantaneousQuantumComputation2009,bremnerClassicalSimulationCommuting2011,bremnerAverageCaseComplexityApproximate2016,bremnerAchievingQuantumSupremacy2017,marshallImprovedSeparationQuantum2024}. Yet, for training via the maximum mean discrepancy (MMD) objective \cite{grettonKernelTwoSample2012}, which is common for QCBMs \cite{coyleBornSupremacyQuantum2020,liuDifferentiableLearning2018}, the required Pauli-$Z$ expectation values and parameter gradients admit efficient classical estimators \cite{recio-armengolTrainClassicalDeploy2026}. These estimators build on Van den Nest's techniques for computationally tractable states \cite{nestSimulatingQuantumComputers2011}. However, the standard formulation models a single target distribution per circuit. Extending IQP Born machines to conditional generation requires a conditioning mechanism that preserves classical access to the training observables.
 
 In this work, we formulate a conditional IQP Born machine in which a condition-dependent input state \(\ket{\phi(c)}\) is followed by one shared learned unitary \(U_{\boldsymbol\theta}\), giving \(q_{\boldsymbol\theta}(x\mid c)=|\langle x|U_{\boldsymbol\theta}|\phi(c)\rangle|^2\). Prior works have already explored conditional input preparation for quantum models~\cite{benedettiVariationalInference2021,kissConditionalBornMachine2022}. Our contribution is to identify and construct encoders whose reference amplitudes \(\psi_c(z)=\langle z|H^{\otimes n}|\phi(c)\rangle\) permit efficient sampling and amplitude-ratio evaluation across the queried conditions. Applying existing sparse-observable methods \cite{nestSimulatingQuantumComputers2011,havlicekAmplitudeRatiosNeural2023} and IQP training methods \cite{recio-armengolTrainClassicalDeploy2026}, we obtain unbiased estimators of each conditional Pauli-$Z$ moment and phase derivative, with second moments bounded by one and four, respectively. Each specified quantity therefore admits additive error \(\epsilon\) at fixed confidence using \(O(\epsilon^{-2})\) reference samples. Figure~\ref{fig:pipeline_workflow} summarizes the construction and training objective.
 
-We evaluate this conditional formulation across several tasks. First, a sixteen-qubit discrete Gaussian family illustrates how the shared model converts the input condition into a translated output profile. Second, the Curie--Weiss model tests temperature-dependent changes in distributional shape. We compare our approach with independently fitted circuits. We also assess the computational feasibility of classical training on up to $2048$ qubits. Finally, we show how input-state encoding can impose strict output symmetries in unconditional IQP Born machines.
+We evaluate this conditional formulation across several tasks. First, a sixteen-qubit discrete Gaussian family illustrates how the shared model converts the input condition into a translated output profile. Second, the Curie--Weiss model tests temperature-dependent changes in distributional shape. Comparisons with independently fitted circuits reveal a tradeoff: independent fits have lower mean profile errors at $\beta=0.40$ and $1.00$, whereas the shared model has lower mean error at $\beta=1.60$. We also assess the computational feasibility of classical training on up to $2048$ qubits. Finally, we show how input-state encoding can impose strict output symmetries in unconditional IQP Born machines.
 
 The rest of the paper is organized as follows: Section \ref{sec:cond_model} presents the formulation of the conditional IQP model. Section \ref{sec:cond_training} presents the conditional training protocol with the MMD. Section \ref{sec:numerical-experiments} presents the experimental setup and the results from the numerical experiments. Finally, Sections \ref{sec:discussion} and \ref{sec:conclusions} discuss the broader implications of our findings and conclude the work.
 
@@ -640,7 +640,9 @@ We select shared-model hyperparameters and checkpoints using exact profile TVD o
 
 Table~\ref{tab:curie_weiss_profile_tvd} reports mean exact profile TVD and sample standard deviation across five seeds. The shared conditional IQP across conditions improves mean profile error over the encoder at all three reporting temperatures. The independent fits have lower mean errors at $\beta=0.40$ and $1.00$, while the shared conditional IQP across conditions has lower mean error at $\beta=1.60$. At this highest inverse temperature, shared-model errors range from $0.0843$ to $0.374$, compared with $0.263$--$0.353$ for independent conditional IQP per condition and $0.342$--$0.362$ for independent unconditional IQP per condition. The shared conditional IQP across conditions has lower profile error than each independent family in four of the five paired seeds there. These comparisons describe this target family and protocol, rather than a general advantage of parameter sharing.
 
-The comparison has equal trial counts and per-circuit fitting budgets, but unequal aggregate compute and evaluation roles. Per final seed, the shared conditional IQP across conditions trains one circuit with 40,000 pool entries and 6,000 updates across restarts; each independent family trains three circuits with 30,000 pool entries and 18,000 updates. Independent checkpoint selection minimizes exact profile TVD at the fitted temperature, so its reported errors are in-sample. Full-bitstring TVD is a secondary diagnostic and remains appreciable even when profile TVD is small, as detailed in Appendix~\ref{sec:cw_hpo}. The target is uniform within each Hamming shell, but the learned circuit is not guaranteed to be isotropic.
+The comparison has equal trial counts and per-circuit fitting budgets, but unequal aggregate compute and evaluation roles. Per final seed, the shared conditional IQP across conditions trains one circuit with 40,000 pool entries and 6,000 updates across restarts; each independent family trains three circuits with 30,000 pool entries and 18,000 updates. Independent checkpoint selection minimizes exact profile TVD at the fitted temperature, so its reported errors are in-sample.
+
+To assess errors hidden by Hamming-shell aggregation, we also compute the exact full-bitstring TVD, $\operatorname{TVD}(p,q)=\frac{1}{2}\sum_x|p(x)-q(x)|$, from the same selected circuits. At $\beta=0.40,1.00,1.60$, the shared model has mean full-bitstring TVDs of $0.236$, $0.210$, and $0.234$, respectively. These values exceed the corresponding mean profile TVDs, since aggregating probabilities by Hamming weight can hide errors within shells. The target is uniform within each shell, but the learned circuit need not preserve this property. The full-bitstring diagnostics therefore show remaining distributional errors despite the improved profiles. Appendix~\ref{sec:cw_hpo} reports the corresponding variability and baseline values; these diagnostics do not enter model selection.
 
 \begin{table*}[ht!]
 \centering
@@ -696,6 +698,9 @@ At each size, we train at $\beta\in\{0.60,0.80,1.20,1.40\}$ using independent tr
 Figure~\ref{fig:curie_weiss_qubit_scaling} shows a decrease in held-out sampled MMD$^2$ at every system size, followed by a persistent residual. At 64 qubits, the median across runs decreases from $0.0504$ at initialization to $0.0350$ after 5000 updates; at 2048 qubits, it decreases from $0.0490$ to $0.0417$. These results demonstrate the feasibility of classically optimizing conditional IQP Born machines up to 2048 qubits. However, substantial discrepancies remain at high inverse temperature, and a decrease in sampled MMD$^2$ does not establish accurate recovery of the full target distribution. The same bodyness targets are used at every size, so the corresponding kernel bandwidths vary with system size. Absolute MMD$^2$ values should therefore not be interpreted as direct comparisons of distributional fidelity across sizes.
 
 \section{Input-state induced symmetry in unconditional IQP Born machines}
+\label{sec:input-symmetry}
+
+Encoder design determines both the dependence on a condition and the constraints satisfied by the output law. The conditional experiments illustrate the first role; we now demonstrate the second by preparing an input that enforces an exact bit-flip symmetry for every learned phase vector while preserving classical trainability. Such constraints provide inductive biases in variational quantum models \cite{meyerExploitingSymmetry2023}.
 
 \begin{figure}[htbp!]
 \centering
@@ -744,7 +749,7 @@ Figure~\ref{fig:curie_weiss_qubit_scaling} shows a decrease in held-out sampled 
 \label{fig:input-induced-pair-flip}
 \end{figure}
 
-Symmetry-compatible encodings and circuits provide inductive biases in variational quantum models \cite{meyerExploitingSymmetry2023}. The encoder formulation can also impose an exact symmetry on an unconditional IQP Born machine. Choose any nonzero bit mask $s\in\{0,1\}^n$ and prepare
+Choose any nonzero bit mask $s\in\{0,1\}^n$ and prepare
 \begin{equation}
     \ket{\phi_s}
     =\frac{\ket{0^n}+\ket{s}}{\sqrt{2}}.
@@ -769,28 +774,29 @@ The encoded input therefore satisfies the sampling-and-ratio interface, preservi
 
 For example, $s=110$ on three qubits gives $\ket{\phi_s}=(\ket{000}+\ket{110})/\sqrt{2}$ and enforces $q_{\boldsymbol\theta}(x)=q_{\boldsymbol\theta}(x\oplus110)$. The ordinary $\ket{000}$ input does not enforce this relation: with only $\theta_1=\pi/6$ nonzero, it gives $q(000)=3/4$ and $q(110)=0$. Figure~\ref{fig:input-induced-pair-flip} compares the two inputs under the same unitary. This selected-subset construction illustrates the commuting-symmetry recipe of Recio-Armengol \textit{et al.}, whose demonstrated example enforces global bit-flip symmetry \cite{recio-armengolTrainClassicalDeploy2026}.
 
-
 \section{Discussion}
 \label{sec:discussion}
 
-The numerical experiments demonstrate conditional responses under a shared parameter vector, with limitations in distributional accuracy and optimization robustness. The shared conditional IQP across conditions improves mean profile error over the encoder at all three reporting temperatures. Independently fitted models have lower mean profile errors at $\beta=0.40$ and $1.00$, whereas the shared conditional IQP across conditions has lower mean error at $\beta=1.60$ with substantial seed variability. These results compare held-out shared predictions with in-sample independent fits under unequal total compute, and do not establish general superiority or a regularization mechanism. Profile TVD leaves within-shell errors unresolved, and full-bitstring diagnostics do not support treating the learned law as isotropic.
+Our numerical experiments show that a shared parameter vector can learn condition-dependent output profiles. In the Curie--Weiss comparison, the shared conditional IQP across conditions improves mean profile TVD over the encoder at all three reporting temperatures. The independent conditional IQP per condition and independent unconditional IQP per condition have lower mean errors at $\beta=0.40$ and $1.00$, whereas the shared model has lower mean error at $\beta=1.60$, with substantial variability across seeds. This outcome motivates investigating whether training across conditions can improve difficult fits. Different evaluation roles and unequal aggregate training budgets prevent attributing the observed gain to parameter sharing alone.
 
-The original scaling study establishes computational feasibility of classical conditional training up to 2048 qubits, with residual MMD errors. Its optimizer settings, lattice ansatz and evaluation budgets differ from the tuned sixteen-qubit study; optimizer transfer is untested. Size-dependent kernels and the limited distributional information captured by sampled MMD prevent interpreting these trajectories as evidence of accurate full-distribution recovery. Further investigations of scaling performance, encoding, budgets and ansatz design are deferred to the journal version.
+The full-bitstring diagnostics show that accurate Hamming-weight profiles can coexist with appreciable errors within shells. Efficient estimation of the training moments therefore does not guarantee accurate recovery of the full distribution. Herrero-Gonzalez \textit{et al.} analyze discrepancies between classical correlator-based surrogates and deployed Born distributions \cite{herreroBornUltimatum2025}. Under the stated sampling and arithmetic assumptions, our estimators target the moments of the specified circuit without truncating Pauli propagation. Nevertheless, finite sampling budgets and the correlations emphasized by the kernel can leave distributional errors unresolved. Kernel-adaptive IQP training offers a possible extension beyond the fixed Gaussian kernels used here \cite{kurkinUniversalityKernelAdaptive2025}; its benefit for conditional generation remains to be evaluated.
 
-Our classical estimators target the moments of the specified quantum circuit. Herrero-Gonzalez \textit{et al.} analyze deployment discrepancies arising from classical surrogates of Born machines \cite{herreroBornUltimatum2025}. Here, under the stated sampling and arithmetic assumptions, the moment estimator does not truncate Pauli propagation or replace the circuit distribution with a surrogate. Nevertheless, finite sampling budgets and the correlations emphasized by the kernel can leave distributional errors unresolved. Efficient estimation of the training objective therefore provides no general guarantee of accurate conditional generation.
+The scaling experiment demonstrates the computational feasibility of classical conditional training up to 2048 qubits, with residual sampled MMD$^2$ discrepancies. It uses different optimizer settings and a different ansatz from the tuned sixteen-qubit comparison, so transfer of the selected hyperparameters remains untested. The fixed bodyness targets imply size-dependent bandwidths, and the resulting MMD$^2$ values do not provide direct comparisons of distributional fidelity across sizes. Further study of the encoder, ansatz and optimization settings, together with diagnostics beyond sampled MMD, is needed to assess conditional accuracy at larger sizes.
 
-Whether useful trained conditional models retain classical sampling hardness remains open. Herbst \textit{et al.} identify average-case trainability limitations for anticoncentrating output families \cite{herbstLimitsQuantumGenerative2025}. A complementary perspective comes from Bl{\"a}ser \textit{et al.}, who propose an XEB verification protocol for cubic IQP circuits with planted independent spaces \cite{blaeserVerifiableQuantumAdvantage2026}. Under two complexity conjectures, secret knowledge of the planted structure separates verification cost from the cost of classical spoofing, although both remain exponential. Their guarantees concern a prescribed circuit family. Whether comparable guarantees can be preserved under learned phases and condition-dependent inputs is a separate question.
+Encoder design controls the conditional functions available to the model and can impose exact constraints on its output. The product phase encoders studied here provide simple state preparation and efficient sampling and amplitude-ratio evaluation. More structured encoders could offer richer conditional dependence if they retain this interface. The construction in Sec.~\ref{sec:input-symmetry} demonstrates a complementary role: input preparation restricts the output family to distributions with an exact bit-flip symmetry, independently of the learned phases. Spectral Born machines extend IQP generative models through group Fourier analysis while preserving efficient classical training \cite{huangSpectralBorn2026}. Investigating conditional reference-state access in that setting could broaden the framework to other forms of discrete data.
 
-Encoder design is a natural direction for further work. The product phase encoders studied here provide simple state preparation and efficient reference-state access, but also restrict the conditional functions available to the model. More structured encoders could improve these functions while retaining the sampling-and-ratio interface. Evaluating such constructions on richer target families, multidimensional conditions, and quantum hardware would help establish their practical scope. The symmetry example also illustrates how input preparation can impose exact distributional constraints independently of the learned phases.
+Quantum deployment requires assessing how noise and hardware constraints affect conditional accuracy. Ryu \textit{et al.} propose logical-noise injection to decompose large IQP circuits into smaller clusters that fit qubit-limited processors \cite{ryuDeploymentLargeIQP2026}. This approximate strategy introduces a further potential discrepancy from the trained distribution. Its suitability for conditional models requires evaluating such errors across conditions.
+
+Whether useful trained conditional models retain classical sampling hardness remains open. Herbst \textit{et al.} identify average-case trainability limitations for anticoncentrating output families \cite{herbstLimitsQuantumGenerative2025}. Bl{\"a}ser \textit{et al.} propose a cross-entropy verification protocol for cubic IQP circuits with planted independent spaces \cite{blaeserVerifiableQuantumAdvantage2026}. Under two complexity conjectures, secret knowledge of the planted structure creates a polynomial gap between verification and classical spoofing costs, although both remain exponential. These guarantees concern a prescribed circuit family and do not establish hardness for our trained conditional models. Practical quantum advantage would require evidence of useful conditional generation together with an appropriate classical comparison and a justified sampling-hardness claim.
 
 \section{Conclusions}
 \label{sec:conclusions}
 
-We introduced a conditional formulation for IQP Born machines, combining a condition-dependent encoder with a single shared learned unitary. Efficient sampling and amplitude-ratio evaluation of the reference state enable unbiased classical estimation of conditional Pauli-$Z$ moments and phase gradients, supporting training without quantum circuit evaluations.
+We introduced a conditional formulation for IQP Born machines that combines a condition-dependent encoder with a single shared learned unitary. Efficient reference-state sampling and amplitude-ratio evaluation enable unbiased classical estimation of conditional Pauli-$Z$ moments and phase gradients, supporting optimization without quantum circuit evaluations. The same interface also accommodates input states that impose exact output symmetries.
 
-The Gaussian and Curie--Weiss experiments demonstrate learned conditional profiles. Supplementary runs establish classical optimization feasibility up to 2048 qubits. Input-state preparation also imposes an exact bit-flip symmetry in an unconditional example. These results extend the scope of classically trainable IQP Born machines and motivate further work on encoder expressivity, full-distribution accuracy, and quantum deployment.
+The Gaussian and Curie--Weiss experiments demonstrate learned conditional profiles, with temperature-dependent tradeoffs against independently fitted circuits. Supplementary runs establish the computational feasibility of classical optimization up to 2048 qubits. Remaining full-bitstring TVD and sampled MMD$^2$ errors limit claims of distributional accuracy. More expressive tractable encoders, adaptive kernels and evaluation of quantum deployment are directions for improving conditional generation; classical sampling hardness and practical quantum advantage remain open.
 \section*{DATA AVAILABILITY}
-The code and data supporting this study are hosted on GitHub \cite{balloConditionalGenerationIQP2026}.
+The code and data supporting this study are available in GitHub \cite{balloConditionalGenerationIQP2026}.
 
 \section*{Acknowledgments}
 OB is a fellow of Eurecat’s ``Vicente L\'opez'' PhD grant program.
