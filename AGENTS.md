@@ -1,31 +1,27 @@
-# Agent notes
+# Paper reproduction repository
 
-## Layout
+This repository contains the paper, a pinned `iqp-cond` library submodule, and
+one reproduction entry point backed by `paper_experiments/`.
 
-- `iqp-cond/`: library submodule, installed editable by `uv sync`.  It tracks
-  the library's `main`; update with `git submodule update --remote iqp-cond` and
-  commit the pointer.  Library changes belong in that repository, not here.
-- `experiments/`: studies (`gaussian/`, `gaussian2d/`) and shared infrastructure
-  (`common/`), with tests in `experiments/tests/`.
-- `paper/`: placeholder for the manuscript source; its content is gitignored.
-- `results/`: local run outputs, gitignored.  Do not commit them.
+- Do not edit or publish the library from this repository. Use its public API.
+- Retain only experiments and diagnostics described by the current manuscript.
+- Preserve manuscript settings, seed schedules, selection and aggregation when
+  refactoring. Record run configurations, revisions and metrics for every fit.
+- New runs write to ignored `results/`; never replace reviewed paper artifacts
+  automatically. HPO is an explicit, expensive mode.
+- Keep historical local research in `.local_research/`, outside the tracked tree.
 
-## Commands
+Commands:
 
-- `uv sync` installs the environment (library editable plus dev tools).
-- `uv run pytest` runs the experiment tests.
-- `uv run ruff check .` and `uv run ruff format .` for lint and formatting.
-- Smoke runs: `uv run python -m experiments.gaussian.study --smoke` and
-  `uv run python -m experiments.gaussian2d.study --smoke --encoder two_block`.
+```sh
+uv sync --locked --extra hpo
+uv run python run_experiments.py --dry-run
+uv run python run_experiments.py --smoke
+uv run python run_experiments.py --mode figures
+uv run pytest
+uv run ruff check paper_experiments tests run_experiments.py
+```
 
-## Conventions
-
-- Experiments import only the public `iqp_cond` API; the boundary test in
-  `experiments/tests/test_api_boundary.py` enforces it.
-- Every run goes through `experiments.common.runner` so it produces a run
-  directory with config, revisions, metrics, and checkpoint.
-- New studies follow the `Study` descriptor pattern: conditions, target
-  generator, encoder factory, `config.json`, and a `study.py` entry point.
-- MLflow and Optuna integrations are planned but not installed; keep their
-  adapter hooks in `experiments/common/tracking.py` and
-  `experiments/common/sweeps.py`.
+Use `local_flash` for bounded implementation tasks after the primary agent has
+specified behavior and validation. The primary agent owns scientific decisions
+and reviews the final diff. Preserve unrelated local files and library edits.

@@ -1,85 +1,102 @@
-# conditional-generation-iqp
+# Conditional generation with IQP Born machines
 
-Experiments for conditional generation with instantaneous quantum
-polynomial-time circuits, built on the standalone [`iqp-cond`](https://github.com/uriballo/iqp-cond)
-library.
+This repository contains the [paper](paper/main.pdf), its numerical experiments,
+and a pinned link to the [iqp-cond library](https://github.com/uriballo/iqp-cond).
 
-## Two repositories
+## Install
 
-The work is deliberately split across two private repositories:
+Use Python 3.13 and [uv](https://docs.astral.sh/uv/). Repository access is required
+while either repository is private.
 
-- **`iqp-cond`** ([github.com/uriballo/iqp-cond](https://github.com/uriballo/iqp-cond))
-  is the library: encoder interface, conditional Pauli estimator, MMD loss,
-  trainer, ancilla conventions, and the PennyLane/Lightning sampling bridge.  It
-  has its own tests, README, tags (`v0.1.0` through `v0.5.0`), and release
-  cadence.
-- **`conditional-generation-iqp`** (this repository) is the experiment
-  workspace: shared infrastructure in `experiments/common`, the Gaussian and
-  two-parameter Gaussian studies, and the run harness.  It ships no importable
-  package and consumes the library editable from the submodule at `iqp-cond/`.
-
-The link is a git submodule tracking the library's `main` plus an editable uv
-source, so `uv sync` installs exactly the recorded checkout and adopting a new
-library commit is an explicit change here.
-
-| task | repository |
-|---|---|
-| target dataset, encoder map, study, metric, sweep | this one |
-| estimator, MMD loss, trainer, encoder protocol, sampling bridge | `iqp-cond` |
-
-Experiments import only the public `iqp_cond` API
-(`experiments/tests/test_api_boundary.py` enforces this), so the library can
-evolve and release on its own schedule.
-
-## Layout
-
-- `iqp-cond/`: the library as a git submodule tracking its `main` branch.  It is
-  installed editable by `uv sync`; initialize it with
-  `git submodule update --init` and pull the latest library commit with
-  `git submodule update --remote iqp-cond` (then commit the updated pointer).
-  The repository is private, so access needs credentials.
-- `experiments/`: studies and shared infrastructure.
-  - `common/`: datasets, encoder maps, run config and harness, metrics,
-    tracking, sweeps, and plotting style.
-  - `gaussian/`: one-parameter Gaussian Hamming-profile study.
-  - `gaussian2d/`: two-parameter Gaussian study (joint mean and width).
-  - `tests/`: framework tests, including the public-API boundary check.
-- `paper/`: placeholder for the manuscript source; its content is ignored until
-  it is dropped in.
-- `results/`: local run outputs, ignored by git.  Each run writes
-  `results/<study>/<run_id>/` with `config.json`, `run.json` (paper and library
-  revisions), `metrics.json`, and `checkpoint.npz`; `results/index.jsonl`
-  indexes completed runs.
-
-## Workflow
-
-```bash
-uv sync                     # library (editable) plus dev tools
-uv run pytest               # framework and study tests
-uv run ruff check .         # lint
-uv run python -m experiments.gaussian.study --smoke
-uv run python -m experiments.gaussian2d.study --smoke --encoder two_block
+```sh
+git clone --recurse-submodules https://github.com/uriballo/conditional-generation-iqp.git
+cd conditional-generation-iqp
+uv sync --locked --extra hpo
 ```
 
-A full run drops `--smoke`; budgets and seed lists come from each study's
-`config.json`.  `--seeds 1,2,3` overrides them.
+For an existing clone, run `git submodule update --init` before installation.
+The submodule is pinned to `f90875da72b3379c1ea38b844a0a908a20eacf24`.
+Do not update it to a moving branch when reproducing this paper. Checkpoint
+recording and optimizer orchestration live here and require no library patches.
 
-## Adding a study
+## Reproduce
 
-1. Add the target family under `experiments/common/datasets.py` (or a study-local
-   module) and the encoder map under `experiments/common/encoders.py`.
-2. Create `experiments/<study>/` with a `Study` descriptor (conditions, target
-   generator, encoder factory), a `config.json` of frozen parameters, and a
-   `study.py` entry point that calls `experiments.common.runner`.
-3. Cover the new pieces in `experiments/tests/`.
+One entry point runs the paper experiments with their reported settings:
 
-Experiments use only the public `iqp_cond` API; anything the library cannot
-express belongs in the library repository, not here.
+```sh
+uv run python run_experiments.py --dry-run
+uv run python run_experiments.py --smoke
+uv run python run_experiments.py
+```
 
-## Planned integrations
+The default campaign includes Gaussian translation, the shared Curie--Weiss
+model, both independent baseline families, original lattice scaling from 64 to
+2048 qubits, and the three-qubit symmetry example. It uses the selected frozen
+optimizer settings; it does not repeat hyperparameter searches.
 
-- **MLflow** tracking via `experiments/common/tracking.py:log_mlflow`, mirroring
-  each run directory into a local MLflow experiment once the dependency is
-  added.
-- **Optuna** sweeps via `experiments/common/sweeps.py:optuna_objective`, with
-  the run harness as the objective.
+Select a subset with `--experiment gaussian`, `curie-weiss`, `scaling`, or
+`symmetry`. Set `--workers N` for concurrent fits and `--output PATH` to choose
+an output directory. The default is one local worker and `results/paper/`.
+Full runs are computationally expensive. Smoke mode reduces budgets and uses a
+separate output namespace; its results are not paper results.
+
+Repeat the full staged hyperparameter searches explicitly:
+
+```sh
+uv run python run_experiments.py --mode hpo --dry-run
+uv run python run_experiments.py --mode hpo --smoke
+uv run python run_experiments.py --mode hpo
+```
+
+HPO includes 48 unpruned trials each for shared-model cosine Adam and
+Schedule-Free Adam, and one aggregate 48-trial Adam study per independent
+baseline family. Screening, confirmation and final evaluation use distinct
+seed groups. Proposal batches and sampler-update order are fixed. The expanded
+shared-model development grid supplies selection diagnostics, not extra
+training conditions. Independent baselines fit the reported temperatures.
+
+Runs record their configuration, code and library revision, checkpoints and
+metrics. Matching completed jobs resume; incompatible run configurations are
+rejected. Regenerated results and plots stay in the selected output directory
+and do not overwrite the reviewed paper.
+
+## Figures and numerical data
+
+Compact audited data in `paper/data/` retain per-seed profiles, profile/full TVD,
+scaling trajectories, selected settings and provenance. Regenerate numerical
+figures and tables without training:
+
+```sh
+uv run python run_experiments.py --mode figures
+# Render completed new runs instead of committed data:
+uv run python run_experiments.py --mode figures --data-root results/paper/reported
+```
+
+Figures show raw circuit distributions. Curie--Weiss tables summarize per-seed
+errors by mean and sample standard deviation; they are not errors of the mean
+plotted profile. Scaling uses median and interquartile range across seed-level
+bank averages, retains negative unbiased estimates and uses size-dependent
+bandwidths. Its original training budgets remain 512 masks and 1024 reference
+draws, with expected mask weights two and four.
+
+## Paper and checks
+
+The source is `paper/main.tex`, with bibliography `paper/references.bib` and
+editable illustration sources in `paper/figure_sources/`. Compile with a TeX
+installation providing REVTeX, Quantikz and TikZ:
+
+```sh
+cd paper
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+```
+
+Run the focused reproduction checks from the repository root:
+
+```sh
+uv run pytest
+uv run ruff check paper_experiments tests run_experiments.py
+```
+
+The supporting modules contain only paper targets, encoders, training,
+evaluation, HPO and plotting. Exploratory studies and historical research
+artifacts are excluded; local results and archives are ignored by Git.

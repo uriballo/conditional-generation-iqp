@@ -1,20 +1,23 @@
 # Manuscript figures
 
-This directory contains only the four figures included in the handcrafted manuscript. PNGs are previews of the same figures. All numerical fit plots and metrics use raw distributions without probability postprocessing.
+These are the reviewed PDF figures and PNG previews included in `main.tex`.
+The symmetry illustration remains inline in the manuscript.
 
-| PDF | Content |
+| File | Source |
 | --- | --- |
-| `conditional_iqp_workflow.pdf` | Author-approved classical training and conditional quantum generation workflow; editable TikZ source and PNG preview included. |
-| `gaussian_translation_profiles.pdf` | Sixteen-qubit Gaussian translation with an open 4 by 4 lattice and 40 phases. |
-| `curie_weiss_model_comparison.pdf` | Raw encoder-only, shared conditional, independent conditional, and independent ordinary-input profiles. Audited HPO winners, five seeds 5400--5404; 2,048 masks/references and expected weights 2, 4, 6. |
-| `curie_weiss_lattice_scaling_mmd.pdf` | Held-out sampled MMD trajectories for open lattices from 64 to 2048 qubits. Original accepted training protocol retained for the first preprint; tuned optimizer transfer remains untested. |
+| `conditional_iqp_workflow.pdf` | Editable TikZ in `../figure_sources/conditional_iqp_overview.tex` |
+| `gaussian_translation_profiles.pdf` | Selected profiles in `../data/gaussian/`; editable TikZ in `../figure_sources/gaussian_intro.tex` |
+| `curie_weiss_model_comparison.pdf` | Five-seed profiles and metrics in `../data/curie-weiss/figure_data.json` |
+| `curie_weiss_lattice_scaling_mmd.pdf` | Six-size per-seed trajectories in `../data/scaling/figure_data.json` |
 
-The symmetry illustration remains inline in the manuscript LaTeX. It describes actual output symmetry rather than postprocessing. Shared Curie--Weiss predictions are held out; independent comparisons are in-sample.
+Run `python run_experiments.py --mode figures` from the repository root to
+regenerate numerical figures and TVD tables in the ignored results directory.
+Use `--data-root results/paper/reported` to render completed reproduction runs.
+Reviewed paper artifacts are never replaced automatically.
 
-The [filename migration and checksums](../../figure_drafts/paper_figures/provenance.json) record the reviewed PDF/PNG bytes and the approved workflow replacement. The [LaTeX filename list](../../figure_drafts/paper_figures/figure_paths.tex) supports manual manuscript integration. The [workflow editable source and build instructions](../../figure_drafts/conditional_iqp_overview/README.md) accompany the approved workflow PDF and preview. The Gaussian editable source is in `../../figure_drafts/gaussian_intro/`, the current comparison renderer in `../../experiments/curie_weiss/hpo_comparison_figures.py` and [checkpoint provenance](curie_weiss_model_comparison.provenance.json), with the historical export in `../../figure_drafts/curie_weiss_balanced/`, and the ancillary/scaling export in `../../figure_drafts/phase_lattice_scaling/`. Optional training/condition diagnostics are kept with that export; the old combined panel is in `../../figure_drafts/archived_ancilla_scaling/`.
-
-The current workflow revision incorporates adversarial-review clarifications: the reference state is explicit, classical phase evaluation is distinct from the complete output state, squared MMD losses are matched by condition before averaging, and the generation circuit is schematic on n qubits. The author retained the simpler Condition c_i=c_2 and Samples for chosen c_i output wording.
-
-The author-approved layout refinement aligns the encoder columns and outer left edges, places generation headings on a common baseline, matches MMD/data card heights, and wraps Conditional samples onto two lines. The scientific labels and circuit gate spacing are retained.
-
-The entire ancillary study was removed from the first draft at the author's request on 2026-10-03. Its lattice assets are archived in `../../figure_drafts/deferred_ancilla/`; complete-bank results and comparison drafts remain outside the manuscript.
+Curie--Weiss curves average raw profiles across seeds 5400--5404; table errors
+average per-seed exact TVDs. Shared temperatures are excluded from current
+fitting and selection but have historical exposure; independent fits are
+in-sample. Scaling retains the original protocol and summarizes bank averages
+by median and interquartile range across seeds. Its size-dependent kernels
+prevent direct fidelity comparisons between sizes.
