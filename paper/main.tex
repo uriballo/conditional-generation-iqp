@@ -590,11 +590,11 @@ We tune the shared model on development temperatures and each independent family
 
 \begin{table*}[!t]
 \centering
-\caption{Exact raw Curie--Weiss Hamming-profile TVD at sixteen qubits. Trained rows report mean $\pm$ sample standard deviation over five independent training runs. The encoder-only baseline is deterministic. The shared model is evaluated at held-out temperatures, whereas the independent circuits are evaluated at their fitted temperatures.}
+\caption{Exact raw Curie--Weiss Hamming-profile TVD at sixteen qubits. Trained rows report mean $\pm$ sample standard deviation over five independent training runs. The encoder-only baseline is deterministic. The shared model is evaluated at held-out temperatures, whereas the independent circuits are evaluated at their fitted temperatures. Bold entries indicate the lowest mean TVD at each temperature.}
 \label{tab:curie_weiss_profile_tvd}
 \small
 \renewcommand{\arraystretch}{1.15}
-\setlength{\tabcolsep}{8pt}
+\setlength{\tabcolsep}{6pt}
 \begin{tabular}{llccc}
 \toprule
 Model & Evaluation & \multicolumn{3}{c}{Hamming-profile TVD $\downarrow$} \\
@@ -605,20 +605,20 @@ Encoder only
 & Baseline
 & $0.1180$ & $0.4406$ & $0.8699$ \\
 Shared conditional IQP across conditions
-& Held out
+& Held-out
 & $0.0712 \pm 0.0158$
 & $0.0683 \pm 0.0153$
-& $0.1530 \pm 0.1245$ \\
+& $\boldsymbol{0.1530 \pm 0.1245}$ \\
 \midrule
 Independent conditional IQP per condition
-& Fitted
+& Trained
 & $0.0530 \pm 0.0169$
 & $0.0334 \pm 0.0088$
 & $0.2957 \pm 0.0377$ \\
 Independent unconditional IQP per condition
-& Fitted
-& $0.0170 \pm 0.0114$
-& $0.0296 \pm 0.0080$
+& Trained
+& $\boldsymbol{0.0170 \pm 0.0114}$
+& $\boldsymbol{0.0296 \pm 0.0080}$
 & $0.3500 \pm 0.0094$ \\
 \bottomrule
 \end{tabular}

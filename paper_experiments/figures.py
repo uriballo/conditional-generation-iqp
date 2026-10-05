@@ -89,7 +89,7 @@ def curie_tables(payload):
                 rows.append(
                     dict(
                         model=MODEL_NAMES[family],
-                        evaluation="Held out" if family == "shared" else "Fitted",
+                        evaluation="Held-out" if family == "shared" else "Trained",
                         metric=kind + "_tvd",
                         beta=beta,
                         mean=float(mean[i]),
