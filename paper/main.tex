@@ -31,7 +31,7 @@
 
 \begin{document}
 
-\title{Classical training of conditional instanteous quantum polynomial-time Born machines}
+\title{Classical training of conditional instantaneous quantum polynomial-time Born machines}
 
 \author{Oriol Balló-Gimbernat}
 \email{oriol.ballo@eurecat.org}
@@ -441,7 +441,7 @@ The bandwidth $\sigma$ determines which correlation orders are weighted most str
 \end{equation}
 Thus, each bandwidth induces a distribution over Pauli-string weights rather than selecting a single correlation order. Large bandwidths favor low-weight observables, whereas decreasing $\sigma$ shifts weight toward higher-order correlations, with $\E[K]\rightarrow n/2$ as $\sigma\rightarrow0$.
 
-The choice of bandwidth has large implications, as it dictates not only which data correlations are weighted by the loss, but also the overall trainability of the model. Previous results demonstrate that cost functions consisting of global terms can induce barren plateaus \cite{mccleanBarrenPlateausQuantum2018, laroccaBarrenPlateausVariational2025}, even in shallow quantum circuits \cite{cerezoCostFunctionDependent2021}. This creates a fundamental trade-off. Ensuring trainability may require restricting the objective to low-body correlations, which in turn limits the model's capacity to distinguish higher-order terms which may be relevant to model our target dataset \cite{rudolphTrainabilityBarriersOpportunities2024}. While various strategies have been proposed to navigate these optimization issues---including tailored generator sets, restricted initializations \cite{shenCharacterizingTrainability2026,lerchIQPInitialization2026}, and adversarial kernel adaptation \cite{kurkinUniversalityKernelAdaptive2025}---it remains an open questions outside of the scope of this work.
+The choice of bandwidth has large implications, as it dictates not only which data correlations are weighted by the loss, but also the overall trainability of the model. Previous results demonstrate that cost functions consisting of global terms can induce barren plateaus \cite{mccleanBarrenPlateausQuantum2018, laroccaBarrenPlateausVariational2025}, even in shallow quantum circuits \cite{cerezoCostFunctionDependent2021}. This creates a fundamental trade-off. Ensuring trainability may require restricting the objective to low-body correlations, which in turn limits the objective's ability to distinguish distributions that differ in higher-order correlations \cite{rudolphTrainabilityBarriersOpportunities2024}. While various strategies have been proposed to navigate these optimization issues---including tailored generator sets, restricted initializations \cite{shenCharacterizingTrainability2026,lerchIQPInitialization2026}, and adversarial kernel adaptation \cite{kurkinUniversalityKernelAdaptive2025}---this remains an open question outside the scope of this work.
 
 \subsection{Unbiased finite-sample MMD and gradients}
 \label{sec:unbiased-conditional-mmd}
@@ -601,7 +601,7 @@ where $\rho(k)$ is the probability of observing a bitstring of weight $k$. The t
 \begin{figure*}[ht!]
     \centering
     \includegraphics[width=0.900\linewidth]{figures/gaussian_translation_profiles.pdf}
-    \caption{Mean Hamming weight translation via conditioning. The three panels compare the target, the trained conditional IQP Born machine, and the encoder-only output. The displayed conditions were excluded from training and checkpoint selection. Dashed curves show the targets, solid blue curves show the trained model, and dotted grey curves show the encoder-only output.}
+    \caption{Mean Hamming weight translation via conditioning. The three panels compare the target, the trained conditional IQP Born machine, and the encoder-only output. The displayed conditions were excluded from training and checkpoint selection. Dashed curves show the targets, solid blue curves show the trained model, and dotted grey curves show the encoder-only output. Model curves illustrate one run selected independently of held-out performance; the aggregate error reported in the text summarizes ten runs.}
     \label{fig:gaussian-translation}
 \end{figure*}
 
@@ -613,7 +613,7 @@ We use a fixed product state encoder that applies the same two rotations to ever
 \end{equation}
 Measurement immediately after this encoder yields a fixed distribution; changing $c$ modifies the input phases but leaves the outcome probabilities unchanged. 
 
-The shared unitary uses an $4\times4$ lattice with 16 one-body gates and 24 horizontal and vertical nearest-neighbor gates, giving 40 trainable parameters.
+The shared unitary uses a $4\times4$ lattice with 16 one-body gates and 24 horizontal and vertical nearest-neighbor gates, giving 40 trainable parameters.
 
 We train at $c\in\{0,0.250,0.500,0.750,1\}$ using 1000 target samples per condition and 300 optimizer updates. We evaluate the selected circuits across 80 conditions excluded from training. The median across runs of the mean evaluation profile TVD is $0.0670$, compared with $0.292$ for the encoder alone. Figure~\ref{fig:gaussian-translation} illustrates the learned translation by the conditional model.
 
@@ -858,7 +858,7 @@ The model has 16 visible qubits on an open $4\times4$ lattice, with 16 single-qu
     \bigotimes_{i=1}^{16}
     R_Z(c-1/2)R_Y(1.50)\ket{0}_i.
 \end{equation}
-The target profile is $\rho(k\mid c)\propto\exp[-(k-(5+6c))^2/8]$, with uniform probabilities within each Hamming-weight shell. Training uses $c\in\{0,0.250,0.500,0.750,1\}$ and 1,000 samples per condition, giving 5,000 training samples per seed. Evaluation uses $c_j=(j+1/3)/80$ for $j=0,\ldots,79$, with 1,000 target draws per condition for auxiliary test-MMD diagnostics. Profile TVDs use exact probabilities; the aggregate error is the median across ten independent seeds of the mean error over evaluation conditions.
+The target profile is $\rho(k\mid c)\propto\exp[-(k-(5+6c))^2/8]$, with uniform probabilities within each Hamming-weight shell. Training uses $c\in\{0,0.250,0.500,0.750,1\}$ and 1,000 samples per condition, giving 5,000 training samples per seed. We select the checkpoint minimizing mean exact profile TVD at development conditions $c\in\{0.125,0.375,0.625,0.875\}$, including initialization and checks every 30 updates. Evaluation uses $c_j=(j+1/3)/80$ for $j=0,\ldots,79$, with 1,000 target draws per condition for auxiliary test-MMD diagnostics. Profile TVDs use exact probabilities; the aggregate error is the median across ten independent seeds of the mean error over evaluation conditions.
 
 \subsection{Curie--Weiss comparison}
 
