@@ -11,9 +11,10 @@
   "aggregation": "Mean raw profiles; table TVDs are means and sample standard deviations of per-seed errors.",
   "sha256": {
     "paper/data/curie-weiss/figure_data.json": "6a5afab0cb816b26fd165906cb0b74172eec7f2fc8eeb6d0f9001d2f23f4ae5b",
-    "paper_experiments/figures.py": "b5b048504679645abe9959b3df7e7f1b188af76e340c3a21c8055c996c1ac652",
-    "paper/figures/curie_weiss_model_comparison.pdf": "e0662699b274a75180c8803e2e4aaad4001235c085192dd863e94887de53f7af",
-    "paper/figures/curie_weiss_model_comparison.png": "1729cf2593037275aebf025b4bc70c990d03ef0997f43098c0f977e442b40010"
+    "paper_experiments/figures.py": "1eef43b5462d77de37a4754bdf07f94ebcf096793fd45475a5f8bca0f1fcf81a",
+    "paper/figures/curie_weiss_model_comparison.pdf": "8b561349783d81a212a6d5ca8c275a9d15735f7be3c25b05e73a4e600fddb892",
+    "paper/figures/curie_weiss_model_comparison.png": "f40ef26b675a9000341b36a36b37bc480c906f9052658802fb67a0e267da02ab"
   },
-  "horizontal_axis": "Dimensionless magnetization per spin m=(2k-16)/16"
+  "horizontal_axis": "Dimensionless magnetization per spin m=(2k-16)/16",
+  "vertical_axis": "Probability mass; one centered figure-level label"
 }

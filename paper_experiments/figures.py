@@ -139,8 +139,7 @@ def _curie(data, output):
         ax.set_xticks([-1, -0.5, 0, 0.5, 1])
         ax.spines[["top", "right"]].set_visible(False)
     fig.supxlabel(r"Magnetization per spin $m$", fontsize=10)
-    for ax in axes[:, 0]:
-        ax.set_ylabel("Probability mass")
+    fig.supylabel("Probability mass", fontsize=10)
     handles = [
         plt.Line2D([], [], color=COLORS[i], label=rf"$\beta={beta:.1f}$")
         for i, beta in enumerate(payload["betas"])
