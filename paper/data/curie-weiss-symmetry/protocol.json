@@ -1,0 +1,108 @@
+{
+  "experiment": "curie-weiss-symmetry",
+  "arms": {
+    "general": "cw_general",
+    "projected": "cw_projected"
+  },
+  "trials": 48,
+  "screen_seeds": [
+    6200,
+    6201
+  ],
+  "confirmation_seeds": [
+    6300,
+    6301,
+    6302
+  ],
+  "final_seeds": [
+    6400,
+    6401,
+    6402,
+    6403,
+    6404
+  ],
+  "sampler_seeds": {
+    "general": 20261005,
+    "projected": 20261006
+  },
+  "batch_size": 2,
+  "n_startup_trials": 12,
+  "pruning": false,
+  "confirmation_candidates": 2,
+  "smoke": false,
+  "training_conditions": [
+    0.6,
+    0.8,
+    1.2,
+    1.4
+  ],
+  "development_conditions": [
+    0.5,
+    0.7,
+    1.3,
+    1.5
+  ],
+  "reporting_conditions": [
+    0.4,
+    1.0,
+    1.6
+  ],
+  "selection": "mean_exact_development_profile_tvd",
+  "confirmation_tie_break": "candidate_sha256",
+  "references": [
+    {
+      "name": "adam",
+      "learning_rate": 0.01,
+      "init_scale": 0.5,
+      "b1": 0.9,
+      "final_learning_rate_ratio": 0.1
+    },
+    {
+      "name": "adam",
+      "learning_rate": 0.04014691865370211,
+      "final_learning_rate_ratio": 0.08111685641025783,
+      "init_scale": 0.43008014083790563,
+      "b1": 0.967827235881252
+    }
+  ],
+  "ranges": {
+    "learning_rate": [
+      0.0003,
+      0.05
+    ],
+    "init_scale": [
+      0.01,
+      0.7
+    ],
+    "b1": [
+      0.8,
+      0.98
+    ],
+    "final_learning_rate_ratio": [
+      0.01,
+      0.3
+    ]
+  },
+  "source_sha256": {
+    "__init__.py": "6878e1fab9a9411f80dcf219f947da424ec7b0926a8026ba801c03cbea6b90b9",
+    "ansatz.py": "aa3621288bbc56c2e250222695ae8cf6c11252ce393e27ee834f935425e4490a",
+    "campaign.py": "c6ee64cbbc5d376c89d3ed9745aa60b477669e5843f8d426bc82ef9183eb7996",
+    "config.py": "e9a626715d4118e909361e1db3e3a1f1a924dab60e0e61df289fdf03c11a7de5",
+    "engine.py": "20cc55dfdfdb6db9446895cd6099b34f850055007b81b0935ec1453b27e5b834",
+    "figures.py": "976875e604597b1f935cb3313053275656ebd419e7c3011f7e630b058b4f505d",
+    "gaussian.py": "8e2ed8888d39c20bfd65c83cbfeee380e296568fef4e015ae61d07348290f9a7",
+    "hpo.py": "9920f15e4beb76954b0841d5102f75f00d1abf659e26584d62e32caaf27ba20f",
+    "metrics.py": "6573a810aee9e7b2abf7109ea206875c2ece3d78ed5f8e0033e94801606bc42b",
+    "phase_encoder.py": "86db8cfd221852932a58a7159135be0c547a6377a979262dd72d189159ad3b48",
+    "runtime.py": "d088f90a0523ffbbee80864742d1657abfc22f648c7c4cf0dc5221a36d1c6176",
+    "scaling.py": "1d2d8fd5eacb57953cf62ffc754302350511ceec1b47869ec72671bcbb913c1c",
+    "spin_flip_encoder.py": "015ba14506727a9ce669bb752846b6cf25e1aa9074f585965d32651fed5a69ba",
+    "studies.py": "cce79532846a4cf7d0560af865bf28fa5c762ac1fed001a433a07cd818a33d46",
+    "symmetry_campaign.py": "b550dd52805c81a357c42b27a2dcbc31fa64dd8768f99e9ba644a3a9ee7bcd88",
+    "symmetry_figures.py": "2b53a440b29fc8d80eac3c4e3b1abe4cffaad55da417b3b3504eaf1c43ee589a",
+    "target.py": "b2e9c6f76ab9f8bef2274add3bae0ecf63735e3074e668cf56163a1db4683d72",
+    "training.py": "e6e42cfab7e7b0dee5abc58af3e1eb7a617b17c5f756cd56c6595b7af8b13430"
+  },
+  "library_commit": "f90875da72b3379c1ea38b844a0a908a20eacf24",
+  "lock_sha256": "aea6715dd67736530b62a9fb4f8a0d7ef9420557f772948f7681d6f687ab3bae"
+}

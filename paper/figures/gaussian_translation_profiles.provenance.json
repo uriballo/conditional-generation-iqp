@@ -1,0 +1,15 @@
+{
+  "renderer": "paper_experiments/figures.py",
+  "renderer_sha256": "5324a16c5810dc666ee4209a88e0ed9bc284dfd6a4906248e6618ae067a39a99",
+  "inputs": {
+    "results.json": "822804bf66a8694bd0e29cbb901843b8b96a6859e6b75808da0f05f4b179dd10",
+    "profile_10.csv": "39eb738191f99bfe70fd032cea172ded9a751335a647d7298f21e8af8977a139",
+    "profile_40.csv": "7f880497f544cfd6e42cd8e397d8a790ae2398a48e98d173568266b185c68528",
+    "profile_70.csv": "32dd0d3f6bf93ab018912f2bff5997fe60d3663e9575e2a90707b19ab4c28c76"
+  },
+  "primary_metric": "full_tvd",
+  "secondary_metric": "profile_tvd",
+  "selection_metric": "profile_tvd",
+  "aggregation": "Full-TVD curve: pointwise median/IQR across runs; table: median across seed-wise means over conditions. Profile panels retain the originally selected run.",
+  "selection_changed": false
+}

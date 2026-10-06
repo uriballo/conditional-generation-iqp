@@ -1,0 +1,25 @@
+\begin{table}[!htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{3pt}
+\caption{Exact encoder-only errors and diagnostics after averaging the trained product-input output with its complement. Full TVD is primary and Profile TVD is secondary. Encoder-only rows are deterministic. Averaged outputs use the same checkpoints without additional fitting or selection. Means $\pm$ sample standard deviations over 5 paired seeds. Reporting temperatures enter neither fitting nor current selection but have historical exposure.}
+\label{tab:cw_symmetry_secondary}
+\begin{tabular}{llccc}
+\toprule
+Model & Metric & $\beta=0.4$ & $\beta=1.0$ & $\beta=1.6$ \\
+\midrule
+Product-state input, encoder only & Full TVD & $0.1180$ & $0.4406$ & $0.8699$ \\
+ & Profile TVD & $0.1180$ & $0.4406$ & $0.8699$ \\
+ & $D_{\mathrm{flip}}$ & $0.0000$ & $0.0000$ & $0.0000$ \\
+\midrule
+Spin-flip invariant input, encoder only & Full TVD & $0.2561$ & $0.5536$ & $0.9002$ \\
+ & Profile TVD & $0.2561$ & $0.5536$ & $0.9002$ \\
+ & $D_{\mathrm{flip}}$ & $0.0000$ & $0.0000$ & $0.0000$ \\
+\midrule
+Product output, classically averaged & Full TVD & $0.0585\pm0.0066$ & $0.2010\pm0.0164$ & $0.1921\pm0.0217$ \\
+ & Profile TVD & $0.0223\pm0.0048$ & $0.0645\pm0.0112$ & $0.0986\pm0.0154$ \\
+ & $D_{\mathrm{flip}}$ & $0.0000\pm0.0000$ & $0.0000\pm0.0000$ & $0.0000\pm0.0000$ \\
+\bottomrule
+\end{tabular}
+\end{table}

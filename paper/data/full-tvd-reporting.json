@@ -1,0 +1,88 @@
+{
+  "revised_utc": "2026-10-06T07:27:18.169698+00:00",
+  "scope": "Author-requested full-distribution TVD reporting revision; author review pending",
+  "primary_metric": "exact full-distribution TVD",
+  "secondary_metric": "exact Hamming-profile TVD",
+  "training_objective": "unbiased squared MMD, unchanged",
+  "selection_metric": "original profile TVD, unchanged",
+  "fits_changed": false,
+  "checkpoints_changed": false,
+  "hpo_rerun": false,
+  "artifacts": {
+    "paper/main.tex": "5c970d0ffa1e9e1965c6a37299b53190d60bd884631bea30893c2e0c56925a91",
+    "paper/main.pdf": "7f524f6493c59904d17754b58e38f37486ec78ac48eaf87a4ad84be0d0e9bf7d",
+    "paper/tables/curie_weiss_full_tvd.tex": "f3f31e0c2bfeaecf98d9ca612633e03b6c6fbe4112f353f52693d6c45f03e2d0",
+    "paper/tables/curie_weiss_profile_tvd.tex": "65b85556c3d6f92aa310587c6cd8d5c3bef89c706972197f462d196daf350d1c",
+    "paper/tables/curie_weiss_symmetry_main.tex": "7bb9e6e038edb92f5b9c34ad45fdc085dd93ffd3d590f9466bb6f6fdcbe87453",
+    "paper/tables/curie_weiss_symmetry_paired.tex": "cd3ab7f37afec8c4590182a8cf687ebabeaaeda13ee15112190049271967b1a7",
+    "paper/tables/curie_weiss_symmetry_secondary.tex": "422f944dd529730931acda1fb548da501403ca2156b744099492982d2aa3ca87",
+    "paper/tables/curie_weiss_symmetry_settings.tex": "68eb80869cfb7091bb7609f3c8f57784d85524726562dc56f5a7afd477fc912f",
+    "paper/tables/gaussian_tvd.tex": "78f5061603484ab2725c719a6144661268f634aeeba3c93782508d860701231c",
+    "paper/figures/gaussian_translation_profiles.pdf": "199b96628f06b2dd0ea6931554e5e3bb5ca491b2f7cf0916e02d099eb418d218",
+    "paper/figures/gaussian_translation_profiles.png": "4e44e02f38eefa88770426b5344fd955152f1846cb0fbc9155494bc189f63c75",
+    "paper/figures/gaussian_translation_profiles.provenance.json": "fc63484de1359d8a38790a1f814f2a31b77d5f84527c16257ca8b9d656d50518",
+    "paper/figures/curie_weiss_model_comparison.pdf": "5d5752d9d4cab343712c3854266dac02e6a95bab1a580695aa04d90c364692c4",
+    "paper/figures/curie_weiss_model_comparison.png": "8872d904a8af1e29e9b091faafbde6e9ea56cc3f6f5a28ee7abaea65dccdff67",
+    "paper/figures/curie_weiss_model_comparison.provenance.json": "02aa550b688b37e66836358fa2ffad24614e3410fe224e555d2ce067eddeefac",
+    "paper/figures/curie_weiss_symmetry_comparison.pdf": "b5a380ee2f01005028e110d84ba470f3c881bdb5eadbac00a21f41cf73bd91b4",
+    "paper/figures/curie_weiss_symmetry_comparison.png": "8f721b6d7e9ef37213b237ba26eaeedc1c44591361d14691ef99082871b47a44",
+    "paper/figures/curie_weiss_symmetry_comparison.provenance.json": "77a4dcafeed10108d7185ce23600bc5ef865eca6d78c9e9299f337a4a21b93d1"
+  },
+  "inputs": {
+    "paper/data/gaussian/results.json": "822804bf66a8694bd0e29cbb901843b8b96a6859e6b75808da0f05f4b179dd10",
+    "paper/data/curie-weiss/figure_data.json": "6a5afab0cb816b26fd165906cb0b74172eec7f2fc8eeb6d0f9001d2f23f4ae5b",
+    "paper/data/curie-weiss-symmetry/figure_data.json": "d1d7fc0dad95ed56bcc7147acf321c19be7dedf40092b9509d94e0546808f4dc",
+    "paper/data/curie-weiss-symmetry/winner.json": "9ffb68a0fc2cf566bc6103f724deb981de57b5c8d483102ed7140ef6697a358b",
+    "paper/data/curie-weiss-symmetry/protocol.json": "0dd9cc695478c4e3a3c07c32f5a5d51cf2eb00a1eba4e7002204f4366155d99f"
+  },
+  "rendering_sources": {
+    "paper_experiments/figures.py": "5324a16c5810dc666ee4209a88e0ed9bc284dfd6a4906248e6618ae067a39a99",
+    "paper_experiments/symmetry_figures.py": "9440ae548d301dd6afaabf0e6f51dcb12c67c2b69ea9f5d6d3e29c50de80bcae",
+    "paper_experiments/symmetry_tables.py": "c233ef4ae41896cfc69d274363179498f076557b0803844ac074faefb92b31f5"
+  },
+  "validation": {
+    "full_pytest_passed": 42,
+    "additional_focused_pytest_passed": 5,
+    "ruff_passed": true,
+    "diff_check_passed": true,
+    "manuscript_pages": 20,
+    "undefined_references": false,
+    "overfull_boxes": false,
+    "revtex_deferred_float_warnings": true,
+    "visual_review": "All result figures and relevant manuscript/appendix pages inspected; all floats present without clipping.",
+    "visually_reviewed_pages": [
+      1,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      15,
+      17,
+      18,
+      19,
+      20
+    ]
+  },
+  "manuscript_revision": {
+    "updated_utc": "2026-10-06T12:46:49.412602+00:00",
+    "scope": "Manuscript methods and presentation update; reported numerical fits unchanged",
+    "full_tvd_hpo_protocol_documented": true,
+    "numerical_seed_ids_in_manuscript": false,
+    "optimizer_names_use_texttt": true,
+    "artifacts": {
+      "paper/main.tex": "f8d1c19ebff65d89ac375c5b43f837db59fd1e8f8c3e14bb3f53d723f5e57474",
+      "paper/main.pdf": "94221ff9d1f12ac8899f53822521caa0869a7062e37e36cf1c5e0f5208bc136b",
+      "paper/references.bib": "1923ad4d6b60072b607f7b077742c2c1c6dbc541489dc5d48358b774f45cd33c",
+      "paper/tables/curie_weiss_full_tvd.tex": "f3f31e0c2bfeaecf98d9ca612633e03b6c6fbe4112f353f52693d6c45f03e2d0",
+      "paper/tables/curie_weiss_profile_tvd.tex": "65b85556c3d6f92aa310587c6cd8d5c3bef89c706972197f462d196daf350d1c",
+      "paper/tables/curie_weiss_symmetry_main.tex": "7bb9e6e038edb92f5b9c34ad45fdc085dd93ffd3d590f9466bb6f6fdcbe87453",
+      "paper/tables/curie_weiss_symmetry_paired.tex": "631732595a0a4afa7a530871182a4be5e3477ee1e366abf597944cf7dc0d4776",
+      "paper/tables/curie_weiss_symmetry_secondary.tex": "422f944dd529730931acda1fb548da501403ca2156b744099492982d2aa3ca87",
+      "paper/tables/curie_weiss_symmetry_settings.tex": "e784533caafff5e37cb3a8b6409055d458b6e6cdbdc1126269e0ce009c9e6135",
+      "paper/tables/gaussian_tvd.tex": "78f5061603484ab2725c719a6144661268f634aeeba3c93782508d860701231c"
+    }
+  }
+}

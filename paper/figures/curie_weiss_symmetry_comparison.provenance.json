@@ -1,0 +1,23 @@
+{
+  "input_sha256": "d1d7fc0dad95ed56bcc7147acf321c19be7dedf40092b9509d94e0546808f4dc",
+  "renderer_sha256": "9440ae548d301dd6afaabf0e6f51dcb12c67c2b69ea9f5d6d3e29c50de80bcae",
+  "input": "figure_data.json",
+  "seeds": [
+    6400,
+    6401,
+    6402,
+    6403,
+    6404
+  ],
+  "betas": [
+    0.4,
+    1.0,
+    1.6
+  ],
+  "n_visible": 16,
+  "profile_aggregation": "mean-of-raw-profiles",
+  "error_aggregation": "mean/sample-SD-of-per-seed-errors",
+  "primary_metric": "full_tvd",
+  "secondary_metric": "profile_tvd",
+  "selection_metric": "profile_tvd"
+}

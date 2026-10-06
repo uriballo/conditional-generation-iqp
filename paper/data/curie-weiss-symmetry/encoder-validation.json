@@ -1,0 +1,112 @@
+{
+  "preparation": [
+    {
+      "n": 2,
+      "beta": 0.4,
+      "preparation_amplitude_max_error": 1.110311076871224e-16
+    },
+    {
+      "n": 2,
+      "beta": 1.0,
+      "preparation_amplitude_max_error": 1.114174724879541e-16
+    },
+    {
+      "n": 2,
+      "beta": 1.6,
+      "preparation_amplitude_max_error": 2.235566352356393e-16
+    },
+    {
+      "n": 3,
+      "beta": 0.4,
+      "preparation_amplitude_max_error": 1.6655984080181885e-16
+    },
+    {
+      "n": 3,
+      "beta": 1.0,
+      "preparation_amplitude_max_error": 1.1121121315186822e-16
+    },
+    {
+      "n": 3,
+      "beta": 1.6,
+      "preparation_amplitude_max_error": 1.1213281519635697e-16
+    },
+    {
+      "n": 4,
+      "beta": 0.4,
+      "preparation_amplitude_max_error": 1.1102230704487706e-16
+    },
+    {
+      "n": 4,
+      "beta": 1.0,
+      "preparation_amplitude_max_error": 1.6684809620026287e-16
+    },
+    {
+      "n": 4,
+      "beta": 1.6,
+      "preparation_amplitude_max_error": 2.2372554121201265e-16
+    },
+    {
+      "n": 5,
+      "beta": 0.4,
+      "preparation_amplitude_max_error": 8.327339775166571e-17
+    },
+    {
+      "n": 5,
+      "beta": 1.0,
+      "preparation_amplitude_max_error": 1.3895178351669734e-16
+    },
+    {
+      "n": 5,
+      "beta": 1.6,
+      "preparation_amplitude_max_error": 1.1217819431261009e-16
+    },
+    {
+      "n": 6,
+      "beta": 0.4,
+      "preparation_amplitude_max_error": 1.1102279840884252e-16
+    },
+    {
+      "n": 6,
+      "beta": 1.0,
+      "preparation_amplitude_max_error": 1.6673094365341648e-16
+    },
+    {
+      "n": 6,
+      "beta": 1.6,
+      "preparation_amplitude_max_error": 1.678129227044452e-16
+    },
+    {
+      "n": 8,
+      "beta": 0.4,
+      "preparation_amplitude_max_error": 6.938980459124893e-17
+    },
+    {
+      "n": 8,
+      "beta": 1.0,
+      "preparation_amplitude_max_error": 1.1127735379711098e-16
+    },
+    {
+      "n": 8,
+      "beta": 1.6,
+      "preparation_amplitude_max_error": 8.440289454531904e-17
+    },
+    {
+      "n": 16,
+      "beta": 0.4,
+      "preparation_amplitude_max_error": 1.0408580270538514e-17
+    },
+    {
+      "n": 16,
+      "beta": 1.0,
+      "preparation_amplitude_max_error": 1.3903557459598793e-17
+    },
+    {
+      "n": 16,
+      "beta": 1.6,
+      "preparation_amplitude_max_error": 2.0922064236685937e-17
+    }
+  ],
+  "n16_public_numpy_replay_max_error": 1.6534083130403943e-18,
+  "n16_projected_spin_flip_max_error": 0.0,
+  "n16_product_spin_flip_max_error": 0.0002277010322470282
+}

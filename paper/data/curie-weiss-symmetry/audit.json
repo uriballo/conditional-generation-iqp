@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "full_checkpoint_replay": true,
+  "records": [
+    {
+      "arm": "general",
+      "seed": 6400,
+      "selected_restart": 0,
+      "selected_step": 875,
+      "checkpoint_sha256": "31ab9e9410e2ca961510bcbcc5f92cab7ea6b2694f78e7aa0e3b3e326c0dad75"
+    },
+    {
+      "arm": "general",
+      "seed": 6401,
+      "selected_restart": 1,
+      "selected_step": 1275,
+      "checkpoint_sha256": "cdb938c47575a2b9c0b4828944decd52ca4197b2ac66d94ca8de28aceb9efb25"
+    },
+    {
+      "arm": "general",
+      "seed": 6402,
+      "selected_restart": 1,
+      "selected_step": 775,
+      "checkpoint_sha256": "8972f0f445cf23df8d26171d48c132f4ef74fc71ab658dfccf83397194273e0a"
+    },
+    {
+      "arm": "general",
+      "seed": 6403,
+      "selected_restart": 2,
+      "selected_step": 1225,
+      "checkpoint_sha256": "fa4313cd6302be507870fb701cc5942a9b1f7c8ecf9332136e393600e6a23f7a"
+    },
+    {
+      "arm": "general",
+      "seed": 6404,
+      "selected_restart": 0,
+      "selected_step": 1525,
+      "checkpoint_sha256": "1ae426ad5b6701e9310c097ea8247439d5fd9490c3560f8abd046fc89d28e233"
+    },
+    {
+      "arm": "projected",
+      "seed": 6400,
+      "selected_restart": 0,
+      "selected_step": 1625,
+      "checkpoint_sha256": "427e8f859171bbfee56de7f8be4eb152e27e17dd202318a09de42b58489d84aa"
+    },
+    {
+      "arm": "projected",
+      "seed": 6401,
+      "selected_restart": 1,
+      "selected_step": 1075,
+      "checkpoint_sha256": "feb5e3ebdd82b26217bca5ed66cd310358a14184ed56ef8e456248f68cfadc94"
+    },
+    {
+      "arm": "projected",
+      "seed": 6402,
+      "selected_restart": 0,
+      "selected_step": 2000,
+      "checkpoint_sha256": "deeab9fdcde5d6b7b4723f5c4a8efbda1b0071c6a1641d2c006bcf392c7b7d5a"
+    },
+    {
+      "arm": "projected",
+      "seed": 6403,
+      "selected_restart": 0,
+      "selected_step": 1225,
+      "checkpoint_sha256": "9e93a58b71ce5680e8ecd934b9358e216bf22a8d1803212f2ac85291497d3103"
+    },
+    {
+      "arm": "projected",
+      "seed": 6404,
+      "selected_restart": 0,
+      "selected_step": 1950,
+      "checkpoint_sha256": "b2efe680c27e3ec7e81597fe50c363638ba4d68e2173526f29894358f6c9e1e5"
+    }
+  ]
+}

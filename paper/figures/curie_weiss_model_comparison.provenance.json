@@ -1,20 +1,12 @@
 {
   "renderer": "paper_experiments/figures.py",
-  "compact_data": "paper/data/curie-weiss/figure_data.json",
-  "seeds": [
-    5400,
-    5401,
-    5402,
-    5403,
-    5404
-  ],
-  "aggregation": "Mean raw profiles; table TVDs are means and sample standard deviations of per-seed errors.",
-  "sha256": {
-    "paper/data/curie-weiss/figure_data.json": "6a5afab0cb816b26fd165906cb0b74172eec7f2fc8eeb6d0f9001d2f23f4ae5b",
-    "paper_experiments/figures.py": "1eef43b5462d77de37a4754bdf07f94ebcf096793fd45475a5f8bca0f1fcf81a",
-    "paper/figures/curie_weiss_model_comparison.pdf": "8b561349783d81a212a6d5ca8c275a9d15735f7be3c25b05e73a4e600fddb892",
-    "paper/figures/curie_weiss_model_comparison.png": "f40ef26b675a9000341b36a36b37bc480c906f9052658802fb67a0e267da02ab"
+  "renderer_sha256": "5324a16c5810dc666ee4209a88e0ed9bc284dfd6a4906248e6618ae067a39a99",
+  "inputs": {
+    "figure_data.json": "6a5afab0cb816b26fd165906cb0b74172eec7f2fc8eeb6d0f9001d2f23f4ae5b"
   },
-  "horizontal_axis": "Dimensionless magnetization per spin m=(2k-16)/16",
-  "vertical_axis": "Probability mass; one centered figure-level label"
+  "primary_metric": "full_tvd",
+  "secondary_metric": "profile_tvd",
+  "selection_metric": "profile_tvd",
+  "aggregation": "Mean raw profiles; full-TVD points and tables: mean/sample SD of individual-seed errors. Encoder is deterministic.",
+  "selection_changed": false
 }

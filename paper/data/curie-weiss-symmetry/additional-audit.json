@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "utc": "2026-10-05T20:46:55.892109+00:00",
+  "elapsed_seconds": 77.2369069539709,
+  "seed_pairing": [
+    {
+      "seed": 6400,
+      "initialization_direction_max_error": 2.220446049250313e-16,
+      "training_pool_sha256": "c2a866666425244ca7b527eb581ad4f80299f0a095986cab84fa43a885d47b08"
+    },
+    {
+      "seed": 6401,
+      "initialization_direction_max_error": 2.220446049250313e-16,
+      "training_pool_sha256": "af3550a948b35987e2f6d0d1aa6f0208f2e35b544ec119baee953f04343276f4"
+    },
+    {
+      "seed": 6402,
+      "initialization_direction_max_error": 2.220446049250313e-16,
+      "training_pool_sha256": "fc08ffc06562a8e303df57db016cc6440882c6c16ffe4becb41aca9237e773be"
+    },
+    {
+      "seed": 6403,
+      "initialization_direction_max_error": 4.440892098500626e-16,
+      "training_pool_sha256": "e2409e0872bc897f564bf049496127ec726dd8e4a158676e322b1f68391f6598"
+    },
+    {
+      "seed": 6404,
+      "initialization_direction_max_error": 4.440892098500626e-16,
+      "training_pool_sha256": "5fe8cf372e36b2e3d6c3fbe5c1e6c83f026e7070e75c056ef3c1dbdd9b615b73"
+    }
+  ],
+  "seed_fits": 214,
+  "restart_trajectories": 258,
+  "optimizer_updates": 516000,
+  "exact_target_law": true,
+  "all_final_development_checkpoints_replayed": true,
+  "output_averaging_contraction": true,
+  "auditor_sha256": "2a63267b3e02d22734a77eb4be11d97a0511048f2ade8f89bcc7011a50f5018f"
+}

@@ -1,0 +1,16 @@
+\begin{table}[!htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{3pt}
+\caption{Selected \texttt{Adam} hyperparameters. Scores are mean exact development-profile TVDs on confirmation seeds. Settings are rounded to three significant figures.}
+\label{tab:cw_symmetry_settings}
+\begin{tabular}{lccccc}
+\toprule
+Input & Initial LR & $s_\theta$ & $b_1$ & Final/initial LR & Selection score \\
+\midrule
+Product-state input & $0.0456$ & $0.525$ & $0.964$ & $0.279$ & $0.0524$ \\
+Spin-flip invariant input & $0.0485$ & $0.633$ & $0.98$ & $0.0394$ & $0.0349$ \\
+\bottomrule
+\end{tabular}
+\end{table}
