@@ -1,7 +1,7 @@
 \begin{table*}[!htbp]
 \centering
 \small
-\caption{Exact raw Curie--Weiss hamming-profile TVD at sixteen qubits. Trained rows report means and sample standard deviations over 5 independent runs; the encoder is deterministic. Shared reporting temperatures are held out, while independent circuits are fitted at each reporting temperature. Bold entries mark the lowest mean error, including the encoder. Selection uses full-distribution TVD; the 5 confirmation seeds are reused for reporting.}
+\caption{Exact Hamming-profile TVD for sixteen-qubit Curie--Weiss models. Trained entries give means $\pm$ sample standard deviations across 5 runs from the confirmation cohort used for model selection, reused for reporting; the encoder is deterministic. Shared reporting temperatures are excluded from fitting and current selection, while independent circuits fit at each reporting temperature. Bold entries mark the lowest mean error, including the encoder.}
 \label{tab:curie_weiss_profile_tvd}
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.12}
@@ -12,9 +12,9 @@ Model & Evaluation & \multicolumn{3}{c}{Hamming-profile TVD $\downarrow$} \\
  & & $\beta=0.4$ & $\beta=1.0$ & $\beta=1.6$ \\
 \midrule
 Encoder only & Baseline & $0.1180$ & $0.4406$ & $0.8699$ \\
-Shared conditional IQP across conditions & Held-out & $0.0976 \pm 0.0269$ & $0.1301 \pm 0.0317$ & $\boldsymbol{0.0631 \pm 0.0135}$ \\
-Independent conditional IQP per condition & Fitted & $\boldsymbol{0.0939 \pm 0.0073}$ & $0.0885 \pm 0.0116$ & $0.3948 \pm 0.0003$ \\
-Independent unconditional IQP per condition & Fitted & $0.1186 \pm 0.0040$ & $\boldsymbol{0.0780 \pm 0.0320}$ & $0.3293 \pm 0.0119$ \\
+Shared conditional IQP & Held-out & $0.0976 \pm 0.0269$ & $0.1301 \pm 0.0317$ & $\boldsymbol{0.0631 \pm 0.0135}$ \\
+Independent conditional IQPs & Fitted & $\boldsymbol{0.0939 \pm 0.0073}$ & $0.0885 \pm 0.0116$ & $0.3948 \pm 0.0003$ \\
+Independent unconditional IQPs & Fitted & $0.1186 \pm 0.0040$ & $\boldsymbol{0.0780 \pm 0.0320}$ & $0.3293 \pm 0.0119$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
