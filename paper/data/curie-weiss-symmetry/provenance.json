@@ -1,5 +1,5 @@
 {
-  "campaign": "curie_weiss_symmetry16_20261005",
+  "campaign": "curie-weiss-full-tvd-hpo-20261006",
   "library_commit": "f90875da72b3379c1ea38b844a0a908a20eacf24",
   "source_archive_sha256": "4951018a9fc694814617481f0bea7ba4a5e2cf4e12d02e036f04d5c81237f776",
   "lock_sha256": "aea6715dd67736530b62a9fb4f8a0d7ef9420557f772948f7681d6f687ab3bae",
@@ -216,5 +216,160 @@
         "restart_training_seconds_sum": 2622.793161018868
       }
     }
+  },
+  "selection": "mean_exact_development_full_tvd",
+  "reporting_source": "results/curie-weiss-full-tvd-hpo-20261006/shared-reporting-update.json",
+  "confirmation_seeds_reused_for_reporting": true,
+  "selected": {
+    "general": {
+      "name": "adam",
+      "learning_rate": 0.030980841185477226,
+      "init_scale": 0.6957845773887974
+    },
+    "projected": {
+      "name": "adam",
+      "learning_rate": 0.01,
+      "init_scale": 0.5
+    }
+  },
+  "audit": [
+    {
+      "arm": "general",
+      "seed": 2026100610,
+      "selected_restart": 0,
+      "selected_step": 1800,
+      "checkpoint_sha256": "a0c764777710892037f68ccc43e2c4e13c4e6d2ead742da4e8e55c7914cdedbc"
+    },
+    {
+      "arm": "general",
+      "seed": 2026100611,
+      "selected_restart": 1,
+      "selected_step": 1400,
+      "checkpoint_sha256": "3b1fbe7fa34953cf487579d19e12a4483964480dc1082b6bc0629437d76f8e8b"
+    },
+    {
+      "arm": "general",
+      "seed": 2026100612,
+      "selected_restart": 2,
+      "selected_step": 700,
+      "checkpoint_sha256": "14bc357b0944b086855d2d6d4aec87f9b5fa0e1d6a297b3f2d78545bf7b5d1a7"
+    },
+    {
+      "arm": "general",
+      "seed": 2026100613,
+      "selected_restart": 0,
+      "selected_step": 1100,
+      "checkpoint_sha256": "9239819888d79c87514a5741409b5d9a571a01b50712d5f465d3212503e100a2"
+    },
+    {
+      "arm": "general",
+      "seed": 2026100614,
+      "selected_restart": 2,
+      "selected_step": 1600,
+      "checkpoint_sha256": "74b61eb0f9477f6025badb76f179e0b96b8a2b575cdb46ce98f05b61c4891048"
+    },
+    {
+      "arm": "projected",
+      "seed": 2026100610,
+      "selected_restart": 0,
+      "selected_step": 1100,
+      "checkpoint_sha256": "918c3297489ba1096760dc19eca9310480602d4ee39d9a07f747fd2cd3839e9d"
+    },
+    {
+      "arm": "projected",
+      "seed": 2026100611,
+      "selected_restart": 2,
+      "selected_step": 1200,
+      "checkpoint_sha256": "2716c3d230abfbe02bb2d0d9b5465af1378e199fe22af15a70e243fc4770c0df"
+    },
+    {
+      "arm": "projected",
+      "seed": 2026100612,
+      "selected_restart": 2,
+      "selected_step": 1500,
+      "checkpoint_sha256": "4fbc3880926efe16ce73efcabc39986225c7f682b557ecb393c56df556a1cb9c"
+    },
+    {
+      "arm": "projected",
+      "seed": 2026100613,
+      "selected_restart": 1,
+      "selected_step": 1500,
+      "checkpoint_sha256": "38b30631edf813a4788265ba72de7b9d08179f56d79eb05b96f0011c1f3cf991"
+    },
+    {
+      "arm": "projected",
+      "seed": 2026100614,
+      "selected_restart": 1,
+      "selected_step": 1100,
+      "checkpoint_sha256": "35090d9e8bc8c0026da9f0b917a23f6be766a0986ab3e7fec0effbc77c8b05cb"
+    }
+  ],
+  "provenance": {
+    "protocol": {
+      "campaign": "curie-weiss-full-tvd-hpo-20261006",
+      "arms": {
+        "general": "product",
+        "projected": "symmetry"
+      },
+      "trials_per_study": 60,
+      "screening_seeds": [
+        2026100600,
+        2026100601,
+        2026100602
+      ],
+      "confirmation_seeds": [
+        2026100610,
+        2026100611,
+        2026100612,
+        2026100613,
+        2026100614
+      ],
+      "reporting_seeds": [
+        2026100610,
+        2026100611,
+        2026100612,
+        2026100613,
+        2026100614
+      ],
+      "fitting_conditions": [
+        0.6,
+        0.8,
+        1.2,
+        1.4
+      ],
+      "selection_conditions": [
+        0.5,
+        0.7,
+        1.3,
+        1.5
+      ],
+      "reporting_conditions": [
+        0.4,
+        1.0,
+        1.6
+      ],
+      "selection": "median_exact_full_tvd_confirmation",
+      "training_updates": 2000,
+      "confirm_initializations_per_seed": 3,
+      "reporting_reuses_confirmation_checkpoints": true,
+      "metric": "full_tvd"
+    },
+    "selection": "median_exact_full_tvd_confirmation",
+    "campaign": "curie-weiss-full-tvd-hpo-20261006",
+    "confirmation_seeds": [
+      2026100610,
+      2026100611,
+      2026100612,
+      2026100613,
+      2026100614
+    ],
+    "reporting_seeds": [
+      2026100610,
+      2026100611,
+      2026100612,
+      2026100613,
+      2026100614
+    ],
+    "reporting_reuses_confirmation_checkpoints": true
   }
 }

@@ -1,7 +1,7 @@
 \begin{table*}[!htbp]
 \centering
 \small
-\caption{Exact raw Curie--Weiss full-distribution TVD at sixteen qubits. Trained rows report means and sample standard deviations over 5 independent runs; the encoder is deterministic. Shared reporting temperatures are held out, while independent circuits are fitted at each reporting temperature. Bold entries mark the lowest mean error, including the encoder. Selection remains profile TVD.}
+\caption{Exact raw Curie--Weiss full-distribution TVD at sixteen qubits. Trained rows report means and sample standard deviations over 5 independent runs; the encoder is deterministic. Shared reporting temperatures are held out, while independent circuits are fitted at each reporting temperature. Bold entries mark the lowest mean error, including the encoder. Selection uses full-distribution TVD; the 5 confirmation seeds are reused for reporting.}
 \label{tab:curie_weiss_full_tvd}
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.12}
@@ -12,9 +12,9 @@ Model & Evaluation & \multicolumn{3}{c}{Full-distribution TVD $\downarrow$} \\
  & & $\beta=0.4$ & $\beta=1.0$ & $\beta=1.6$ \\
 \midrule
 Encoder only & Baseline & $\boldsymbol{0.1180}$ & $0.4406$ & $0.8699$ \\
-Shared conditional IQP across conditions & Held-out & $0.2356 \pm 0.0293$ & $\boldsymbol{0.2102 \pm 0.0217}$ & $\boldsymbol{0.2345 \pm 0.0945}$ \\
-Independent conditional IQP per condition & Fitted & $0.1941 \pm 0.0221$ & $0.2337 \pm 0.0077$ & $0.4829 \pm 0.0366$ \\
-Independent unconditional IQP per condition & Fitted & $0.1406 \pm 0.0364$ & $0.3475 \pm 0.0355$ & $0.3660 \pm 0.0227$ \\
+Shared conditional IQP across conditions & Held-out & $0.2240 \pm 0.0115$ & $\boldsymbol{0.2175 \pm 0.0136}$ & $\boldsymbol{0.1709 \pm 0.0136}$ \\
+Independent conditional IQP per condition & Fitted & $0.1240 \pm 0.0083$ & $0.2309 \pm 0.0319$ & $0.3948 \pm 0.0003$ \\
+Independent unconditional IQP per condition & Fitted & $0.3842 \pm 0.0017$ & $0.3322 \pm 0.0105$ & $0.3299 \pm 0.0119$ \\
 \bottomrule
 \end{tabular}
 \end{table*}

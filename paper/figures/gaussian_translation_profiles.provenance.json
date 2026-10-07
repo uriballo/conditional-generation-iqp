@@ -1,15 +1,13 @@
 {
   "renderer": "paper_experiments/figures.py",
-  "renderer_sha256": "5324a16c5810dc666ee4209a88e0ed9bc284dfd6a4906248e6618ae067a39a99",
+  "renderer_sha256": "545dfce4c96fff440a83e8b3399a8ae75bda287a079a6e5a3f7bb3e4c1e310c3",
   "inputs": {
-    "results.json": "822804bf66a8694bd0e29cbb901843b8b96a6859e6b75808da0f05f4b179dd10",
-    "profile_10.csv": "39eb738191f99bfe70fd032cea172ded9a751335a647d7298f21e8af8977a139",
-    "profile_40.csv": "7f880497f544cfd6e42cd8e397d8a790ae2398a48e98d173568266b185c68528",
-    "profile_70.csv": "32dd0d3f6bf93ab018912f2bff5997fe60d3663e9575e2a90707b19ab4c28c76"
+    "results.json": "ae1d60ec1a1f82d248db38228dd5414327d9236722cf0197d110f4c87dc41047",
+    "midpoint_profiles.json": "cdfd82e336c40ef970dcead670389190c514df60dc86114d65cea4acd5c3f2f0"
   },
   "primary_metric": "full_tvd",
   "secondary_metric": "profile_tvd",
   "selection_metric": "profile_tvd",
-  "aggregation": "Full-TVD curve: pointwise median/IQR across runs; table: median across seed-wise means over conditions. Profile panels retain the originally selected run.",
+  "aggregation": "Profile panels show mean probabilities across five midpoint runs; the response shows median per-run expected Hamming weight with IQR; target and encoder curves are exact.",
   "selection_changed": false
 }

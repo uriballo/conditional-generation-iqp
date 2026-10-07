@@ -1,12 +1,12 @@
 {
   "renderer": "paper_experiments/figures.py",
-  "renderer_sha256": "5324a16c5810dc666ee4209a88e0ed9bc284dfd6a4906248e6618ae067a39a99",
+  "renderer_sha256": "6c432a1e2a658bb9b0145a226d7a7e74d5c1b426609b272583fc422b5f152388",
   "inputs": {
-    "figure_data.json": "6a5afab0cb816b26fd165906cb0b74172eec7f2fc8eeb6d0f9001d2f23f4ae5b"
+    "figure_data.json": "fd7558c86e36214a25ed0ce85a661b14d4a034d9705b9cfbc48509a15fb71ce6"
   },
   "primary_metric": "full_tvd",
   "secondary_metric": "profile_tvd",
   "selection_metric": "profile_tvd",
-  "aggregation": "Mean raw profiles; full-TVD points and tables: mean/sample SD of individual-seed errors. Encoder is deterministic.",
+  "aggregation": "Mean raw profiles; full-TVD tables: mean/sample SD of individual-seed errors. Encoder is deterministic.",
   "selection_changed": false
 }

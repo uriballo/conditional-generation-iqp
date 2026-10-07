@@ -1,104 +1,77 @@
 {
-  "status": "audited figure export; no additional checkpoint selection",
-  "source_file_sha256": {
-    "README.md": "6b9e6aec12f685128c6a4797bba851d735cec355c30c666fd2bdcf95944d0fa4",
-    "experiments/common/__init__.py": "d4413fa01de0879d9cd188ea7183d0ba3e52674ac15d800828305d52372dd704",
-    "experiments/common/ansatz.py": "ac6314474ba2de55fd77ef7e631deac05bf261771e755e190b5188d23464b029",
-    "experiments/common/config.py": "b8c69732fcc1e0c3ee0a6631b65574637d7e0953aea667745cd1fde988c25b7b",
-    "experiments/common/datasets.py": "e7f2f58f61282dad4a0440c07a7ffc39b8308d67b6e20e9bc4980c162e2f8353",
-    "experiments/common/encoders.py": "93e6b0a33d370917be229bda2b645bc412db90b38c5abbc7c6bc94fd9d69b74f",
-    "experiments/common/exact_runner.py": "dc63b0cfadd3540426b39c0ef467bb1ad723c7bb01eede5e871000acb2fb4dbe",
-    "experiments/common/metrics.py": "6573a810aee9e7b2abf7109ea206875c2ece3d78ed5f8e0033e94801606bc42b",
-    "experiments/common/plotting.py": "def5fada86ffb2b43d8a9aee5c54085549ba0d8886259e0ab9170189d5055a42",
-    "experiments/common/runner.py": "5e84428fc9dedd5012efcec6353efe786858d02edbf6244189cd862e62cb04bf",
-    "experiments/common/sweeps.py": "8d71417e8dcd33d88f110f708d924bd2634b16560e8278dd2fe9a5c0e646ba31",
-    "experiments/common/tracking.py": "68bb7f4aa7cc19ee3c95726c24483209b9f8db593a61beb3db62bbbc5fa5dca0",
-    "experiments/gaussian_isotropic/campaign.py": "73b99477752290a91e3b04f22a2eabfd60d686666fba02e4adb6c47f83f06afe",
-    "experiments/gaussian_isotropic/config.json": "7cb42a72687dbf69c12722821ab604a168ca141bd6d01e097d2aeb438dcf70e7",
-    "experiments/gaussian_isotropic/study.py": "f142ab071e2b26970c946e58a14f21247ec330be11f492d8631b879ddf75c978",
-    "iqp-cond/src/iqp_cond/__init__.py": "65effe05eb2003e8efa227f45f1cdb4b9b8ba5ddbaceea4c0c2052c9ea653622",
-    "iqp-cond/src/iqp_cond/encoders.py": "905fc43acc061aa8956918c668c0aaae3c8f66097afe8947f74b12d98f615596",
-    "iqp-cond/src/iqp_cond/estimator.py": "c92f82010fd016c349fd67e060488374c039b312c093d7ebea89a57319289227",
-    "iqp-cond/src/iqp_cond/exact.py": "fd39fd12e5b9780e48a3e7a480ad14ed92dad30a59b7e7def4004d82c9560a50",
-    "iqp-cond/src/iqp_cond/initialization.py": "e4c6093e579167041d060ed6070165f49d54701bacba08c8b0e765abcbba8b78",
-    "iqp-cond/src/iqp_cond/loss.py": "c6f97a84be8accbe595fd4fde1af7de623a3f3e2785f42873af229611ece7bbf",
-    "iqp-cond/src/iqp_cond/model.py": "3760bfa3406ed30a55d6d5485580e4d86ab9b50f660628347e6ea0a4f4c8c8f5",
-    "iqp-cond/src/iqp_cond/operators.py": "4dad3c8499ec03213dc41ddef3b0fad9da1945404e988f0d5ebcc77e738093a6",
-    "iqp-cond/src/iqp_cond/simulation.py": "557907d01516975053a98c209b1ca79628eb8582f22c9b8eda99388d92358520",
-    "iqp-cond/src/iqp_cond/training.py": "e48cf7b1ce8c9e864bdd8df3e78122195fd3c9e208ae2e549dbd6a5a4f86ba5b",
-    "iqp-cond/src/iqp_cond/verification.py": "ddcd6fe847578abdc51f3675077d644e0a46c51848f20e243cecdf7f7ca7b6af",
-    "pyproject.toml": "c19dfc883e12a621621278f3d691073f44b77246c2b33213524be866ddf428e3"
-  },
-  "source_archive_sha256": "5dd1ded00298aed79930adf36501d50ea2d16e52f7cc3cff08271329d232058c",
-  "exporter_sha256": "41620bc74e135381d53b78d082a38eeb7924503d359aed1d4ce84ad40c4abc27",
-  "source_files": {
-    "results/lattice_20260930/gaussian_manifest.json": "814f6ddbf6a5eea02feb09fc213283fb9d159eb035b95d4b47e4364356d1b4a9",
-    "results/lattice_20260930/gaussian_audit_local.json": "81520d127e7a5ca6b9c4a3388fca8a8d982e7747c5a606f588d92ec1aebcb3e6"
-  },
-  "profile_seed": 17100,
-  "profile_seed_selection": "First recorded seed; independent of held-out fit",
-  "profile_indices": [
-    10,
-    40,
-    70
-  ],
+  "status": "1024-update Gaussian rerun with matched pools and initializations",
+  "library_commit": "f90875da72b3379c1ea38b844a0a908a20eacf24",
+  "source_manifest_sha256": "da9ec565e4df9e304c59680ae7798842314bfc70157ca4284ec010eeb43022a5",
+  "seed_count": 5,
+  "updates": 1024,
+  "training_targets_per_condition": 512,
+  "minibatch_size": 128,
+  "initialization_width": 0.25,
+  "checkpoint_interval": 32,
+  "eligible_checkpoints": 33,
+  "selection_metric": "mean_exact_development_profile_tvd",
   "profile_conditions": [
-    0.12916666666666668,
-    0.5041666666666667,
-    0.8791666666666667
-  ],
-  "profile_checkpoint_sha256": "8db16f10e7ff000c549b738e5a124e0973d4a9fd345b519ced11701831d86687",
-  "profile_best_step": 120,
-  "error_seeds": [
-    17100,
-    17101,
-    17102,
-    17103,
-    17104,
-    17105,
-    17106,
-    17107,
-    17108,
-    17109
-  ],
-  "error_summary": "Pointwise median and 25th/75th percentiles of profile TVD",
-  "encoder_only_profile_tvd_summary": {
-    "fixed_mean_hamming_weight": 7.434102386658376,
-    "target_center": "5 + 6c",
-    "continuous_center_match_condition": 0.4056837311097293,
-    "sampled_grid_min_tvd": 0.0077621746594922,
-    "sampled_grid_min_condition": 0.4041666666666667,
-    "sampled_grid_max_tvd": 0.6172572428454748,
-    "sampled_grid_max_condition": 0.9916666666666666,
-    "monotone_away_from_grid_minimum": {
-      "left_of_grid_minimum": true,
-      "right_of_grid_minimum": true
-    }
-  },
-  "training_conditions": [
-    0,
-    0.25,
-    0.5,
-    0.75,
-    1
-  ],
-  "development_conditions": [
     0.125,
     0.375,
     0.625,
     0.875
   ],
-  "all_80_plotted_conditions_are_held_out": true,
-  "profile_tvd_at_displayed_conditions": [
-    0.11541276227103794,
-    0.05269419702194279,
-    0.04020212565619663
+  "profile_condition_role": "development; excluded from fitting, used for checkpoint selection",
+  "profile_aggregation": "mean exact profiles over five selected runs",
+  "response_aggregation": "pointwise median and IQR of per-run mean Hamming weight over80reportingconditions",
+  "error_aggregation": "median across seed-wise mean errors over80reportingconditions",
+  "baseline": "results/gaussian-rerun-20261006",
+  "comparison": "results/gaussian-1024-20261006/comparison-summary.json",
+  "runs": [
+    {
+      "seed": 17100,
+      "job_id": "01efff99bbc23aba",
+      "selected_step": 416,
+      "selected_restart": 0,
+      "full_tvd_mean": 0.09949910125966158,
+      "profile_tvd_mean": 0.04994345319945054
+    },
+    {
+      "seed": 17101,
+      "job_id": "f3c10269a19a27bd",
+      "selected_step": 224,
+      "selected_restart": 0,
+      "full_tvd_mean": 0.09770781876386903,
+      "profile_tvd_mean": 0.04395504731024263
+    },
+    {
+      "seed": 17102,
+      "job_id": "b9ebe32a58215761",
+      "selected_step": 320,
+      "selected_restart": 0,
+      "full_tvd_mean": 0.10441915618111057,
+      "profile_tvd_mean": 0.036069469612812446
+    },
+    {
+      "seed": 17103,
+      "job_id": "ca8306262402d838",
+      "selected_step": 224,
+      "selected_restart": 0,
+      "full_tvd_mean": 0.10492301894579477,
+      "profile_tvd_mean": 0.0463837406099964
+    },
+    {
+      "seed": 17104,
+      "job_id": "2271e1bfb01300a6",
+      "selected_step": 320,
+      "selected_restart": 0,
+      "full_tvd_mean": 0.0961124753522404,
+      "profile_tvd_mean": 0.05225066769989423
+    }
   ],
-  "csv_sha256": {
-    "errors.csv": "c56da3e475056c73f2c1ac0f3855a43d41d53b5cffeffafdb4d63d168262218f",
-    "profile_10.csv": "39eb738191f99bfe70fd032cea172ded9a751335a647d7298f21e8af8977a139",
-    "profile_40.csv": "7f880497f544cfd6e42cd8e397d8a790ae2398a48e98d173568266b185c68528",
-    "profile_70.csv": "32dd0d3f6bf93ab018912f2bff5997fe60d3663e9575e2a90707b19ab4c28c76",
-    "profile_tvds.csv": "be3f1ad2b436e1d70f3c342f400594b766d2ff972fdc35284d12bbcffe3bb26b"
+  "compact_sha256": {
+    "training_response.csv": "71eb6eda1dfeb0c06da92ec3bded3a93db10b45e9dd7b461106f4efac11bcece",
+    "profile_40.csv": "46d8cb0b5ea691e30e39411aeb662dbffe87613b61c52c61c6d6a0605dc61297",
+    "results.json": "ae1d60ec1a1f82d248db38228dd5414327d9236722cf0197d110f4c87dc41047",
+    "midpoint_profiles.csv": "5f5881886b9d01b159c4ce615537307e32fb96b8a815ca3f0d7a4cb63489ddeb",
+    "response.csv": "1e99b4de3201b7dcea356497fceb07569504d4fb7940d8674fd6482d0a15b74d",
+    "profile_70.csv": "5c15481a3c5f811a237802cf1ac0aa02cd4d5b1d08bf1ba009d539f2001816d8",
+    "midpoint_profiles.json": "cdfd82e336c40ef970dcead670389190c514df60dc86114d65cea4acd5c3f2f0",
+    "profile_10.csv": "f9be0dea09fb48bd020e7c0ae48c4861a4eb5e1cdc1e05b4f64ccef69ca62ce6"
   }
 }

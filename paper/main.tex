@@ -74,7 +74,7 @@ A particularly promising architecture in this space is the instantaneous quantum
 
 In this work, we develop a classically trainable framework for conditional IQP Born machines. A condition-dependent input state \(\ket{\phi(c)}\) is followed by one shared learned unitary \(U_{\boldsymbol\theta}\), giving \(q_{\boldsymbol\theta}(x\mid c)=|\langle x|U_{\boldsymbol\theta}|\phi(c)\rangle|^2\). We establish sufficient conditions on the encoder for efficient classical estimation of the conditional training observables and their gradients, and construct encoders satisfying these conditions. Specifically, the reference amplitudes \(\psi_c(z)=\langle z|H^{\otimes n}|\phi(c)\rangle\) must support efficient sampling and amplitude-ratio evaluation. Building on sparse-observable methods \cite{nestSimulatingQuantumComputers2011,havlicekAmplitudeRatiosNeural2023} and IQP training methods \cite{recio-armengolTrainClassicalDeploy2026}, we derive explicit unbiased estimators of conditional Pauli-$Z$ moments and phase derivatives, with second moments bounded by one and four, respectively. Each specified quantity therefore admits additive error \(\epsilon\) at fixed confidence using \(O(\epsilon^{-2})\) reference samples. We combine these estimators with an unbiased finite-sample conditional MMD objective and its gradients, enabling classical optimization of a single IQP Born machine across conditions. Figure~\ref{fig:pipeline_workflow} summarizes the framework.
 
-We evaluate this framework across several tasks. First, using a 16-qubit discrete Gaussian family, we demonstrate that a shared model successfully maps input conditions to translated output profiles. Next, we analyze temperature-dependent changes in distributional shape using the Curie--Weiss model. Here, we compare a single conditional IQP model, evaluated at three held-out conditions, against independent circuits trained directly at each. Although the independent baselines require three times the parameters and optimization steps, our shared model achieves a lower mean full-distribution total variation distance (TVD) at $\beta=1.0$ and at the extrapolation point $\beta=1.6$. The independent models yield lower mean errors at $\beta=0.4$, where the uniform encoder-only baseline has the lowest mean error. We further assess scalability from $64$ to $2048$ qubits by tracking the  $\text{MMD}^2$ at held-out temperatures throughout optimization. Furthermore, we show how input-state encoding can enforce exact output symmetries in both conditional and unconditional IQP Born machines. For the Curie--Weiss model, we compare product-state and spin-flip invariant temperature encoders under matched optimization budgets to assess how this constraint affects distributional fit. A fixed-input example illustrates the same symmetry mechanism in an unconditional model.
+We evaluate this framework across several tasks. First, using a 16-qubit discrete Gaussian family, we demonstrate that a shared model successfully maps input conditions to translated output profiles. Next, we analyze temperature-dependent changes in distributional shape using the Curie--Weiss model. Here, we compare a single conditional IQP model, evaluated at three held-out conditions, against independent circuits trained directly at each. Although the independent baselines require three times the parameters and optimization steps, our shared model achieves a lower mean full-distribution total variation distance (TVD) at $\beta=1.0$ and at the extrapolation point $\beta=1.6$. The independent conditional model yields lower mean error at $\beta=0.4$, where the uniform encoder-only baseline has the lowest error in this comparison. We further assess scalability from $64$ to $2048$ qubits by tracking the  $\text{MMD}^2$ at held-out temperatures throughout optimization. Furthermore, we show how input-state encoding can enforce exact output symmetries in both conditional and unconditional IQP Born machines. For the Curie--Weiss model, we compare product-state and spin-flip invariant temperature encoders under matched optimization budgets to assess how this constraint affects distributional fit. A fixed-input example illustrates the same symmetry mechanism in an unconditional model.
 
 The remainder of the paper is organized as follows. Section~\ref{sec:cond_model} introduces the conditional IQP model and its classical estimators. Section~\ref{sec:cond_training} develops the conditional MMD training protocol. Section~\ref{sec:numerical-experiments} describes the numerical experiments and reports their results. Section~\ref{sec:input-symmetry} shows how input-state preparation can enforce output symmetries. Finally, Sections~\ref{sec:discussion} and~\ref{sec:conclusions} discuss the implications and limitations of our findings and summarize the contributions.
 
@@ -550,13 +550,13 @@ We also report the exact Hamming-profile TVD as a diagnostic,
 \begin{equation}
     \operatorname{TVD}_K(p,q)=\frac{1}{2}\sum_{k=0}^{n}|\rho_p(k)-\rho_q(k)|,
 \end{equation}
-where $\rho(k)$ is the probability of observing a bitstring of weight $k$. Aggregation gives $\operatorname{TVD}_K(p,q)\leq\operatorname{TVD}(p,q)$. The targets are uniform within each Hamming-weight shell, but the learned models need not be, so accurate profiles can hide distributional errors. Both metrics use the same exact circuit probabilities. Training minimizes the squared-MMD objective. We select hyperparameters and checkpoints using profile TVD and evaluate the selected models using exact full-distribution TVD.
+where $\rho(k)$ is the probability of observing a bitstring of weight $k$. Aggregation gives $\operatorname{TVD}_K(p,q)\leq\operatorname{TVD}(p,q)$. The targets are uniform within each Hamming-weight shell, but the learned models need not be, so accurate profiles can hide distributional errors. Both metrics use the same exact circuit probabilities. Training minimizes the squared-MMD objective. Gaussian checkpoints use development-profile TVD. All sixteen-qubit Curie--Weiss models use full-distribution TVD for hyperparameter and checkpoint selection. Appendix~\ref{sec:cw_hpo} specifies the full-distribution TVD selection protocol.
 
 \subsection{Discrete Gaussian translation}
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=0.900\linewidth]{figures/gaussian_translation_profiles.pdf}
-    \caption{Conditional Gaussian generation at sixteen qubits. Upper panels show target, trained-model and encoder-only Hamming profiles at three held-out conditions, using one run selected independently of held-out performance. The lower panel reports exact full-distribution TVD across all $80$ held-out conditions. The trained curve and band show the pointwise median and interquartile range over ten independent runs; the encoder-only error is deterministic. These pointwise summaries differ from the aggregate in Table~\ref{tab:gaussian_tvd}, which takes the median of each run's mean error.}
+    \caption{Mean Hamming-weight translation via conditioning at sixteen qubits. (a) Solid colored curves show mean exact model profiles across five runs at the midpoint development conditions $c\in\{0.125,0.375,0.625,0.875\}$, which are excluded from fitting but used for checkpoint selection. (b) The solid black conditional-response line shows the model's mean output Hamming weight at each of the $80$ held-out conditions, summarized by the pointwise median across runs; shading shows the interquartile range. Dashed curves show exact targets, dotted gray curves show the encoder alone, and gray circles mark training conditions on the target response. Table~\ref{tab:gaussian_tvd} reports exact full-distribution and profile errors.}
     \label{fig:gaussian-translation}
 \end{figure*}
 
@@ -570,7 +570,7 @@ Measurement immediately after this encoder yields a fixed distribution; changing
 
 The shared unitary uses a $4\times4$ lattice with 16 one-body gates and 24 horizontal and vertical nearest-neighbor gates, giving 40 trainable parameters.
 
-We train at $c\in\{0.0,0.25,0.50,0.75,1.0\}$ and evaluate across $80$ held-out conditions. The median across ten training runs of the mean evaluation full TVD is $0.0876$, compared with $0.2922$ for the encoder alone (Table~\ref{tab:gaussian_tvd}). The corresponding trained profile TVD is $0.0670$, indicating some additional error within Hamming shells. Figure~\ref{fig:gaussian-translation} shows the translated profiles and full-TVD dependence on the condition. Appendix~\ref{sec:appendix_gaussian} gives the training and evaluation protocol.
+We train at $c\in\{0.0,0.25,0.50,0.75,1.0\}$ and evaluate across $80$ held-out conditions. The median across five training runs of the mean evaluation full TVD is $0.0995$, compared with $0.2922$ for the encoder alone (Table~\ref{tab:gaussian_tvd}). The corresponding trained profile TVD is $0.0464$, indicating some additional error within Hamming shells. Figure~\ref{fig:gaussian-translation} shows the translated profiles; Table~\ref{tab:gaussian_tvd} reports exact full-distribution accuracy. Appendix~\ref{sec:appendix_gaussian} gives the training and evaluation protocol.
 
 \input{tables/gaussian_tvd.tex}
 
@@ -586,22 +586,22 @@ The encoder-only output is uniform for every $\beta$. The parameterized circuit 
 
 We compare the shared conditional IQP across conditions with two independently tuned baseline families. Each family fits three separate circuits, one at each reporting temperature. The independent conditional IQP per condition retains the corresponding temperature encoder, while the independent unconditional IQP per condition uses the ordinary input.
 
-We tune the shared model on development temperatures and each independent family jointly across its fitted temperatures, using exact profile TVD for selection. The full-TVD results evaluate those same selected circuits. Appendix~\ref{sec:cw_hpo} details hyperparameter optimization and model selection.
+We tune the shared model on development temperatures and each independent family jointly across its fitted temperatures, using exact full-distribution TVD for selection. Appendix~\ref{sec:cw_hpo} details hyperparameter optimization and model selection.
 
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=0.900\linewidth]{figures/curie_weiss_model_comparison.pdf}
-    \caption{Curie--Weiss profiles and full-distribution accuracy at sixteen qubits. Columns correspond to $\beta=0.4,1.0,1.6$. Upper panels show mean exact raw magnetization profiles, with $m=(2k-16)/16$, and dashed exact targets. Lower panels show mean exact full-distribution TVD with sample standard deviations across five independent runs; the encoder is deterministic. Errors are averaged across individual runs, rather than computed from mean profiles. The shared model is evaluated at held-out temperatures; independent circuits are fitted directly at each reporting temperature. All trained circuits were selected using profile TVD.}
+    \caption{Curie--Weiss magnetization profiles at sixteen qubits, with $m=(2k-16)/16$. Panels show (a) encoder only, (b) shared conditional IQP across conditions, (c) independent conditional IQP per condition, and (d) independent unconditional IQP per condition. Colors identify $\beta=0.4,1.0,1.6$; dashed curves show exact targets and solid curves show mean exact raw model profiles over five confirmation seeds reused for reporting. The encoder is deterministic. Shared reporting temperatures are held out, while independent circuits are fitted at each displayed temperature. Table~\ref{tab:curie_weiss_full_tvd} reports full-distribution accuracy.}
     \label{fig:curie_weiss_phase_flip}
 \end{figure*}
 
 \input{tables/curie_weiss_full_tvd.tex}
 
-Table~\ref{tab:curie_weiss_full_tvd} reports the exact full-distribution TVDs. The shared conditional IQP has the lowest mean error among trained families at $\beta=1.0$ and $1.6$, with substantial variability at $\beta=1.6$. Independent fits have lower mean errors at $\beta=0.4$, where the uniform encoder-only law has lower mean error than every trained family. Relative to that encoder, the shared model improves mean full TVD at $\beta=1.0$ and $1.6$ but worsens it at $\beta=0.4$. These findings describe this target family and the existing profile-based selection protocol; they do not establish a general advantage of parameter sharing.
+Table~\ref{tab:curie_weiss_full_tvd} reports the exact full-distribution TVDs. The shared conditional IQP has the lowest mean error among trained families at $\beta=1.0$ and $1.6$, with mean errors $0.2175$ and $0.1709$, respectively. The independent conditional model has lower mean error at $\beta=0.4$, $0.1240$ compared with $0.2240$ for the shared model. The uniform encoder-only law has error $0.1180$, lower than every trained family in this comparison. Relative to that encoder, the shared model improves mean full TVD at $\beta=1.0$ and $1.6$ but worsens it at $\beta=0.4$. These findings describe this target family and the specified full-TVD selection protocol; they do not establish a general advantage of parameter sharing.
 
 Each independent family uses three circuits, with three times the total number of parameters and optimizer updates of the shared model. The shared model uses more total training-pool samples. These unequal aggregate resources and the different evaluation roles limit conclusions about parameter sharing alone. Appendix~\ref{sec:appendix_cw} reports the detailed budgets.
 
-The secondary profile diagnostic gives a different ranking. The independent models have lower mean profile TVD at $\beta=1.0$, despite higher full TVD than the shared model. The shared model also improves the encoder's profile TVD at $\beta=0.4$, while worsening full TVD. These differences show why profile agreement alone does not establish accurate generation of bitstrings. Appendix~\ref{sec:appendix_cw} retains the profile results alongside the full-distribution analysis.
+The secondary profile diagnostic gives a different ranking. Both independent models have lower mean profile TVD at $\beta=1.0$, despite higher full TVD than the shared model. The shared model also improves the encoder's profile TVD at $\beta=0.4$, while worsening full TVD. These differences show why profile agreement alone does not establish accurate generation of bitstrings. Appendix~\ref{sec:appendix_cw} retains the profile results alongside the full-distribution analysis.
 
 \subsubsection{Spin-flip invariant temperature encoding}
 \label{sec:cw_input_symmetry}
@@ -632,25 +632,20 @@ We sample $k$ from a binomial law with success probability $\sin^2(t/2)$ conditi
 \end{equation}
 These operations require polynomial resources and enter the same conditional estimator and training objective. A deterministic preparation circuit uses a running parity wire within the existing register and $O(n)$ gates, without an ancillary qubit or postselection.
 
-We compare the product-state encoder with the spin-flip invariant encoder using separate, matched \texttt{Adam} searches and five paired evaluation seeds. Both models use the same fitting and development temperatures and training budgets. The product-input model is fitted independently for this comparison, so its errors differ from those in Table~\ref{tab:curie_weiss_full_tvd}. Appendix~\ref{sec:cw_symmetry_hpo} specifies the comparison protocol. We evaluate exact full-distribution TVD, secondary profile TVD, and the same-temperature spin-flip error
+We compare the product-state encoder with the spin-flip invariant encoder using separate, matched hyperparameter searches with full-distribution TVD for selection. Reporting reuses the five paired confirmation seeds used to select the winning configuration. Both models use the same fitting and development temperatures and training budgets. Appendix~\ref{sec:cw_symmetry_hpo} specifies the comparison protocol. Table~\ref{tab:cw_symmetry_metrics} reports exact full-distribution TVD. We quantify deviation from global spin-flip symmetry by
 \begin{equation}
     D_{\mathrm{flip}}(q\mid\beta)
     =\frac{1}{2}\sum_x\left|q(x\mid\beta)-q(\bar x\mid\beta)\right|.
 \end{equation}
-The symmetry guarantee holds independently of optimization; distributional fit remains an empirical question.
+Here $\bar x$ complements every bit of $x$, and $D_{\mathrm{flip}}=0$ if and only if the output distribution is spin-flip invariant. For the trained product model, mean $D_{\mathrm{flip}}$ is $0.4354$, $0.1092$, and $0.0087$ at $\beta=0.4,1.0,1.6$, respectively. The invariant input gives $D_{\mathrm{flip}}<10^{-12}$ at every reporting temperature. Its symmetry guarantee holds independently of optimization; distributional fit remains an empirical question.
 
-\begin{figure*}[!t]
-    \centering
-    \includegraphics[width=0.95\linewidth]{figures/curie_weiss_symmetry_comparison.pdf}
-    \caption{Curie--Weiss profiles and full-distribution accuracy for product-state and spin-flip invariant inputs. Both models have sixteen visible qubits and all $136$ independent phases. Columns correspond to $\beta=0.4,1.0,1.6$. Upper panels show mean exact raw magnetization profiles over five paired final seeds and dashed exact targets, with $m=(2k-16)/16$. Lower panels report mean exact full-distribution TVD and sample standard deviations, including classical averaging of the trained product output without retraining. Reporting temperatures enter neither fitting nor current selection but have historical exposure. Selection uses profile TVD; reported errors average individual-seed errors rather than errors of mean profiles.}
-    \label{fig:cw_input_symmetry}
-\end{figure*}
+
 
 \input{tables/curie_weiss_symmetry_main.tex}
 
-The invariant input lowers mean full-distribution TVD at all three reporting temperatures in this matched comparison (Table~\ref{tab:cw_symmetry_metrics}). At $\beta=0.4,1.0,1.6$, the mean errors decrease from $0.2505$, $0.2192$, and $0.1936$ to $0.1056$, $0.1645$, and $0.1746$, respectively. Full TVD improves in all five paired seeds at $\beta=0.4$ and $1.0$, and in four of five at $\beta=1.6$. The profile errors are close at $\beta=1.0$ and $1.6$, so profile agreement alone would obscure much of this improvement. The invariant input's spin-flip error remains below $10^{-12}$ at every reporting temperature. This exact symmetry does not enforce uniform probabilities within Hamming shells, and appreciable full-distribution errors remain.
+The invariant input lowers mean full-distribution TVD at $\beta=0.4$ and $1.0$, while the product input has lower mean error at $\beta=1.6$ (Table~\ref{tab:cw_symmetry_metrics}). The invariant input improves full TVD in all five paired seeds at $\beta=0.4$ and $1.0$, and in two of five at $\beta=1.6$. This exact symmetry does not enforce uniform probabilities within Hamming shells, and appreciable full-distribution errors remain.
 
-Classical averaging of the product-input output gives lower mean full TVD at $\beta=0.4$, $0.0585$ rather than $0.1056$ for the invariant input, without additional training. At $\beta=1.0$ and $1.6$, the invariant input retains lower mean full TVD than the averaged output. Appendix~\ref{sec:cw_symmetry_hpo} reports this diagnostic, secondary profile errors and paired differences. Thus, input projection improves full-distribution fit relative to the trained product-input model in this comparison, but does not give uniformly lower mean error than symmetry enforcement after sampling.
+Appendix~\ref{sec:cw_symmetry_hpo} reports secondary profile diagnostics, encoder-only errors and paired differences. These results show that input projection enforces symmetry exactly, but its effect on distributional accuracy depends on temperature.
 
 \subsection{Scaling}
 
@@ -752,13 +747,13 @@ For example, $s=110$ on three qubits gives $\ket{\phi_s}=(\ket{000}+\ket{110})/\
 \section{Discussion}
 \label{sec:discussion}
 
-Our numerical experiments demonstrate conditional generation with measurable residual full-distribution errors. In the Gaussian experiment, the shared model reduces aggregate full TVD relative to the encoder. In the Curie--Weiss baseline comparison, the shared model has lower mean full TVD than both independently fitted families at $\beta=1.0$ and $1.6$. At $\beta=0.4$, the encoder-only law has lower mean error than every trained family. Different evaluation roles and unequal aggregate training budgets prevent attributing these outcomes to parameter sharing alone.
+Our numerical experiments demonstrate conditional generation with measurable residual full-distribution errors. In the Gaussian experiment, the shared model reduces aggregate full TVD relative to the encoder. In the Curie--Weiss baseline comparison, the shared model has lower mean full TVD than both independently fitted families at $\beta=1.0$ and $1.6$. At $\beta=0.4$, the uniform encoder-only law has lower error than the shared product model and both independent families. Different evaluation roles and unequal aggregate training budgets prevent attributing these outcomes to parameter sharing alone.
 
-Full-distribution TVD exposes errors that Hamming-weight aggregation can hide and changes some model rankings. Efficient estimation of the training moments therefore does not guarantee accurate recovery of the full distribution. The reported circuits were tuned and selected using profile TVD; changing the reporting metric does not optimize those circuits for full TVD. Evaluating full-TVD-based selection and hyperparameter tuning is a separate question left for future work. Herrero-Gonzalez \textit{et al.} analyze discrepancies between classical correlator-based surrogates and deployed Born distributions \cite{herreroBornUltimatum2025}. Under the stated sampling and arithmetic assumptions, our estimators target the moments of the specified circuit without truncating Pauli propagation. Nevertheless, finite sampling budgets and the correlations emphasized by the kernel can leave distributional errors unresolved. Kernel-adaptive IQP training offers a possible extension beyond the fixed Gaussian kernels used here \cite{kurkinUniversalityKernelAdaptive2025}; its benefit for conditional generation remains to be evaluated.
+Full-distribution TVD exposes errors that Hamming-weight aggregation can hide and changes some model rankings. Efficient estimation of the training moments therefore does not guarantee accurate recovery of the full distribution. Gaussian checkpoints use profile TVD for selection, whereas all sixteen-qubit Curie--Weiss models use full-distribution TVD. Curie--Weiss reporting reuses the confirmation cohorts that selected the winning configurations, so its variability does not constitute an independent assessment of hyperparameter selection. Herrero-Gonzalez \textit{et al.} analyze discrepancies between classical correlator-based surrogates and deployed Born distributions \cite{herreroBornUltimatum2025}. Under the stated sampling and arithmetic assumptions, our estimators target the moments of the specified circuit without truncating Pauli propagation. Nevertheless, finite sampling budgets and the correlations emphasized by the kernel can leave distributional errors unresolved. Kernel-adaptive IQP training offers a possible extension beyond the fixed Gaussian kernels used here \cite{kurkinUniversalityKernelAdaptive2025}; its benefit for conditional generation remains to be evaluated.
 
 The scaling experiment demonstrates the computational feasibility of classical conditional training up to 2048 qubits, with residual sampled MMD$^2$ discrepancies. It uses different optimizer settings and a different ansatz from the tuned sixteen-qubit comparison, so transfer of the selected hyperparameters remains untested. The fixed bodyness targets imply size-dependent bandwidths, and the resulting MMD$^2$ values do not provide direct comparisons of distributional fidelity across sizes. Further study of the encoder, ansatz and optimization settings, together with diagnostics beyond sampled MMD, is needed to assess conditional accuracy at larger sizes.
 
-Encoder design controls the conditional functions available to the model and can impose exact constraints on its output. Both the product phase encoder and its spin-flip invariant projection admit efficient state preparation, reference sampling and amplitude-ratio evaluation. The Curie--Weiss construction in Sec.~\ref{sec:cw_input_symmetry} and the unconditional illustration in Sec.~\ref{sec:input-symmetry} restrict the output family through the input, independently of the learned phases. In the matched Curie--Weiss comparison, projection lowers mean full TVD relative to the trained product-input model at every reporting temperature. Classical output averaging gives lower mean error at $\beta=0.4$, whereas projection gives lower mean error at $\beta=1.0$ and $1.6$. These empirical results do not follow from the symmetry guarantee, and spin-flip invariance does not resolve all within-shell errors. More structured encoders could offer richer conditional dependence if they retain the same reference interface. Spectral Born machines extend IQP generative models through group Fourier analysis while preserving efficient classical training \cite{huangSpectralBorn2026}. Investigating conditional reference-state access in that setting could broaden the framework to other forms of discrete data.
+Encoder design controls the conditional functions available to the model and can impose exact constraints on its output. Both the product phase encoder and its spin-flip invariant projection admit efficient state preparation, reference sampling and amplitude-ratio evaluation. The Curie--Weiss construction in Sec.~\ref{sec:cw_input_symmetry} and the unconditional illustration in Sec.~\ref{sec:input-symmetry} restrict the output family through the input, independently of the learned phases. In the matched Curie--Weiss comparison, projection lowers mean full TVD relative to the trained product-input model at $\beta=0.4$ and $1.0$, but raises it at $\beta=1.6$. These empirical results do not follow from the symmetry guarantee, and spin-flip invariance does not resolve all within-shell errors. Classical postprocessing that averages the output distribution with its bitwise complement also enforces spin-flip symmetry and may improve accuracy, since it cannot increase full TVD to an invariant target. More structured encoders could offer richer conditional dependence if they retain the same reference interface. Spectral Born machines extend IQP generative models through group Fourier analysis while preserving efficient classical training \cite{huangSpectralBorn2026}. Investigating conditional reference-state access in that setting could broaden the framework to other forms of discrete data.
 
 Quantum deployment requires assessing how noise and hardware constraints affect conditional accuracy. Ryu \textit{et al.} propose logical-noise injection to decompose large IQP circuits into smaller clusters that fit qubit-limited processors \cite{ryuDeploymentLargeIQP2026}. This approximate strategy introduces a further potential discrepancy from the trained distribution. Its suitability for conditional models requires evaluating such errors across conditions.
 
@@ -769,7 +764,7 @@ Whether useful trained conditional models retain classical sampling hardness rem
 
 We introduced a conditional formulation for IQP Born machines that combines a condition-dependent encoder with a single shared learned unitary. Efficient reference-state sampling and amplitude-ratio evaluation enable unbiased classical estimation of conditional Pauli-$Z$ moments and phase gradients, supporting optimization without quantum circuit evaluations. The same interface also accommodates input states that impose exact output symmetries.
 
-The Gaussian experiment demonstrates improved full-distribution accuracy relative to the encoder. The Curie--Weiss comparison shows temperature-dependent tradeoffs against independent fits, and the matched encoder comparison shows lower mean full TVD with a spin-flip invariant input than with a trained product input. Classical output averaging remains a stronger comparator at one reporting temperature. These results evaluate circuits selected using profile TVD. Supplementary runs establish the computational feasibility of classical optimization up to 2048 qubits. Residual full-distribution TVD and sampled MMD$^2$ errors limit claims of distributional accuracy. More expressive tractable encoders, adaptive kernels and evaluation of quantum deployment are directions for improving conditional generation; classical sampling hardness and practical quantum advantage remain open.
+The Gaussian experiment demonstrates improved full-distribution accuracy relative to the encoder. The Curie--Weiss comparison shows temperature-dependent tradeoffs against independent fits, and the matched encoder comparison shows that exact spin-flip invariance can improve full TVD at some temperatures while worsening it at others. All sixteen-qubit Curie--Weiss comparisons use full-TVD selection; Gaussian checkpoints use profile TVD. Supplementary runs establish the computational feasibility of classical optimization up to 2048 qubits. Residual full-distribution TVD and sampled MMD$^2$ errors limit claims of distributional accuracy. More expressive tractable encoders, adaptive kernels and evaluation of quantum deployment are directions for improving conditional generation; classical sampling hardness and practical quantum advantage remain open.
 \section*{DATA AVAILABILITY}
 The code and data supporting this study are available in GitHub \cite{balloConditionalGenerationIQP2026}.
 
@@ -784,54 +779,50 @@ OB is a fellow of Eurecat’s ``Vicente L\'opez'' PhD grant program.
 \newcommand{\hpCell}[2]{\parbox[t]{#1}{\raggedright #2\strut}}
 \raggedbottom
 
-\section{Hyperparameters used for the numerical experiments}
+\section{Hyperparameters and evaluation protocols}
 \label{sec:appendix_hyperparams}
 
 \subsection{Common training settings}
 
-The Gaussian, scaling and profile-selected Curie--Weiss models minimize the unbiased squared-MMD estimator using \texttt{Adam} \cite{kingmaAdam2015}, with second-moment coefficient $0.999$ and numerical stabilizer $10^{-8}$. The first-moment coefficient is $0.9$ for the Gaussian and scaling experiments and is tuned for Curie--Weiss. Learning rates follow a cosine decay, and parameters are initialized independently from $\mathcal N(0,s_\theta^2)$. Table~\ref{tab:training_hyperparams} lists the experiment-specific budgets. Section~\ref{sec:cw_full_tvd_hpo} describes hyperparameter selection based on full-distribution TVD.
+All trained models minimize the unbiased squared-MMD objective. Encoders remain fixed, and the circuit phases are initialized independently as $\theta_j\sim\mathcal N(0,s_\theta^2)$. Each update samples one fitting condition and one kernel bandwidth uniformly, then draws a target minibatch with replacement. Nonidentity masks are refreshed at every update, retaining the nonidentity-probability correction. Reference samples are independent of the target minibatch and shared across masks. Table~\ref{tab:training_hyperparams} summarizes the settings.
 
-One training run uses an independent seed and includes the prescribed restarts. Each restart resets the optimizer and draws new initial parameters while reusing target pools. Curie--Weiss restarts reuse sampling schedules; scaling restarts use different sampling randomness. We record checkpoints at initialization and the intervals specified below, then select the lowest-scoring checkpoint across restarts. Reported uncertainty is computed across runs, not restarts.
-
-Each update uniformly samples one training condition and one bandwidth, then draws a target minibatch with replacement from its training pool. Nonidentity masks are refreshed at every update, retaining the nonidentity-probability correction. Mask budgets include repetitions. Reference samples are independent of the target minibatch and shared across masks.
+Each initialization resets the optimizer and circuit phases while retaining the target pools. A training seed includes all prescribed initializations; selection takes the lowest-scoring checkpoint across them. Uncertainty is computed across seeds, not across initializations or temperatures. Gaussian and scaling models use \texttt{Adam} with cosine learning-rate decay to one tenth of the initial rate. Curie--Weiss models use the optimizer selected by HPO with a constant learning rate. The coefficient $b_1$ is $0.9$; $b_2=0.999$ and $\epsilon=10^{-8}$ apply to the \texttt{Adam} variants. Weight decay is zero.
 
 \begin{table}[!htbp]
 \centering
-\caption{Training and sampled-test budgets per circuit. The Curie--Weiss columns describe profile-TVD selection; Table~\ref{tab:cw_full_tvd_sample_budgets} gives the budgets for full-TVD selection. Updates are per restart. Curie--Weiss learning rates, initialization widths and first-moment coefficients are selected by HPO; Gaussian and scaling settings are fixed. Tuned values are rounded to three significant figures. Test budgets refer to sampled MMD diagnostics; small-system TVDs use exact probabilities. Full TVD is the primary reporting metric, while profile TVD retains its role in selection.}
+\caption{Training settings for the numerical experiments. Curie--Weiss columns use full-distribution TVD for hyperparameter and checkpoint selection. Curie--Weiss optimizers, learning rates and initialization widths are selected from Table~\ref{tab:cw_hpo_ranges}. Numerical values are rounded to three significant figures. The displayed expected mask weight $8$ denotes $7.99$. Updates and initializations refer to confirmation and evaluation; screening uses the smaller budget specified in Sec.~\ref{sec:cw_hpo}.}
 \label{tab:training_hyperparams}
 \small
-\setlength{\tabcolsep}{3pt}
+\setlength{\tabcolsep}{2pt}
 \renewcommand{\arraystretch}{1.12}
-\begin{tabular}{lccccc}
+\begin{tabular}{lcccccc}
 \toprule
-\hpCell{.25\textwidth}{Setting} & \hpCell{.135\textwidth}{Gaussian} & \hpCell{.135\textwidth}{Shared conditional IQP across conditions} & \hpCell{.135\textwidth}{Independent conditional IQP per condition} & \hpCell{.135\textwidth}{Independent unconditional IQP per condition} & \hpCell{.135\textwidth}{Scaling} \\
+\hpCell{.22\textwidth}{Setting} & \hpCell{.112\textwidth}{Gaussian} & \hpCell{.112\textwidth}{Shared product input} & \hpCell{.112\textwidth}{Shared spin-flip input} & \hpCell{.112\textwidth}{Independent conditional} & \hpCell{.112\textwidth}{Independent unconditional} & \hpCell{.112\textwidth}{Scaling} \\
 \midrule
-\hpCell{.25\textwidth}{Updates per restart} & 300 & 2,000 & 2,000 & 2,000 & 5,000 \\
-\hpCell{.25\textwidth}{Restarts per model and seed} & 1 & 3 & 3 & 3 & 3 \\
-\hpCell{.25\textwidth}{Final evaluation seeds per model} & 10 & 5 & 5 & 5 & 3 \\
-\hpCell{.25\textwidth}{Training-pool samples per condition} & 1,000 & 10,000 & 10,000 & 10,000 & 10,000 \\
-\hpCell{.25\textwidth}{Test target draws per condition/estimate} & 1,000 & 2,000 & 2,000 & 2,000 & 2,000 \\
-\hpCell{.25\textwidth}{Test MMD estimates per seed and condition grid} & 1 & 1 & 1 & 1 & 5 \\
-\hpCell{.25\textwidth}{Target minibatch size} & 100 & 450 & 450 & 450 & 450 \\
-\hpCell{.25\textwidth}{Mask draws per update} & 1,024 & 2,048 & 2,048 & 2,048 & 512 \\
-\hpCell{.25\textwidth}{Reference draws per update} & 1,024 & 2,048 & 2,048 & 2,048 & 1,024 \\
-\hpCell{.25\textwidth}{Expected mask weights} & $\{1\}$ & $\{2,4,6\}$ & $\{2,4,6\}$ & $\{2,4,6\}$ & $\{2,4\}$ \\
-\hpCell{.25\textwidth}{Initial learning rate} & $5\times10^{-3}$ & $0.0401$ & $0.0400$ & $0.0324$ & $0.01$ \\
-\hpCell{.25\textwidth}{Final learning rate} & $5\times10^{-4}$ & $3.26\times10^{-3}$ & $7.83\times10^{-4}$ & $3.65\times10^{-4}$ & $10^{-3}$ \\
-\hpCell{.25\textwidth}{Initial phase standard deviation $s_\theta$} & $0.05$ & $0.430$ & $0.349$ & $0.0758$ & $0.1$ \\
-\hpCell{.25\textwidth}{First-moment coefficient $b_1$} & $0.9$ & $0.968$ & $0.812$ & $0.975$ & $0.9$ \\
+\hpCell{.22\textwidth}{Updates per initialization} & 1,024 & 2,000 & 2,000 & 2,000 & 2,000 & 5,000 \\
+\hpCell{.22\textwidth}{Initializations per seed} & 1 & 3 & 3 & 3 & 3 & 3 \\
+\hpCell{.22\textwidth}{Evaluation seeds} & 5 & 5 & 5 & 5 & 5 & 3 \\
+\hpCell{.22\textwidth}{Training targets per condition} & 512 & 1,024 & 1,024 & 1,024 & 1,024 & 10,000 \\
+\hpCell{.22\textwidth}{Target minibatch} & 128 & 256 & 256 & 256 & 256 & 450 \\
+\hpCell{.22\textwidth}{Training mask draws} & 1,024 & 2,048 & 2,048 & 2,048 & 2,048 & 512 \\
+\hpCell{.22\textwidth}{Training reference draws} & 1,024 & 2,048 & 2,048 & 2,048 & 2,048 & 1,024 \\
+\hpCell{.22\textwidth}{Expected mask weights} & $\{1\}$ & $\{2,4,8\}$ & $\{2,4,8\}$ & $\{2,4,8\}$ & $\{2,4,8\}$ & $\{2,4\}$ \\
+\hpCell{.22\textwidth}{Checkpoint interval} & 32 & 100 & 100 & 100 & 100 & 25 \\
+\hpCell{.22\textwidth}{Optimizer} & \texttt{Adam} & \texttt{Adam} & \texttt{Adam} & \shortstack{\texttt{AdamW}\\\texttt{ScheduleFree}} & \texttt{Adam} & \texttt{Adam} \\
+\hpCell{.22\textwidth}{Learning rate} & $0.005$ & $0.0310$ & $0.0100$ & $0.0603$ & $0.00844$ & $0.01$ \\
+\hpCell{.22\textwidth}{Learning-rate schedule} & Cosine & Constant & Constant & Constant & Constant & Cosine \\
+\hpCell{.22\textwidth}{Initialization width $s_\theta$} & $0.25$ & $0.696$ & $0.500$ & $0.119$ & $0.117$ & $0.1$ \\
+\hpCell{.22\textwidth}{Coefficient $b_1$} & $0.9$ & $0.9$ & $0.9$ & $0.9$ & $0.9$ & $0.9$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-For expected mask weight $w$, the bandwidth is
+For expected mask weight $w$, the Gaussian bandwidth is
 \begin{equation}
-    \sigma(n,w)
-    =
-    \left[-2\ln\left(1-\frac{2w}{n}\right)\right]^{-1/2},
-    \qquad 0<w<n/2,
+    \sigma(n,w)=\left[-2\ln\left(1-\frac{2w}{n}\right)\right]^{-1/2},
+    \qquad 0<w<n/2.
 \end{equation}
-where $n$ counts visible qubits and the expectation precedes conditioning on a nonidentity mask. Bandwidths contribute equally to the objective. All encoders are fixed during training, and rotation angles are in radians. All reported model profiles use raw circuit probabilities. Encoder-only baselines receive no training. Sampled-test target draws are independent of the training pools; these diagnostics do not determine the exact full or profile TVDs.
+Here, $n$ counts visible qubits, and the expectation precedes nonidentity conditioning. Bandwidths have equal weights in the objective. The Curie--Weiss weights are numerically $\{2,4,7.99\}$, displayed as $\{2,4,8\}$; all three bandwidths are strictly positive. Rotation angles are in radians. Full and profile TVDs use exact circuit probabilities at sixteen qubits; sampled-MMD diagnostics do not determine these errors.
 
 \subsection{Discrete Gaussian translation}
 \label{sec:appendix_gaussian}
@@ -843,88 +834,42 @@ The model has 16 visible qubits on an open $4\times4$ lattice, with 16 single-qu
     \bigotimes_{i=1}^{16}
     R_Z(c-1/2)R_Y(1.5)\ket{0}_i.
 \end{equation}
-The target profile is $\rho(k\mid c)\propto\exp[-(k-(5+6c))^2/8]$, with uniform probabilities within each Hamming-weight shell. Training uses $c\in\{0.0,0.25,0.50,0.75,1.0\}$ and 1,000 samples per condition, giving 5,000 training samples per seed. We select the checkpoint minimizing mean exact profile TVD at development conditions $c\in\{0.125,0.375,0.625,0.875\}$, including initialization and checks every 30 updates. Evaluation uses $c_j=(j+1/3)/80$ for $j=0,\ldots,79$, with 1,000 target draws per condition for auxiliary test-MMD diagnostics. Full and profile TVDs use exact probabilities; each aggregate error is the median across ten independent seeds of the mean error over evaluation conditions. The full-TVD curve shows pointwise medians and interquartile ranges, which need not aggregate to that same value. Checkpoint selection remains based on development-profile TVD. Figure~\ref{fig:gaussian-translation} illustrates one run chosen independently of held-out performance.
+The target profile is $\rho(k\mid c)\propto\exp[-(k-(5+6c))^2/8]$, with uniform probabilities within each Hamming-weight shell. Training uses $c\in\{0.0,0.25,0.50,0.75,1.0\}$ and $512$ samples per condition, giving $2560$ training samples per seed. We select the checkpoint minimizing mean exact profile TVD at development conditions $c\in\{0.125,0.375,0.625,0.875\}$, including initialization and checks every $32$ updates through update $1024$. Evaluation uses $c_j=(j+1/3)/80$ for $j=0,\ldots,79$, with $1000$ target draws per condition for auxiliary test-MMD diagnostics. Full and profile TVDs use exact probabilities; each aggregate error is the median across five independent seeds of the mean error over evaluation conditions. Figure~\ref{fig:gaussian-translation} averages exact profiles over the five selected circuits at the development midpoints and summarizes their mean output Hamming weights over the separate evaluation grid.
 
-\subsection{Curie--Weiss comparison}
+\subsection{Curie--Weiss models}
 \label{sec:appendix_cw}
 
-The target law is $p(x\mid\beta)\propto\exp[\beta(2|x|-16)^2/32]$. All trained comparison models have 16 visible qubits and the same complete set of 16 single-qubit and 120 pair phases. Conditional models use
-\begin{equation}
-    \ket{\phi_{\mathrm{CW}}(\beta)}
-    =
-    \bigotimes_{i=1}^{16}
-    R_Z(0.75\beta)R_Y(\pi/2)\ket{0}_i.
-\end{equation}
-The shared conditional IQP across conditions trains at $\beta\in\{0.6,0.8,1.2,1.4\}$ and is evaluated at $\beta\in\{0.4,1.0,1.6\}$.
+The sixteen-qubit target is $p(x\mid\beta)\propto\exp[\beta(2|x|-16)^2/32]$. All models use the complete bank of $16$ one-body and $120$ two-body phases, with no ancillas. The shared product model uses $R_Z(0.75\beta)R_Y(\pi/2)\ket{0}$ on every qubit. The shared invariant model uses its normalized $+1$ global spin-flip projection, as defined in Sec.~\ref{sec:cw_input_symmetry}. Both fit at $\beta\in\{0.6,0.8,1.2,1.4\}$, select on development temperatures $\{0.5,0.7,1.3,1.5\}$, and report at $\{0.4,1.0,1.6\}$. Independent baseline families fit a separate circuit at each reporting temperature, using either the corresponding product input or $\ket{0}^{\otimes16}$. One optimizer, learning rate and initialization width is selected jointly for the three circuits within each family.
 
-Independent baselines fit a separate circuit at each reporting temperature, using either the corresponding conditional input or $\ket{0}^{\otimes16}$. Each circuit has 10,000 training samples and uses 2,000 updates per restart with three restarts in the final evaluation. Each baseline family therefore requires three circuits per seed. Table~\ref{tab:cw_baseline_budgets} distinguishes these aggregate budgets. Independent models are evaluated at fitted temperatures, whereas the shared conditional IQP across conditions is evaluated at temperatures omitted from fitting and selection. Auxiliary test-MMD diagnostics use 2,000 independently drawn targets per reported temperature. Full and profile TVDs use exact probabilities; final results report means and sample standard deviations across five independent seeds. Full TVD is the primary reported accuracy metric, while HPO and checkpoint selection retain profile TVD.
+Each fit uses $1024$ training targets per fitting temperature and seed, minibatches of $256$, and $2048$ mask and reference draws per update. Auxiliary sampled-MMD diagnostics use $2048$ validation targets per fitting temperature and $2048$ independently drawn test targets per reporting temperature. Each diagnostic uses $2048$ masks per condition and bandwidth and $2048$ reference samples per condition shared across bandwidths. These diagnostics do not select models. Parameters and optimizer states use double precision; phase contractions use single precision. Table~\ref{tab:cw_baseline_budgets} gives the aggregate fitting resources.
 
 \begin{table}[!htbp]
 \centering
-\caption{Curie--Weiss comparison budgets per seed, summed over fitting conditions. Training samples count target-pool entries, rather than repeated minibatch draws. Optimizer updates include all three restarts of every trained circuit.}
+\caption{Curie--Weiss fitting budgets per seed. Target counts denote training-pool entries; optimizer updates include all three initializations of each circuit during confirmation and evaluation. Each independent family fits three circuits, whereas each shared model fits one.}
 \label{tab:cw_baseline_budgets}
 \small
-\setlength{\tabcolsep}{6pt}
-\begin{tabular}{lccc}
+\begin{tabular}{lrrr}
 \toprule
-Model & Trained circuits & Training samples & Optimizer updates \\
+Model & Circuits & Training targets & Updates \\
 \midrule
-Encoder only & 0 & 0 & 0 \\
-Shared conditional IQP across conditions & 1 & 40,000 & 6,000 \\
-Independent conditional IQP per condition & 3 & 30,000 & 18,000 \\
-Independent unconditional IQP per condition & 3 & 30,000 & 18,000 \\
+Shared product input & 1 & 4,096 & 6,000 \\
+Shared spin-flip input & 1 & 4,096 & 6,000 \\
+Independent conditional & 3 & 3,072 & 18,000 \\
+Independent unconditional & 3 & 3,072 & 18,000 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsubsection{Hyperparameter optimization based on profile TVD}
+\subsubsection{Hyperparameter optimization}
 \label{sec:cw_hpo}
-
-We use Optuna's tree-structured Parzen estimator \cite{akibaOptuna2019} to tune cosine-decay \texttt{Adam} and the Gaussian initialization width, while fixing the encoder, the 136-parameter ansatz, the training pools, kernel weights, and sampling budgets. The shared-model search uses 48 trials, each completing 2,000 sampled-MMD updates on each of two screening seeds, with one restart and no early pruning. The score averages the best exact development-profile TVD across the two seeds. Checkpoint selection includes initialization and every 25 updates at development temperatures $\{0.5,0.7,1.3,1.5\}$. We also tried \texttt{AdamWScheduleFree} \cite{defazioRoadLessScheduled2024} with the same HPO trial budget, but it did not outperform cosine-decay \texttt{Adam} on the development-profile TVD.
-
-\begin{table}[!htbp]
-\centering
-\caption{\texttt{Adam} HPO search ranges for the Curie--Weiss models. Learning rates, initialization widths, and decay ratios are sampled logarithmically; $b_1$ is sampled uniformly.}
-\label{tab:cw_hpo_ranges}
-\small
-\begin{tabular}{lc}
-\toprule
-Setting & Search range \\
-\midrule
-Initial learning rate & $[3\times10^{-4},5\times10^{-2}]$ \\
-Gaussian initialization width $s_\theta$ & $[0.01,0.7]$ \\
-First-moment coefficient $b_1$ & $[0.8,0.98]$ \\
-Final/initial learning-rate ratio & $[0.01,0.3]$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Table~\ref{tab:cw_hpo_ranges} gives the \texttt{Adam} search ranges. Each study uses 12 startup trials and batches of two proposals, with sampler updates ordered independently of completion order. The second-moment coefficient, numerical stabilizer, and weight decay are fixed at $0.999$, $10^{-8}$, and zero. We confirm the two best distinct \texttt{Adam} configurations on three fresh seeds, with three restarts per seed, and select the lowest mean development-profile TVD. The selected settings in Table~\ref{tab:training_hyperparams} are then fixed for evaluation on five further independent seeds, with three restarts per seed and development-based checkpoint selection. Reporting temperatures $\{0.4,1.0,1.6\}$ do not enter this search or selection, although they had been examined in earlier experiments.
-
-For each independent baseline family, we run one \texttt{Adam} HPO study with 48 trials and the same search ranges and per-circuit budgets. Each trial fits circuits at $\beta=0.4,1.0,1.6$ on two screening seeds and scores the mean best fitted-temperature profile TVD across these six fits. One configuration therefore serves all temperatures within a family. Each baseline study includes a fixed \texttt{Adam} reference configuration and the selected shared-model configuration within its trial budget. The shared-model study includes the same fixed reference configuration. We confirm the two best configurations per family on three fresh seeds with three restarts per circuit, select the lowest mean fitted-temperature profile TVD, then evaluate on five further independent seeds with three restarts per circuit. Checkpoint selection includes initialization and every 25 updates at the fitted temperature. Equal trial counts require three times as many circuit fits per independent family as for the shared-model \texttt{Adam} search. Reporting temperatures remain in-sample; fresh seeds measure optimization variability.
-
-At $\beta=1.6$, exact full TVDs across the five final runs range over $0.1671$--$0.4012$ for the shared model, $0.4524$--$0.5388$ for independent conditional IQPs, and $0.3439$--$0.4027$ for independent unconditional IQPs. The shared model has lower full TVD than the independent conditional model in all five paired runs and than the independent unconditional model in four of five. At $\beta=1.0$, it has lower full TVD than both independent families in all five paired runs. These comparisons describe optimization variability under the existing profile-based selection protocol.
-
-\input{tables/curie_weiss_profile_tvd.tex}
-
-Table~\ref{tab:curie_weiss_profile_tvd} retains the secondary exact profile errors. At $\beta=0.4,1.0,1.6$, the shared model gives $0.0712\pm0.0158$, $0.0683\pm0.0153$, and $0.1530\pm0.1245$. Both independent families have lower mean profile error at $\beta=0.4$ and $1.0$, whereas the shared model has lower mean profile error at $\beta=1.6$. These rankings differ from the primary full-TVD rankings at $\beta=1.0$. All spreads are sample standard deviations across the same five seeds. Full TVD was evaluated without retuning or changing checkpoint selection.
-
-\subsubsection{Full-distribution TVD hyperparameter optimization}
 \label{sec:cw_full_tvd_hpo}
 
-For hyperparameter selection based on exact full-distribution TVD, we use the following protocol. The results in Tables~\ref{tab:curie_weiss_full_tvd} and~\ref{tab:cw_symmetry_metrics} use the profile-based selection described above and in Sec.~\ref{sec:cw_symmetry_hpo}.
-
-We run four separate studies: a shared model with the product phase input, a shared model with its normalized $+1$ global spin-flip projection, an independent unconditional baseline family, and an independent conditional baseline family. The projected input is the spin-flip construction in Sec.~\ref{sec:cw_input_symmetry}. All circuits use $16$ visible qubits, no ancillas, and the same $136$ independently parameterized one- and two-body phases. The shared models fit at $\beta\in\{0.6,0.8,1.2,1.4\}$ and select on development temperatures $\{0.5,0.7,1.3,1.5\}$. Each independent family fits three circuits at $\beta=0.4,1.0,1.6$, selecting each circuit at its fitted temperature and sharing one hyperparameter configuration across the family.
-
-Each study uses $60$ Optuna TPE trials with a categorical optimizer choice among \texttt{Adam}, \texttt{AdamWScheduleFree}, and \texttt{SGDScheduleFree} \cite{kingmaAdam2015,defazioRoadLessScheduled2024,akibaOptuna2019}.
-
-We allocate the same trial budget to all four studies, searching only three hyperparameters: the optimizer, learning rate and Gaussian initialization width. As a random-search benchmark \cite{bergstraRandomSearch2012}, $60$ independent draws have probability $1-(1-0.05)^{60}\approx0.954$ of sampling at least one configuration in the best-performing $5\%$ of the chosen sampling distribution. This benchmark motivates the budget; it is not a coverage guarantee for our adaptive TPE proposals, which use previous scores to prioritize promising configurations.
-
-Table~\ref{tab:cw_full_tvd_hpo_ranges} gives the search space. Each fit uses a constant learning rate and independent initial phases $\theta_j\sim\mathcal N(0,s_\theta^2)$. We fix $b_1=0.9$, $b_2=0.999$ and $\epsilon=10^{-8}$ where applicable, zero weight decay, no warmup, and no gradient clipping. The schedule-free optimizers use learning-rate weighting exponent $2$ and their evaluation parameters for checkpoint scoring.
+We run four separate Optuna TPE studies \cite{akibaOptuna2019}, one for each model family. Each study has $60$ trials and searches three hyperparameters: a categorical optimizer choice among \texttt{Adam}, \texttt{AdamWScheduleFree} and \texttt{SGDScheduleFree}, the constant learning rate, and the Gaussian initialization width \cite{kingmaAdam2015,defazioRoadLessScheduled2024}. Table~\ref{tab:cw_hpo_ranges} gives the search space. Equal trial counts provide a common tuning budget across families. As a random-search benchmark \cite{bergstraRandomSearch2012}, $60$ independent draws have probability $1-0.95^{60}\approx0.954$ of sampling at least one configuration in the best-performing $5\%$ of the chosen sampling distribution. This calculation motivates the budget rather than guaranteeing coverage for adaptive TPE proposals.
 
 \begin{table}[!htbp]
 \centering
-\caption{Search space for Curie--Weiss hyperparameter optimization based on full-distribution TVD. The optimizer is categorical; learning rates and initialization widths are sampled logarithmically. The $60$ trials per study have no allocation quota by optimizer.}
+\caption{Curie--Weiss HPO search space. Optimizer choice is categorical; learning rates and initialization widths are sampled logarithmically. There is no allocation quota by optimizer.}
+\label{tab:cw_hpo_ranges}
 \label{tab:cw_full_tvd_hpo_ranges}
 \small
 \begin{tabular}{ll}
@@ -932,85 +877,42 @@ Table~\ref{tab:cw_full_tvd_hpo_ranges} gives the search space. Each fit uses a c
 Hyperparameter & Options or range \\
 \midrule
 Optimizer & \texttt{Adam}, \texttt{AdamWScheduleFree}, \texttt{SGDScheduleFree} \\
-Learning rate, \texttt{Adam} or \texttt{AdamWScheduleFree} & $[3\times10^{-4},10^{-1}]$ \\
+Learning rate, \texttt{Adam} variants & $[3\times10^{-4},10^{-1}]$ \\
 Learning rate, \texttt{SGDScheduleFree} & $[10^{-3},1]$ \\
-Gaussian initialization width $s_\theta$ & $[0.01,0.7]$ radians \\
+Initialization width $s_\theta$ & $[0.01,0.7]$ radians \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Each regular trial runs $1000$ updates on three seeds, with one initialization per seed. We evaluate exact TVD over all $2^{16}$ bitstrings at initialization and every $100$ updates. For a shared model, each seed selects the checkpoint with the lowest mean development-temperature TVD. For an independent family, each circuit selects its lowest fitted-temperature TVD, then the three fitted-temperature errors are averaged within each seed. The trial score is the median of these three seed scores. TPE uses $12$ startup trials, including one reference configuration per optimizer, and batches of two proposals with sampler updates in proposal order. No trial is pruned. The reference learning rates are $0.01$ for the \texttt{Adam} variants and $0.1$ for \texttt{SGDScheduleFree}, all with $s_\theta=0.5$.
+TPE uses $12$ startup trials, including one reference configuration per optimizer, and batches of two proposals with sampler updates in proposal order. The reference learning rates are $0.01$ for the \texttt{Adam} variants and $0.1$ for \texttt{SGDScheduleFree}, all with $s_\theta=0.5$. No trial is pruned. Optimizer coefficients are fixed as specified above, with no warmup or gradient clipping. Schedule-free optimizers use learning-rate weighting exponent $2$ and their evaluation parameters for checkpoint scoring.
 
-We promote the three best distinct optimizer, learning-rate and initialization-width configurations to confirmation on five fresh seeds. Each confirmation fit uses $2000$ updates and three total initializations per seed, selecting the best checkpoint across those initializations. The winner minimizes the median of the five seed scores. Reporting evaluates the winning configuration's selected confirmation checkpoints at $\beta=0.4,1.0,1.6$, without further fitting or reselection. Thus, the five reporting seeds are reused from configuration selection rather than forming an independent final cohort. Shared reporting temperatures remain excluded from fitting and selection, although they have historical exposure. Independent reporting temperatures remain in-sample. Per-temperature results report means and sample standard deviations across the five seeds; restarts and temperatures are not additional seed replicates.
+Each screening trial uses three seeds, $1000$ updates and one initialization per seed. Selection includes initialization and every $100$ updates, using exact TVD over all $2^{16}$ bitstrings. A shared model selects the checkpoint minimizing mean development-temperature TVD. Each independent circuit selects at its fitted temperature; the three circuit errors are then averaged within each seed. The trial score is the median of the three seed scores, preserving mean aggregation across temperatures.
 
-\begin{table}[!htbp]
-\centering
-\caption{Sampling budgets for Curie--Weiss hyperparameter optimization based on full-distribution TVD. The same budgets apply to all four studies during screening and confirmation. Target-pool sizes are per condition and seed; minibatches are drawn with replacement.}
-\label{tab:cw_full_tvd_sample_budgets}
-\small
-\begin{tabular}{lr}
-\toprule
-Setting & Budget \\
-\midrule
-Training target pool per fitting condition & $1024$ \\
-Target minibatch per update & $256$ \\
-Mask draws per update & $2048$ \\
-Reference draws per update & $2048$ \\
-Validation target pool per fitting condition & $2048$ \\
-Test targets per reporting condition & $2048$ \\
-Diagnostic masks per condition and bandwidth & $2048$ \\
-Diagnostic reference draws per condition & $2048$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+The three best distinct configurations are confirmed on five fresh seeds, with $2000$ updates and three initializations per seed. Each seed selects the best checkpoint across its initializations, and the configuration with the lowest five-seed median score is chosen. Reporting reuses the five selected confirmation runs without further fitting or reselection. These seeds therefore do not form an independent final cohort. Shared reporting temperatures are excluded from fitting and selection but have historical exposure; independent reporting temperatures are fitted. Per-temperature results report means and sample standard deviations across the five seeds.
 
-Training minimizes the unbiased squared-MMD objective using the budgets in Table~\ref{tab:cw_full_tvd_sample_budgets}. Each update uniformly samples one fitting temperature and one bandwidth. Masks are refreshed at every update and retain the nonidentity-probability correction. Reference draws are shared across masks and independent of target minibatches. The actual expected mask weights are $\{2,4,7.99\}$ before nonidentity conditioning; the displayed label $8$ rounds $7.99$. All three components therefore use strictly positive Gaussian bandwidths.
-
-Auxiliary sampled-MMD diagnostics use $2048$ validation targets per fitting temperature and independent test targets of the same size per reporting temperature, $2048$ masks per condition and bandwidth, and $2048$ reference draws per condition shared across bandwidths. These diagnostics do not select checkpoints or configurations. Parameter and optimizer states use double precision; phase contractions use single precision with sample chunks of $256$.
-
-At equal trial counts, each independent family requires three times as many circuit fits as a shared model.
-
-\subsubsection{Matched comparison of product and spin-flip invariant inputs}
+\subsubsection{Spin-flip invariant input and secondary diagnostics}
 \label{sec:cw_symmetry_hpo}
 
-For deterministic preparation, write $c=\cos(t/2)$, $s=\sin(t/2)$, and let $Z_\ell^{(p)}=[1+(-1)^p\cos^\ell(t)]/2$ be the parity-$p$ probability of $\ell$ independent reference bits. The last register wire accumulates the parity $p$ of the prepared prefix. With $\ell$ wires remaining, the next wire receives a parity-controlled $R_Y(\alpha_p)$, where
+The two shared inputs use the same HPO protocol and paired seeds. Target pools, condition, minibatch, bandwidth and mask schedules, and Gaussian initialization directions are shared within each seed; initialization widths may differ after tuning. Reference sampling uses common random numbers with input-dependent laws. Odd masks remain in the objective even though their projected-model moments vanish.
+
+For deterministic preparation of the invariant input, let $t=0.75\beta$ and define $Z_\ell^{(p)}=[1+(-1)^p\cos^\ell(t)]/2$, the parity-$p$ probability of $\ell$ independent reference bits. The last wire accumulates the parity $p$ of the prepared prefix. With $\ell$ wires remaining, the next wire receives a parity-controlled rotation
 \begin{equation}
-    \alpha_p=2\operatorname{atan2}\!\left(s\sqrt{Z_{\ell-1}^{(p\oplus1)}},c\sqrt{Z_{\ell-1}^{(p)}}\right).
+    \alpha_p=2\operatorname{atan2}\!\left(\sin(t/2)\sqrt{Z_{\ell-1}^{(p\oplus1)}},\cos(t/2)\sqrt{Z_{\ell-1}^{(p)}}\right).
 \end{equation}
-A CNOT from that wire updates the accumulator. Repeating on the first $n-1$ wires leaves the last wire equal to their parity and prepares the even-conditioned reference magnitudes. Applying a phase of $-\pi/2$ to each occupied wire gives Eq.~\eqref{eq:cw_projected_reference}; final Hadamards prepare Eq.~\eqref{eq:cw_projected_input}. This construction uses $O(n)$ one- and two-qubit gates within the original register.
+A CNOT updates the accumulator. Repeating on the first $n-1$ wires prepares the even-conditioned reference magnitudes. Applying a phase of $-\pi/2$ to each occupied wire gives Eq.~\eqref{eq:cw_projected_reference}; final Hadamards prepare Eq.~\eqref{eq:cw_projected_input}. The construction uses $O(n)$ gates without ancillas or postselection.
 
-The spin-flip comparison uses the two inputs in Sec.~\ref{sec:cw_input_symmetry}, $n=16$ visible qubits, no ancillas, and the same complete $136$-parameter ansatz. Each input has its own $48$-trial cosine-\texttt{Adam} search over the ranges in Table~\ref{tab:cw_hpo_ranges}. Both studies include a fixed \texttt{Adam} reference configuration and the shared-model configuration in Table~\ref{tab:training_hyperparams} within that budget. Optuna TPE uses $12$ startup trials, one independent sampler seed per input, two proposals per batch, no pruning, and sampler updates in proposal order.
-
-Screening uses two seeds and one $2000$-update restart per candidate and seed. We confirm the two best distinct configurations for each input on three fresh confirmation seeds, with three restarts per seed. The selected configuration minimizes mean exact development-profile TVD. We fix both configurations before final evaluation on five fresh paired evaluation seeds, with three restarts per seed. Selection includes initialization and every $25$ updates at development temperatures $\{0.5,0.7,1.3,1.5\}$; fitting uses $\{0.6,0.8,1.2,1.4\}$. Reporting temperatures $\{0.4,1.0,1.6\}$ enter neither fitting nor current selection but have historical exposure. The completed comparison used $258$ restart trajectories and $516{,}000$ optimizer updates. Table~\ref{tab:cw_symmetry_settings} gives the selected hyperparameters and their confirmation scores.
-
-\input{tables/curie_weiss_symmetry_settings.tex}
-
-Each arm retains $10{,}000$ target-pool entries per fitting temperature, batch size $450$, $2048$ nonidentity-mask draws and $2048$ reference draws per update, and expected mask weights $\{2,4,6\}$. Paired seeds share target pools, minibatch, condition, bandwidth and mask schedules, and Gaussian initialization directions; selected initialization widths may differ. Reference samples use common random numbers with input-dependent sampling laws. We use the Hamming-RBF mask law, including odd masks whose projected-model moments vanish. Sampled validation diagnostics retain $2000$ target samples, $256$ masks and $16{,}384$ reference draws; development-profile TVD determines selection.
-
-As a comparator without additional training, we average the product-input model's output with its complement, $q_{\mathrm{avg}}(x\mid\beta)=[q(x\mid\beta)+q(\bar x\mid\beta)]/2$, without retraining or reselection. This law can be sampled by complementing each model output with probability $1/2$. It satisfies spin-flip symmetry, whereas the invariant encoder imposes that symmetry on the pure input state before learning. Both deterministic encoder-only laws are also evaluated. Final metrics use exact raw probabilities, prioritize full-distribution TVD, and report mean and sample standard deviation over the five paired seeds; seed-wise differences concern optimization variability within this specified temperature family.
-
-To distinguish the two operations, let $A_{\boldsymbol\theta,\beta}(x)=\langle x|U_{\boldsymbol\theta}|\phi(\beta)\rangle$ be the product-input output amplitude. At the same circuit phases, the invariant input gives
+The projected input produces
 \begin{equation}
     q_{\boldsymbol\theta,+}(x\mid\beta)
-    =\frac{|A_{\boldsymbol\theta,\beta}(x)+A_{\boldsymbol\theta,\beta}(\bar x)|^2}
-    {2[1+\cos^n(t)]}.
+    =\frac{|A_{\boldsymbol\theta,\beta}(x)+A_{\boldsymbol\theta,\beta}(\bar x)|^2}{2[1+\cos^n(t)]},
 \end{equation}
-The interference term changes the model family relative to classical probability averaging. For the spin-flip invariant target, convexity guarantees that output averaging cannot increase either profile or full-bitstring TVD of the product-input model. Input projection has no corresponding guarantee of improved fit.
+where $A_{\boldsymbol\theta,\beta}(x)=\langle x|U_{\boldsymbol\theta}|\phi(\beta)\rangle$. Its interference term changes the model family, but does not guarantee improved fit. The invariant encoder alone gives $q_{0,+}(x\mid\beta)=[1+\cos((2|x|-n)t)]/[2^n(1+\cos^n(t))]$. Both encoder-only laws are uniform within Hamming shells, so their full and profile TVDs coincide.
 
-The product encoder alone gives the uniform law. The invariant encoder alone gives
-\begin{equation}
-    q_{0,+}(x\mid\beta)
-    =\frac{1+\cos[(2|x|-n)t]}{2^n[1+\cos^n(t)]}.
-\end{equation}
-Both encoder-only laws are uniform within Hamming shells and spin-flip invariant. Their profile and full-bitstring TVDs therefore coincide. At $\beta=0.4,1.0,1.6$, these errors are $0.1180$, $0.4406$, and $0.8699$ for the product input and $0.2561$, $0.5536$, and $0.9002$ for the invariant input. Projection enforces the physical symmetry but does not improve these untrained baselines.
-
+\input{tables/curie_weiss_profile_tvd.tex}
 \input{tables/curie_weiss_symmetry_secondary.tex}
-
-Table~\ref{tab:cw_symmetry_secondary} reports the encoder-only and output-averaging diagnostics. At $\beta=0.4$, averaging the trained product-input output gives full TVD $0.0585\pm0.0066$ and profile TVD $0.0223\pm0.0048$, both lower than for the invariant input. At $\beta=1.0$ and $1.6$, its full TVDs are $0.2010\pm0.0164$ and $0.1921\pm0.0217$, respectively, compared with $0.1645\pm0.0140$ and $0.1746\pm0.0182$ for the invariant input. The corresponding profile errors remain close. These comparisons separate coherent input projection from classical output averaging under the specified profile-based selection protocol.
-
-Table~\ref{tab:cw_symmetry_paired} reports paired differences, invariant input minus product input. Full TVD improves in all five paired seeds at $\beta=0.4$ and $1.0$, and in four of five at $\beta=1.6$. Profile differences change sign across seeds at every reporting temperature. Sample standard deviations describe the paired differences rather than differences of the separate standard deviations.
-
 \input{tables/curie_weiss_symmetry_paired.tex}
+
+The secondary tables retain Hamming-profile errors, encoder-only controls, and paired differences between the learned inputs. Paired differences are formed within each seed before computing their mean and sample standard deviation. Thus, their spread differs from a difference of the separate standard deviations.
 
 \subsection{Scaling}
 \label{sec:appendix_scaling}

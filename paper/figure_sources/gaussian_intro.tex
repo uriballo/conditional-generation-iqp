@@ -1,96 +1,53 @@
 \documentclass[border=1.5mm]{standalone}
 \usepackage{amsmath,amssymb}
 \usepackage{tikz}
-\usepackage{pgfplots}
-\usepgfplotslibrary{groupplots}
 \usetikzlibrary{calc}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots,fillbetween}
 \pgfplotsset{compat=1.18}
-
-% Editable Figure 1 draft: native TikZ and pgfplots with vector text and curves.
-\definecolor{dark}{HTML}{000000}
-\definecolor{targetgray}{HTML}{4D4D4D}
-\definecolor{trainedblue}{HTML}{0072B2}
+\definecolor{blue}{HTML}{0072B2}
+\definecolor{vermillion}{HTML}{D55E00}
+\definecolor{green}{HTML}{009E73}
+\definecolor{purple}{HTML}{CC79A7}
+\definecolor{targetgray}{HTML}{666666}
 \definecolor{encodergray}{HTML}{808080}
-
 \pgfplotsset{
-  every axis/.append style={
-    axis line style={draw=dark,line width=.8pt},
-    axis x line*=bottom,
-    axis y line*=left,
-    tick align=inside,
-    tick style={draw=dark,line width=.6pt},
-    tick label style={font=\small,text=dark},
-    label style={font=\small,text=dark},
-    title style={font=\small,text=dark,yshift=-1pt},
-    major tick length=2.2pt,
-    minor tick length=1.2pt,
-    minor x tick num=1,
-    minor y tick num=1,
-    ymajorgrids=false,
-    xmajorgrids=false,
-    clip=true,
-    scaled ticks=false,
-  },
-  targetline/.style={targetgray,line width=1.5pt,dashed},
-  trainedline/.style={trainedblue,line width=1.5pt,mark=*,mark size=1.05pt,
-    mark options={fill=trainedblue,draw=trainedblue}},
-  encoderline/.style={encodergray,line width=1.5pt,densely dotted},
-}
-
-\newcommand{\profilelegend}{%
-  \begin{tikzpicture}[baseline=-.45ex]
-    \draw[draw=targetgray,line width=1.5pt,dashed] (0,0)--(5mm,0);
-  \end{tikzpicture}\,Target\hspace{2mm}
-  \begin{tikzpicture}[baseline=-.45ex]
-    \draw[draw=trainedblue,line width=1.5pt] (0,0)--(5mm,0);
-    \fill[trainedblue] (2.5mm,0) circle (.9pt);
-  \end{tikzpicture}\,Trained\hspace{2mm}
-  \begin{tikzpicture}[baseline=-.45ex]
-    \draw[draw=encodergray,line width=.8pt,densely dotted] (0,0)--(5mm,0);
-  \end{tikzpicture}\,Encoder only\hspace{2mm}
-  % no training-condition marker in the profiles-only figure
-}
-
-\pgfplotstableread[col sep=comma]{../data/gaussian/profile_10.csv}\profileten
-\pgfplotstableread[col sep=comma]{../data/gaussian/profile_40.csv}\profileforty
-\pgfplotstableread[col sep=comma]{../data/gaussian/profile_70.csv}\profileseventy
-
+ every axis/.append style={axis line style={draw=black,line width=.7pt},axis x line*=bottom,axis y line*=left,tick align=inside,tick style={draw=black,line width=.55pt},tick label style={font=\fontsize{9}{10}\selectfont},label style={font=\fontsize{10}{11}\selectfont},major tick length=2.2pt,minor tick length=1.2pt,minor x tick num=1,minor y tick num=1,clip=true,scaled ticks=false,enlargelimits=false},
+ targetgrayline/.style={draw=targetgray,line width=1.15pt,dashed}, encoderline/.style={draw=encodergray,line width=1.0pt,densely dotted},
+ bluecondition/.style={draw=blue,line width=1.2pt}, vermillioncondition/.style={draw=vermillion,line width=1.2pt}, greencondition/.style={draw=green,line width=1.2pt}, purplecondition/.style={draw=purple,line width=1.2pt}}
+% Renderer-generated compact inputs in ../data/gaussian/.
+\pgfplotstableread[col sep=comma]{../data/gaussian/midpoint_profiles.csv}\profiles
+\pgfplotstableread[col sep=comma]{../data/gaussian/response.csv}\response
+\pgfplotstableread[col sep=comma]{../data/gaussian/training_response.csv}\training
 \begin{document}
-\begin{minipage}{170mm}
-\noindent
-\begin{center}
-  {\fontsize{9}{11}\selectfont\profilelegend}
-\end{center}
-\vspace{2mm}
-
-\noindent
-\begin{tikzpicture}[baseline=(left-axis-top)]
-  \begin{groupplot}[
-    group style={group size=3 by 1,horizontal sep=8mm},
-    scale only axis,
-    width=46mm,height=42mm,
-    xmin=0,xmax=16,ymin=0,ymax=.30,
-    xtick={0,4,8,12,16},ytick={0,.1,.2,.3},
-    xlabel={},
-    enlargelimits=false,
-    scaled y ticks=false,
-  ]
-    \nextgroupplot[title={(a)\ $c=0.129$},ylabel={$P(K=k)$}]
-      \coordinate (left-axis-top) at (rel axis cs:0,1);
-      \addplot[targetline] table[x=k,y=target] {\profileten};
-      \addplot[trainedline] table[x=k,y=trained] {\profileten};
-      \addplot[encoderline] table[x=k,y=encoder] {\profileten};
-    \nextgroupplot[title={(b)\ $c=0.504$},yticklabels=\empty]
-      \addplot[targetline] table[x=k,y=target] {\profileforty};
-      \addplot[trainedline] table[x=k,y=trained] {\profileforty};
-      \addplot[encoderline] table[x=k,y=encoder] {\profileforty};
-    \nextgroupplot[title={(c)\ $c=0.879$},yticklabels=\empty]
-      \addplot[targetline] table[x=k,y=target] {\profileseventy};
-      \addplot[trainedline] table[x=k,y=trained] {\profileseventy};
-      \addplot[encoderline] table[x=k,y=encoder] {\profileseventy};
-  \end{groupplot}
-  \node[font=\small,text=dark] at ($(group c2r1.south)+(0,-6mm)$)
-    {Hamming weight $k$};
+\begin{tikzpicture}
+\begin{groupplot}[group style={group size=2 by 1,horizontal sep=13mm},scale only axis,width=77mm,height=47mm]
+\nextgroupplot[width=98mm,title={(a) Profiles},title style={font=\fontsize{10}{11}\selectfont},xmin=0,xmax=16,ymin=0,ymax=.24,xtick={0,4,8,12,16},ytick={0,.05,.1,.15,.2},yticklabel style={/pgf/number format/fixed},xlabel={Hamming weight $k$},ylabel={Probability mass},legend to name=commonlegend,legend style={font=\fontsize{9}{10}\selectfont,draw=none,/tikz/every even column/.style={column sep=2.4mm},legend columns=4,anchor=south}]
+\addplot[forget plot,bluecondition,dashed] table[x=k,y=target_0] {\profiles};
+\addplot[forget plot,vermillioncondition,dashed] table[x=k,y=target_1] {\profiles};
+\addplot[forget plot,greencondition,dashed] table[x=k,y=target_2] {\profiles};
+\addplot[forget plot,purplecondition,dashed] table[x=k,y=target_3] {\profiles};
+\addplot[forget plot,bluecondition] table[x=k,y=model_0] {\profiles};
+\addplot[forget plot,vermillioncondition] table[x=k,y=model_1] {\profiles};
+\addplot[forget plot,greencondition] table[x=k,y=model_2] {\profiles};
+\addplot[forget plot,purplecondition] table[x=k,y=model_3] {\profiles};
+\addplot[forget plot,encoderline] table[x=k,y=encoder] {\profiles};
+\addlegendimage{targetgrayline}\addlegendentry{Target}
+\addlegendimage{bluecondition}\addlegendentry{$c=0.125$}
+\addlegendimage{vermillioncondition}\addlegendentry{$c=0.375$}
+\addlegendimage{greencondition}\addlegendentry{$c=0.625$}
+\addlegendimage{purplecondition}\addlegendentry{$c=0.875$}
+\addlegendimage{encoderline}\addlegendentry{Encoder}
+\addlegendimage{only marks,mark=*,mark size=2.5pt,draw=targetgray,fill=targetgray}\addlegendentry{Training $c$}
+\nextgroupplot[width=49mm,title={(b) Conditional response},title style={font=\fontsize{10}{11}\selectfont},xmin=-.025,xmax=1.025,ymin=4.4,ymax=11.2,xtick={0,.5,1},ytick={5,7,9,11},xlabel={Condition $c$},ylabel={$E[K]$}]
+\addplot[name path=upper,draw=none] table[x=c,y=upper] {\response};
+\addplot[name path=lower,draw=none] table[x=c,y=lower] {\response};
+\addplot[draw=none,fill=gray!25] fill between[of=upper and lower];
+\addplot[targetgrayline] table[x=c,y=target] {\response};
+\addplot[black,line width=1.25pt] table[x=c,y=model] {\response};
+\addplot[encoderline] table[x=c,y=encoder] {\response};
+\addplot[only marks,mark=*,mark size=2.5pt,draw=targetgray,fill=targetgray] table[x=c,y=target] {\training};
+\end{groupplot}
+\node[anchor=south,font=\fontsize{9}{10}\selectfont] at ($(group c1r1.north)!0.5!(group c2r1.north)+(0,12mm)$) {\ref{commonlegend}};
 \end{tikzpicture}
-\end{minipage}
 \end{document}
