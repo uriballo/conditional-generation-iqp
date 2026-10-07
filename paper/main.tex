@@ -581,7 +581,7 @@ We train the models by minimizing the squared-MMD objective. We select Gaussian 
     \label{fig:gaussian-translation}
 \end{figure*}
 
-Our first experiment illustrates the conditioning mechanism with a translated discrete Gaussian Hamming-weight profile. For $n=16$ bits, let $K=|x|$ denote the Hamming weight of bitstring $x$. The condition $c\in[0,1]$ controls the nominal center of the profile. The target distribution assigns equal probability to all bitstrings with the same Hamming weight.
+Our first experiment illustrates the conditioning mechanism with a translated discrete Gaussian Hamming-weight profile. For $n=16$ bits, let $K=|x|$ denote the Hamming weight of bitstring $x$. The condition $c\in[0,1]$ controls the nominal center $5+6c$ of the profile. The target distribution assigns equal probability to all bitstrings with the same Hamming weight.
 
 We use a fixed product-state encoder that applies the same two rotations to every qubit:
 \begin{equation}
@@ -609,6 +609,8 @@ We compare the shared conditional IQP model with two independently tuned baselin
 
 We use exact full-distribution TVD for hyperparameter optimization (HPO) and model selection. We tune the shared model on development temperatures and each independent family jointly across its fitted temperatures. Appendix~\ref{sec:cw_hpo} details the protocol.
 
+Each independent baseline family uses three circuits and therefore three times the total parameters and optimizer updates of the shared model. The shared model uses more training-pool samples, with $4{,}096$ entries per seed compared with $3{,}072$ for each independent family. Appendix~\ref{sec:appendix_cw} reports the detailed budgets.
+
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=0.900\linewidth]{figures/curie_weiss_model_comparison.pdf}
@@ -618,9 +620,7 @@ We use exact full-distribution TVD for hyperparameter optimization (HPO) and mod
 
 \input{tables/curie_weiss_full_tvd.tex}
 
-The shared conditional model captures the change from unimodal to bimodal magnetization profiles, including bimodality at the held-out inverse temperature $\beta=1.0$ (Figure~\ref{fig:curie_weiss_phase_flip}). It achieves lower mean full-distribution TVD than both independent baseline families at $\beta=1.0$ and $1.6$, with mean errors of $0.2175$ and $0.1709$, respectively (Table~\ref{tab:curie_weiss_full_tvd}). The temperature $\beta=1.6$ lies beyond the training range. At $\beta=0.4$, the independent conditional family achieves lower mean TVD than the shared model ($0.1240$ versus $0.2240$), while the uniform encoder-only baseline achieves the lowest error ($0.1180$).
-
-Each independent baseline family uses three circuits and therefore three times the total parameters and optimizer updates of the shared model. The shared model uses more training-pool samples, with $4{,}096$ entries per seed compared with $3{,}072$ for each independent family. Appendix~\ref{sec:appendix_cw} reports the detailed budgets. Together with the held-out results, this comparison suggests that learning across conditions may provide a useful inductive bias for generalization.
+The shared conditional model captures the change from unimodal to bimodal magnetization profiles, including bimodality at the held-out inverse temperature $\beta=1.0$ (Figure~\ref{fig:curie_weiss_phase_flip}). It achieves lower mean full-distribution TVD than both independent baseline families at $\beta=1.0$ and $1.6$, with mean errors of $0.2175$ and $0.1709$, respectively (Table~\ref{tab:curie_weiss_full_tvd}). The temperature $\beta=1.6$ lies beyond the training range. At $\beta=0.4$, the independent conditional family achieves lower mean TVD than the shared model ($0.1240$ versus $0.2240$), while the uniform encoder-only baseline achieves the lowest error ($0.1180$). Together with the held-out results, this comparison suggests that learning across conditions may provide a useful inductive bias for generalization.
 
 The profile diagnostic in Appendix~\ref{sec:appendix_cw} (Table~\ref{tab:curie_weiss_profile_tvd}) gives a different ranking from full-distribution TVD. At $\beta=1.0$, both independent baseline families achieve lower mean profile TVD than the shared model but higher mean full-distribution TVD. At $\beta=0.4$, the shared model reduces mean profile TVD relative to the encoder while increasing mean full-distribution TVD. These differences show that agreement in Hamming-weight profiles does not ensure accurate bitstring probabilities.
 
