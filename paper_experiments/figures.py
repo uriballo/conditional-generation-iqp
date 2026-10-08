@@ -154,6 +154,10 @@ def _curie(data, output):
         writer.writeheader()
         writer.writerows(rows)
     paths.append(table)
+    if (data / "response_sweep.json").exists():
+        from .physical_response import render as render_physical_response
+
+        paths.extend(render_physical_response(data, output))
     return paths
 
 

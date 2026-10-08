@@ -624,6 +624,23 @@ The shared conditional model captures the change from unimodal to bimodal magnet
 
 The profile diagnostic in Appendix~\ref{sec:appendix_cw} (Table~\ref{tab:curie_weiss_profile_tvd}) gives a different ranking from full-distribution TVD. At $\beta=1.0$, both independent baseline families achieve lower mean profile TVD than the shared model but higher mean full-distribution TVD. At $\beta=0.4$, the shared model reduces mean profile TVD relative to the encoder while increasing mean full-distribution TVD. These differences show that agreement in Hamming-weight profiles does not ensure accurate bitstring probabilities.
 
+We also evaluate physical observables to distinguish magnetization magnitude from energy fluctuations. The exact zero-field target has $\langle m\rangle=0$ at finite size, so we report the mean absolute magnetization $\langle |m|\rangle$, with $m=n^{-1}\sum_i s_i$ and $n=16$. For the Hamiltonian $H=-nm^2/2$, we define the per-spin heat-capacity fluctuation estimate
+\begin{equation}
+    c_{\mathrm{fluc}}(\beta)=\frac{\beta^2}{n}
+    \bigl(\langle H^2\rangle-\langle H\rangle^2\bigr).
+    \label{eq:cw_heat_fluctuation}
+\end{equation}
+This expression equals the equilibrium heat capacity for the Gibbs target. For a learned distribution, it measures energy fluctuations and need not equal the temperature derivative of its mean energy. We compute both observables from exact probabilities for the same five selected confirmation circuits on a grid from $\beta=0$ to $2$ in steps of $0.02$, without additional fitting or model selection. The sweep includes fitting and development temperatures as well as temperatures beyond the fitting range; it is not an entirely held-out evaluation. Appendix~\ref{sec:cw_physical_observables} specifies the calculation and aggregation.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/curie_weiss_physical_response.pdf}
+    \caption{Sixteen-qubit Curie--Weiss observables: (a) mean absolute magnetization and (b) per-spin heat-capacity fluctuation estimate, Eq.~\eqref{eq:cw_heat_fluctuation}. Dashed and dotted curves show the exact target and uniform encoder reference. Conditional IQP curves and bands show mean and sample standard deviation across five frozen confirmation circuits at $101$ temperatures. Independent markers use separately fitted circuits at $\beta=0.4,1.0,1.6$, with the same summaries. We compute nonlinear observables within each run before aggregation. The sweep includes fitting, development and extrapolation conditions. For learned distributions, panel (b) measures energy fluctuations rather than a verified temperature response.}
+    \label{fig:cw_physical_response}
+\end{figure}
+
+The dense response reveals errors that the three-temperature distribution comparison does not fully describe (Figure~\ref{fig:cw_physical_response}). At $\beta=1.0$, the shared model overestimates mean absolute magnetization ($0.525$ versus the target $0.451$), while the independent fitted baselines are closer. At higher inverse temperatures, the shared response levels off and underestimates the target ($0.855$ versus $0.936$ at $\beta=2$). Energy fluctuations show a different discrepancy. The target's heat capacity reaches its maximum on the evaluated grid near $\beta=1.52$ and then decreases, whereas the shared model's fluctuation estimate continues increasing through $\beta=2$, reaching $1.299$ versus the target $0.504$. At $\beta=1.6$, however, the shared estimate remains closer to the target than either independent baseline. Thus, capturing the change in magnetization magnitude does not ensure recovery of the target's energy fluctuations, and the relative accuracy depends on the observable and temperature.
+
 \subsection{Scaling}
 
 We assess the computational feasibility of classical training at $n\in\{64,128,256,512,1024,2048\}$ visible qubits, without ancillas. We use the fixed product-state encoder $R_Z(0.75\beta)R_Y(\pi/2)$ on every qubit. The learned unitary uses independent one-body phase gates and two-body phase gates between horizontal and vertical nearest neighbors on an open rectangular lattice. For an $L_x\times L_y$ lattice with $n=L_xL_y$, the model has $3n-L_x-L_y$ trainable parameters, so the parameter count grows linearly with $n$. Appendix~\ref{sec:appendix_scaling} gives the lattice dimensions and optimization settings.
@@ -878,6 +895,18 @@ We report performance using the five selected confirmation runs, without further
 \input{tables/curie_weiss_profile_tvd.tex}
 
 Table~\ref{tab:curie_weiss_profile_tvd} reports exact Hamming-profile errors for the primary Curie--Weiss comparison.
+
+\subsubsection{Physical observables}
+\label{sec:cw_physical_observables}
+
+For a distribution $q$, let $\rho_q(k\mid\beta)$ denote its exact Hamming-weight profile and set $m_k=(2k-n)/n$ with $n=16$. We compute its moments as $\langle m^r\rangle_q=\sum_{k=0}^{n}\rho_q(k\mid\beta)m_k^r$, and its mean absolute magnetization as $\sum_k\rho_q(k\mid\beta)|m_k|$. The target law corresponds to $H=-nm^2/2$ in units $J=k_B=1$. Excluding self-interactions would add only a constant to $H$ and would not change the energy variance. Equation~\eqref{eq:cw_heat_fluctuation} therefore becomes
+\begin{equation}
+    c_{\mathrm{fluc},q}(\beta)=\frac{\beta^2n}{4}
+    \left(\langle m^4\rangle_q-\langle m^2\rangle_q^2\right).
+\end{equation}
+The observables depend only on the shell profile and do not test uniformity within shells. For the Gibbs target, differentiating the mean energy with respect to $T=\beta^{-1}$ gives this fluctuation expression. We do not assume that the learned family satisfies the same derivative identity.
+
+We evaluate the shared product-input circuits selected by full-distribution TVD on $101$ equally spaced inverse temperatures $\beta_j=0.02j$, $j=0,\ldots,100$, using their frozen parameters and ordered generators. The grid includes the fitting temperatures $\{0.6,0.8,1.2,1.4\}$ and development temperatures $\{0.5,0.7,1.3,1.5\}$, as well as extrapolation below and above the fitting range. We reuse the five winning confirmation seeds $2026100610$--$2026100614$; these are not an independent assessment of model selection. The selected checkpoint profiles and full-distribution TVDs at $\beta\in\{0.4,1.0,1.6\}$ reproduce the existing reporting records to numerical precision. We compute each observable separately within each seed before taking its mean and sample standard deviation, including the nonlinear heat-capacity estimate. The independent baselines appear only at their fitted temperatures, with the same within-seed calculation and aggregation. The uniform encoder reference has the binomial shell law $\rho_0(k)=2^{-n}\binom{n}{k}$. These diagnostics do not change fitting, hyperparameter selection, or checkpoint selection.
 
 \subsubsection{Spin-flip invariant temperature encoding}
 \label{sec:cw_input_symmetry}

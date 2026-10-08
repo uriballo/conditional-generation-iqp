@@ -44,6 +44,6 @@ def test_original_scaling_endpoint_metrics():
 
 def test_all_numerical_figures_render(tmp_path):
     paths = render_all(DATA, tmp_path)
-    assert len([p for p in paths if p.suffix == ".pdf"]) == 4
-    assert len([p for p in paths if p.suffix == ".png"]) == 4
+    assert len([p for p in paths if p.suffix == ".pdf"]) == 5
+    assert len([p for p in paths if p.suffix == ".png"]) == 5
     assert all(p.is_file() and p.stat().st_size > 100 for p in paths)

@@ -17,6 +17,18 @@ regenerate numerical figures and TVD tables in the ignored results directory.
 Use `--data-root results/paper/reported` to render completed reproduction runs.
 Reviewed paper artifacts are never replaced automatically.
 
+`curie_weiss_physical_response.pdf` and its PNG preview show a single-column,
+two-panel response: mean absolute magnetization above and per-spin heat-capacity
+fluctuation estimate below. The renderer `paper_experiments/physical_response.py`
+uses `../data/curie-weiss/response_sweep.json` and the independent fitted-temperature
+records in `figure_data.json`. The 101-point beta 0 to 2 sweep reuses five selected
+confirmation circuits without refitting or changing selection. Curves and bands
+show mean and sample SD; independent markers and error bars use the same summaries
+at their three fitted temperatures. Compute the nonlinear energy variance within
+each run before aggregation. The target fluctuation expression equals equilibrium
+heat capacity; the generated-distribution value does not verify the learned
+family's temperature derivative. The figure was added at the author's request.
+
 Gaussian profiles average five runs at four development midpoints. The model
 response reports pointwise median expected Hamming weight with interquartile
 range across five runs over 80 reporting conditions; its TVD table takes the
