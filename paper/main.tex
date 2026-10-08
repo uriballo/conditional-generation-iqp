@@ -82,7 +82,7 @@ For the Curie--Weiss model, we train a single model at four inverse temperatures
 
 We also assess computational feasibility through optimization runs from $64$ to $2048$ qubits, tracking sampled MMD$^2$ at held-out temperatures throughout training.
 
-Furthermore, we show how input-state encoding can enforce exact output symmetries in both conditional and unconditional IQP Born machines while preserving classical trainability. For the Curie--Weiss model, we construct a temperature encoder that enforces global spin-flip invariance at every temperature and for every parameter setting. We compare this encoder with the product-state encoder under matched optimization budgets and obtain lower mean full-distribution TVD with the invariant encoder at the held-out inverse temperatures $\beta=0.4$ and $\beta=1.0$. Finally, we illustrate the same mechanism in an unconditional model by choosing a fixed input state that enforces output symmetry under flipping a selected subset of qubits.
+Input-state design also allows exact output symmetries without restricting the learned phases. We illustrate this capability with a fixed input that enforces symmetry under flipping a selected subset of qubits while preserving classical trainability. Appendix~\ref{sec:cw_input_symmetry} extends the construction to temperature-dependent Curie--Weiss inputs and reports a matched encoder comparison.
 
 The remainder of this paper is organized as follows. In Section~\ref{sec:cond_model}, we introduce the conditional IQP model and its classical estimators. In Section~\ref{sec:cond_training}, we develop the conditional MMD training protocol. In Section~\ref{sec:numerical-experiments}, we describe the numerical experiments and report their results. In Section~\ref{sec:input-symmetry}, we show how input-state preparation can enforce output symmetries. In Section~\ref{sec:discussion}, we discuss the implications and limitations of our findings, and in Section~\ref{sec:conclusions}, we summarize the contributions.
 
@@ -624,57 +624,15 @@ The shared conditional model captures the change from unimodal to bimodal magnet
 
 The profile diagnostic in Appendix~\ref{sec:appendix_cw} (Table~\ref{tab:curie_weiss_profile_tvd}) gives a different ranking from full-distribution TVD. At $\beta=1.0$, both independent baseline families achieve lower mean profile TVD than the shared model but higher mean full-distribution TVD. At $\beta=0.4$, the shared model reduces mean profile TVD relative to the encoder while increasing mean full-distribution TVD. These differences show that agreement in Hamming-weight profiles does not ensure accurate bitstring probabilities.
 
-\subsubsection{Spin-flip invariant temperature encoding}
-\label{sec:cw_input_symmetry}
-
-The zero-field Curie--Weiss target satisfies $p(x\mid\beta)=p(\bar x\mid\beta)$, where $\bar x$ denotes the bitwise complement of $x$. We enforce this global spin-flip symmetry through the input state while retaining the temperature encoding and all $136$ trainable circuit phases. With $n=16$, $t=0.75\beta$, and $F=X^{\otimes n}$, we project the product encoder onto the $+1$ eigenspace of $F$ and normalize the resulting state:
-\begin{equation}
-    \ket{\phi_+(\beta)}
-    =\frac{(I+F)\ket{\phi(\beta)}}{\sqrt{2[1+\cos^n(t)]}}.
-    \label{eq:cw_projected_input}
-\end{equation}
-The identity $\langle\phi(\beta)|F|\phi(\beta)\rangle=\cos^n(t)$ gives the normalization factor. Because the IQP unitary commutes with $F$, it preserves the $+1$ eigenspace. The output therefore satisfies $q_{\boldsymbol\theta,+}(x\mid\beta)=q_{\boldsymbol\theta,+}(\bar x\mid\beta)$ for every parameter vector. We apply the symmetry construction of Recio-Armengol \textit{et al.} \cite[Sec.~6]{recio-armengolTrainClassicalDeploy2026} to this conditional encoder and discuss it further in Section~\ref{sec:input-symmetry}. The learned circuit can still break permutation symmetry, so this constraint does not guarantee equal probabilities within Hamming-weight shells.
-
-The projected encoder preserves efficient classical access to the reference state $H^{\otimes n}\ket{\phi_+(\beta)}$. For a bitstring $z$ with Hamming weight $k=|z|$, its amplitude is
-\begin{equation}
-    \psi_{+,\beta}(z)
-    =\frac{\mathbf{1}_{k\text{ even}}[\cos(t/2)]^{n-k}[-i\sin(t/2)]^k}
-    {\sqrt{[1+\cos^n(t)]/2}}.
-    \label{eq:cw_projected_reference}
-\end{equation}
-The indicator equals one for even $k$ and zero otherwise, so the reference state has support only on bitstrings of even Hamming weight.
-
-We draw $k$ from a binomial distribution with $n$ trials and success probability $\sin^2(t/2)$, conditioned on even $k$. We then choose a bitstring uniformly among those with Hamming weight $k$. For a sampled string $z$, the amplitude ratio is
-\begin{equation}
-    R_{+,\beta}(z,a)=
-    \begin{cases}
-        [-i\tan(t/2)]^{|z\oplus a|-|z|},& |a|\text{ even},\\
-        0,& |a|\text{ odd}.
-    \end{cases}
-    \label{eq:cw_projected_ratio}
-\end{equation}
-A mask with odd Hamming weight moves $z$ outside the reference-state support, giving a zero amplitude ratio.
-
-These sampling and amplitude-ratio calculations require polynomial resources, so the projected encoder supports the conditional estimators and MMD training objective developed above. We can prepare the projected input deterministically with $O(n)$ gates by tracking parity on one qubit of the existing register, without ancillas or postselection. Appendix~\ref{sec:cw_symmetry_hpo} describes the construction.
-
-We compare the product-state and spin-flip invariant encoders using separate HPO studies with matched budgets and the same fitting and development temperatures. We use exact full-distribution TVD for model selection and reuse the selected confirmation runs for reporting (Table~\ref{tab:cw_symmetry_metrics}). Appendix~\ref{sec:appendix_hyperparams} gives the configurations and comparison protocol. We quantify deviations from global spin-flip symmetry using
-\begin{equation}
-    D_{\mathrm{flip}}(q\mid\beta)
-    =\frac{1}{2}\sum_x\left|q(x\mid\beta)-q(\bar x\mid\beta)\right|.
-\end{equation}
-The diagnostic vanishes exactly for spin-flip invariant distributions. For the trained product model, we obtain mean $D_{\mathrm{flip}}$ values of $0.4354$, $0.1092$, and $0.0087$ at $\beta=0.4,1.0,1.6$, respectively. The projected input enforces $D_{\mathrm{flip}}=0$ at every temperature, independently of optimization. Numerical evaluation confirms this guarantee to machine precision.
-
-
-
-\input{tables/curie_weiss_symmetry_main.tex}
-
-The spin-flip invariant input achieves lower mean full-distribution TVD than the product input at $\beta=0.4$ and $1.0$ (Table~\ref{tab:cw_symmetry_metrics}). This improvement holds across all five paired runs at both temperatures. At $\beta=1.6$, the product input achieves lower mean TVD, although the invariant input reduces TVD in two of the five paired runs.
-
-Input projection enforces spin-flip symmetry exactly, while its effect on distributional accuracy depends on temperature. Appendix~\ref{sec:cw_symmetry_hpo} reports encoder-only errors and paired differences in full-distribution TVD.
-
 \subsection{Scaling}
 
 We assess the computational feasibility of classical training at $n\in\{64,128,256,512,1024,2048\}$ visible qubits, without ancillas. We use the fixed product-state encoder $R_Z(0.75\beta)R_Y(\pi/2)$ on every qubit. The learned unitary uses independent one-body phase gates and two-body phase gates between horizontal and vertical nearest neighbors on an open rectangular lattice. For an $L_x\times L_y$ lattice with $n=L_xL_y$, the model has $3n-L_x-L_y$ trainable parameters, so the parameter count grows linearly with $n$. Appendix~\ref{sec:appendix_scaling} gives the lattice dimensions and optimization settings.
+
+
+
+At each system size, we train at $\beta\in\{0.6,0.8,1.2,1.4\}$ and track the mean sampled MMD$^{2}$ over the held-out temperatures throughout optimization (Figure~\ref{fig:curie_weiss_qubit_scaling}). Appendix~\ref{sec:appendix_scaling} specifies the training and reporting protocol.
+
+The scaling study demonstrates the computational feasibility of classical conditional training up to 2048 qubits (Figure~\ref{fig:curie_weiss_qubit_scaling}). At 64 qubits, the median held-out sampled MMD$^{2}$ decreases from $0.0504$ to $0.0350$ after 5,000 updates; at 2048 qubits, it decreases from $0.0490$ to $0.0417$. These modest reductions suggest limited progress under the chosen training configuration and may reflect suboptimal hyperparameters. The runs use a sparse lattice ansatz and optimizer settings that differ from the tuned sixteen-qubit comparison. Further tuning and benchmarking are needed for a systematic assessment of generative performance. Because the kernel bandwidths vary with system size, the absolute MMD$^{2}$ values do not directly compare distributional fidelity across sizes.
 
 \begin{figure}[!htbp]
     \centering
@@ -683,39 +641,26 @@ We assess the computational feasibility of classical training at $n\in\{64,128,2
     \label{fig:curie_weiss_qubit_scaling}
 \end{figure}
 
-At each system size, we train at $\beta\in\{0.6,0.8,1.2,1.4\}$ and track the mean sampled MMD$^{2}$ over the held-out temperatures throughout optimization (Figure~\ref{fig:curie_weiss_qubit_scaling}). Appendix~\ref{sec:appendix_scaling} specifies the training and reporting protocol.
-
-The scaling study demonstrates the computational feasibility of classical conditional training up to 2048 qubits (Figure~\ref{fig:curie_weiss_qubit_scaling}). At 64 qubits, the median held-out sampled MMD$^{2}$ decreases from $0.0504$ to $0.0350$ after 5,000 updates; at 2048 qubits, it decreases from $0.0490$ to $0.0417$. These modest reductions suggest limited progress under the chosen training configuration and may reflect suboptimal hyperparameters. The runs use a sparse lattice ansatz and optimizer settings that differ from the tuned sixteen-qubit comparison. Further tuning and benchmarking are needed for a systematic assessment of generative performance. Because the kernel bandwidths vary with system size, the absolute MMD$^{2}$ values do not directly compare distributional fidelity across sizes.
-
 \section{Input-state induced symmetries in IQP Born machines}
 \label{sec:input-symmetry}
 
-The encoder determines how the output distribution depends on the condition and which constraints it obeys. The projected Curie--Weiss input in Sec.~\ref{sec:cw_input_symmetry} combines these roles. More generally, if a bit-flip operator $X_s$ commutes with the learned unitary and each encoded input is an eigenstate of $X_s$, the model produces a distribution invariant under that flip for every condition and parameter vector. We now illustrate this construction with a fixed unconditional input that preserves classical trainability. Such symmetry constraints provide inductive biases in variational quantum models \cite{meyerExploitingSymmetry2023}.
+Input-state encoding can also enforce exact output symmetries without restricting the learned phases. For a nonzero bit mask $s\in\{0,1\}^n$, the bit-flip operator $X_s=\bigotimes_{i=1}^n X_i^{s_i}$ commutes with the IQP unitary. If each encoded input is an eigenstate of $X_s$, the output state retains the same eigenvalue. Its computational-basis amplitudes at $x$ and $x\oplus s$ therefore differ at most by a sign, giving equal probabilities for every condition and parameter vector. This applies the commuting-symmetry construction of Recio-Armengol \textit{et al.} \cite[Sec.~6]{recio-armengolTrainClassicalDeploy2026} to conditional inputs. Such constraints provide inductive biases in variational quantum models \cite{meyerExploitingSymmetry2023}.
 
-We choose a nonzero bit mask $s\in\{0,1\}^n$ and prepare
+A simple unconditional example uses the input
 \begin{equation}
     \ket{\phi_s}
     =\frac{\ket{0^n}+\ket{s}}{\sqrt{2}}.
 \end{equation}
-The operator $X_s=\bigotimes_{i=1}^n X_i^{s_i}$ flips the qubits selected by $s$, and this state satisfies $X_s\ket{\phi_s}=\ket{\phi_s}$. Because the IQP unitary commutes with $X_s$, it preserves this symmetry for every choice of learned phases. The model therefore assigns equal probabilities to bitstrings related by the flip:
+This state satisfies $X_s\ket{\phi_s}=\ket{\phi_s}$ and therefore imposes
 \begin{equation}
     q_{\boldsymbol\theta}(x)
     =q_{\boldsymbol\theta}(x\oplus s)
     \qquad\text{for every }x\text{ and }\boldsymbol\theta.
 \end{equation}
 
-The reference state $H^{\otimes n}\ket{\phi_s}$ has equal amplitudes on bitstrings satisfying $s\cdot z=0$ modulo two and zero amplitudes elsewhere. To sample its measurement distribution, we choose a position with $s_i=1$, draw the other bits uniformly, and set $z_i$ to satisfy the parity constraint. For a sampled string $z$, the amplitude ratio is
-\begin{equation}
-    R_s(z,a)
-    =
-    \begin{cases}
-        1, & s\cdot a=0,\\
-        0, & s\cdot a=1.
-    \end{cases}
-\end{equation}
-where we also evaluate $s\cdot a$ modulo two. This input satisfies the sampling-and-ratio interface, so we can estimate the training moments and their gradients efficiently on a classical computer.
+The reference state $H^{\otimes n}\ket{\phi_s}$ has equal amplitudes on bitstrings satisfying $s\cdot z=0$ modulo two and zero amplitudes elsewhere. To sample its measurement distribution, we choose a position with $s_i=1$, draw the other bits uniformly, and set $z_i$ to satisfy the parity constraint. For a sampled string $z$, the amplitude ratio $R_s(z,a)$ equals one when $s\cdot a=0$ modulo two and zero otherwise. This input satisfies the sampling-and-ratio interface, so we can estimate the training moments and their gradients efficiently on a classical computer.
 
-For three qubits, we choose $s=110$, giving $\ket{\phi_s}=(\ket{000}+\ket{110})/\sqrt{2}$. This input enforces $q_{\boldsymbol\theta}(x)=q_{\boldsymbol\theta}(x\oplus110)$ for every parameter vector. The ordinary $\ket{000}$ input does not enforce this symmetry: with only $\theta_1=\pi/6$ nonzero, the model assigns $q(000)=3/4$ and $q(110)=0$. Figure~\ref{fig:input-induced-pair-flip} compares the two inputs at a separate parameter setting, using the same unitary for both. This construction applies the commuting-symmetry recipe of Recio-Armengol \textit{et al.} to a selected subset of qubits; their example enforces global bit-flip symmetry \cite{recio-armengolTrainClassicalDeploy2026}.
+For three qubits, we choose $s=110$, giving $\ket{\phi_s}=(\ket{000}+\ket{110})/\sqrt{2}$. This input enforces $q_{\boldsymbol\theta}(x)=q_{\boldsymbol\theta}(x\oplus110)$ for every parameter vector. The ordinary $\ket{000}$ input does not enforce this symmetry: with only $\theta_1=\pi/6$ nonzero, the model assigns $q(000)=3/4$ and $q(110)=0$. Figure~\ref{fig:input-induced-pair-flip} compares the two inputs at a separate parameter setting, using the same unitary for both. Appendix~\ref{sec:cw_input_symmetry} gives a temperature-dependent encoder that enforces global spin-flip invariance for Curie--Weiss and reports its effect on distributional accuracy.
 
 \begin{figure}[!htbp]
 \centering
@@ -772,7 +717,7 @@ For three qubits, we choose $s=110$, giving $\ket{\phi_s}=(\ket{000}+\ket{110})/
 
 Our framework establishes sufficient conditions for classical training of conditional IQP Born machines with input preparation beyond strict IQP form. Efficient sampling and amplitude-ratio evaluation of the reference state enable unbiased estimation of conditional training moments and their gradients, while one learned unitary shares parameters across conditions. The sixteen-qubit experiments demonstrate conditional translations and changes in distributional shape through input phases. For Curie--Weiss, the shared model achieves lower mean full-distribution TVD than both independent baseline families at $\beta=1.0$ and $1.6$, with the latter extending beyond the training range. Each baseline family fits these temperatures directly and uses three times the aggregate parameters and optimizer updates, whereas the shared model uses more training-pool samples. At $\beta=0.4$, the uniform encoder-only distribution achieves the lowest error. Joint training may provide useful regularization, but comparisons with matched data and optimization budgets are needed to assess this explanation.
 
-Input-state design also incorporates exact output symmetries without restricting the learned phases. The conditional Curie--Weiss projection and the unconditional bit-flip construction preserve classical trainability and enforce their symmetries for every parameter vector. In the matched encoder comparison, spin-flip projection lowers mean full-distribution TVD at $\beta=0.4$ and $1.0$ but increases it at $\beta=1.6$. Exact symmetry therefore does not guarantee improved accuracy, nor does spin-flip invariance enforce uniformity within Hamming-weight shells. Classical output symmetrization is a relevant control because averaging a distribution with its bitwise complement cannot increase TVD to a spin-flip-invariant target. Coherent projection introduces interference and generally differs from this mixture. Comparisons that include symmetrization in fitting and selection would test whether projection improves accuracy beyond classical enforcement of the same symmetry.
+Input-state design can impose exact output symmetries while preserving classical trainability. The unconditional bit-flip input and conditional Curie--Weiss projection enforce their symmetries for every parameter vector. The encoder comparison in Appendix~\ref{sec:cw_input_symmetry} shows temperature-dependent changes in full-distribution TVD, so exact symmetry does not guarantee improved accuracy. Spin-flip invariance also does not enforce uniformity within Hamming-weight shells. Classical output symmetrization is a relevant control because averaging a distribution with its bitwise complement cannot increase TVD to a spin-flip-invariant target. Coherent projection introduces interference and generally differs from this mixture. Comparisons that include symmetrization in fitting and selection would test whether projection improves accuracy beyond classical enforcement of the same symmetry.
 
 The methodological limitations concern distributional evaluation and the scope of the scaling evidence. Efficient, unbiased MMD estimation does not ensure accurate recovery of every relevant correlation \cite{herreroBornUltimatum2025}. Although the Gaussian kernel includes all correlation orders, its bandwidth weights them unequally, and finite sampling and optimization may fail to resolve weakly weighted discrepancies. Agreement in Hamming-weight profiles can therefore coexist with errors in individual bitstring probabilities, making full-distribution diagnostics necessary whenever feasible. For Curie--Weiss, reporting reuses the confirmation runs used to select hyperparameters, so the reported spread does not independently assess model selection. The reporting temperatures are excluded from current fitting and selection but were examined in earlier experiments. Fresh seeds and previously unexamined conditions, evaluated with configurations fixed in advance, would strengthen the generalization evidence. The sparse-lattice runs establish computational feasibility up to $2048$ qubits, with modest reductions in held-out sampled MMD$^2$. Their connectivity and optimizer settings differ from the sixteen-qubit comparison. Fixed expected mask weights emphasize low-order correlations as the system grows, while size-dependent bandwidths prevent direct comparisons of distributional accuracy across sizes.
 
@@ -869,7 +814,7 @@ We compute full-distribution and profile TVDs from exact circuit probabilities. 
 \subsection{Curie--Weiss models}
 \label{sec:appendix_cw}
 
-We use the sixteen-qubit target $p(x\mid\beta)\propto\exp[\beta(2|x|-16)^2/32]$. For each trained model in this comparison, we parameterize the learned unitary with 16 one-body phase gates and 120 two-body phase gates, without ancillas. For the shared product-input model, we prepare $R_Z(0.75\beta)R_Y(\pi/2)\ket{0}$ on every qubit. For the shared invariant model, we use the normalized projection of this product input onto the $+1$ eigenspace of the global spin-flip operator, as described in Sec.~\ref{sec:cw_input_symmetry}.
+We use the sixteen-qubit target $p(x\mid\beta)\propto\exp[\beta(2|x|-16)^2/32]$. For all trained sixteen-qubit Curie--Weiss models, we parameterize the learned unitary with 16 one-body phase gates and 120 two-body phase gates, without ancillas. For the shared product-input model, we prepare $R_Z(0.75\beta)R_Y(\pi/2)\ket{0}$ on every qubit. For the shared invariant model, we use the normalized projection of this product input onto the $+1$ eigenspace of the global spin-flip operator, as described in Sec.~\ref{sec:cw_input_symmetry}.
 
 We train both shared models at $\beta\in\{0.6,0.8,1.2,1.4\}$, use $\beta\in\{0.5,0.7,1.3,1.5\}$ for model selection, and report performance at $\beta\in\{0.4,1.0,1.6\}$. Each independent baseline family comprises three circuits that we fit directly at these reporting temperatures, using either the corresponding product input or $\ket{0}^{\otimes16}$. For each baseline family, we select one optimizer, learning rate and initialization width jointly for its three circuits.
 
@@ -930,10 +875,43 @@ We confirm the three best distinct configurations from each study on five fresh 
 
 We report performance using the five selected confirmation runs, without further fitting or checkpoint selection. Because these runs also inform hyperparameter selection, they do not provide an independent final evaluation. In the current protocol, we exclude the shared models' reporting temperatures from fitting and selection, although earlier experiments examined them. We fit the independent circuits directly at their reporting temperatures. For each temperature, we report the mean and sample standard deviation across the five seeds.
 
-\subsubsection{Spin-flip invariant input and secondary diagnostics}
+\input{tables/curie_weiss_profile_tvd.tex}
+
+Table~\ref{tab:curie_weiss_profile_tvd} reports exact Hamming-profile errors for the primary Curie--Weiss comparison.
+
+\subsubsection{Spin-flip invariant temperature encoding}
+\label{sec:cw_input_symmetry}
 \label{sec:cw_symmetry_hpo}
 
-We compare the shared product-input and spin-flip-invariant models using the same HPO protocol and paired seeds. Within each seed, we reuse the same target pools and Gaussian initialization directions and follow the same condition, minibatch, bandwidth and mask schedules. The tuned initialization widths may differ. For reference sampling, we reuse random numbers but sample from the distribution associated with each input. We retain odd-weight masks in the objective, although global spin-flip symmetry makes the corresponding moments of the projected model vanish.
+The zero-field Curie--Weiss target satisfies $p(x\mid\beta)=p(\bar x\mid\beta)$, where $\bar x$ denotes the bitwise complement of $x$. We enforce this global spin-flip symmetry through the input state while retaining the temperature encoding and all $136$ trainable circuit phases. With $n=16$, $t=0.75\beta$, and $F=X^{\otimes n}$, we project the product encoder onto the $+1$ eigenspace of $F$ and normalize the resulting state:
+\begin{equation}
+    \ket{\phi_+(\beta)}
+    =\frac{(I+F)\ket{\phi(\beta)}}{\sqrt{2[1+\cos^n(t)]}}.
+    \label{eq:cw_projected_input}
+\end{equation}
+The identity $\langle\phi(\beta)|F|\phi(\beta)\rangle=\cos^n(t)$ gives the normalization factor. Because the IQP unitary commutes with $F$, it preserves the $+1$ eigenspace. The output therefore satisfies $q_{\boldsymbol\theta,+}(x\mid\beta)=q_{\boldsymbol\theta,+}(\bar x\mid\beta)$ for every parameter vector. We apply the symmetry construction of Recio-Armengol \textit{et al.} \cite[Sec.~6]{recio-armengolTrainClassicalDeploy2026} to this conditional encoder following the criterion in Section~\ref{sec:input-symmetry}. The learned circuit can still break permutation symmetry, so this constraint does not guarantee equal probabilities within Hamming-weight shells.
+
+The projected encoder preserves efficient classical access to the reference state $H^{\otimes n}\ket{\phi_+(\beta)}$. For a bitstring $z$ with Hamming weight $k=|z|$, its amplitude is
+\begin{equation}
+    \psi_{+,\beta}(z)
+    =\frac{\mathbf{1}_{k\text{ even}}[\cos(t/2)]^{n-k}[-i\sin(t/2)]^k}
+    {\sqrt{[1+\cos^n(t)]/2}}.
+    \label{eq:cw_projected_reference}
+\end{equation}
+The indicator equals one for even $k$ and zero otherwise, so the reference state has support only on bitstrings of even Hamming weight.
+
+We draw $k$ from a binomial distribution with $n$ trials and success probability $\sin^2(t/2)$, conditioned on even $k$. We then choose a bitstring uniformly among those with Hamming weight $k$. For a sampled string $z$, the amplitude ratio is
+\begin{equation}
+    R_{+,\beta}(z,a)=
+    \begin{cases}
+        [-i\tan(t/2)]^{|z\oplus a|-|z|},& |a|\text{ even},\\
+        0,& |a|\text{ odd}.
+    \end{cases}
+    \label{eq:cw_projected_ratio}
+\end{equation}
+A mask with odd Hamming weight moves $z$ outside the reference-state support, giving a zero amplitude ratio.
+
+These sampling and amplitude-ratio calculations require polynomial resources, so the projected encoder supports the conditional estimators and MMD training objective developed above.
 
 We can prepare the invariant input deterministically by tracking parity on the last qubit of the existing register. We initialize all $n$ qubits in $\ket{0}$, set $t=0.75\beta$, and write $Z_\ell^{(p)}=[1+(-1)^p\cos^\ell(t)]/2$ for the probability that $\ell$ independent reference bits have parity $p\in\{0,1\}$. At each step, $p$ denotes the parity of the prepared prefix, and $\ell$ counts the remaining qubits, including the parity qubit. We apply a parity-controlled $R_Y$ rotation to the next unprepared qubit, with angle
 \begin{equation}
@@ -950,11 +928,25 @@ where $A_{\boldsymbol\theta,\beta}(x)=\langle x|U_{\boldsymbol\theta}|\phi(\beta
 
 We obtain the encoder-only distribution by setting the learned unitary to the identity: $q_{0,+}(x\mid\beta)=[1+\cos((2|x|-n)t)]/[2^n(1+\cos^n(t))]$. Because the Curie--Weiss target and both encoder-only distributions are uniform within each Hamming-weight shell, each encoder's full-distribution TVD equals its profile TVD.
 
-\input{tables/curie_weiss_profile_tvd.tex}
+We compare the product-state and spin-flip invariant encoders using separate HPO studies with matched budgets and the same fitting and development temperatures. We use exact full-distribution TVD for model selection and reuse the selected confirmation runs for reporting (Table~\ref{tab:cw_symmetry_metrics}). Section~\ref{sec:cw_hpo} gives the HPO protocol.
+
+We compare the shared product-input and spin-flip-invariant models using the same HPO protocol and paired seeds. Within each seed, we reuse the same target pools and Gaussian initialization directions and follow the same condition, minibatch, bandwidth and mask schedules. The tuned initialization widths may differ. For reference sampling, we reuse random numbers but sample from the distribution associated with each input. We retain odd-weight masks in the objective, although global spin-flip symmetry makes the corresponding moments of the projected model vanish.
+
+We quantify deviations from global spin-flip symmetry using
+\begin{equation}
+    D_{\mathrm{flip}}(q\mid\beta)
+    =\frac{1}{2}\sum_x\left|q(x\mid\beta)-q(\bar x\mid\beta)\right|.
+\end{equation}
+The diagnostic vanishes exactly for spin-flip invariant distributions. For the trained product model, we obtain mean $D_{\mathrm{flip}}$ values of $0.4354$, $0.1092$, and $0.0087$ at $\beta=0.4,1.0,1.6$, respectively. The projected input enforces $D_{\mathrm{flip}}=0$ at every temperature, independently of optimization. Numerical evaluation confirms this guarantee to machine precision.
+
+\input{tables/curie_weiss_symmetry_main.tex}
+
+The spin-flip invariant input achieves lower mean full-distribution TVD than the product input at $\beta=0.4$ and $1.0$ (Table~\ref{tab:cw_symmetry_metrics}). This improvement holds across all five paired runs at both temperatures. At $\beta=1.6$, the product input achieves lower mean TVD, although the invariant input reduces TVD in two of the five paired runs.
+
 \input{tables/curie_weiss_symmetry_secondary.tex}
 \input{tables/curie_weiss_symmetry_paired.tex}
 
-Table~\ref{tab:curie_weiss_profile_tvd} reports exact Hamming-profile errors, and Table~\ref{tab:cw_symmetry_paired} summarizes paired full-distribution TVD differences. We compute these differences within each seed before calculating their mean and sample standard deviation. The spin-flip-invariant model achieves lower full-distribution TVD than the product-input model in all five paired runs at $\beta=0.4$ and $1.0$, and in two of five at $\beta=1.6$.
+Table~\ref{tab:cw_symmetry_paired} summarizes paired full-distribution TVD differences. We compute these differences within each seed before calculating their mean and sample standard deviation. The spin-flip-invariant model achieves lower full-distribution TVD than the product-input model in all five paired runs at $\beta=0.4$ and $1.0$, and in two of five at $\beta=1.6$.
 
 \subsection{Scaling}
 \label{sec:appendix_scaling}
