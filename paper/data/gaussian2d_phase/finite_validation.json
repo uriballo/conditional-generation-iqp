@@ -1,0 +1,1070 @@
+{
+  "status": "passed",
+  "fit_count": 20,
+  "rows": [
+    {
+      "protocol": "axes",
+      "estimator": "raw",
+      "seed": 2026104921,
+      "angles": {
+        "selected": 1.1228443281960572,
+        "terminal": 1.1105677833133527,
+        "mean_calibration_gaussian": 1.1281535721323057,
+        "mean_calibration_product": 1.1282153121539185
+      },
+      "tvd": {
+        "selected": 0.027535685925043123,
+        "terminal": 0.033109979865289886,
+        "mean_calibration_gaussian": 0.025544836370237377,
+        "mean_calibration_product": 0.023428006554127127
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.027535685925043164,
+          "worst_reporting_tvd": 0.040686407692747485,
+          "mean_response": 1.0037861467348537,
+          "width_response": [
+            0.9347317214903019,
+            0.8942697324122151,
+            0.934731721490292
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38439642618085834,
+          "width_clamped_tvd": 0.07040517538216082,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.019397004847514658,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.030248579617552663
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03310997986528988,
+          "worst_reporting_tvd": 0.0483866999786217,
+          "mean_response": 1.0232045728002075,
+          "width_response": [
+            0.9244769802184569,
+            0.881618939960657,
+            0.9244769802184469
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38422063265919815,
+          "width_clamped_tvd": 0.07340782543510832,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.022475838548693255,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.03665469363748875
+        }
+      }
+    },
+    {
+      "protocol": "axes",
+      "estimator": "pair",
+      "seed": 2026104921,
+      "angles": {
+        "selected": 1.1223015817325883,
+        "terminal": 1.1092897371647763,
+        "mean_calibration_gaussian": 1.1281535721323057,
+        "mean_calibration_product": 1.1282153121539185
+      },
+      "tvd": {
+        "selected": 0.02776551402204206,
+        "terminal": 0.03373728718280017,
+        "mean_calibration_gaussian": 0.025544836370237377,
+        "mean_calibration_product": 0.023428006554127127
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.027765514022042092,
+          "worst_reporting_tvd": 0.04102544125461082,
+          "mean_response": 1.0046575079497946,
+          "width_response": [
+            0.9343281977680624,
+            0.89375560305022,
+            0.9343281977680532
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38438855048289444,
+          "width_clamped_tvd": 0.07051503087681772,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.019507617937499968,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.030518146050222794
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03373728718280016,
+          "worst_reporting_tvd": 0.04936600816740676,
+          "mean_response": 1.0251908710237516,
+          "width_response": [
+            0.9232742665631541,
+            0.8801800596661431,
+            0.9232742665631377
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3842026308281664,
+          "width_clamped_tvd": 0.07375208431172273,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.02289351190380015,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.03735187894246684
+        }
+      }
+    },
+    {
+      "protocol": "axes",
+      "estimator": "raw",
+      "seed": 2026104922,
+      "angles": {
+        "selected": 1.137621630683411,
+        "terminal": 1.1129545766903397,
+        "mean_calibration_gaussian": 1.1291515606492462,
+        "mean_calibration_product": 1.129213049855768
+      },
+      "tvd": {
+        "selected": 0.023670079953975326,
+        "terminal": 0.031983770603091835,
+        "mean_calibration_gaussian": 0.02523629578534056,
+        "mean_calibration_product": 0.023192871284729084
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.02367007995397537,
+          "worst_reporting_tvd": 0.03245776520874885,
+          "mean_response": 0.979610674946358,
+          "width_response": [
+            0.9439376927860383,
+            0.9066376151538371,
+            0.9439376927860089
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38461415141831623,
+          "width_clamped_tvd": 0.0676804920136956,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.016380898307386513,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.026099807169504986
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03198377060309186,
+          "worst_reporting_tvd": 0.04676378606848495,
+          "mean_response": 1.0194772050013186,
+          "width_response": [
+            0.9266550210748038,
+            0.8842449410290706,
+            0.9266550210747829
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38425440903364766,
+          "width_clamped_tvd": 0.07276579764051923,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.021709032656244097,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.035408683252041113
+        }
+      }
+    },
+    {
+      "protocol": "axes",
+      "estimator": "pair",
+      "seed": 2026104922,
+      "angles": {
+        "selected": 1.137621630683411,
+        "terminal": 1.110751793753615,
+        "mean_calibration_gaussian": 1.1291515606492462,
+        "mean_calibration_product": 1.129213049855768
+      },
+      "tvd": {
+        "selected": 0.023670079953975326,
+        "terminal": 0.03301937147252215,
+        "mean_calibration_gaussian": 0.02523629578534056,
+        "mean_calibration_product": 0.023192871284729084
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.02367007995397537,
+          "worst_reporting_tvd": 0.03245776520874885,
+          "mean_response": 0.979610674946358,
+          "width_response": [
+            0.9439376927860383,
+            0.9066376151538371,
+            0.9439376927860089
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38461415141831623,
+          "width_clamped_tvd": 0.0676804920136956,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.016380898307386513,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.026099807169504986
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03301937147252213,
+          "worst_reporting_tvd": 0.048245309698136576,
+          "mean_response": 1.0229180388333396,
+          "width_response": [
+            0.9246480522448496,
+            0.8818242287345062,
+            0.9246480522448325
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38422322940852904,
+          "width_clamped_tvd": 0.07335813060515614,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.022415568122778,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.036553972589103506
+        }
+      }
+    },
+    {
+      "protocol": "axes",
+      "estimator": "raw",
+      "seed": 2026104923,
+      "angles": {
+        "selected": 1.1318544259138386,
+        "terminal": 1.1296192361046797,
+        "mean_calibration_gaussian": 1.1445743479917199,
+        "mean_calibration_product": 1.1446321093546914
+      },
+      "tvd": {
+        "selected": 0.02468968959218603,
+        "terminal": 0.025132373343361644,
+        "mean_calibration_gaussian": 0.023769195754945877,
+        "mean_calibration_product": 0.021523119478694258
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.02468968959218607,
+          "worst_reporting_tvd": 0.035450862033571104,
+          "mean_response": 0.9891487266109846,
+          "width_response": [
+            0.9407541497258662,
+            0.902186842000325,
+            0.9407541497258286
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38452843759791344,
+          "width_clamped_tvd": 0.06855760531063985,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.01753147676245576,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.027075760535429507
+        },
+        "terminal": {
+          "full_tvd_mean": 0.02513237334336166,
+          "worst_reporting_tvd": 0.036603476256525186,
+          "mean_response": 0.9928100637209141,
+          "width_response": [
+            0.9393792827010473,
+            0.9003319444498953,
+            0.9393792827010107
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3844954740274251,
+          "width_clamped_tvd": 0.0690173721458929,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.017999387807161493,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.027510035188761717
+        }
+      }
+    },
+    {
+      "protocol": "axes",
+      "estimator": "pair",
+      "seed": 2026104923,
+      "angles": {
+        "selected": 1.131521891535614,
+        "terminal": 1.127543131867796,
+        "mean_calibration_gaussian": 1.1445743479917199,
+        "mean_calibration_product": 1.1446321093546914
+      },
+      "tvd": {
+        "selected": 0.024749965987573976,
+        "terminal": 0.02574581109378694,
+        "mean_calibration_gaussian": 0.023769195754945877,
+        "mean_calibration_product": 0.021523119478694258
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.024749965987574014,
+          "worst_reporting_tvd": 0.03562291999159322,
+          "mean_response": 0.9896946856767623,
+          "width_response": [
+            0.9405545922632244,
+            0.9019154658656585,
+            0.9405545922631994
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38452352497342557,
+          "width_clamped_tvd": 0.06862622136068247,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.017601301382728342,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.027132854189189242
+        },
+        "terminal": {
+          "full_tvd_mean": 0.025745811093786965,
+          "worst_reporting_tvd": 0.037723843665797174,
+          "mean_response": 0.9961930407130114,
+          "width_response": [
+            0.938031790305205,
+            0.8985443893464536,
+            0.9380317903051743
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3844649803220106,
+          "width_clamped_tvd": 0.0694455172066338,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.018430981716391015,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.028184087552918947
+        }
+      }
+    },
+    {
+      "protocol": "axes",
+      "estimator": "raw",
+      "seed": 2026104924,
+      "angles": {
+        "selected": 1.116891823492068,
+        "terminal": 1.1039710295230503,
+        "mean_calibration_gaussian": 1.1258465591169862,
+        "mean_calibration_product": 1.1259088836529605
+      },
+      "tvd": {
+        "selected": 0.030169118540204803,
+        "terminal": 0.03639310056256549,
+        "mean_calibration_gaussian": 0.026354643455844033,
+        "mean_calibration_product": 0.023992644143420786
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.03016911854020482,
+          "worst_reporting_tvd": 0.044369515298468484,
+          "mean_response": 1.0132778228408652,
+          "width_response": [
+            0.9300537594375453,
+            0.8884018541515237,
+            0.9300537594375307
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3843105605566264,
+          "width_clamped_tvd": 0.07172675688526803,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.02064386573136893,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.03334420280981678
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03639310056256549,
+          "worst_reporting_tvd": 0.0533905935942711,
+          "mean_response": 1.0333849491947655,
+          "width_response": [
+            0.9179967558611848,
+            0.8739481751149144,
+            0.9179967558611687
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38412836854442123,
+          "width_clamped_tvd": 0.07516783105833158,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.024614088806086842,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.04031943781472504
+        }
+      }
+    },
+    {
+      "protocol": "axes",
+      "estimator": "pair",
+      "seed": 2026104924,
+      "angles": {
+        "selected": 1.1167424606778,
+        "terminal": 1.103352559493587,
+        "mean_calibration_gaussian": 1.1258465591169862,
+        "mean_calibration_product": 1.1259088836529605
+      },
+      "tvd": {
+        "selected": 0.030238156658111814,
+        "terminal": 0.036729562357778696,
+        "mean_calibration_gaussian": 0.026354643455844033,
+        "mean_calibration_product": 0.023992644143420786
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.03023815665811184,
+          "worst_reporting_tvd": 0.04446094639252159,
+          "mean_response": 1.0135141506841612,
+          "width_response": [
+            0.9299292439030687,
+            0.888248148327149,
+            0.9299292439030341
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3843084207924651,
+          "width_clamped_tvd": 0.07176643505157546,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.02068299966650755,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.0334232089886466
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03672956235777869,
+          "worst_reporting_tvd": 0.053853272815789076,
+          "mean_response": 1.0343302016512523,
+          "width_response": [
+            0.917354641829906,
+            0.8731981230589306,
+            0.9173546418298637
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38411980352701935,
+          "width_clamped_tvd": 0.07533067831145923,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.024812313083169567,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.040701978782648404
+        }
+      }
+    },
+    {
+      "protocol": "axes",
+      "estimator": "raw",
+      "seed": 2026104925,
+      "angles": {
+        "selected": 1.1008448593527989,
+        "terminal": 1.098591422124753,
+        "mean_calibration_gaussian": 1.116142065671403,
+        "mean_calibration_product": 1.1162069239553238
+      },
+      "tvd": {
+        "selected": 0.038086245639272244,
+        "terminal": 0.039294552901981084,
+        "mean_calibration_gaussian": 0.030515211453845406,
+        "mean_calibration_product": 0.02838630534640048
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.038086245639272265,
+          "worst_reporting_tvd": 0.055718008665190125,
+          "mean_response": 1.0381466687549363,
+          "width_response": [
+            0.9146905350006019,
+            0.8701029966801689,
+            0.9146905350005752
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38408523001502093,
+          "width_clamped_tvd": 0.07603984070026604,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.02561209259068524,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.04224429665546794
+        },
+        "terminal": {
+          "full_tvd_mean": 0.0392945529019811,
+          "worst_reporting_tvd": 0.057378279191231917,
+          "mean_response": 1.041553899715148,
+          "width_response": [
+            0.9122138549319047,
+            0.8672482056726222,
+            0.9122138549318727
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.38405437811796217,
+          "width_clamped_tvd": 0.07672942473428046,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.026325354234540074,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.04361761912446143
+        }
+      }
+    },
+    {
+      "protocol": "axes",
+      "estimator": "pair",
+      "seed": 2026104925,
+      "angles": {
+        "selected": 1.1012441663738533,
+        "terminal": 1.0998216341216407,
+        "mean_calibration_gaussian": 1.116142065671403,
+        "mean_calibration_product": 1.1162069239553238
+      },
+      "tvd": {
+        "selected": 0.037871066190745636,
+        "terminal": 0.03863617516329067,
+        "mean_calibration_gaussian": 0.030515211453845406,
+        "mean_calibration_product": 0.02838630534640048
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.03787106619074566,
+          "worst_reporting_tvd": 0.05542229215360666,
+          "mean_response": 1.0375407092211895,
+          "width_response": [
+            0.9151212421676272,
+            0.8706016185320978,
+            0.9151212421675993
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3840907184369098,
+          "width_clamped_tvd": 0.07591707266047981,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.025485167186232827,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.04199969919224994
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03863617516329069,
+          "worst_reporting_tvd": 0.05647369543386301,
+          "mean_response": 1.0396964184524586,
+          "width_response": [
+            0.9135756312103719,
+            0.8688153131436045,
+            0.9135756312103352
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3840711953298259,
+          "width_clamped_tvd": 0.0763536454472635,
+          "inside_axis_hull_count": 4,
+          "inside_axis_hull_tvd": 0.0259366029022062,
+          "outside_axis_hull_count": 12,
+          "outside_axis_hull_tvd": 0.042869365916985515
+        }
+      }
+    },
+    {
+      "protocol": "rectangle",
+      "estimator": "raw",
+      "seed": 2026104921,
+      "angles": {
+        "selected": 1.1255370974637078,
+        "terminal": 1.1103426101171716,
+        "mean_calibration_gaussian": 1.1267546731894906,
+        "mean_calibration_product": 1.1268146073978234
+      },
+      "tvd": {
+        "selected": 0.025705981870014844,
+        "terminal": 0.03254916853904523,
+        "mean_calibration_gaussian": 0.025208385104736417,
+        "mean_calibration_product": 0.022366136349422017
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.025705981870014848,
+          "worst_reporting_tvd": 0.03897876863546569,
+          "mean_response": 0.9994455252621863,
+          "width_response": [
+            0.9366653567585362,
+            0.8967581916681778,
+            0.9366653567585153
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3542590197800806,
+          "width_clamped_tvd": 0.06696619629948845,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.020187489755378537,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.027545479241560283
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03254916853904523,
+          "worst_reporting_tvd": 0.04961255290292097,
+          "mean_response": 1.0235550152701,
+          "width_response": [
+            0.9242669229930888,
+            0.8813670848212648,
+            0.9242669229930935
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.35412211796885623,
+          "width_clamped_tvd": 0.0704804901798561,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.023646811617842926,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.035516620846112665
+        }
+      }
+    },
+    {
+      "protocol": "rectangle",
+      "estimator": "pair",
+      "seed": 2026104921,
+      "angles": {
+        "selected": 1.122614552217843,
+        "terminal": 1.1108886363125325,
+        "mean_calibration_gaussian": 1.1267546731894906,
+        "mean_calibration_product": 1.1268146073978234
+      },
+      "tvd": {
+        "selected": 0.026936019507114467,
+        "terminal": 0.032288857034438866,
+        "mean_calibration_gaussian": 0.025208385104736417,
+        "mean_calibration_product": 0.022366136349422017
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.026936019507114464,
+          "worst_reporting_tvd": 0.04106942190283533,
+          "mean_response": 1.0041551887793732,
+          "width_response": [
+            0.9345614507978811,
+            0.8940525853281559,
+            0.9345614507978642
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.35423000963980633,
+          "width_clamped_tvd": 0.06760875587479763,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.020822562422875793,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.028973838535194026
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03228885703443887,
+          "worst_reporting_tvd": 0.04924040834855755,
+          "mean_response": 1.0227048630463862,
+          "width_response": [
+            0.9247749313254552,
+            0.8819765884473314,
+            0.9247749313254396
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.35412661146147684,
+          "width_clamped_tvd": 0.07034583441118422,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.023511286435041103,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.0352147139009048
+        }
+      }
+    },
+    {
+      "protocol": "rectangle",
+      "estimator": "raw",
+      "seed": 2026104922,
+      "angles": {
+        "selected": 1.1327589164649965,
+        "terminal": 1.1044573651804817,
+        "mean_calibration_gaussian": 1.120029906326272,
+        "mean_calibration_product": 1.1200915281935637
+      },
+      "tvd": {
+        "selected": 0.023117487151424497,
+        "terminal": 0.03535501515119807,
+        "mean_calibration_gaussian": 0.028079969892948975,
+        "mean_calibration_product": 0.025280296994376207
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.02311748715142452,
+          "worst_reporting_tvd": 0.033718068753599936,
+          "mean_response": 0.9876615100368767,
+          "width_response": [
+            0.9412881256383399,
+            0.9029168679906309,
+            0.9412881256382817
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3543314978016626,
+          "width_clamped_tvd": 0.06549454044195006,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.018666567822110763,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.02460112692786244
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03535501515119806,
+          "worst_reporting_tvd": 0.05357743372410999,
+          "mean_response": 1.032640536690342,
+          "width_response": [
+            0.9184975298115118,
+            0.8745342768956338,
+            0.9184975298114711
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.35407449858697293,
+          "width_clamped_tvd": 0.07200785095656517,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.02509274755048681,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.03877577101810181
+        }
+      }
+    },
+    {
+      "protocol": "rectangle",
+      "estimator": "pair",
+      "seed": 2026104922,
+      "angles": {
+        "selected": 1.13252185470359,
+        "terminal": 1.1053785667821932,
+        "mean_calibration_gaussian": 1.120029906326272,
+        "mean_calibration_product": 1.1200915281935637
+      },
+      "tvd": {
+        "selected": 0.023188155528684598,
+        "terminal": 0.034910417144444116,
+        "mean_calibration_gaussian": 0.028079969892948975,
+        "mean_calibration_product": 0.025280296994376207
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.023188155528684605,
+          "worst_reporting_tvd": 0.033892910468672204,
+          "mean_response": 0.9880516136683303,
+          "width_response": [
+            0.9411494208334887,
+            0.9027266804752946,
+            0.9411494208334631
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.35432910177356813,
+          "width_clamped_tvd": 0.06553789321958171,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.01871281060295106,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.02467993717059579
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03491041714444411,
+          "worst_reporting_tvd": 0.05296236989512262,
+          "mean_response": 1.0312278167775366,
+          "width_response": [
+            0.9194360482843114,
+            0.8756355018231678,
+            0.9194360482842744
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3540818522097199,
+          "width_clamped_tvd": 0.0717669082363191,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.024868215412363465,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.03825781772180432
+        }
+      }
+    },
+    {
+      "protocol": "rectangle",
+      "estimator": "raw",
+      "seed": 2026104923,
+      "angles": {
+        "selected": 1.1169164649683982,
+        "terminal": 1.1039866078811513,
+        "mean_calibration_gaussian": 1.1325764224677555,
+        "mean_calibration_product": 1.1326349803405318
+      },
+      "tvd": {
+        "selected": 0.029493330303958742,
+        "terminal": 0.03558876675248384,
+        "mean_calibration_gaussian": 0.023171894012486708,
+        "mean_calibration_product": 0.020279471442198133
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.02949333030395874,
+          "worst_reporting_tvd": 0.045083088789265306,
+          "mean_response": 1.0132388254175164,
+          "width_response": [
+            0.9300742681580808,
+            0.8884271818119459,
+            0.9300742681580957
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3541769539565192,
+          "width_clamped_tvd": 0.06888719022061207,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.022066905588630184,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.03196880520906825
+        },
+        "terminal": {
+          "full_tvd_mean": 0.035588766752483854,
+          "worst_reporting_tvd": 0.05389095768108283,
+          "mean_response": 1.0333611192434378,
+          "width_response": [
+            0.9180128534208688,
+            0.8739669997672882,
+            0.9180128534208601
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3540707537322034,
+          "width_clamped_tvd": 0.07213072912928548,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.02520723036267996,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.039049278882418485
+        }
+      }
+    },
+    {
+      "protocol": "rectangle",
+      "estimator": "pair",
+      "seed": 2026104923,
+      "angles": {
+        "selected": 1.117489021267707,
+        "terminal": 1.1026942310360737,
+        "mean_calibration_gaussian": 1.1325764224677555,
+        "mean_calibration_product": 1.1326349803405318
+      },
+      "tvd": {
+        "selected": 0.029232580110121545,
+        "terminal": 0.03622914334878384,
+        "mean_calibration_gaussian": 0.023171894012486708,
+        "mean_calibration_product": 0.020279471442198133
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.029232580110121545,
+          "worst_reporting_tvd": 0.04468349057499628,
+          "mean_response": 1.0123320092185917,
+          "width_response": [
+            0.9305481245136559,
+            0.889013263391707,
+            0.9305481245136424
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.35418180458901954,
+          "width_clamped_tvd": 0.06874879896371908,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.021936976729804068,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.031664447903560704
+        },
+        "terminal": {
+          "full_tvd_mean": 0.03622914334878384,
+          "worst_reporting_tvd": 0.054748943910023926,
+          "mean_response": 1.035334633772653,
+          "width_response": [
+            0.9166646506146422,
+            0.8723939455363994,
+            0.9166646506146151
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3540605185542367,
+          "width_clamped_tvd": 0.07246743776731562,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.025520619819014306,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.039798651192040346
+        }
+      }
+    },
+    {
+      "protocol": "rectangle",
+      "estimator": "raw",
+      "seed": 2026104924,
+      "angles": {
+        "selected": 1.1127532534154254,
+        "terminal": 1.092156394629059,
+        "mean_calibration_gaussian": 1.1220878480920358,
+        "mean_calibration_product": 1.122148956699347
+      },
+      "tvd": {
+        "selected": 0.031409840620784266,
+        "terminal": 0.04154845887780538,
+        "mean_calibration_gaussian": 0.027164998553414497,
+        "mean_calibration_product": 0.024354900536329188
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.031409840620784266,
+          "worst_reporting_tvd": 0.04796403828200155,
+          "mean_response": 1.019792502484925,
+          "width_response": [
+            0.926474732874991,
+            0.8840265238762324,
+            0.9264747328749675
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.35414204079935263,
+          "width_clamped_tvd": 0.06988569149247482,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.023046909945101682,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.03419748417934512
+        },
+        "terminal": {
+          "full_tvd_mean": 0.041548458877805394,
+          "worst_reporting_tvd": 0.06175880744485881,
+          "mean_response": 1.0511670567026097,
+          "width_response": [
+            0.9047121766217661,
+            0.8587160778886597,
+            0.9047121766217474
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3539796344240815,
+          "width_clamped_tvd": 0.07555159221101168,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.02803677600846871,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.04605235316758428
+        }
+      }
+    },
+    {
+      "protocol": "rectangle",
+      "estimator": "pair",
+      "seed": 2026104924,
+      "angles": {
+        "selected": 1.1152125072746095,
+        "terminal": 1.0930146493604405,
+        "mean_calibration_gaussian": 1.1220878480920358,
+        "mean_calibration_product": 1.122148956699347
+      },
+      "tvd": {
+        "selected": 0.030268761874237753,
+        "terminal": 0.041117420294019255,
+        "mean_calibration_gaussian": 0.027164998553414497,
+        "mean_calibration_product": 0.024354900536329188
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.030268761874237732,
+          "worst_reporting_tvd": 0.046267454494313,
+          "mean_response": 1.0159296926717127,
+          "width_response": [
+            0.9286337296839001,
+            0.8866555628422534,
+            0.9286337296838815
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.35416258796452127,
+          "width_clamped_tvd": 0.06929752306705023,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.022456816086262082,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.032872743803562955
+        },
+        "terminal": {
+          "full_tvd_mean": 0.04111742029401929,
+          "worst_reporting_tvd": 0.06112966108332985,
+          "mean_response": 1.0498949551493424,
+          "width_response": [
+            0.9057493182540793,
+            0.8598863549161135,
+            0.9057493182540641
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.35398604623592,
+          "width_clamped_tvd": 0.07529125678936613,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.02783503272142886,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.045544882818216094
+        }
+      }
+    },
+    {
+      "protocol": "rectangle",
+      "estimator": "raw",
+      "seed": 2026104925,
+      "angles": {
+        "selected": 1.1153576382819481,
+        "terminal": 1.1153576382819481,
+        "mean_calibration_gaussian": 1.1254895097863407,
+        "mean_calibration_product": 1.1255497761059923
+      },
+      "tvd": {
+        "selected": 0.030202877042690028,
+        "terminal": 0.030202877042690028,
+        "mean_calibration_gaussian": 0.025725606416035936,
+        "mean_calibration_product": 0.022904210971145283
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.030202877042690018,
+          "worst_reporting_tvd": 0.04616686144174519,
+          "mean_response": 1.0157009629573217,
+          "width_response": [
+            0.9287581917423705,
+            0.886808053219451,
+            0.9287581917423432
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3541638074639296,
+          "width_clamped_tvd": 0.0692626630654572,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.022423690076786643,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.03279593936465781
+        },
+        "terminal": {
+          "full_tvd_mean": 0.030202877042690018,
+          "worst_reporting_tvd": 0.04616686144174519,
+          "mean_response": 1.0157009629573217,
+          "width_response": [
+            0.9287581917423705,
+            0.886808053219451,
+            0.9287581917423432
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3541638074639296,
+          "width_clamped_tvd": 0.0692626630654572,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.022423690076786643,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.03279593936465781
+        }
+      }
+    },
+    {
+      "protocol": "rectangle",
+      "estimator": "pair",
+      "seed": 2026104925,
+      "angles": {
+        "selected": 1.1164360044770458,
+        "terminal": 1.1164360044770458,
+        "mean_calibration_gaussian": 1.1254895097863407,
+        "mean_calibration_product": 1.1255497761059923
+      },
+      "tvd": {
+        "selected": 0.029712252256921735,
+        "terminal": 0.029712252256921735,
+        "mean_calibration_gaussian": 0.025725606416035936,
+        "mean_calibration_product": 0.022904210971145283
+      },
+      "metrics": {
+        "selected": {
+          "full_tvd_mean": 0.029712252256921735,
+          "worst_reporting_tvd": 0.045417776929159395,
+          "mean_response": 1.013998754816777,
+          "width_response": [
+            0.9296726764255236,
+            0.8879317940205573,
+            0.9296726764254942
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3541728926125414,
+          "width_clamped_tvd": 0.06900312231821629,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.022177065148987537,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.0322239812928998
+        },
+        "terminal": {
+          "full_tvd_mean": 0.029712252256921735,
+          "worst_reporting_tvd": 0.045417776929159395,
+          "mean_response": 1.013998754816777,
+          "width_response": [
+            0.9296726764255236,
+            0.8879317940205573,
+            0.9296726764254942
+          ],
+          "width_reversals": 0,
+          "mean_clamped_tvd": 0.3541728926125414,
+          "width_clamped_tvd": 0.06900312231821629,
+          "inside_axis_hull_count": 8,
+          "inside_axis_hull_tvd": 0.022177065148987537,
+          "outside_axis_hull_count": 24,
+          "outside_axis_hull_tvd": 0.0322239812928998
+        }
+      }
+    }
+  ],
+  "source_manifest_sha256": "4909e252b622a8930912927b33c338d1334aaade1ded35730c034caf7d1ba537",
+  "summary_sha256": "33f52eb3e86aea3211e8beb3da1f412b678adcd06644cb4030d18f096f5b2324",
+  "audit_sha256": "639220fc5616edcbd0d1d2be8a89100f4965f8d1bd577c25e9e695266ee661bb",
+  "arrays_sha256": "cd88466427c09c16ad64c9bd337478f45a7d541575ed8451c786345be1afa184"
+}

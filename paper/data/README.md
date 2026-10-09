@@ -26,10 +26,16 @@ replacement for the full training archives.
 | Computational feasibility at 64--2048 qubits | `scaling/figure_data.json` | Scaling figure | Sampled MMD with size-dependent kernels; residual error persists | Previously reviewed; retained |
 | Conditional signed-graph generation with exact switching symmetry | `switching16/response.npz`, `response-summary.json`, `reporting.npz`, `reporting-summary.json` and figure receipts | `fig:switching16-encoder`, `fig:switching16-response`, `tab:switching16`; appendix `app:switching16` and `fig:switching16-fluctuations` | Five independent final fits, 128 training bitstrings per temperature, two learned angles; moderate full TVD, post-selection dense sweep and substantial large-inverse-temperature fluctuation discrepancy; fixed classical switching control has lower TVD | Manuscript draft for author review; current data reproduced without new fitting |
 
-The two-dimensional Gaussian section uses `gaussian2d/` and
-`../tables/gaussian2d_tvd.tex`. The reviewed heatmaps compare separately and
-jointly varied mean--width conditions against an encoder-only baseline on a
-common withheld table domain. `gaussian2d/REVIEW.md` maps the claims to evidence
-and records the limits of the adaptive study and width response.
+The two-dimensional Gaussian section uses `gaussian2d_phase/`, the
+phase-conditioned heatmaps and the `gaussian2d_phase_*` tables. A fixed prior
+receives linear and quadratic conditional phases, followed by one shared
+learned rotation. Separate and joint variation use different reporting sets;
+Exact population development TVD selects checkpoints in the initial benchmark;
+a matched follow-up instead uses finite target validation with exact model
+moments. The bundle records selected and terminal errors, the frozen rotation
+control, analytic diagnostics and calibration controls fitted from finite data. These results illustrate
+conditional capability and fitted-model generalization; they do not establish
+that learning or Gaussian amplitude preparation is necessary. The earlier
+`gaussian2d/` package remains historical and is not the current section's data.
 
 The conditional switching section uses the frozen sixteen-qubit triangle study. The main figure shows triangle balance and fully balanced probability with an encoder-only baseline, fitting markers and a boundary at beta 1.2. The appendix records reference access, optimizer settings, selection, controls and energy fluctuations; detailed provenance remains in the research records. `switching16/README.md` documents deterministic figure regeneration from compact arrays. The separate parity methods draft has no fitted Curie--Weiss result and is outside the current manuscript. The newer HPO campaign remains outside this revision while the author reviews its results.

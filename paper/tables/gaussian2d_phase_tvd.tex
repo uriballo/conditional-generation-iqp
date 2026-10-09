@@ -1,0 +1,13 @@
+\begin{table*}[!t]
+\caption{Full-distribution TVD on each design's reporting set, excluding fitting and development conditions. For the sampled fits, we report the mean and sample standard deviation of per-fit mean errors across five runs. The fixed rotation was chosen after the capacity pilot and frozen before sampled training. Exact development TVD selects checkpoints. The designs use different reporting sets.}
+\label{tab:gaussian-two-dimensional}
+\centering
+\begin{tabular}{lcc}\toprule
+ & Separate variation & Joint variation\\
+ & $16$ reporting pairs & $32$ reporting pairs\\\midrule
+Encoder only & 0.3901 & 0.3612\\
+Fixed $\theta=3\pi/8$ & 0.0347 & 0.0309\\
+Sampled calibration, selected checkpoint & 0.0258 $\pm$ 0.0005 & 0.0222 $\pm$ 0.0013\\
+\bottomrule
+\end{tabular}
+\end{table*}

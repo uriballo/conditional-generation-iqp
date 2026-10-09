@@ -1,0 +1,45 @@
+{
+  "checkpoints": [
+    {
+      "path": "results/gaussian2d-phase-sampled-20261009/rectangle/final/branch_lr03/2026103921/checkpoint.npz",
+      "sha256": "0e4ec1bf89b190cc4435ca2f4652bf16432cd8bbda7991ab3aaac36b70de096f"
+    },
+    {
+      "path": "results/gaussian2d-phase-sampled-20261009/rectangle/final/branch_lr03/2026103922/checkpoint.npz",
+      "sha256": "7e2f72681402d3ab02533825c5005a54112779345f79763f456e984f8ea84b10"
+    },
+    {
+      "path": "results/gaussian2d-phase-sampled-20261009/rectangle/final/branch_lr03/2026103923/checkpoint.npz",
+      "sha256": "19d61904babd399cb2039a9fc4d9fe20c143e34e90e04aaa29a052d627032cfd"
+    },
+    {
+      "path": "results/gaussian2d-phase-sampled-20261009/rectangle/final/branch_lr03/2026103924/checkpoint.npz",
+      "sha256": "9be5216cde7bd34372cf38cd3c43758ca2a284eaab8763790d02c61d30e359bd"
+    },
+    {
+      "path": "results/gaussian2d-phase-sampled-20261009/rectangle/final/branch_lr03/2026103925/checkpoint.npz",
+      "sha256": "493687b32bcd88082c2cdb73a32d8906c9ebf264e1a3b94cfba6a674e942842b"
+    },
+    {
+      "path": "results/gaussian2d-phase-sampled-20261009/axes/final/branch_lr03/2026103921/checkpoint.npz",
+      "sha256": "20160e70cb83bf96013d314a11cd4e55f90a848c980489dac26ae44f17c47b99"
+    },
+    {
+      "path": "results/gaussian2d-phase-sampled-20261009/axes/final/branch_lr03/2026103922/checkpoint.npz",
+      "sha256": "935e5103d6434d271d714a228fefd7077db2528b43206a8e16cc19967638854d"
+    },
+    {
+      "path": "results/gaussian2d-phase-sampled-20261009/axes/final/branch_lr03/2026103923/checkpoint.npz",
+      "sha256": "11b0aaaf365b0e09b713db8007b1ad7e420ac91c811341925ae78631e1c6e2e2"
+    },
+    {
+      "path": "results/gaussian2d-phase-sampled-20261009/axes/final/branch_lr03/2026103924/checkpoint.npz",
+      "sha256": "a6acc2ec6ae06a3cdf20f6a040ec312ef975e8effbf36bfdd81b06f969197094"
+    },
+    {
+      "path": "results/gaussian2d-phase-sampled-20261009/axes/final/branch_lr03/2026103925/checkpoint.npz",
+      "sha256": "f568141e6386309e203dde39b83436a221e0ca1a240a6bfc377e4ee2d8121845"
+    }
+  ],
+  "input_sha256": "77ab32751b0926414323c29c5f6bfbee711c328ef4d54e41dcaf03ff6b0c15fd"
+}

@@ -1,0 +1,41 @@
+{
+  "input_sha256": "cd1ae5810f31bfe28394d7b6149db6de91172811eaac8c5db773abd2e2afff40",
+  "summary_sha256": "4cf54dd9fc4af0d8bbc071f5cb7204272fb5e0ee680f82d3a9c7c1c8c88cd320",
+  "source_copy_hashes": {
+    "README.md": "742371eb97c846ec97160876e248f10d076bb823164fb0684dc570c33e12804c",
+    "SUMMARY.json": "4cf54dd9fc4af0d8bbc071f5cb7204272fb5e0ee680f82d3a9c7c1c8c88cd320",
+    "DIAGNOSTICS.npz": "cd1ae5810f31bfe28394d7b6149db6de91172811eaac8c5db773abd2e2afff40"
+  },
+  "renderer_sha256": "588433b2229079d05e92304a9cd9fc49562b1fa8970cf63cb0d910db706f611d",
+  "protocols": [
+    "separate variation",
+    "joint variation"
+  ],
+  "response_aggregation": "median and IQR across five final fits per protocol",
+  "heatmaps": {
+    "order": [
+      "separate variation",
+      "joint variation"
+    ],
+    "axis_transform": "mu=8+3u; sigma_G=2(1+0.2v)",
+    "aggregation": "arithmetic mean across five final fits per protocol",
+    "pixel_edge_extent": {
+      "mu": [
+        4.925,
+        11.075
+      ],
+      "sigma_G": [
+        1.59,
+        2.41
+      ]
+    },
+    "vmin": 0,
+    "vmax": 0.06,
+    "smoothing": "none"
+  },
+  "fixed_control": {
+    "theta": 1.1780972450961724,
+    "role": "post-capacity fixed control, frozen before sampled campaign"
+  },
+  "note": "Measurement distribution of the phase encoder is fixed; no necessity claim is made."
+}

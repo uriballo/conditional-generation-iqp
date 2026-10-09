@@ -50,11 +50,12 @@ checkpoint replay, selection reconstruction and primary scientific review
 passed before these new artifacts were added. The claim-to-evidence map in
 `../data/README.md` records the limits and review status.
 
-`gaussian2d_heatmaps.pdf` and its PNG preview show full-distribution TVD for
-separate and joint mean--width training, with fitting points and convex hulls.
-The portable source is `../figure_sources/gaussian2d_heatmaps.py`, and its
-committed inputs and provenance are in `../data/gaussian2d/`. The heatmaps
-include all grid points; the accompanying table excludes both designs' fitting
-and development pairs. Values summarize five individual fitted distributions,
-not their mixture. The author approved this heatmap presentation; the integrated
-section remains available for author review.
+`gaussian2d_phase_heatmaps.pdf` shows full-distribution TVD across separately
+and jointly varied center--width conditions. Its input measurement distribution
+is fixed and both coordinates enter through phases. The heatmaps average five
+selected fits at each grid point, including fitting and development conditions.
+`gaussian2d_phase_mean_response.pdf` and `gaussian2d_phase_width_response.pdf`
+show median/IQR response diagnostics and the fixed rotation control in the
+appendix. `../figure_sources/gaussian2d_phase.py` regenerates these figures from
+`../data/gaussian2d_phase/`; its provenance distinguishes heatmap and curve
+aggregation. The earlier `gaussian2d_heatmaps` figures remain historical.

@@ -29,7 +29,13 @@ pdflatex -interaction=nonstopmode -halt-on-error -output-directory=/tmp/iqp-illu
 pdflatex -interaction=nonstopmode -halt-on-error -output-directory=/tmp/iqp-illustrations gaussian_intro.tex
 ```
 
-The approved two-dimensional Gaussian heatmaps use `gaussian2d_heatmaps.py` and
-`../data/gaussian2d/`. From the repository root, run
-`.venv/bin/python paper/figure_sources/gaussian2d_heatmaps.py --results paper/data/gaussian2d --output results/gaussian2d-figures`.
-This standalone renderer writes to ignored results and does not replace reviewed figures.
+The current two-dimensional Gaussian figures use `gaussian2d_phase.py` and
+`../data/gaussian2d_phase/`. From the repository root, run
+`.venv/bin/python paper/figure_sources/gaussian2d_phase.py` to replay into ignored
+results. `gaussian2d_phase_controls.py` replays saved initial, selected and
+terminal parameters and analytic controls without fitting; use `--tables`
+to regenerate the two numerical tables. Both sources support explicit output
+paths. `gaussian2d_phase_finite_validation.py` independently replays the finite-
+validation follow-up and its direct calibration controls from compact saved
+parameters, without fitting. The earlier `gaussian2d_heatmaps.py` source is
+historical.

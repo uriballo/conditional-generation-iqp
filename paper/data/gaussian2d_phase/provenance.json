@@ -1,0 +1,41 @@
+{
+  "role": "Publication evidence and figure/control replay; author review pending",
+  "training_scope": "Original sampled-MMD benchmark with exact target-TVD development selection, plus matched finite-target validation with exact model moments; encoder and configurations remain exploratory.",
+  "sources": {
+    "SUMMARY.json": "4cf54dd9fc4af0d8bbc071f5cb7204272fb5e0ee680f82d3a9c7c1c8c88cd320",
+    "source-manifest.json": "456fb89d52084f85813c4232489069ad989e930fa6ed2040c2446282195bbb65",
+    "campaign_receipt.json": "46b11844d73c38f374a93b7037afd12b0434c4bc52155c0b7480f6719be9eacc",
+    "AUDIT.json": "9ccac862041cdd258c12af3384d68d8b2aa44dd865f0abadd02bad5a69149695"
+  },
+  "files": {
+    "paper/data/gaussian2d_phase/SUMMARY.json": "4cf54dd9fc4af0d8bbc071f5cb7204272fb5e0ee680f82d3a9c7c1c8c88cd320",
+    "paper/data/gaussian2d_phase/control_parameters.npz": "77ab32751b0926414323c29c5f6bfbee711c328ef4d54e41dcaf03ff6b0c15fd",
+    "paper/data/gaussian2d_phase/control_provenance.json": "3cb1e0d476b500537251a034b7b29fe8e216b209125e37d0c8a5e7c6a50d1437",
+    "paper/data/gaussian2d_phase/controls.json": "3094f72cfec919ffa285687fb24def0ea6be057345641e7d7c2c12699e40a802",
+    "paper/data/gaussian2d_phase/README.md": "ddd724d83622d19a9eedf3d1ede2e99f0812bcc83a3dc41244fe8c9e41b11f5a",
+    "paper/data/gaussian2d_phase/DIAGNOSTICS.npz": "cd1ae5810f31bfe28394d7b6149db6de91172811eaac8c5db773abd2e2afff40",
+    "paper/data/gaussian2d_phase/REVIEW.md": "cf61af9013d2f15524638e0387b97f544ae85cfaa5f2d071842d5631dff0afc3",
+    "paper/figure_sources/gaussian2d_phase.py": "588433b2229079d05e92304a9cd9fc49562b1fa8970cf63cb0d910db706f611d",
+    "paper/figure_sources/gaussian2d_phase_controls.py": "c9252bccf43bc6cf1ca1c5b1d8c9bfff33f0c3493b7e86c278bad889b8e9a8ef",
+    "paper/tables/gaussian2d_phase_tvd.tex": "2034b4f73bf5e83f8edcc74e228194e9725c9f668ee68b5489efd33fa634ca0a",
+    "paper/tables/gaussian2d_phase_controls.tex": "7dd468d0fb8f9166f83168010aee59c168d68b86da634734f7fc5ab06f21ebbf",
+    "paper/figures/gaussian2d_phase_mean_response.pdf": "60ab06c67c3a1d306c1ee0a9bfa88a7603c6c28cba79313163531d0f9f74a009",
+    "paper/figures/gaussian2d_phase_mean_response.png": "e978cb220677c93032a15c9d12094132f70c3329543bfee415af7049b4cad570",
+    "paper/figures/gaussian2d_phase_heatmaps.png": "1ab136f76e7df956d854646531aee59e7003f9dcb528c965716e62ae1c1979a1",
+    "paper/figures/gaussian2d_phase_heatmaps.pdf": "590d1e68d807dd2abf24818197b11f454cc80f53e18871d14097006329784778",
+    "paper/figures/gaussian2d_phase_provenance.json": "33bf691a31efe82ed800fb1eeed398ca831c1d527dd671ec303bd9dd8e27a08b",
+    "paper/figures/gaussian2d_phase_width_response.png": "57bf778ec1046b18c032bd93081b68dd2ae3f2c736827caac7803cccd8ac0ec0",
+    "paper/figures/gaussian2d_phase_width_response.pdf": "3e0a81382f8db7bc7ab8f7db76cf4181cb2116c3dad626bf702a85d7a2678422",
+    "paper/data/gaussian2d_phase/finite_validation.json": "4d50e33df496b3b0f79a2754e31b07651ea09dab8a959e417cd3df76739f5680",
+    "paper/data/gaussian2d_phase/finite_validation_parameters.npz": "ed3fdae41523d77edef8d44fb5af389f0512a383765f6a4971a485089903a687",
+    "paper/data/gaussian2d_phase/finite_validation_provenance.json": "b13a3691268d2f11d4484efc8519995214d8ede1b941628d2ae20b303a88e96a",
+    "paper/figure_sources/gaussian2d_phase_finite_validation.py": "7e207161693d1c454a8e09bd29e49533e4e6b5c0af2fc313c8ff11781b2f4f09",
+    "paper/tables/gaussian2d_phase_finite_validation.tex": "cc61a8d9396b01b1904a970256205d044248076d4a69f669c6e4395931727d94"
+  },
+  "finite_validation_sources": {
+    "SUMMARY.json": "33f52eb3e86aea3211e8beb3da1f412b678adcd06644cb4030d18f096f5b2324",
+    "AUDIT.json": "639220fc5616edcbd0d1d2be8a89100f4965f8d1bd577c25e9e695266ee661bb",
+    "campaign_receipt.json": "181e50b292c99999b31ed27d1e5027b1d8fe804f8e5403248af396ea1c26d847",
+    "source-manifest.json": "4909e252b622a8930912927b33c338d1334aaade1ded35730c034caf7d1ba537"
+  }
+}

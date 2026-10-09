@@ -1,0 +1,13 @@
+{
+  "inputs": {
+    "SUMMARY.json": "33f52eb3e86aea3211e8beb3da1f412b678adcd06644cb4030d18f096f5b2324",
+    "AUDIT.json": "639220fc5616edcbd0d1d2be8a89100f4965f8d1bd577c25e9e695266ee661bb",
+    "campaign_receipt.json": "181e50b292c99999b31ed27d1e5027b1d8fe804f8e5403248af396ea1c26d847",
+    "source-manifest.json": "4909e252b622a8930912927b33c338d1334aaade1ded35730c034caf7d1ba537"
+  },
+  "export_sha256": "ed3fdae41523d77edef8d44fb5af389f0512a383765f6a4971a485089903a687",
+  "summary_export_sha256": "4d50e33df496b3b0f79a2754e31b07651ea09dab8a959e417cd3df76739f5680",
+  "replayer_sha256": "7e207161693d1c454a8e09bd29e49533e4e6b5c0af2fc313c8ff11781b2f4f09",
+  "table_sha256": "cc61a8d9396b01b1904a970256205d044248076d4a69f669c6e4395931727d94",
+  "table_path": "paper/tables/gaussian2d_phase_finite_validation.tex"
+}
