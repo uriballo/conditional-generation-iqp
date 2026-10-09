@@ -598,45 +598,67 @@ We train at $c\in\{0,0.25,0.5,0.75,1\}$ and evaluate at $80$ held-out conditions
 \subsection{Two-dimensional Gaussian conditioning and generalization}
 \label{sec:gaussian-two-dimensional}
 
-We next test generalization when two coordinates control the target distribution. For sixteen bits and Hamming weight $K=|x|$, we define
+We next extend the Gaussian benchmark to two conditioning variables that control the profile center and width. For sixteen bits and Hamming weight $K=|x|$, we define the target distribution as
 \begin{align}
  p(x\mid u,v)&=\frac{\rho_{u,v}(K)}{\binom{16}{K}},\label{eq:gaussian-two-dimensional-target}\\
  \rho_{u,v}(k)&\propto\exp\!\left[-\frac{(k-\mu(u))^2}{2\sigma_{\mathrm G}(v)^2}\right],
 \end{align}
-where $u,v\in[-1,1]$, $\mu(u)=8+3u$, and $\sigma_{\mathrm G}(v)=2(1+0.2v)$. We normalize the profile over $k\in\{0,\ldots,16\}$ and assign equal probability to bitstrings of the same weight. Thus, $u$ controls the profile center and $v$ controls its width. Their ranges correspond to centers between $5$ and $11$ and widths between $1.6$ and $2.4$. Discretization and finite support mean that these parameters need not equal the actual mean and standard deviation.
+where $u,v\in[-1,1]$, $\mu(u)=8+3u$, and $\sigma_{\mathrm G}(v)=2(1+0.2v)$. The coordinate $u$ controls the profile center over $[5,11]$, while $v$ controls its width over $[1.6,2.4]$. We normalize the profile over $k\in\{0,\ldots,16\}$ and assign equal probability to all bitstrings with the same Hamming weight. Because we discretize and truncate the Gaussian profile, $\mu(u)$ and $\sigma_{\mathrm G}(v)$ need not equal its actual mean and standard deviation.
 
-We encode width in the amplitudes of a correlated state and encode the mean coordinate through identical phase rotations:
-\begin{align}
- \ket{\chi(v)}&=\sum_{k=0}^{16}\sqrt{r_v(k)}\ket{D_k^{(16)}},\\
- \ket{\phi(u,v)}&=R_Z(u/2)^{\otimes16}\ket{\chi(v)},\label{eq:gaussian-two-dimensional-input}\\
- r_v(k)&\propto\exp\!\left[-\frac{(k-8)^2}{2\tau(v)^2}\right],\qquad
+We construct the conditional input state in two steps. First, we encode the width coordinate $v$ through a Gaussian Hamming-weight profile centered at $k=8$:
+\begin{equation}
+ r_v(k)\propto\exp\!\left[-\frac{(k-8)^2}{2\tau(v)^2}\right],\qquad
  \tau(v)=\frac{2}{1+0.2v}.
-\end{align}
-Here $\ket{D_k^{(16)}}$ denotes the normalized uniform superposition of weight-$k$ bitstrings. The width coordinate changes the centered input profile, whereas $u$ changes phases without changing its computational-basis probabilities. This fixed encoder supplies a task-specific Gaussian prior; it does not prepare the requested target distribution.
+\end{equation}
+We normalize this profile over $k\in\{0,\ldots,16\}$. Increasing $v$ narrows the input profile, whereas it widens the target profile.
 
-We apply a shared learned layer containing only local rotations,
+We then use the square roots of these probabilities as amplitudes:
+\begin{equation}
+ \ket{\chi(v)}=\sum_{k=0}^{16}\sqrt{r_v(k)}\ket{D_k^{(16)}}.
+\end{equation}
+Here, $\ket{D_k^{(16)}}$ denotes the normalized uniform superposition of all bitstrings with Hamming weight $k$. Measuring $\ket{\chi(v)}$ therefore produces the profile $r_v(k)$, with equal probabilities for bitstrings of the same weight.
+
+Second, we encode the center coordinate $u$ by applying the same phase rotation $R_Z(u/2)$ to every qubit. Combining both steps gives
+\begin{equation}
+\begin{aligned}
+ \ket{\phi(u,v)}&=R_Z(u/2)^{\otimes16}\ket{\chi(v)}\\
+ &=\sum_{k=0}^{16}\sqrt{r_v(k)}\,e^{iu(k-8)/2}\ket{D_k^{(16)}}.
+\end{aligned}
+ \label{eq:gaussian-two-dimensional-input}
+\end{equation}
+Thus, $v$ controls the input probabilities, while $u$ controls the relative phases between Hamming-weight sectors.
+
+This encoder supplies a task-specific Gaussian prior, and the learned circuit transforms these inputs to approximate the target family. The input measurement profile remains centered at $k=8$ for every $u$, and its width varies oppositely to the target width as $v$ increases. Except at $(u,v)=(0,0)$, the input and target distributions therefore differ. The circuit must convert the encoded phases into changes in the output center and transform the input width response to approximate the target family. We fix the encoder throughout training and use its measurement distribution as a baseline to assess the improvement achieved by the learned circuit.
+
+We apply the same learned layer to every encoded input:
 \begin{equation}
  U_{\boldsymbol\theta}=\exp\!\left(i\sum_{j=1}^{16}\theta_jX_j\right)
  =\bigotimes_{j=1}^{16}R_X(-2\theta_j).
 \end{equation}
-The sixteen angles remain fixed across conditions after training. Although this layer contains no learned entangling gates, the correlated input allows correlated outputs. Unequal angles can also break permutation symmetry, so we evaluate the full bitstring distribution. The reference state $H^{\otimes16}\ket{\phi(u,v)}$ has one amplitude per Hamming-weight shell. This representation supplies the classical sampling and amplitude ratios required for training. Appendix~\ref{sec:gaussian-two-dimensional-protocol} describes that access and the input-preparation resources.
+We optimize the sixteen angles jointly across training conditions and keep them fixed during conditional generation. These local rotations act on a correlated input and can therefore produce correlated output distributions without learned entangling gates. Because the angles can differ between qubits, the learned layer need not preserve the input's permutation symmetry. We therefore evaluate the full distribution to capture discrepancies among bitstrings with the same Hamming weight.
 
-We compare two training designs, each with nine fitting conditions and $1024$ target samples per condition. In the \emph{separate-variation} design, we vary $u$ at $v=0$ and $v$ at $u=0$. Neither fitting nor development uses a pair with both coordinates nonzero. In the \emph{joint-variation} design, we fit the $3\times3$ grid $\{-1,0,1\}^2$. We select configurations and checkpoints using development full-distribution TVD and repeat the selected configuration in five independent fits. Appendix~\ref{sec:gaussian-two-dimensional-protocol} gives the condition sets, optimization settings and selection protocol.
+The reference state $H^{\otimes16}\ket{\phi(u,v)}$ retains the input's permutation symmetry, so its amplitudes depend only on Hamming weight. This structure enables efficient classical sampling and amplitude-ratio evaluation for training. Appendix~\ref{sec:gaussian-two-dimensional-protocol} describes these operations and the resources required to prepare the correlated input.
+
+We compare two training designs, each with nine fitting conditions and $1024$ target samples per condition. In the \emph{separate-variation} design, we vary one coordinate at a time: $u$ at $v=0$, and $v$ at $u=0$. We exclude all pairs with both coordinates nonzero from fitting and development, allowing us to test generalization to unseen joint combinations. In the \emph{joint-variation} design, we fit the nine points of the $3\times3$ grid $\{-1,0,1\}^2$.
+
+For each design, we select hyperparameters using exact full-distribution TVD at development conditions and perform five independent fits with the selected configuration. Within each fit, we retain the parameters that minimize development TVD. Appendix~\ref{sec:gaussian-two-dimensional-protocol} specifies the condition sets, optimization settings and selection procedure.
 
 \begin{figure*}[!t]
  \centering
  \includegraphics[width=\linewidth]{figures/gaussian2d_heatmaps.pdf}
- \caption{Generalization across Gaussian mean and width conditions with a correlated encoder and sixteen learned local rotations. Shading shows exact full-distribution TVD averaged over five fits at each point of a $41\times41$ grid. Crosses mark fitting conditions; dashed lines mark their convex hulls. (a) Training varies mean and width separately. Mixed conditions outside the diamond test joint extrapolation while remaining within each coordinate's training range. (b) Training varies both coordinates on a $3\times3$ grid, and the interior tests interpolation. Axes show the requested profile parameters. Both panels share a sequential color scale. The dense grid evaluates frozen models after selection; Table~\ref{tab:gaussian-two-dimensional} includes the encoder-only baseline on a common withheld domain.}
+ \caption{Generalization across Gaussian profile centers and widths with a correlated encoder and sixteen learned local rotations. Colors show exact full-distribution total variation distance (TVD), averaged over five independent fits at each point of a $41\times41$ grid. Crosses mark fitting conditions, and dashed lines bound their convex hulls. (a) We vary center and width separately during fitting. Pairs outside the diamond test extrapolation beyond the convex hull of the separate-variation fitting conditions while remaining within each coordinate's fitting range. (b) We fit a $3\times3$ grid, whose interior tests interpolation. The axes show the target profile parameters $\mu$ and $\sigma_{\mathrm G}$, and both panels use the same color scale. We evaluate the grid after completing model selection. Table~\ref{tab:gaussian-two-dimensional} reports errors on a common domain excluding both designs' fitting and development pairs and includes the encoder-only baseline.}
  \label{fig:gaussian-two-dimensional}
 \end{figure*}
 
 \input{tables/gaussian2d_tvd.tex}
 
-Separate variation supports generalization to combinations absent from fitting and development. Across sixteen mixed reporting pairs, the model achieves mean full-distribution TVD $0.0637\pm0.0051$. The four pairs inside the joint training hull give $0.0311\pm0.0022$, and the twelve outside give $0.0745\pm0.0061$. These outer pairs combine previously fitted coordinate values; they do not extend either marginal range. Joint variation gives $0.0646\pm0.0002$ on thirty-two withheld reporting pairs. We report means and sample standard deviations across five per-fit condition averages. These original reporting sets differ, so their averages do not directly compare the designs.
+The separate-variation model generalizes to sixteen joint condition pairs excluded from fitting and development, achieving mean full-distribution TVD $0.0637\pm0.0051$. Four pairs lie inside the convex hull of its fitting conditions and give mean TVD $0.0311\pm0.0022$; the remaining twelve lie outside and give $0.0745\pm0.0061$. All sixteen pairs combine coordinate values encountered separately during fitting, so this evaluation tests new combinations within the fitted marginal ranges. The joint-variation model achieves mean full-distribution TVD $0.0646\pm0.0002$ over thirty-two withheld reporting pairs. For each fit, we average TVD over the reporting pairs, then report the mean and sample standard deviation of these averages across five fits. Because the designs use different reporting sets, we compare them on a common evaluation grid below.
 
-Figure~\ref{fig:gaussian-two-dimensional} evaluates both designs on a common dense grid. Table~\ref{tab:gaussian-two-dimensional} excludes every pair used for fitting or development by either design, leaving $1652$ common pairs. Separate and joint variation achieve mean TVDs of $0.0498\pm0.0040$ and $0.0533\pm0.0003$, respectively, compared with $0.3124$ for the encoder alone. Both designs therefore improve substantially on the untrained input across this domain. The dense grid provides a descriptive evaluation after selection, and earlier exploratory studies examined some reporting conditions. These results establish approximation of unseen joint combinations for the present fits, rather than an independent confirmatory comparison of training designs.
+After model selection, we evaluate both models on a common $41\times41$ grid (Figure~\ref{fig:gaussian-two-dimensional}). For the averages in Table~\ref{tab:gaussian-two-dimensional}, we exclude every pair used for fitting or development by either design, leaving $1652$ common evaluation pairs. The separate-variation and joint-variation models achieve mean full-distribution TVDs of $0.0498\pm0.0040$ and $0.0533\pm0.0003$, respectively, compared with $0.3124$ for the encoder alone. Both learned models therefore improve substantially on the distributions supplied by the fixed encoder across this domain. We interpret this post-selection evaluation as a descriptive comparison of the frozen models because earlier exploratory studies examined some reporting conditions.
 
-The conditional response remains imperfect. Freezing the width coordinate at zero increases separate-variation reporting TVD from $0.0637$ to $0.0773$; freezing the mean coordinate raises it to $0.3851$. These diagnostics establish sensitivity to both inputs, but do not imply accurate calibration of the generated width. We also repeated selection and training with one angle shared across all sixteen rotations. That model achieves similar TVD but responds much less to the width coordinate. We retain sixteen independent angles to preserve the stronger two-coordinate response, and report the simplification and response diagnostics in Appendix~\ref{sec:gaussian-two-dimensional-protocol}. The experiment demonstrates two-dimensional conditional generation with a local learned layer and a structured correlated input; it does not establish encoder necessity or quantum advantage.
+We assess sensitivity to each conditioning variable by fixing one encoder coordinate at zero without retraining and retaining the original target conditions. For the separate-variation model, fixing $v=0$ increases mean full-distribution TVD from $0.0637$ to $0.0773$, while fixing $u=0$ raises it to $0.3851$. These increases show that the trained model uses both inputs, although they do not establish accurate reproduction of the target width response.
+
+We also repeat model selection and training with one angle shared across all sixteen rotations. This simpler model achieves similar TVD but responds much less to the width coordinate. We therefore retain sixteen independent angles to preserve the stronger response to both conditioning variables. Appendix~\ref{sec:gaussian-two-dimensional-protocol} details the simplification study and conditional-response diagnostics. Together, these results demonstrate two-dimensional conditional generation with a shared local rotation layer acting on a structured correlated input.
 
 \subsection{Curie-Weiss spin model}
 
