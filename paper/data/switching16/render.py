@@ -12,35 +12,33 @@ import numpy as np
 
 MM = 1 / 25.4
 BLUE = "#0072B2"
-mpl.rcParams.update(
-    {
-        "font.family": "serif",
-        "font.size": 8,
-        "axes.labelsize": 8,
-        "xtick.labelsize": 7,
-        "ytick.labelsize": 7,
-        "legend.fontsize": 7,
-        "lines.linewidth": 1.25,
-        "lines.markersize": 3,
-        "axes.linewidth": 0.7,
-        "xtick.direction": "in",
-        "ytick.direction": "in",
-        "xtick.minor.visible": True,
-        "ytick.minor.visible": True,
-        "legend.frameon": False,
-        "axes.xmargin": 0.015,
-        "axes.ymargin": 0.03,
-        "savefig.bbox": "tight",
-        "savefig.dpi": 300,
-        "mathtext.fontset": "cm",
-    }
-)
+STYLE = {
+    "font.family": "serif",
+    "font.size": 8,
+    "axes.labelsize": 8,
+    "xtick.labelsize": 7,
+    "ytick.labelsize": 7,
+    "legend.fontsize": 7,
+    "lines.linewidth": 1.25,
+    "lines.markersize": 3,
+    "axes.linewidth": 0.7,
+    "xtick.direction": "in",
+    "ytick.direction": "in",
+    "xtick.minor.visible": True,
+    "ytick.minor.visible": True,
+    "legend.frameon": False,
+    "axes.xmargin": 0.015,
+    "axes.ymargin": 0.03,
+    "savefig.bbox": "tight",
+    "savefig.dpi": 300,
+    "mathtext.fontset": "cm",
+}
 
 ROOT = Path(__file__).resolve().parents[3]
 INPUT = ROOT / "paper/data/switching16/response.npz"
 SUMMARY = ROOT / "paper/data/switching16/response-summary.json"
 OUT = ROOT / "paper/data/switching16"
-FIGURES = ROOT / "paper/figures"
+FIGURES = ROOT / "results/switching16-publication-replay"
 
 
 def digest(path: Path) -> str:
@@ -48,10 +46,15 @@ def digest(path: Path) -> str:
 
 
 def render(
-    panels: list[tuple[np.ndarray, np.ndarray, np.ndarray, str, str]], stem: str
+    panels: list[tuple[np.ndarray, np.ndarray, np.ndarray, str, str]],
+    stem: str,
+    input_root: Path = OUT,
+    output_root: Path = FIGURES,
 ) -> tuple[Path, Path]:
-    data = np.load(INPUT)
-    summary = json.loads(SUMMARY.read_text())
+    input_root = Path(input_root)
+    output_root = Path(output_root)
+    data = np.load(input_root / "response.npz")
+    summary = json.loads((input_root / "response-summary.json").read_text())
     beta = data["betas"]
     train = np.asarray(summary["fitting_betas"])
     fig = plt.figure(figsize=(85 * MM, 116 * MM), layout="constrained")
@@ -151,21 +154,23 @@ def render(
         columnspacing=1.2,
         handlelength=2.2,
     )
-    pdf, png = FIGURES / f"{stem}.pdf", FIGURES / f"{stem}.png"
+    output_root.mkdir(parents=True, exist_ok=True)
+    pdf, png = output_root / f"{stem}.pdf", output_root / f"{stem}.png"
     fig.savefig(pdf)
     fig.savefig(png, dpi=300)
     plt.close(fig)
     return pdf, png
 
 
-def main() -> None:
-    OUT.mkdir(parents=True, exist_ok=True)
-    FIGURES.mkdir(parents=True, exist_ok=True)
-    data = np.load(INPUT)
-    summary = json.loads(SUMMARY.read_text())
+@mpl.rc_context(STYLE)
+def main(input_root: Path = OUT, output_root: Path = FIGURES) -> list[Path]:
+    input_root, output_root = Path(input_root), Path(output_root)
+    output_root.mkdir(parents=True, exist_ok=True)
+    data = np.load(input_root / "response.npz")
+    summary = json.loads((input_root / "response-summary.json").read_text())
     assert data["balance"].shape == (5, 121) and data["fluctuation"].shape == (5, 121)
     assert np.allclose(data["betas"], np.linspace(0, 2.4, 121))
-    assert summary["arrays_sha256"] == digest(INPUT)
+    assert summary["arrays_sha256"] == digest(input_root / "response.npz")
     panels = [
         (
             data["target_balance"],
@@ -182,17 +187,18 @@ def main() -> None:
             "Probability of\ncomplete balance",
         ),
     ]
-    pdf, png = render(panels, "conditional_symmetry_current")
+    pdf, png = render(panels, "conditional_symmetry_current", input_root, output_root)
+    paths = [pdf, png]
     renderer_hash = digest(Path(__file__))
     receipt = {
-        "input": str(INPUT.relative_to(ROOT)),
-        "input_sha256": digest(INPUT),
-        "summary": str(SUMMARY.relative_to(ROOT)),
-        "summary_sha256": digest(SUMMARY),
+        "input": str(input_root / "response.npz"),
+        "input_sha256": digest(input_root / "response.npz"),
+        "summary": str(input_root / "response-summary.json"),
+        "summary_sha256": digest(input_root / "response-summary.json"),
         "analysis_source_sha256": summary["source_sha256"],
         "renderer_source_sha256": renderer_hash,
-        "output_pdf": str(pdf.relative_to(ROOT)),
-        "output_png": str(png.relative_to(ROOT)),
+        "output_pdf": str(pdf),
+        "output_png": str(png),
         "n_frozen_fits": 5,
         "grid_points": 121,
         "beta_range": [0, 2.4],
@@ -205,7 +211,9 @@ def main() -> None:
     }
     receipt["output_pdf_sha256"] = digest(pdf)
     receipt["output_png_sha256"] = digest(png)
-    (OUT / "FIGURE_CONDITIONAL.json").write_text(json.dumps(receipt, indent=2) + "\n")
+    (output_root / "FIGURE_CONDITIONAL.json").write_text(
+        json.dumps(receipt, indent=2) + "\n"
+    )
     fluct_panels = [
         (
             data["target_balance"],
@@ -222,9 +230,11 @@ def main() -> None:
             "Energy fluctuations",
         ),
     ]
-    pdf, png = render(fluct_panels, "conditional_symmetry_fluctuation")
-    receipt["output_pdf"] = str(pdf.relative_to(ROOT))
-    receipt["output_png"] = str(png.relative_to(ROOT))
+    pdf, png = render(
+        fluct_panels, "conditional_symmetry_fluctuation", input_root, output_root
+    )
+    receipt["output_pdf"] = str(pdf)
+    receipt["output_png"] = str(png)
     receipt["output_pdf_sha256"] = digest(pdf)
     receipt["output_png_sha256"] = digest(png)
     receipt["observables"] = ["mean triangle balance", "fluctuation statistic"]
@@ -232,7 +242,16 @@ def main() -> None:
         "The fluctuation statistic is shown as an appendix diagnostic; it is not "
         "interpreted as a verified heat capacity."
     )
-    (OUT / "FIGURE_FLUCTUATION.json").write_text(json.dumps(receipt, indent=2) + "\n")
+    (output_root / "FIGURE_FLUCTUATION.json").write_text(
+        json.dumps(receipt, indent=2) + "\n"
+    )
+    return [
+        *paths,
+        pdf,
+        png,
+        output_root / "FIGURE_CONDITIONAL.json",
+        output_root / "FIGURE_FLUCTUATION.json",
+    ]
 
 
 if __name__ == "__main__":

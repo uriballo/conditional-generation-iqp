@@ -7,7 +7,7 @@ import iqp_cond as ciqp
 import numpy as np
 import pytest
 
-from paper_experiments.runtime import SELECTED, build_job, execute_job
+from paper_experiments.runtime import build_job
 from paper_experiments.studies import make_targets
 from paper_experiments.training import make_trainer
 
@@ -17,10 +17,8 @@ def test_reported_settings_and_serialization():
     assert json.loads(json.dumps(j)) == j
     assert j["config"]["n_ops"] == 512 and j["config"]["mc_samples"] == 1024
     assert j["config"]["bodyness_targets"] == [2.0, 4.0]
-    for kind in ("shared", "conditional", "unconditional"):
-        j = build_job(kind, 5400, beta=0.4 if kind != "shared" else None)
-        assert j["optimizer"] == SELECTED[kind]
-        assert j["config"]["steps"] == 2000 and j["config"]["restarts"] == 3
+    with pytest.raises(ValueError):
+        build_job("shared", 5400)
 
 
 def test_adam_matches_public_trainer_and_checkpoints_do_not_change_it():
@@ -96,17 +94,3 @@ def test_curie_target_pool_matches_saved_run():
         hashlib.sha256(pool.tobytes()).hexdigest()
         == "bd5c9c723a30aace13a1d353fb0979f8b0d2b54eba0e91a2b872a62b18643dce"
     )
-
-
-def test_symmetry_job_and_strict_resume(tmp_path):
-    job = build_job("symmetry", 0)
-    r = execute_job(job, tmp_path)
-    np.testing.assert_allclose(
-        np.asarray(r["encoded"])[[0, 1, 4, 5]],
-        np.asarray(r["encoded"])[[3, 2, 7, 6]],
-        atol=1e-14,
-    )
-    assert execute_job(job, tmp_path) == r
-    invalid = dict(job, seed=1)
-    with pytest.raises(ValueError):
-        execute_job(invalid, tmp_path)

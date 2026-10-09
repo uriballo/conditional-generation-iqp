@@ -37,8 +37,8 @@ def test_paper_source_uses_only_retained_figures():
     for filename in [
         "conditional_iqp_workflow.pdf",
         "gaussian_translation_profiles.pdf",
-        "curie_weiss_model_comparison.pdf",
         "curie_weiss_lattice_scaling_mmd.pdf",
     ]:
         assert filename in source
         assert (root / "paper" / "figures" / filename).is_file()
+    assert "curie_weiss_symmetry_comparison.pdf" not in source

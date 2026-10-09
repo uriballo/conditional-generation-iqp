@@ -8,11 +8,10 @@ import multiprocessing
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
-from paper_experiments.campaign import inventory
-from paper_experiments.runtime import execute_job
-
 
 def _execute(arguments):
+    from paper_experiments.runtime import execute_job
+
     job, output, smoke = arguments
     return execute_job(job, output, smoke=smoke)
 
@@ -20,9 +19,19 @@ def _execute(arguments):
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--mode", choices=("reported", "hpo", "figures"), default="reported")
+    p.add_argument("--hpo-phase", choices=("random", "tpe"), default="random")
     p.add_argument(
         "--experiment",
-        choices=("all", "gaussian", "curie-weiss", "scaling", "symmetry"),
+        choices=(
+            "all",
+            "gaussian",
+            "curie-weiss",
+            "curie-weiss-followup",
+            "curie-weiss-historical",
+            "gaussian2d-phase",
+            "scaling",
+            "switching16",
+        ),
         default="all",
     )
     p.add_argument("--dry-run", action="store_true")
@@ -32,20 +41,45 @@ def main(argv=None):
     p.add_argument(
         "--data-root",
         type=Path,
-        help="compact data directory, or completed reported-run output",
+        help="compact data directory, or completed reported/HPO output",
     )
     args = p.parse_args(argv)
     if args.workers < 1:
         p.error("--workers must be positive")
-    if args.mode == "hpo" and args.experiment not in ("all", "curie-weiss"):
-        p.error("HPO applies only to curie-weiss")
+    cw_choices = ("all", "curie-weiss", "curie-weiss-followup")
+    if args.hpo_phase == "tpe" and not (
+        args.mode == "hpo" and args.experiment in cw_choices
+    ):
+        p.error("--hpo-phase tpe applies only to Curie-Weiss HPO")
+    if args.mode == "hpo":
+        if args.experiment not in cw_choices:
+            p.error("HPO applies only to the current Curie-Weiss campaign")
+        from paper_experiments.cw_followup_hpo import protocol
+
+        if args.hpo_phase == "tpe":
+            from paper_experiments.cw_followup_tpe import run_all
+        else:
+            from paper_experiments.cw_followup_hpo import run_all
+    if args.mode == "reported":
+        if args.experiment in ("curie-weiss", "curie-weiss-followup"):
+            p.error("Curie-Weiss final configurations are pending; use --mode hpo")
+        if args.experiment in (
+            "gaussian2d-phase",
+            "switching16",
+            "curie-weiss-historical",
+        ):
+            p.error(
+                "this experiment supports --mode figures; frozen training sources "
+                "remain in the local research archives"
+            )
+        from paper_experiments.campaign import inventory
     if args.dry_run:
         if args.mode == "reported":
             plan = inventory(args.experiment, smoke=args.smoke)
         elif args.mode == "hpo":
-            from paper_experiments.hpo import protocol
-
             plan = protocol(args.smoke)
+            if args.hpo_phase == "tpe":
+                plan = {"phase": "tpe", "protocol": plan}
         else:
             plan = dict(
                 data=str(args.data_root or Path("paper/data")),
@@ -63,19 +97,26 @@ def main(argv=None):
         paths = render_all(
             args.data_root or Path(__file__).parent / "paper/data",
             namespace,
-            experiment=args.experiment,
+            experiment=(
+                "curie-weiss"
+                if args.experiment == "curie-weiss-followup"
+                else args.experiment
+            ),
         )
         print("\n".join(str(path) for path in paths))
         return 0
     if args.mode == "hpo":
-        from paper_experiments.hpo import run_all
-
         run_all(
             namespace / "hpo" if args.smoke else namespace,
             smoke=args.smoke,
             workers=args.workers,
         )
-        print(f"HPO complete: {namespace}")
+        message = (
+            "TPE HPO complete, paused for review"
+            if args.hpo_phase == "tpe"
+            else "Random HPO complete, paused for review"
+        )
+        print(f"{message}: {namespace}")
         return 0
     jobs = inventory(args.experiment, smoke=args.smoke)
     arguments = [(job, namespace, args.smoke) for job in jobs]

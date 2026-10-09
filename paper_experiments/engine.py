@@ -115,9 +115,13 @@ def repo_state() -> dict[str, object]:
     """Return the paper and library revisions that produced a run."""
     dirty = _git("status", "--porcelain")
     library = REPO / "iqp-cond"
+    snapshot_path = REPO / ".reproduction-source.json"
+    snapshot = json.loads(snapshot_path.read_text()) if snapshot_path.exists() else {}
     return {
-        "paper_revision": _git("rev-parse", "HEAD"),
-        "paper_dirty": bool(dirty) if dirty is not None else None,
+        "paper_revision": _git("rev-parse", "HEAD") or snapshot.get("paper_revision"),
+        "paper_dirty": (
+            bool(dirty) if dirty is not None else snapshot.get("paper_dirty")
+        ),
         "library_revision": (
             subprocess.run(
                 ["git", "rev-parse", "HEAD"],
@@ -126,7 +130,7 @@ def repo_state() -> dict[str, object]:
                 capture_output=True,
                 text=True,
             ).stdout.strip()
-            or None
+            or snapshot.get("library_revision")
         ),
         "library_version": importlib.metadata.version("iqp-cond"),
     }
@@ -236,6 +240,7 @@ def _evaluate(
             mean_weight(target_probabilities, config.n_visible),
         ),
         "complement_tvd": _paired_complement_errors(probabilities, conditions),
+        "spin_flip_tvd": np.asarray(complement_tvd(probabilities, probabilities)),
     }
 
 
@@ -375,7 +380,10 @@ def run(
         )
 
     development_conditions = study.development_conditions
-    if config.selection_mode == "exact_development_profile_tvd":
+    if config.selection_mode in {
+        "exact_development_profile_tvd",
+        "exact_development_tvd",
+    }:
         if development_conditions is None or config.model_kind == "independent_direct":
             raise ValueError(
                 "development profile selection requires shared development conditions"
@@ -393,8 +401,13 @@ def run(
                     probabilities, exact_development_targets, config.n_visible
                 ).mean()
             )
+
+        def exact_development_tvd(params: np.ndarray) -> float:
+            probabilities = model_probabilities(study, development_model, params)
+            return float(bitstring_tvd(probabilities, exact_development_targets).mean())
     else:
         exact_development_profile_tvd = None
+        exact_development_tvd = None
 
     results: list[ciqp.training.TrainingResult] = []
     restart_wall_seconds: list[float] = []
@@ -430,6 +443,8 @@ def run(
                     else exact_training_profile_tvd
                     if config.selection_mode == "exact_training_profile_tvd"
                     else exact_development_profile_tvd
+                    if config.selection_mode == "exact_development_profile_tvd"
+                    else exact_development_tvd
                 ),
             )
             restart_wall_seconds.append(time.perf_counter() - start)
@@ -504,6 +519,8 @@ def run(
             if config.selection_mode == "exact_training_profile_tvd"
             else "mean_exact_development_profile_tvd"
             if config.selection_mode == "exact_development_profile_tvd"
+            else "mean_exact_development_tvd"
+            if config.selection_mode == "exact_development_tvd"
             else "validation_mmd"
         ),
         "best_selection_score": (
@@ -517,6 +534,9 @@ def run(
         "held_out_tvd_mean": float(evaluation["tvd"].mean()),
         "held_out_tvd_worst": float(evaluation["tvd"].max()),
         "held_out_tvd_per_condition": evaluation["tvd"].tolist(),
+        "train_spin_flip_tvd_per_condition": training["spin_flip_tvd"].tolist(),
+        "held_out_spin_flip_tvd_per_condition": evaluation["spin_flip_tvd"].tolist(),
+        "training_pool_sha256": hashlib.sha256(training_targets.tobytes()).hexdigest(),
         "train_profile_tvd_mean": float(training["profile_tvd"].mean()),
         "train_profile_tvd_per_condition": training["profile_tvd"].tolist(),
         "held_out_profile_tvd_mean": float(evaluation["profile_tvd"].mean()),
@@ -527,6 +547,12 @@ def run(
         ),
         "development_profile_tvd_mean": (
             None if development is None else float(development["profile_tvd"].mean())
+        ),
+        "development_tvd_per_condition": (
+            None if development is None else development["tvd"].tolist()
+        ),
+        "development_tvd_mean": (
+            None if development is None else float(development["tvd"].mean())
         ),
         "train_within_shell_residual_mean": float(
             training["within_shell_residual"].mean(),

@@ -13,24 +13,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 MM = 1 / 25.4
-mpl.rcParams.update(
-    {
-        "font.family": "serif",
-        "font.size": 10,
-        "axes.labelsize": 10,
-        "xtick.labelsize": 9,
-        "ytick.labelsize": 9,
-        "legend.frameon": False,
-        "lines.linewidth": 1.5,
-        "savefig.bbox": "tight",
-        "savefig.dpi": 300,
-        **(
-            {"text.usetex": True, "text.latex.preamble": r"\usepackage{amsmath}"}
-            if shutil.which("latex")
-            else {"text.usetex": False, "mathtext.fontset": "cm"}
-        ),
-    }
-)
+STYLE = {
+    "font.family": "serif",
+    "font.size": 10,
+    "axes.labelsize": 10,
+    "xtick.labelsize": 9,
+    "ytick.labelsize": 9,
+    "legend.frameon": False,
+    "lines.linewidth": 1.5,
+    "savefig.bbox": "tight",
+    "savefig.dpi": 300,
+    **(
+        {"text.usetex": True, "text.latex.preamble": r"\usepackage{amsmath}"}
+        if shutil.which("latex")
+        else {"text.usetex": False, "mathtext.fontset": "cm"}
+    ),
+}
 
 
 def load(root: Path):
@@ -123,6 +121,7 @@ def heatmaps(a, output):
     save(fig, output, "heatmaps")
 
 
+@mpl.rc_context(STYLE)
 def main(argv=None):
     paper_root = Path(__file__).resolve().parents[1]
     repo_root = paper_root.parent

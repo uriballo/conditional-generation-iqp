@@ -2,6 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
+from math import comb
+from pathlib import Path
+
 import iqp_cond as ciqp
 import numpy as np
 
@@ -72,3 +77,79 @@ def make_encoder(conditions: np.ndarray, config: RunConfig) -> ciqp.Encoder:
     return ciqp.AngleEncoder(
         np.stack((ry, rz), axis=1), axes=("Y" * N_VISIBLE, "Z" * N_VISIBLE)
     )
+
+
+def export_midpoint_profiles(checkpoints: dict[int, Path], destination: Path) -> dict:
+    """Export exact development profiles from the already selected circuits.
+
+    The additional simulation is read-only: it neither trains nor reselects
+    checkpoints. An existing reporting condition verifies the simulator against
+    the probabilities saved with each checkpoint.
+    """
+    if not checkpoints:
+        raise ValueError("midpoint profiles require selected checkpoints")
+    fitting = np.array([0.0, 0.25, 0.5, 0.75, 1.0])
+    conditions = (fitting[:-1] + fitting[1:]) / 2
+    weights = _states(N_VISIBLE).sum(axis=1).astype(int)
+    records = []
+    for seed, checkpoint in sorted(checkpoints.items()):
+        checkpoint = Path(checkpoint)
+        digest = hashlib.sha256(checkpoint.read_bytes()).hexdigest()
+        with np.load(checkpoint) as saved:
+            np.testing.assert_allclose(saved["training_conditions"], fitting)
+            params = saved["params"].copy()
+            generators = saved["generators"].copy()
+            reference_condition = float(saved["evaluation_conditions"][0])
+            reference_probabilities = saved["held_out_probabilities"][0].copy()
+        queried = np.r_[conditions, reference_condition]
+        angles = np.stack(
+            (
+                np.full((len(queried), N_VISIBLE), 1.5),
+                np.repeat((queried - 0.5)[:, None], N_VISIBLE, axis=1),
+            ),
+            axis=1,
+        )
+        encoder = ciqp.AngleEncoder(angles, axes=("Y" * N_VISIBLE, "Z" * N_VISIBLE))
+        model = ciqp.ConditionalModel(ciqp.Ansatz(generators), encoder)
+        probabilities = np.asarray(model.probabilities(params))
+        if not np.isfinite(probabilities).all() or probabilities.min() < 0:
+            raise ValueError("midpoint simulation returned invalid probabilities")
+        np.testing.assert_allclose(probabilities.sum(axis=1), 1, atol=2e-12, rtol=0)
+        np.testing.assert_allclose(
+            probabilities[-1], reference_probabilities, atol=2e-12, rtol=0
+        )
+        profiles = np.array(
+            [np.bincount(weights, weights=q, minlength=17) for q in probabilities[:4]]
+        )
+        records.append(
+            dict(
+                seed=int(seed),
+                checkpoint_sha256=digest,
+                profiles=profiles.tolist(),
+                probability_crosscheck_max_error=float(
+                    np.max(np.abs(probabilities[-1] - reference_probabilities))
+                ),
+            )
+        )
+    chance = np.sin(1.5 / 2) ** 2
+    encoder_profile = [
+        comb(N_VISIBLE, k) * chance**k * (1 - chance) ** (N_VISIBLE - k)
+        for k in range(N_VISIBLE + 1)
+    ]
+    payload = dict(
+        conditions=conditions.tolist(),
+        training_conditions=fitting.tolist(),
+        condition_role=(
+            "development: excluded from fitting, used for checkpoint selection"
+        ),
+        seeds=[record["seed"] for record in records],
+        records=records,
+        target_profiles=_shell_profile(conditions).tolist(),
+        encoder_profile=encoder_profile,
+        aggregation="Mean exact profile probabilities across selected runs",
+        evaluation="Exact public ConditionalModel.probabilities, without retraining",
+    )
+    destination = Path(destination)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(payload, indent=2) + "\n")
+    return payload

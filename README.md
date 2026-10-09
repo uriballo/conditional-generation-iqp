@@ -1,12 +1,12 @@
 # Conditional generation with IQP Born machines
 
-This repository contains the [paper](paper/main.pdf), its numerical experiments,
-and a pinned link to the [iqp-cond library](https://github.com/uriballo/iqp-cond).
+This repository contains the [paper](paper/main.pdf), its manuscript experiments,
+and a pinned [iqp-cond library](https://github.com/uriballo/iqp-cond) submodule.
+Historical experiments are kept outside the tracked tree in `.local_research/`.
 
 ## Install
 
-Use Python 3.13 and [uv](https://docs.astral.sh/uv/). Repository access is required
-while either repository is private.
+Use Python 3.13 and [uv](https://docs.astral.sh/uv/):
 
 ```sh
 git clone --recurse-submodules https://github.com/uriballo/conditional-generation-iqp.git
@@ -14,14 +14,23 @@ cd conditional-generation-iqp
 uv sync --locked --extra hpo
 ```
 
-For an existing clone, run `git submodule update --init` before installation.
-The submodule is pinned to `f90875da72b3379c1ea38b844a0a908a20eacf24`.
-Do not update it to a moving branch when reproducing this paper. Checkpoint
-recording and optimizer orchestration live here and require no library patches.
+For an existing clone, run `git submodule update --init`. The library is pinned
+to `f90875da72b3379c1ea38b844a0a908a20eacf24`. Use its public API and preserve
+the pin when reproducing the paper.
 
-## Reproduce
+## Current experiment scope
 
-One entry point runs the paper experiments with their reported settings:
+| Experiment | Retained workflow |
+| --- | --- |
+| Gaussian translation | Frozen five-seed training and compact figure replay |
+| Phase-conditioned Gaussian mean and width | Compact figure, control and finite-validation replay; frozen training sources in local research archives |
+| Curie–Weiss | Parity and product inputs; four-family random/TPE HPO; confirmation and final configurations pending |
+| Lattice scaling, 64–2048 qubits | Original product-input training settings and compact figure replay |
+| Sixteen-qubit signed-graph switching | Compact figure replay; frozen training sources in local research archives |
+
+The default training inventory covers the two experiments with maintained fit
+runners: five Gaussian translation fits and eighteen scaling fits. It does not
+start HPO or substitute historical Curie–Weiss fits for the pending comparison.
 
 ```sh
 uv run python run_experiments.py --dry-run
@@ -29,74 +38,80 @@ uv run python run_experiments.py --smoke
 uv run python run_experiments.py
 ```
 
-The default campaign includes Gaussian translation, the shared Curie--Weiss
-model, both independent baseline families, original lattice scaling from 64 to
-2048 qubits, and the three-qubit symmetry example. It uses the selected frozen
-optimizer settings; it does not repeat hyperparameter searches.
+Select `--experiment gaussian` or `--experiment scaling`, set `--workers N`
+for concurrent fits, and use `--output PATH` to choose an output root. Normal
+fits write to `results/paper/reported/`; smoke fits use a separate namespace
+and cannot establish paper results. Full runs are computationally expensive.
+Every fit records configuration, source/library identity, checkpoints and
+metrics. Matching completed jobs resume; incompatible configurations or sources
+are rejected.
 
-Select a subset with `--experiment gaussian`, `curie-weiss`, `scaling`, or
-`symmetry`. Set `--workers N` for concurrent fits and `--output PATH` to choose
-an output directory. The default is one local worker and `results/paper/`.
-Full runs are computationally expensive. Smoke mode reduces budgets and uses a
-separate output namespace; its results are not paper results.
+## Curie–Weiss HPO
 
-Repeat the full staged hyperparameter searches explicitly:
+The sole maintained Curie–Weiss search is frozen in
+`paper_experiments/cw_followup_protocol.json`. It compares shared parity,
+shared product, independent parity and independent unconditional models. Each
+study receives 60 random proposals and an explicit 60-proposal TPE continuation.
+The search uses Adam with constant or cosine learning rates, exact full-TVD
+scores and the specified physics tolerance for checkpoint selection.
 
 ```sh
-uv run python run_experiments.py --mode hpo --dry-run
-uv run python run_experiments.py --mode hpo --smoke
-uv run python run_experiments.py --mode hpo
+uv run python run_experiments.py --mode hpo --experiment curie-weiss --dry-run
+uv run python run_experiments.py --mode hpo --experiment curie-weiss --smoke --workers 2 --output results/cw-cleanup-smoke
+uv run python run_experiments.py --mode hpo --experiment curie-weiss --workers 2 --output results/cw-new-campaign
+# After reviewing a completed random stage, explicitly continue that output root:
+uv run python run_experiments.py --mode hpo --experiment curie-weiss --hpo-phase tpe --workers 2 --output results/cw-new-campaign
 ```
 
-HPO includes 48 unpruned trials each for shared-model cosine Adam and
-Schedule-Free Adam, and one aggregate 48-trial Adam study per independent
-baseline family. Screening, confirmation and final evaluation use distinct
-seed groups. Proposal batches and sampler-update order are fixed. The expanded
-shared-model development grid supplies selection diagnostics, not extra
-training conditions. Independent baselines fit the reported temperatures.
+`--experiment curie-weiss-followup` remains an alias. `--mode hpo` without an
+experiment also selects this campaign. Both phases stop for review; neither
+starts confirmation or final fitting automatically. The manuscript's current
+Curie–Weiss numerical comparison remains pending.
 
-Runs record their configuration, code and library revision, checkpoints and
-metrics. Matching completed jobs resume; incompatible run configurations are
-rejected. Regenerated results and plots stay in the selected output directory
-and do not overwrite the reviewed paper.
+Existing campaigns must run and resume from their frozen source workspaces.
+The cleanup changes source hashes, so this tree cannot resume the earlier
+Strix campaign. Its workspace, launch snapshots and results are preserved.
+Do not weaken the identity checks or copy the cleaned tree over that workspace.
 
 ## Figures and numerical data
 
-Compact audited data in `paper/data/` retain per-seed profiles, profile/full TVD,
-scaling trajectories, selected settings and provenance. Regenerate numerical
-figures and tables without training:
+Replay current numerical figures to ignored outputs without fitting:
 
 ```sh
 uv run python run_experiments.py --mode figures
-# Render completed new runs instead of committed data:
+uv run python run_experiments.py --mode figures --experiment gaussian2d-phase
+uv run python run_experiments.py --mode figures --experiment switching16
 uv run python run_experiments.py --mode figures --data-root results/paper/reported
 ```
 
-Figures show raw circuit distributions. Curie--Weiss tables summarize per-seed
-errors by mean and sample standard deviation; they are not errors of the mean
-plotted profile. Scaling uses median and interquartile range across seed-level
-bank averages, retains negative unbiased estimates and uses size-dependent
-bandwidths. Its original training budgets remain 512 masks and 1024 reference
-draws, with expected mask weights two and four.
+The two-dimensional Gaussian controls and finite-validation evidence have
+separate replay scripts documented in
+[their data README](paper/data/gaussian2d_phase/README.md). The signed-graph
+encoder illustrations have an additional source in
+[the switching data directory](paper/data/switching16/README.md).
 
-## Paper and checks
-
-The source is `paper/main.tex`, with bibliography `paper/references.bib` and
-editable illustration sources in `paper/figure_sources/`. Compile with a TeX
-installation providing REVTeX, Quantikz and TikZ:
+The appendix still cites earlier product-input Curie–Weiss evidence. Its compact
+data and renderer remain available explicitly:
 
 ```sh
-cd paper
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+uv run python run_experiments.py --mode figures --experiment curie-weiss-historical
 ```
 
-Run the focused reproduction checks from the repository root:
+That replay is excluded from the default current-figure set. It does not produce
+the pending parity comparison. Generated figures and tables never replace the
+reviewed paper automatically.
+
+## Checks
 
 ```sh
 uv run pytest
 uv run ruff check paper_experiments tests run_experiments.py
+cd paper
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The supporting modules contain only paper targets, encoders, training,
-evaluation, HPO and plotting. Exploratory studies and historical research
-artifacts are excluded; local results and archives are ignored by Git.
+The TeX build requires REVTeX, Quantikz and TikZ. Preserve reviewed numerical
+artifacts when refactoring. Gaussian translation summarizes seed-wise mean
+errors by their median; Curie–Weiss summaries use means and sample standard
+deviations of per-repeat metrics. Scaling retains negative unbiased MMD estimates,
+size-dependent kernels and the original 512-mask/1024-reference budgets.

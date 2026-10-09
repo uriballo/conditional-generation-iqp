@@ -1,0 +1,603 @@
+{
+  "version": "cw-parity-hpo-followup-author-accepted-v1",
+  "status": "design_closed_not_implemented_not_launched",
+  "accepted_date": "2026-10-09",
+  "campaign_id": "cw-parity-hpo-followup-20261009",
+  "parent_protocol": {
+    "path": ".local_research/cw-hpo-redesign-20261008/HPO_PROTOCOL.json",
+    "protocol_sha256": "9448732b77a5ad250451c190718d85f89e084473afafc37691a9a3c8adbaad50",
+    "change_policy": "immutable completed campaign; separate follow-up"
+  },
+  "scientific_goal": "learn the low-to-high-beta distributional transition and test parameter sharing; accurate thermodynamic-response recovery is not a primary claim",
+  "scope": {
+    "n_qubits": 16,
+    "phases_per_circuit": 136,
+    "generators": "all one- and two-body X-string IQP phases",
+    "ancillas": 0,
+    "families": {
+      "shared_parity": {
+        "circuits_per_repeat": 1,
+        "encoder": "parity",
+        "scope": "main shared conditional model"
+      },
+      "shared_product": {
+        "circuits_per_repeat": 1,
+        "encoder": "product",
+        "scope": "appendix encoder-prior ablation"
+      },
+      "independent_parity": {
+        "circuits_per_repeat": 3,
+        "encoder": "parity",
+        "scope": "main direct-fit independent conditional baseline"
+      },
+      "independent_unconditional": {
+        "circuits_per_repeat": 3,
+        "encoder": "unconditional",
+        "scope": "main direct-fit fixed-input baseline"
+      }
+    },
+    "parameter_tying": false,
+    "scaling": "deferred",
+    "projected_encoder": "replaced by parity; no fifth study",
+    "representation_pilot": "not repeated"
+  },
+  "training": {
+    "loss": "fixed sampled squared-MMD; no added TVD or physics terms; kernel settings fixed within a fit",
+    "shared_anchors": [
+      0.1,
+      0.7,
+      1.3,
+      1.95
+    ],
+    "anchor_allocation": "independent uniform draw per update, probability 1/4 per shared anchor",
+    "target_pool_draws_per_fitting_beta": 1024,
+    "target_pool_policy": {
+      "within_repeat": "fixed_sampled_training_pool_per_anchor; reused_across_updates_and_restarts",
+      "within_stage": "pair_repeat_pools_across_HPO_candidates_matched_families_and_representation_arms_at_identical_anchor",
+      "between_stages": "independent_screen_confirmation_final_pool_streams",
+      "across_repeats": "independent pools with accepted stage-specific repeat counts and structured seed manifest",
+      "generation": "sample_target_law; not_feed_exact_probabilities_into_training_loss",
+      "verification": "record_pool_hashes_and_draw_counts"
+    },
+    "target_minibatch": 256,
+    "reference_draws_per_update": 1024,
+    "operator_masks_per_update": 2048,
+    "mask_refresh": "step",
+    "kernel": {
+      "expected_weight_slots": [
+        "2",
+        "w2",
+        "w3"
+      ],
+      "tunable_grid": [
+        4,
+        4.5,
+        5,
+        5.5,
+        6,
+        6.5,
+        7,
+        7.5,
+        7.99
+      ],
+      "ordered_pair": "w2<=w3; repetitions allowed; 45 pairs",
+      "slot_probabilities": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "duplicate_slots": "retained, giving probability 2/3 when w2=w3",
+      "bandwidth_mapping": "sigma=[-2*log(1-2*w/n)]^(-1/2), before identity-mask exclusion; explicit finite w=7.99 at n=16",
+      "representation": "single categorical over 45 unique ordered pairs; uniform random prior; completed pilot choice retained; no pilot rerun"
+    },
+    "optimizer": {
+      "family": "standard Adam",
+      "beta1": {
+        "range": [
+          0.8,
+          0.95
+        ],
+        "sampling": "continuous_uniform_initial_prior_TPE_adapts_after_startup",
+        "reference": 0.9
+      },
+      "beta2": {
+        "range": [
+          0.95,
+          0.999
+        ],
+        "sampled_parameter": "1-beta2",
+        "sampled_range": [
+          0.001,
+          0.05
+        ],
+        "sampling": "continuous_log_uniform_initial_prior_TPE_adapts_after_startup",
+        "reference": 0.999
+      },
+      "epsilon": 1e-08,
+      "eps_root": 0,
+      "weight_decay": 0,
+      "learning_rate": {
+        "range": [
+          0.0003,
+          0.1
+        ],
+        "sampling": "continuous_log_uniform_initial_prior_TPE_adapts_after_startup"
+      },
+      "schedule": {
+        "search": true,
+        "choices": [
+          "constant",
+          "cosine"
+        ],
+        "random_prior": [
+          0.5,
+          0.5
+        ],
+        "cosine_final_learning_rate_ratio": 0.1,
+        "duration_updates": 2000,
+        "warmup_updates": 0
+      },
+      "warmup_updates": 0
+    },
+    "initialization": {
+      "family": "independent_zero_mean_Gaussian",
+      "per_parameter_standard_deviation_range": [
+        0.01,
+        1.0
+      ],
+      "sampling": "continuous_log_uniform_initial_prior_TPE_adapts_after_startup",
+      "mean": 0,
+      "clipping_or_wrapping": false,
+      "normalization_by_qubit_count": false
+    },
+    "encoder": {
+      "scale_range": [
+        0.25,
+        1.5
+      ],
+      "scale_prior": "log_uniform",
+      "scale_sharing": "one scalar per conditional candidate; joint across independent parity cases",
+      "rotation_bound": "abs(s*beta)<=3<pi for beta in [0,2]",
+      "product": "RZ(s*beta) RY(pi/2)|0> on every physical wire; RY fixed",
+      "parity": "RX(s*beta) on wires 0..14; CNOT from each leaf to wire 15; Hadamard on all 16 wires",
+      "parity_reference": "15 independent Bernoulli bits with probability sin(s*beta/2)^2, root XOR; no ancillas",
+      "parity_physical_equivalent": "exp(-i*s*beta/2*sum_i Z_i Z_15)|+>^16",
+      "parity_guarantee": "global spin-flip invariance preserved by X-generated IQP; not full permutation invariance",
+      "unconditional": "|0>^16; no scale parameter"
+    },
+    "numerics": "preserve manuscript precision and public-library contraction conventions; record actual environment and implementation tolerances before launch"
+  },
+  "temperature_sets": {
+    "artifact": "TEMPERATURE_GRIDS_FOLLOWUP.json",
+    "canonical_sha256": "b5d2d8d67b6c51f8521d183a5be7b5ff11aedc55a6bc6bd1ad5440581cea6e18",
+    "shared_anchors_exact": [
+      "1/10",
+      "7/10",
+      "13/10",
+      "39/20"
+    ],
+    "A_exact": [
+      "1/20",
+      "17/100",
+      "29/100",
+      "41/100",
+      "53/100",
+      "13/20",
+      "77/100",
+      "89/100",
+      "101/100",
+      "113/100",
+      "5/4",
+      "137/100",
+      "149/100",
+      "161/100",
+      "173/100",
+      "37/20",
+      "79/40"
+    ],
+    "B_exact": [
+      "3/40",
+      "27/200",
+      "23/100",
+      "7/20",
+      "47/100",
+      "59/100",
+      "27/40",
+      "147/200",
+      "83/100",
+      "19/20",
+      "107/100",
+      "119/100",
+      "51/40",
+      "267/200",
+      "143/100",
+      "31/20",
+      "167/100",
+      "179/100",
+      "19/10",
+      "157/80"
+    ],
+    "common_markers_exact": [
+      "2/5",
+      "1",
+      "2"
+    ],
+    "final_shared_grid_exact": [
+      "0",
+      "2/297",
+      "8/297",
+      "14/297",
+      "20/297",
+      "26/297",
+      "32/297",
+      "38/297",
+      "4/27",
+      "50/297",
+      "56/297",
+      "62/297",
+      "68/297",
+      "74/297",
+      "80/297",
+      "86/297",
+      "92/297",
+      "98/297",
+      "104/297",
+      "10/27",
+      "116/297",
+      "122/297",
+      "128/297",
+      "134/297",
+      "140/297",
+      "146/297",
+      "152/297",
+      "158/297",
+      "164/297",
+      "170/297",
+      "16/27",
+      "182/297",
+      "188/297",
+      "194/297",
+      "200/297",
+      "206/297",
+      "212/297",
+      "218/297",
+      "224/297",
+      "230/297",
+      "236/297",
+      "22/27",
+      "248/297",
+      "254/297",
+      "260/297",
+      "266/297",
+      "272/297",
+      "278/297",
+      "284/297",
+      "290/297",
+      "296/297",
+      "302/297",
+      "28/27",
+      "314/297",
+      "320/297",
+      "326/297",
+      "332/297",
+      "338/297",
+      "344/297",
+      "350/297",
+      "356/297",
+      "362/297",
+      "368/297",
+      "34/27",
+      "380/297",
+      "386/297",
+      "392/297",
+      "398/297",
+      "404/297",
+      "410/297",
+      "416/297",
+      "422/297",
+      "428/297",
+      "434/297",
+      "40/27",
+      "446/297",
+      "452/297",
+      "458/297",
+      "464/297",
+      "470/297",
+      "476/297",
+      "482/297",
+      "488/297",
+      "494/297",
+      "500/297",
+      "46/27",
+      "512/297",
+      "518/297",
+      "524/297",
+      "530/297",
+      "536/297",
+      "542/297",
+      "548/297",
+      "554/297",
+      "560/297",
+      "566/297",
+      "52/27",
+      "578/297",
+      "584/297",
+      "590/297",
+      "2"
+    ],
+    "final_grid_sha256": "8b47464058f8e9756d7a07e702082e5a14659fe068a5034ca35ba958d141007d"
+  },
+  "objectives": {
+    "primary": {
+      "per_repeat": "J_r=(2*max_beta TVD_r+normalized_trapezoidal_temperature_average(TVD_r))/3",
+      "candidate": "mean_r J_r",
+      "average_domain": "actual stage evaluation span; no padding to unevaluated endpoints",
+      "single_temperature": "max and average both equal point value",
+      "repeat_aggregation": "compute metrics per selected fit/case before arithmetic averaging; never score averaged probabilities"
+    },
+    "physics": {
+      "magnetization_error": "abs(E_model|m|-E_target|m|), natural unit range",
+      "fluctuation_error": "abs(c_fluc_model-c_fluc_target)/c_star",
+      "normalization_artifact": "PHYSICS_NORMALIZATION.json",
+      "c_star": 0.8231097389772882,
+      "normalization_fixed": "same target-only value across families and stages",
+      "per_repeat": "P_r=0.5*(R(e_m,r)+R(e_c,r)); R(e)=(2*max_beta e+normalized_trapezoidal_average(e))/3",
+      "candidate": "mean_r P_r",
+      "excluded_from_selection": [
+        "signed mean magnetization",
+        "spin-flip defect"
+      ],
+      "interpretation": "learned c_fluc is an energy-fluctuation statistic, not a verified thermal derivative"
+    },
+    "eligibility": {
+      "absolute_primary_tolerance": 0.01,
+      "anchor": "minimum primary score over the same selection-stage candidate pool",
+      "winner": "minimum physics score inside primary eligibility set",
+      "not": "statistical equivalence or hard absolute-accuracy requirement"
+    },
+    "sampler_feedback": "primary J only; P and component curves retained as metadata; no extra scalar physics weight or multiobjective sampler"
+  },
+  "fit_selection": {
+    "checkpoint_steps": [
+      0,
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900,
+      1000,
+      1100,
+      1200,
+      1300,
+      1400,
+      1500,
+      1600,
+      1700,
+      1800,
+      1900,
+      2000
+    ],
+    "procedure": "per circuit/repeat pool all scheduled checkpoints from all available starts; find pool minimum J; choose minimum P within J<=pool_min+0.01; apply tolerance once over full pool",
+    "shared_temperatures": "A only in every stage; B never chooses checkpoints/starts",
+    "independent_temperatures": "direct-fit reporting case only; single-temperature score convention",
+    "ties": "physics score, then primary score, then earliest checkpoint step, then lowest start index",
+    "retention": "retain recoverable parameters and J/P/components for all checkpoints, plus selected/end states; no mixture of fitted states"
+  },
+  "independent_families": {
+    "configuration": "one jointly selected hyperparameter configuration per family; independent learned phases per case; shared scale for parity",
+    "primary_and_physics": "aggregate cases across actual reporting temperatures within each repeat using accepted R, then average repeat scores",
+    "resource_difference": "3 circuits/408 phases/3 times updates; 3072 target-pool entries versus 4096 for a shared repeat",
+    "evaluation": "report at directly fitted cases; no independent continuous response or whole-grid accuracy claim"
+  },
+  "search": {
+    "trials_per_study": 120,
+    "random_trials": 60,
+    "tpe_trials": 60,
+    "trial_counts": "proposals including numerical failures; same-identity infrastructure retry does not add a proposal",
+    "screening": {
+      "repeats": 5,
+      "starts_per_repeat_per_circuit": 1,
+      "updates_per_start": 2000,
+      "shared_score_temperatures": "A",
+      "independent_score_temperatures": "common markers"
+    },
+    "random_phase": {
+      "distribution": "independent draws from frozen priors; 45 kernel pairs uniform; schedule choices equally probable; no forced balance or adaptive draw",
+      "scheduling": "parallel trials/studies permitted within validated GPU capacity; freeze configurations/IDs/seeds before scheduling",
+      "required_completed_proposals_all_studies": 240,
+      "pause": "every study stops after 60; joint user review before TPE; no automatic confirmation/final fitting",
+      "review": "A/direct-case scores and curves, MMD trajectories, kernel/schedule choices, coverage/failures; no shared B/F model inspection",
+      "forced_reference_checks": "not part of 60 independent draws; no extra fitting checks included in nominal campaign"
+    },
+    "tpe_phase": {
+      "resume": "same study includes all 60 random outcomes; no empty-study restart",
+      "proposal_order": "sequential within study, concurrent studies permitted",
+      "feedback": "primary J",
+      "continuation_authorization": "explicit agreement after random-stage review"
+    },
+    "sampler": {
+      "version": "locked Optuna 5.0.0; record dependency-lock hash",
+      "n_startup_trials": 60,
+      "n_ei_candidates": 24,
+      "multivariate": true,
+      "group": false,
+      "constant_liar": true,
+      "pruner": "NopPruner",
+      "proposal_batch_size": 1,
+      "other_controls": "retain pinned defaults; 60 independently sampled random observations precede adaptive TPE; no extra warm-start/queued study proposals",
+      "rationale": "one frozen categorical/numeric search space per family; sequential adaptive proposals; inherited multivariate TPE",
+      "limitation": "these settings freeze an algorithm, not an empirically proven optimal sampler; backend concurrency remains a separate feasibility check"
+    },
+    "protocol_revision_at_review": "any changed settings get a named new protocol with disclosed development history; no silently mixed incomparable scores"
+  },
+  "confirmation": {
+    "candidates_minimum": 3,
+    "candidates_maximum": 4,
+    "source": "all 120 screening proposals in each study",
+    "shortlist": "best J; best P within J_min+0.01; fill to three distinct configurations by J; add global best P if not already selected",
+    "ties": "J ranking: (J,P,trial_id); P ranking: (P,J,trial_id); exact duplicate configurations count once",
+    "repeats_per_candidate": 5,
+    "starts_per_repeat_per_circuit": 3,
+    "updates_per_start": 2000,
+    "shared_rank_temperatures": "A union B, 37 points; fitted checkpoints still selected on A only",
+    "independent_rank_temperatures": "common direct-fit markers",
+    "winner": "recompute confirmed J/P and minimum J among valid confirmed candidates, then minimize P among J<=confirmed_min+0.01",
+    "global_physics_candidate": "same confirmed eligibility guardrail; otherwise tradeoff diagnostic",
+    "feedback_to_tpe": "none; no further proposals after B inspection"
+  },
+  "final_fitting": {
+    "fresh_repeats_per_frozen_family": 10,
+    "starts_per_repeat_per_circuit": 3,
+    "updates_per_start": 2000,
+    "shared_selection": "accepted checkpoint/start rule on A only",
+    "independent_selection": "accepted rule on directly fitted beta only",
+    "repeat_retention": "all ten selected repeat outcomes; no best-repeat selection",
+    "checkpoint_steps": [
+      0,
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900,
+      1000,
+      1100,
+      1200,
+      1300,
+      1400,
+      1500,
+      1600,
+      1700,
+      1800,
+      1900,
+      2000
+    ],
+    "checkpoints_apply_to": "all stages; initialization and final included; full budget, no performance early stopping"
+  },
+  "randomness": {
+    "master_seed": 2026100801,
+    "campaign_namespace": "cw-parity-hpo-followup-20261009 included in every stream; prevents reuse of completed campaign pools/starts",
+    "derivation": "stable SHA-256-derived seeds from canonical structured stream keys; record full keys/digests, actual backend seed widths, intentional pairing groups and collision checks",
+    "target_pool_key": "campaign,stage,repeat,exact_training_beta,purpose; omit family/candidate/restart to pair compatible pools",
+    "fit_stream_key": "campaign,stage,repeat,case,restart,purpose; case shared or exact independent beta; compatible families paired; omit candidate to preserve paired proposal comparisons",
+    "case_pairing": "shared product/parity share compatible streams; independent parity/unconditional share case streams; initialization standard normals scaled by candidate width",
+    "purposes": [
+      "target_pool",
+      "initialization",
+      "target_minibatch",
+      "operator_masks",
+      "reference_draws",
+      "anchor_schedule"
+    ],
+    "sampler_key": "campaign,sampler,family,phase; independent of fitting randomness",
+    "stage_separation": "screen versus confirmation versus final independent target pools/fit streams; random and TPE use the same screen repeat identities",
+    "reference_note": "same reference seed does not imply same model-dependent samples",
+    "preflight_requirement": "record complete manifest and collision/intentional pairing checks; one sampler seed per study"
+  },
+  "failures": {
+    "screening": "120 proposed configurations per study in two phases; numerical failures count in their phase; primary penalty 1 with flag, not measured TVD; invalid candidates ineligible for shortlist; physics failures flag candidate invalid",
+    "numerical_scope": "nonfinite parameters, gradient, probabilities or metric, or invalid probability normalization beyond declared numerical tolerance; numerical tolerances must be recorded before campaign launch",
+    "remaining_repeats": "complete eligible screening repeats using their fixed identities; never replace a failed repeat with another seed; irrecoverably invalid configuration may terminate remaining fits and penalize remaining repeats, with reason retained",
+    "shortlist": "require at least three distinct valid screening configurations; confirm original three plus global physics candidate if new; otherwise halt for diagnosis without adding proposals",
+    "confirmation": "any numerically failed confirmation candidate is ineligible; choose among remaining eligible confirmed candidates; halt if none",
+    "final": "an unresolved final numerical failure halts evaluation for diagnosis; no replacement seed, favorable-repeat selection or silent denominator change",
+    "infrastructure": "one automatic replay/resume of the same immutable job after an infrastructure interruption; second interruption pauses execution for diagnosis without consuming a new proposal or assigning a numerical penalty",
+    "identity": "new campaign namespace plus matching config/source/library/environment/seed identities; durable proposal IDs and phase counters; resolve pending jobs before new proposals; random parallel completion order must not alter configuration draws",
+    "limitation": "failure penalties are search conventions, not observed errors; failures may reduce the eligible search set and must be disclosed"
+  },
+  "reporting": {
+    "fresh_final_repeats": 10,
+    "aggregate": "per-fit metrics before mean and sample SD ddof=1; retain all repeats; SD is not a confidence interval",
+    "main_comparison": "shared parity, independent parity and independent unconditional at common markers; shared parity full sweep; no product curves in main comparison",
+    "appendix": "matched shared product/parity ablation; physics diagnostics retained regardless of outcomes; disclose physics-based selection",
+    "shared_full_grid": "unchanged 101-point F grid; report raw worst TVD, normalized TVD integral and combined J; extra evaluations at common markers do not select fits",
+    "independent": "marker errors and matched marker aggregate only; no independent whole-grid integral/max claim",
+    "profiles": "signed magnetization distributions illustrate transition; full bitstring TVD guards against within-shell errors",
+    "physics": "mean absolute magnetization, c_fluc, component errors and P; signed mean/flip defect diagnostic only",
+    "range_labels": "shared interpolation [0.1,1.95]; small edge extrapolation outside; marker locations excluded from shared A/B but range previously explored",
+    "resource_disclosure": "equal HPO proposal/per-circuit budgets do not imply equal aggregate parameters, target draws or updates",
+    "claims": "no guaranteed parity superiority, continuum fidelity, thermodynamic-response recovery or practical quantum advantage; report finite-search outcomes under this protocol"
+  },
+  "nominal_resource_accounting": {
+    "per_family": {
+      "shared_parity": {
+        "random_proposals": 60,
+        "tpe_proposals": 60,
+        "random_starts": 300,
+        "tpe_starts": 300,
+        "confirmation_starts_minimum": 45,
+        "confirmation_starts_maximum": 60,
+        "final_starts": 30,
+        "total_starts_minimum": 675,
+        "total_starts_maximum": 690
+      },
+      "shared_product": {
+        "random_proposals": 60,
+        "tpe_proposals": 60,
+        "random_starts": 300,
+        "tpe_starts": 300,
+        "confirmation_starts_minimum": 45,
+        "confirmation_starts_maximum": 60,
+        "final_starts": 30,
+        "total_starts_minimum": 675,
+        "total_starts_maximum": 690
+      },
+      "independent_parity": {
+        "random_proposals": 60,
+        "tpe_proposals": 60,
+        "random_starts": 900,
+        "tpe_starts": 900,
+        "confirmation_starts_minimum": 135,
+        "confirmation_starts_maximum": 180,
+        "final_starts": 90,
+        "total_starts_minimum": 2025,
+        "total_starts_maximum": 2070
+      },
+      "independent_unconditional": {
+        "random_proposals": 60,
+        "tpe_proposals": 60,
+        "random_starts": 900,
+        "tpe_starts": 900,
+        "confirmation_starts_minimum": 135,
+        "confirmation_starts_maximum": 180,
+        "final_starts": 90,
+        "total_starts_minimum": 2025,
+        "total_starts_maximum": 2070
+      }
+    },
+    "random_proposals": 240,
+    "tpe_proposals": 240,
+    "screening_proposals": 480,
+    "random_starts": 2400,
+    "tpe_starts": 2400,
+    "confirmation_starts_minimum": 360,
+    "confirmation_starts_maximum": 480,
+    "final_starts": 240,
+    "total_starts_minimum": 5400,
+    "total_starts_maximum": 5520,
+    "random_optimizer_updates": 4800000,
+    "total_optimizer_updates_minimum": 10800000,
+    "total_optimizer_updates_maximum": 11040000,
+    "assumptions": "3 or 4 distinct valid confirmation candidates per study, all runs succeed; excludes backend correctness/benchmark checks and identical infrastructure retries; no representation pilot or extra recovery fits",
+    "eta": "not established for parity/full objective/concurrency; benchmark before launch"
+  },
+  "implementation_before_execution": [
+    "paper-side public API encoder/metric/selection adapters; no library changes",
+    "separate protocol loader, hashes and seed/collision manifest",
+    "durable independent-random phase, cross-study review barrier and explicit TPE continuation",
+    "checkpoint parameter retention and objective/tolerance selection correctness",
+    "parity probability, reference sampling/amplitude ratios and gradients versus exact small cases",
+    "CPU/GPU numerical compatibility and bounded throughput/memory benchmark in existing GPU container",
+    "meaningful smoke, resume/retry and stage-boundary tests",
+    "record config/source/library/environment/pools/seeds and metrics for each fit"
+  ],
+  "authorization": "author accepted design only; no implementation, GPU preflight, training/HPO launch or manuscript replacement performed by this freeze; TPE requires post-random-review agreement",
+  "protocol_sha256": "135330d93182535afa2eb8cfc933340e3e86f64ea57f9e28d366cdde9127f02d"
+}

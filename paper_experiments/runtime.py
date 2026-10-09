@@ -7,43 +7,18 @@ import json
 from dataclasses import replace
 from pathlib import Path
 
-import numpy as np
-
 from .config import RunConfig
 
-GAUSSIAN_SEEDS = tuple(range(17100, 17110))
-SHARED_SEEDS = BASELINE_SEEDS = tuple(range(5400, 5405))
+GAUSSIAN_SEEDS = tuple(range(17100, 17105))
 SCALING_SIZES = (64, 128, 256, 512, 1024, 2048)
 SCALING_SEEDS = (100, 101, 102)
-REPORT_BETAS = (0.4, 1.0, 1.6)
 LIBRARY_COMMIT = "f90875da72b3379c1ea38b844a0a908a20eacf24"
 SELECTED = {
-    "shared": dict(
-        name="adam",
-        learning_rate=0.04014691865370211,
-        final_learning_rate_ratio=0.08111685641025783,
-        init_scale=0.43008014083790563,
-        b1=0.967827235881252,
-    ),
-    "conditional": dict(
-        name="adam",
-        learning_rate=0.040042143801868595,
-        final_learning_rate_ratio=0.01954909530299359,
-        init_scale=0.3494510602968495,
-        b1=0.8120567898119135,
-    ),
-    "unconditional": dict(
-        name="adam",
-        learning_rate=0.032402102895288054,
-        final_learning_rate_ratio=0.011269232004298215,
-        init_scale=0.07580759858905509,
-        b1=0.9750900060714265,
-    ),
     "gaussian": dict(
         name="adam",
         learning_rate=0.005,
         final_learning_rate_ratio=0.1,
-        init_scale=0.05,
+        init_scale=0.25,
         b1=0.9,
     ),
     "scaling": dict(
@@ -65,17 +40,12 @@ def digest(value):
 def build_job(
     experiment, seed, *, size=None, optimizer=None, stage="reported", beta=None
 ):
-    if experiment not in (*SELECTED, "symmetry") or stage not in (
-        "reported",
-        "screen",
-        "confirm",
-        "final",
-    ):
+    if experiment not in SELECTED or stage != "reported":
         raise ValueError("unsupported experiment or stage")
+    if beta is not None:
+        raise ValueError("reported jobs do not accept beta")
     if experiment == "scaling" and size not in SCALING_SIZES:
         raise ValueError("unsupported scaling size")
-    if experiment in ("conditional", "unconditional") and beta not in REPORT_BETAS:
-        raise ValueError("baseline needs one reporting temperature")
     settings = dict(optimizer or SELECTED.get(experiment, {}))
     if "optimizer" in settings:
         settings["name"] = settings.pop("optimizer")
@@ -87,8 +57,7 @@ def build_job(
         stage=stage,
         beta=beta,
     )
-    if experiment != "symmetry":
-        job["config"] = config_for(job).as_dict()
+    job["config"] = config_for(job).as_dict()
     job["job_id"] = digest(job)[:16]
     return json.loads(json.dumps(job))
 
@@ -129,21 +98,23 @@ def config_for(job, *, smoke=False):
         base.update(
             encoder="broadcast_ryrz",
             condition_protocol="frozen5",
-            n_train=1000,
+            n_train=512,
             n_validation=1000,
             n_test=1000,
-            steps=300,
-            batch_size=100,
+            steps=1024,
+            batch_size=128,
             n_ops=1024,
             mc_samples=1024,
-            validation_interval=30,
+            validation_interval=32,
             validation_n_ops=1024,
             validation_mc_samples=1024,
             bodyness_targets=(1.0,),
             restarts=1,
+            selection_mode="exact_development_profile_tvd",
         )
     elif kind == "scaling":
         base.update(
+            encoder="phase_075",
             n_visible=job["size"],
             steps=5000,
             n_ops=512,
@@ -153,14 +124,6 @@ def config_for(job, *, smoke=False):
             bodyness_targets=(2.0, 4.0),
             selection_mode="validation_mmd",
         )
-    elif kind in ("conditional", "unconditional"):
-        base.update(
-            fit_condition=(job["beta"],), selection_mode="exact_training_profile_tvd"
-        )
-        if kind == "unconditional":
-            base.update(
-                encoder="blind", model_kind="independent_direct", budget_mode="direct"
-            )
     config = RunConfig(**base)
     if smoke:
         config = replace(
@@ -182,37 +145,24 @@ def config_for(job, *, smoke=False):
 
 
 def _source_identity():
+    import iqp_cond
+
     from . import engine
 
     sources = {
         p.name: hashlib.sha256(p.read_bytes()).hexdigest()
         for p in Path(__file__).parent.glob("*.py")
     }
-    return dict(state=engine.repo_state(), source_sha256=sources)
-
-
-def _symmetry(directory):
-    # U=H D H evaluated directly on the two stated input states.
-    phases = np.asarray([0.70, -1.25, 0.06, 1.34, -0.08, 0.77])
-    codes = np.arange(8)
-    bits = (codes[:, None] >> np.arange(3)) & 1
-    generators = np.asarray(
-        [[1, 0, 0], [0, 1, 0], [0, 0, 1], [1, 1, 0], [1, 0, 1], [0, 1, 1]]
+    library_root = Path(iqp_cond.__file__).parent
+    library_sources = {
+        str(p.relative_to(library_root)): hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in sorted(library_root.rglob("*.py"))
+    }
+    return dict(
+        state=engine.repo_state(),
+        source_sha256=sources,
+        library_source_sha256=library_sources,
     )
-    h = (-1.0) ** (bits @ bits.T) / np.sqrt(8)
-    unitary = h @ np.diag(np.exp(1j * ((-1.0) ** (bits @ generators.T)) @ phases)) @ h
-    ordinary = np.zeros(8)
-    ordinary[0] = 1
-    encoded = ordinary.copy() / np.sqrt(2)
-    encoded[3] = 1 / np.sqrt(2)
-    record = dict(
-        encoded=(np.abs(unitary @ encoded) ** 2).tolist(),
-        ordinary=(np.abs(unitary @ ordinary) ** 2).tolist(),
-        phase_vector=phases.tolist(),
-        flip_mask_little_endian=3,
-    )
-    directory.mkdir(parents=True, exist_ok=True)
-    return record
 
 
 def execute_job(job, output_root, *, smoke=False):
@@ -242,6 +192,8 @@ def execute_job(job, output_root, *, smoke=False):
         source_sha256=source["source_sha256"],
         library_commit=LIBRARY_COMMIT,
     )
+    if job["experiment"] == "scaling":
+        identity["library_source_sha256"] = source["library_source_sha256"]
     if receipt_path.exists():
         old = json.loads(receipt_path.read_text())
         if old["identity"] != identity:
@@ -249,51 +201,44 @@ def execute_job(job, output_root, *, smoke=False):
         if not (Path(old["record"]["directory"]) / "metrics.json").exists():
             raise ValueError("completed receipt has missing artifacts")
         return old["record"]
-    if job["experiment"] == "symmetry":
-        directory = root / "symmetry" / job["job_id"]
-        record = _symmetry(directory)
-        record["directory"] = str(directory)
-        engine._write_json(directory / "metrics.json", record)
-        engine._write_json(directory / "run.json", source)
+    config = config_for(job, smoke=smoke)
+    study = build_study(job, config)
+    settings = {k: v for k, v in job["optimizer"].items() if k != "init_scale"}
+    trainer = make_trainer(settings)
+    if job["experiment"] == "scaling":
+        from .scaling import _evaluate_mmd_trajectory
+
+        def evaluate(model, snapshots, conditions, seed, best_step):
+            return _evaluate_mmd_trajectory(
+                model,
+                snapshots,
+                conditions,
+                seed,
+                best_step,
+                config=config,
+                replicate_banks=2 if smoke else 5,
+                target_draws=32 if smoke else 2000,
+                evaluation_interval=2 if smoke else 500,
+            )
+
+        record = engine.run_large(
+            config,
+            study,
+            job["seed"],
+            evaluate=evaluate,
+            output_root=root,
+            training_fn=trainer,
+        )
     else:
-        config = config_for(job, smoke=smoke)
-        study = build_study(job, config)
-        settings = {k: v for k, v in job["optimizer"].items() if k != "init_scale"}
-        trainer = make_trainer(settings)
-        if job["experiment"] == "scaling":
-            from .scaling import _evaluate_mmd_trajectory
-
-            def evaluate(model, snapshots, conditions, seed, best_step):
-                return _evaluate_mmd_trajectory(
-                    model,
-                    snapshots,
-                    conditions,
-                    seed,
-                    best_step,
-                    config=config,
-                    replicate_banks=2 if smoke else 5,
-                    target_draws=32 if smoke else 2000,
-                    evaluation_interval=2 if smoke else 500,
-                )
-
-            record = engine.run_large(
-                config,
-                study,
-                job["seed"],
-                evaluate=evaluate,
-                output_root=root,
-                training_fn=trainer,
-            )
-        else:
-            record = engine.run(
-                config,
-                study,
-                job["seed"],
-                output_root=root,
-                training_fn=trainer,
-                capture_checkpoints=True,
-            )
-        record["mean_selection_score"] = record["best_selection_score"]
+        record = engine.run(
+            config,
+            study,
+            job["seed"],
+            output_root=root,
+            training_fn=trainer,
+            capture_checkpoints=True,
+        )
+    record["mean_selection_score"] = record["best_selection_score"]
     record.update(
         experiment=job["experiment"], job_id=job["job_id"], job=job, smoke=bool(smoke)
     )

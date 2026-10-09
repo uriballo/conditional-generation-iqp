@@ -5,6 +5,14 @@ one reproduction entry point backed by `paper_experiments/`.
 
 - Do not edit or publish the library from this repository. Use its public API.
 - Retain only experiments and diagnostics described by the current manuscript.
+- Current Curie--Weiss HPO is `cw_followup_*`: parity/product inputs and independent
+  parity/unconditional baselines. Final comparisons are pending. Older product
+  evidence is retained only for the transitional appendix.
+- Default reported fits cover Gaussian translation and original product-input
+  lattice scaling. Phase-conditioned Gaussian and switching16 have compact replay
+  workflows; their frozen training sources remain in local research archives.
+- Resume pre-cleanup campaigns only from their frozen source workspaces; never
+  weaken source identity checks or replace a running campaign's source.
 - Preserve manuscript settings, seed schedules, selection and aggregation when
   refactoring. Record run configurations, revisions and metrics for every fit.
 - New runs write to ignored `results/`; never replace reviewed paper artifacts

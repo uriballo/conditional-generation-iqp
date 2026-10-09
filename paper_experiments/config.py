@@ -34,6 +34,7 @@ SELECTION_MODES = (
     "exact_training_tvd",
     "exact_training_profile_tvd",
     "exact_development_profile_tvd",
+    "exact_development_tvd",
     "validation_mmd",
 )
 BUDGET_MODES = (
@@ -137,8 +138,15 @@ class RunConfig:
 
     def training_config(self) -> ciqp.TrainingConfig:
         """Return the library training configuration for this run."""
-        cap = 0.49 * self.n_visible
-        targets = [min(float(target), cap) for target in self.bodyness_targets]
+        cap = self.n_visible / 2.0
+        targets = [float(target) for target in self.bodyness_targets]
+        if any(
+            not math.isfinite(target) or not 0.0 < target < cap for target in targets
+        ):
+            raise ValueError(
+                "every bodyness target must be finite and satisfy "
+                "0 < expected_weight < n_visible / 2"
+            )
         sigmas = tuple(
             float(
                 (-2.0 * math.log(1.0 - 2.0 * target / self.n_visible)) ** -0.5,

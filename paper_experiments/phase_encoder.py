@@ -22,25 +22,32 @@ class BroadcastPhaseEncoder:
     width: int
     amp_zero: jax.Array
     amp_one: jax.Array
+    beta_scale: float = 0.75
 
     @classmethod
-    def from_betas(cls, betas, width):
+    def from_betas(cls, betas, width, beta_scale=0.75):
         values = np.asarray(betas, dtype=np.float64).reshape(-1)
         if width < 1 or not len(values) or not np.isfinite(values).all():
             raise ValueError("nonempty finite temperatures and positive width required")
-        angles = np.stack([np.full_like(values, np.pi / 2), 0.75 * values], axis=1)[
+        scale = float(beta_scale)
+        if not np.isfinite(scale) or scale <= 0 or np.any(abs(scale * values) > np.pi):
+            raise ValueError(
+                "positive finite scale and encoder angles within [-pi, pi] required"
+            )
+        angles = np.stack([np.full_like(values, np.pi / 2), scale * values], axis=1)[
             ..., None
         ]
         # The public one-qubit encoder pins the same floating-point amplitudes.
         local = ciqp.AngleEncoder(angles, axes=("Y", "Z")).post_hadamard_amplitudes()
-        return cls(jnp.asarray(values), width, local[:, 0], local[:, 1])
+        return cls(jnp.asarray(values), width, local[:, 0], local[:, 1], scale)
 
     def tree_flatten(self):
-        return (self.betas, self.amp_zero, self.amp_one), self.width
+        return (self.betas, self.amp_zero, self.amp_one), (self.width, self.beta_scale)
 
     @classmethod
-    def tree_unflatten(cls, width, children):
-        return cls(children[0], width, children[1], children[2])
+    def tree_unflatten(cls, metadata, children):
+        width, scale = metadata
+        return cls(children[0], width, children[1], children[2], scale)
 
     @property
     def n_conditions(self):
@@ -54,7 +61,8 @@ class BroadcastPhaseEncoder:
     def angles(self):
         return jnp.broadcast_to(
             jnp.stack(
-                [jnp.full_like(self.betas, jnp.pi / 2), 0.75 * self.betas], axis=1
+                [jnp.full_like(self.betas, jnp.pi / 2), self.beta_scale * self.betas],
+                axis=1,
             )[..., None],
             (self.n_conditions, 2, self.width),
         )
@@ -64,7 +72,11 @@ class BroadcastPhaseEncoder:
             raise IndexError("condition outside encoder")
         sl = slice(condition, condition + 1)
         return type(self)(
-            self.betas[sl], self.width, self.amp_zero[sl], self.amp_one[sl]
+            self.betas[sl],
+            self.width,
+            self.amp_zero[sl],
+            self.amp_one[sl],
+            self.beta_scale,
         )
 
     def sample(self, key, n_samples):
