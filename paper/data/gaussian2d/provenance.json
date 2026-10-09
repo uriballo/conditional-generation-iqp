@@ -1,0 +1,23 @@
+{
+  "artifact": "gaussian2d",
+  "data_files": {
+    "DENSE_GRID.npz": "7c5d9495f8b4cef13f6db10f79eb28c88db7f04c0ab0c8627d321f09f818b389",
+    "DENSE_GRID.json": "813ec6aa2311833508f98bbfd9bf8b9c799c88806ef3c0af6d92294806bcbed6",
+    "results.json": "d128e8061e52607f20311aa7361fd53cfeae642105b04b5e6923e1686694b6ad"
+  },
+  "original_reviewed_artifact": {
+    "dense_npz_sha256": "7c5d9495f8b4cef13f6db10f79eb28c88db7f04c0ab0c8627d321f09f818b389",
+    "dense_json_sha256": "f7c37c0112900cd0219579e3c64dd624387bf60f0cc8b62d1335d0a1042a7ea1"
+  },
+  "source_records": [
+    "results/gaussian2d-simple-figure-20261008/DENSE_GRID.json",
+    "results/gaussian2d-combined-20261008/SUMMARY.json",
+    "results/gaussian2d-simplicity-20261008/SUMMARY.json"
+  ],
+  "analysis_source_manifests": [
+    "results/gaussian2d-combined-20261008/source-manifest.json",
+    "results/gaussian2d-simplicity-20261008/source-manifest.json"
+  ],
+  "reproducibility_note": "Fit source files and library source remain in ignored local research/results records; this repository artifact publishes data, summaries, hashes, and the figure renderer only.",
+  "repository_revision": "13f1138dcf4afd95db79004e93134ab083def49c"
+}

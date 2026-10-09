@@ -1,0 +1,448 @@
+{
+  "variant": "onebody_linear",
+  "radial_width_power": 1,
+  "scope": "post-selection diagnostic; no fitting or model selection on dense grid",
+  "grid_shape": [
+    41,
+    41
+  ],
+  "ordering": "v-major, u-minor",
+  "coordinate_mapping": "mu=8+3u; sigma_G=2(1+0.2v)",
+  "source_manifest_sha256": "dd36c98caeb52f7236f34381b7796bf948838cb97576c786561b7e893336dcc9",
+  "source_identity": {
+    "backend": "cpu",
+    "devices": [
+      "cpu:0"
+    ],
+    "origin": {
+      "library_dirty": "M USER_GUIDE.md\n M src/iqp_cond/training.py\n M tests/test_training.py",
+      "library_revision": "f90875da72b3379c1ea38b844a0a908a20eacf24",
+      "paper_dirty": "M README.md\n M iqp-cond\n M paper_experiments/campaign.py\n M paper_experiments/config.py\n M paper_experiments/engine.py\n M paper_experiments/figures.py\n M paper_experiments/gaussian.py\n M paper_experiments/phase_encoder.py\n M paper_experiments/runtime.py\n M paper_experiments/studies.py\n M paper_experiments/training.py\n M run_experiments.py\n M tests/test_paper_campaign.py\n M tests/test_paper_figures.py\n M tests/test_reproduction_boundary.py",
+      "paper_revision": "13f1138dcf4afd95db79004e93134ab083def49c"
+    },
+    "packages": {
+      "iqp-cond": "0.7.0",
+      "jax": "0.11.0",
+      "jaxlib": "0.11.0",
+      "numpy": "2.5.1",
+      "optax": "0.2.8",
+      "pennylane": "0.45.1"
+    },
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.5 (main, Jun 12 2025, 12:22:43) [Clang 20.1.4 ]",
+    "source_sha256": {
+      ".local_research/gaussian2d-combined-20261008/PLAN.md": "1844bb3d0076bb7b099a93f57e2d306da2c36cfccc5ef8e6525c119f99fba9a7",
+      ".local_research/gaussian2d-combined-20261008/campaign.py": "a8e7934f1a1e24bb35635a10c2cd83f41107b35b0d3cd7740bf6ddaf730782fd",
+      ".local_research/gaussian2d-combined-20261008/fit.py": "8d124005f34537b4040b5ef4a769bc41bce7ec1c046872363593218c44806cec",
+      ".local_research/paper-candidates-20261008/collective_encoder.py": "eda34c6115f59e39a48c5901a59bef1cd54a503b7077a59eb51034128b7d120b",
+      ".local_research/paper-candidates-20261008/radial_encoder.py": "d35ba00829237d71d71b1e90b9539a4f93b9b4e3e21a7bbaa1514976aff53dac",
+      "iqp-cond/src/iqp_cond/__init__.py": "65effe05eb2003e8efa227f45f1cdb4b9b8ba5ddbaceea4c0c2052c9ea653622",
+      "iqp-cond/src/iqp_cond/encoders.py": "905fc43acc061aa8956918c668c0aaae3c8f66097afe8947f74b12d98f615596",
+      "iqp-cond/src/iqp_cond/estimator.py": "c92f82010fd016c349fd67e060488374c039b312c093d7ebea89a57319289227",
+      "iqp-cond/src/iqp_cond/exact.py": "13b445e8c35841c7af7fa344e76953c67d1c8a2cdceb8b77b24fb5cff5db9bae",
+      "iqp-cond/src/iqp_cond/initialization.py": "e4c6093e579167041d060ed6070165f49d54701bacba08c8b0e765abcbba8b78",
+      "iqp-cond/src/iqp_cond/loss.py": "c6f97a84be8accbe595fd4fde1af7de623a3f3e2785f42873af229611ece7bbf",
+      "iqp-cond/src/iqp_cond/model.py": "3760bfa3406ed30a55d6d5485580e4d86ab9b50f660628347e6ea0a4f4c8c8f5",
+      "iqp-cond/src/iqp_cond/operators.py": "4dad3c8499ec03213dc41ddef3b0fad9da1945404e988f0d5ebcc77e738093a6",
+      "iqp-cond/src/iqp_cond/simulation.py": "557907d01516975053a98c209b1ca79628eb8582f22c9b8eda99388d92358520",
+      "iqp-cond/src/iqp_cond/training.py": "e48cf7b1ce8c9e864bdd8df3e78122195fd3c9e208ae2e549dbd6a5a4f86ba5b",
+      "iqp-cond/src/iqp_cond/verification.py": "ddcd6fe847578abdc51f3675077d644e0a46c51848f20e243cecdf7f7ca7b6af",
+      "paper_experiments/ansatz.py": "aa3621288bbc56c2e250222695ae8cf6c11252ce393e27ee834f935425e4490a",
+      "paper_experiments/metrics.py": "6573a810aee9e7b2abf7109ea206875c2ece3d78ed5f8e0033e94801606bc42b",
+      "paper_experiments/training.py": "437a81289d1edf37c3db3cb77135c8c56f9250a5386b8dd49b44d201d959e247"
+    }
+  },
+  "evaluator_sha256": "23b447986a49285513e8d7e07a120ddd3c7bd7086cc93a2bacd6a13de2f4cbfa",
+  "summary_sha256": "ec79a7fb6f48001b48aacae25bb1ed616e55fa5e177c805767b0671aed1dea45",
+  "baseline": "exact physical encoder with all learned phases zero",
+  "uncertainty": "sample SD of five per-fit condition means, not grid-point SD",
+  "fits": [
+    {
+      "protocol": "axes",
+      "seed": 2026101921,
+      "receipt": "results/gaussian2d-combined-20261008/onebody_linear/axes/final/exact_probe_settings/2026101921/fit.json",
+      "receipt_sha256": "4ba63d3418f687731c5b1c0986ec59be36eb8abff46ca7dde7a028868c2da927",
+      "checkpoint_sha256": "90bf44ff80592970a2e84f37b23bd6ad778ab0a1486c4a4ac97b3c75290b5a85",
+      "replay_max_error": 0.0,
+      "baseline_max_error": 8.673617379884035e-19,
+      "normalization_max_error": 8.881784197001252e-16
+    },
+    {
+      "protocol": "axes",
+      "seed": 2026101922,
+      "receipt": "results/gaussian2d-combined-20261008/onebody_linear/axes/final/exact_probe_settings/2026101922/fit.json",
+      "receipt_sha256": "7f8d124b4ad6f9ebef290b71dcf2c01a3bf4ca657090719ed2530d15c1da10ba",
+      "checkpoint_sha256": "73756b63336bcd972120984840e3b174cd4e137779b62cb7391b33c0b3e5afea",
+      "replay_max_error": 0.0,
+      "baseline_max_error": 8.673617379884035e-19,
+      "normalization_max_error": 8.881784197001252e-16
+    },
+    {
+      "protocol": "axes",
+      "seed": 2026101923,
+      "receipt": "results/gaussian2d-combined-20261008/onebody_linear/axes/final/exact_probe_settings/2026101923/fit.json",
+      "receipt_sha256": "d2d2032eab74929137c49b8b737e2103ee7787da7051ab350f7191b691888042",
+      "checkpoint_sha256": "529c6d4bfb69300cfecd5eb822a880c7b540230d902dbba4c2becfa101df7484",
+      "replay_max_error": 0.0,
+      "baseline_max_error": 8.673617379884035e-19,
+      "normalization_max_error": 8.881784197001252e-16
+    },
+    {
+      "protocol": "axes",
+      "seed": 2026101924,
+      "receipt": "results/gaussian2d-combined-20261008/onebody_linear/axes/final/exact_probe_settings/2026101924/fit.json",
+      "receipt_sha256": "6be5cc3e907ad6de636ad3046e47d47c763f2a7b41e0e77590dc95268b1d3d63",
+      "checkpoint_sha256": "6d2c8f9365400b348fc4a2da491a52b552ba5b1c3fd10374e6fd23eacb6b903e",
+      "replay_max_error": 0.0,
+      "baseline_max_error": 8.673617379884035e-19,
+      "normalization_max_error": 8.881784197001252e-16
+    },
+    {
+      "protocol": "axes",
+      "seed": 2026101925,
+      "receipt": "results/gaussian2d-combined-20261008/onebody_linear/axes/final/exact_probe_settings/2026101925/fit.json",
+      "receipt_sha256": "a747858dd66e94a80aea4a5d7ca58dd1ff53571dd06432f3910491a7540aced9",
+      "checkpoint_sha256": "ac41f0cafc1c7ffaf5b39c94b8bfecc925dcd2b3d23ae544ff54f621e1da4bd8",
+      "replay_max_error": 0.0,
+      "baseline_max_error": 8.673617379884035e-19,
+      "normalization_max_error": 8.881784197001252e-16
+    },
+    {
+      "protocol": "rectangle",
+      "seed": 2026101921,
+      "receipt": "results/gaussian2d-combined-20261008/onebody_linear/rectangle/final/low_and_medium_orders/2026101921/fit.json",
+      "receipt_sha256": "14c44ec50cccf9bf859af0fe2ad9ea3ba5f40ea18d96ff6fca1caf5c90dea113",
+      "checkpoint_sha256": "fff3c43aa0e51d2ae4d70c43270f4c2f7f862bf8c0e6132393e187aee02bd6d4",
+      "replay_max_error": 0.0,
+      "baseline_max_error": 1.0842021724855044e-18,
+      "normalization_max_error": 8.881784197001252e-16
+    },
+    {
+      "protocol": "rectangle",
+      "seed": 2026101922,
+      "receipt": "results/gaussian2d-combined-20261008/onebody_linear/rectangle/final/low_and_medium_orders/2026101922/fit.json",
+      "receipt_sha256": "cb236f704919f87f4d17839a031a67edc81b0ae81ec114989d3cd6fb5c4c7bef",
+      "checkpoint_sha256": "ada5e448c9404ed7191bb4754004ec730a354f88cc1c4438a20b46dbff2c9c9e",
+      "replay_max_error": 0.0,
+      "baseline_max_error": 1.0842021724855044e-18,
+      "normalization_max_error": 7.771561172376096e-16
+    },
+    {
+      "protocol": "rectangle",
+      "seed": 2026101923,
+      "receipt": "results/gaussian2d-combined-20261008/onebody_linear/rectangle/final/low_and_medium_orders/2026101923/fit.json",
+      "receipt_sha256": "18493d8c03bb048b5cbabf8cc5324e4a5096c4d58165e9c2306082ed30404e6e",
+      "checkpoint_sha256": "57058b012f7afb51d112fd77252d194c97f6fd2a25504dceff648639022a808e",
+      "replay_max_error": 0.0,
+      "baseline_max_error": 1.0842021724855044e-18,
+      "normalization_max_error": 7.771561172376096e-16
+    },
+    {
+      "protocol": "rectangle",
+      "seed": 2026101924,
+      "receipt": "results/gaussian2d-combined-20261008/onebody_linear/rectangle/final/low_and_medium_orders/2026101924/fit.json",
+      "receipt_sha256": "8c29e255d03aa7f093de7e3fabba0b513cf4cd2a9da9204399a97bbb5d047509",
+      "checkpoint_sha256": "ba048ff04abdb44815c2bd2132f57bfe090d9fb02829de9106681ec4668cf3bd",
+      "replay_max_error": 0.0,
+      "baseline_max_error": 1.0842021724855044e-18,
+      "normalization_max_error": 8.881784197001252e-16
+    },
+    {
+      "protocol": "rectangle",
+      "seed": 2026101925,
+      "receipt": "results/gaussian2d-combined-20261008/onebody_linear/rectangle/final/low_and_medium_orders/2026101925/fit.json",
+      "receipt_sha256": "4ddc6c8389864aac85fe34437fa499393e014d2f96b413f1b7e6570210ef01d8",
+      "checkpoint_sha256": "8a61ffa411167b757773ba8053fd2e4861e8a72543f21a44107e5806aca8709b",
+      "replay_max_error": 0.0,
+      "baseline_max_error": 1.0842021724855044e-18,
+      "normalization_max_error": 6.661338147750939e-16
+    }
+  ],
+  "protocols": {
+    "axes": {
+      "training_uv": [
+        [
+          -1.0,
+          0.0
+        ],
+        [
+          -0.37,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.37,
+          0.0
+        ],
+        [
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          -1.0
+        ],
+        [
+          0.0,
+          -0.31
+        ],
+        [
+          0.0,
+          0.31
+        ],
+        [
+          0.0,
+          1.0
+        ]
+      ],
+      "development_uv": [
+        [
+          -0.73,
+          0.0
+        ],
+        [
+          -0.17,
+          0.0
+        ],
+        [
+          0.17,
+          0.0
+        ],
+        [
+          0.73,
+          0.0
+        ],
+        [
+          0.0,
+          -0.69
+        ],
+        [
+          0.0,
+          -0.13
+        ],
+        [
+          0.0,
+          0.13
+        ],
+        [
+          0.0,
+          0.69
+        ]
+      ]
+    },
+    "rectangle": {
+      "training_uv": [
+        [
+          -1.0,
+          -1.0
+        ],
+        [
+          -1.0,
+          0.0
+        ],
+        [
+          -1.0,
+          1.0
+        ],
+        [
+          0.0,
+          -1.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          -1.0
+        ],
+        [
+          1.0,
+          0.0
+        ],
+        [
+          1.0,
+          1.0
+        ]
+      ],
+      "development_uv": [
+        [
+          -1.0,
+          -0.75
+        ],
+        [
+          -1.0,
+          -0.25
+        ],
+        [
+          -1.0,
+          0.25
+        ],
+        [
+          -1.0,
+          0.75
+        ],
+        [
+          -0.5,
+          -0.75
+        ],
+        [
+          -0.5,
+          -0.25
+        ],
+        [
+          -0.5,
+          0.25
+        ],
+        [
+          -0.5,
+          0.75
+        ],
+        [
+          0.0,
+          -0.75
+        ],
+        [
+          0.0,
+          -0.25
+        ],
+        [
+          0.0,
+          0.25
+        ],
+        [
+          0.0,
+          0.75
+        ],
+        [
+          0.5,
+          -0.75
+        ],
+        [
+          0.5,
+          -0.25
+        ],
+        [
+          0.5,
+          0.25
+        ],
+        [
+          0.5,
+          0.75
+        ],
+        [
+          1.0,
+          -0.75
+        ],
+        [
+          1.0,
+          -0.25
+        ],
+        [
+          1.0,
+          0.25
+        ],
+        [
+          1.0,
+          0.75
+        ]
+      ]
+    }
+  },
+  "table_counts": {
+    "all": 1652,
+    "inside": 828,
+    "outside": 824
+  },
+  "table": {
+    "axes": {
+      "all": {
+        "mean": 0.04984468773565061,
+        "sample_sd": 0.004001626231439397,
+        "per_fit_means": [
+          0.04690642024499635,
+          0.052769055602333456,
+          0.05001115198307717,
+          0.0546071737791151,
+          0.04492963706873097
+        ]
+      },
+      "inside": {
+        "mean": 0.03572690428491343,
+        "sample_sd": 0.0028536260198800947,
+        "per_fit_means": [
+          0.03352039493703793,
+          0.03765655683778762,
+          0.0360466518402202,
+          0.039160695876408705,
+          0.032250221933112694
+        ]
+      },
+      "outside": {
+        "mean": 0.0640310041157602,
+        "sample_sd": 0.005160625354777397,
+        "per_fit_means": [
+          0.06035742625833332,
+          0.06795491601136741,
+          0.0640434409615791,
+          0.07012863458426151,
+          0.05767060276325963
+        ]
+      }
+    },
+    "rectangle": {
+      "all": {
+        "mean": 0.05331250218423398,
+        "sample_sd": 0.00028112576229366977,
+        "per_fit_means": [
+          0.05363208088567137,
+          0.05333658650531512,
+          0.053538452250940734,
+          0.053035856755147444,
+          0.05301953452409522
+        ]
+      },
+      "inside": {
+        "mean": 0.037918148874283394,
+        "sample_sd": 0.00039356895037033707,
+        "per_fit_means": [
+          0.03836221845415873,
+          0.03787726191349506,
+          0.038262707401219155,
+          0.03743835958187494,
+          0.037650197020669116
+        ]
+      },
+      "outside": {
+        "mean": 0.06878158536462117,
+        "sample_sd": 0.00020227405114235108,
+        "per_fit_means": [
+          0.06897606886296782,
+          0.06887095636214391,
+          0.06888835120187467,
+          0.06870906993411521,
+          0.0684634804620043
+        ]
+      }
+    },
+    "encoder": {
+      "all": {
+        "mean": 0.3124111606132404
+      },
+      "inside": {
+        "mean": 0.22150128643813474
+      },
+      "outside": {
+        "mean": 0.40376234485715734
+      }
+    }
+  },
+  "dense_arrays_sha256": "7c5d9495f8b4cef13f6db10f79eb28c88db7f04c0ab0c8627d321f09f818b389"
+}

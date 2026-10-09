@@ -1,0 +1,13 @@
+\begin{table*}[!t]
+\caption{Mean full-distribution TVD on a common dense-grid domain. We exclude both designs' fitting and development pairs, leaving $1652$ common pairs. The inside and outside groups use the separate-variation training hull, $|u|+|v|\leq1$, for every row. Trained values are means and sample standard deviations of five per-fit condition averages; the encoder-only baseline is deterministic. This is a post-selection evaluation of frozen fits.}
+\label{tab:gaussian-two-dimensional}
+\centering
+\begin{tabular}{l@{\hspace{1em}}c@{\hspace{1.5em}}c@{\hspace{1.5em}}c}\toprule
+ & All unseen pairs & Inside hull & Outside hull\\
+ & $1652$ pairs & $828$ pairs & $824$ pairs\\\midrule
+Encoder only & 0.3124 & 0.2215 & 0.4038\\
+Mean and width varied separately & 0.0498 $\pm$ 0.0040 & 0.0357 $\pm$ 0.0029 & 0.0640 $\pm$ 0.0052\\
+Mean and width varied jointly & 0.0533 $\pm$ 0.0003 & 0.0379 $\pm$ 0.0004 & 0.0688 $\pm$ 0.0002\\
+\bottomrule
+\end{tabular}
+\end{table*}

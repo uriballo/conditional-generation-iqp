@@ -1,0 +1,68 @@
+{
+  "inputs_sha256": {
+    "DENSE_GRID.npz": "7c5d9495f8b4cef13f6db10f79eb28c88db7f04c0ab0c8627d321f09f818b389",
+    "DENSE_GRID.json": "813ec6aa2311833508f98bbfd9bf8b9c799c88806ef3c0af6d92294806bcbed6"
+  },
+  "aggregation": "mean over five fits; sample SD across per-fit group means",
+  "contours": [],
+  "colormap": "Blues",
+  "color_scale": [
+    0,
+    0.18
+  ],
+  "interpolation": "nearest heatmap cells; no contours or smoothing",
+  "renderer_sha256": "63633c67bbb6a2b21d74d2c625e77771cd848110787fe8035870c1d8bc16dc7c",
+  "table": {
+    "encoder": [
+      {
+        "count": 1652,
+        "mean": 0.3124111606132404,
+        "sample_sd": 0.0
+      },
+      {
+        "count": 828,
+        "mean": 0.22150128643813474,
+        "sample_sd": 0.0
+      },
+      {
+        "count": 824,
+        "mean": 0.40376234485715734,
+        "sample_sd": 0.0
+      }
+    ],
+    "axes": [
+      {
+        "count": 1652,
+        "mean": 0.04984468773565061,
+        "sample_sd": 0.004001626231439397
+      },
+      {
+        "count": 828,
+        "mean": 0.03572690428491343,
+        "sample_sd": 0.0028536260198800947
+      },
+      {
+        "count": 824,
+        "mean": 0.0640310041157602,
+        "sample_sd": 0.005160625354777397
+      }
+    ],
+    "rectangle": [
+      {
+        "count": 1652,
+        "mean": 0.05331250218423398,
+        "sample_sd": 0.00028112576229366977
+      },
+      {
+        "count": 828,
+        "mean": 0.037918148874283394,
+        "sample_sd": 0.00039356895037033707
+      },
+      {
+        "count": 824,
+        "mean": 0.06878158536462117,
+        "sample_sd": 0.00020227405114235108
+      }
+    ]
+  }
+}

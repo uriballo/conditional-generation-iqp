@@ -45,3 +45,9 @@ The archived full research workspace retains historical analyses and pools.
 Table III reports only the two trained input models. Classical output averaging is retained in historical numerical records but appears in the manuscript only as a possible postprocessing improvement.
 
 The author-approved academic writing revision separates classical estimation from optimization difficulty, clarifies the spin-flip commutation statement, and adds explicit figure/table references. The paired symmetry table now contains only full-distribution TVD differences. Numerical results and fitting protocols are unchanged. The revision record is in `../../results/paper-writing-edit-20261007/APPLIED.md`.
+
+The two-dimensional Gaussian section uses `gaussian2d/` and
+`../tables/gaussian2d_tvd.tex`. The reviewed heatmaps compare separately and
+jointly varied mean--width conditions against an encoder-only baseline on a
+common withheld table domain. `gaussian2d/REVIEW.md` maps the claims to evidence
+and records the limits of the adaptive study and width response.

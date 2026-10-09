@@ -28,3 +28,8 @@ mkdir -p /tmp/iqp-illustrations
 pdflatex -interaction=nonstopmode -halt-on-error -output-directory=/tmp/iqp-illustrations conditional_iqp_overview.tex
 pdflatex -interaction=nonstopmode -halt-on-error -output-directory=/tmp/iqp-illustrations gaussian_intro.tex
 ```
+
+The approved two-dimensional Gaussian heatmaps use `gaussian2d_heatmaps.py` and
+`../data/gaussian2d/`. From the repository root, run
+`.venv/bin/python paper/figure_sources/gaussian2d_heatmaps.py --results paper/data/gaussian2d --output results/gaussian2d-figures`.
+This standalone renderer writes to ignored results and does not replace reviewed figures.

@@ -49,3 +49,12 @@ including a distinct same-temperature spin-flip metric. The input comparison is 
 checkpoint replay, selection reconstruction and primary scientific review
 passed before these new artifacts were added. The claim-to-evidence map in
 `../data/README.md` records the limits and review status.
+
+`gaussian2d_heatmaps.pdf` and its PNG preview show full-distribution TVD for
+separate and joint mean--width training, with fitting points and convex hulls.
+The portable source is `../figure_sources/gaussian2d_heatmaps.py`, and its
+committed inputs and provenance are in `../data/gaussian2d/`. The heatmaps
+include all grid points; the accompanying table excludes both designs' fitting
+and development pairs. Values summarize five individual fitted distributions,
+not their mixture. The author approved this heatmap presentation; the integrated
+section remains available for author review.
