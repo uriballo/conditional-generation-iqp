@@ -1,19 +1,19 @@
 \begin{table}[!htbp]
-\caption{Exact full-distribution TVD of five sixteen-qubit fits with $128$ target samples per fitting temperature. Entries show mean $\pm$ sample standard deviation across per-fit temperature averages. The worst-condition row averages each fit's maximum TVD. The original reporting conditions do not enter selection for this graph. The last row describes a separate post-selection range extension.}
+\caption{Full-distribution TVD for the sixteen-qubit signed-graph experiment. Entries show mean $\pm$ sample standard deviation across five fits, each using $128$ target samples per training temperature. We first average TVD over temperatures within each fit; the worst-temperature row instead uses each fit's maximum TVD. Parentheses give the number of temperatures. The twelve evaluation temperatures exclude training and model selection. Extended extrapolation covers ten additional temperatures from $\beta=1.5$ to $2.4$, evaluated after model selection.}
 \label{tab:switching16}
 \centering
 \small
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{lr}
 \toprule
-Reporting group & TVD $\downarrow$ \\
+Evaluation summary & TVD $\downarrow$ \\
 \midrule
-Original report, 12 & $0.1780\pm0.0013$ \\
-Interpolation, 10 & $0.1775\pm0.0006$ \\
-Extrapolation, 2 & $0.1806\pm0.0046$ \\
-Worst condition & $0.2981\pm0.0018$ \\
+All evaluation temperatures (12) & $0.1780\pm0.0013$ \\
+Interpolation (10) & $0.1775\pm0.0006$ \\
+Extrapolation (2) & $0.1806\pm0.0046$ \\
+Worst temperature & $0.2981\pm0.0018$ \\
 \midrule
-Extension $1.5$--$2.4$, 10 & $0.1981\pm0.0046$ \\
+Extended extrapolation (10) & $0.1981\pm0.0046$ \\
 \bottomrule
 \end{tabular}
 \end{table}

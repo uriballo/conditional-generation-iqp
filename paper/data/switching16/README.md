@@ -16,5 +16,6 @@ MPLCONFIGDIR=/tmp/iqp-circuit-mpl .venv/bin/python paper/data/switching16/draw_e
 ```
 
 The renderer performs no training or model evaluation. It only aggregates the
-stored fit arrays and writes provenance receipts in this directory. The
-triangle motif diagram is generated from its explicit PennyLane tape.
+stored fit arrays and writes provenance receipts in this directory.
+`draw_encoders.py` generates the seven-vertex graph schematic with Matplotlib
+and the triangle motif diagram from its explicit PennyLane tape.

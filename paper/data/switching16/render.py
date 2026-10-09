@@ -107,7 +107,7 @@ def render(
             ax.text(
                 0.60,
                 1.04,
-                "Interpolation",
+                "Within the\ntraining range",
                 transform=ax.get_xaxis_transform(),
                 ha="center",
                 va="bottom",
@@ -116,7 +116,7 @@ def render(
             ax.text(
                 1.80,
                 1.04,
-                "Extrapolation",
+                "Beyond the\ntraining range",
                 transform=ax.get_xaxis_transform(),
                 ha="center",
                 va="bottom",
@@ -134,7 +134,12 @@ def render(
     )
     rug_ax.set_xlim(0, 2.4)
     rug_ax.set_xlabel(r"Inverse temperature $\beta$", labelpad=1)
-    handles, labels = axes[0].get_legend_handles_labels()
+    handles = [
+        mpl.lines.Line2D([], [], color="#222222", linestyle="--", linewidth=1.25),
+        mpl.lines.Line2D([], [], color=BLUE, linewidth=1.25),
+        mpl.lines.Line2D([], [], color="#777777", linestyle=":", linewidth=1.25),
+    ]
+    labels = ["Gibbs target", "Learned response", "Encoder only"]
     training = mpl.lines.Line2D(
         [], [], color="#111111", marker="v", linestyle="none", markersize=4
     )
@@ -174,7 +179,7 @@ def main() -> None:
             data["balanced_probability"],
             data["encoder_balanced_probability"],
             r"$\Pr(E=16)$",
-            "Fully balanced graphs",
+            "Probability of\ncomplete balance",
         ),
     ]
     pdf, png = render(panels, "conditional_symmetry_current")
@@ -214,7 +219,7 @@ def main() -> None:
             data["fluctuation"],
             data["encoder_fluctuation"],
             r"$\beta^2\operatorname{Var}(E)/16$",
-            "Fluctuation statistic",
+            "Energy fluctuations",
         ),
     ]
     pdf, png = render(fluct_panels, "conditional_symmetry_fluctuation")

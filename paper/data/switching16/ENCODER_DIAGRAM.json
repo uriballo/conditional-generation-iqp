@@ -1,16 +1,288 @@
 {
-  "source_sha256": "4460a48f4ac698fa8a7f429577fc6914557a1f20998b718362ce75b3b72b18a0",
+  "source_sha256": "b35168318f1b9c1d238b9e7d3e1885f9ea01a7b52eeee4becd4ae101a7c03ab6",
   "motif_operations": {
     "RX": 1,
     "CNOT": 2,
     "Hadamard": 3
   },
   "motif_outputs": [
-    "paper/figures/triangle_motif_draft.pdf",
-    "paper/figures/triangle_motif_draft.png"
+    "paper\\figures\\triangle_motif_draft.pdf",
+    "paper\\figures\\triangle_motif_draft.png"
   ],
   "motif_output_sha256": {
-    "pdf": "09185b61a449d7469cc2a36f91e68d057062c2cdde180b67a69724f69cbf85fa",
+    "pdf": "25ad52f0032f6a57c58ea342ed2ea65b254e6f853b90cc9862a3e5a3cf2cf288",
     "png": "d8d99cdc1740cd4ac3f5713213e136258f62c57265532ecb6d3a43cb8e0fe827"
+  },
+  "graph": {
+    "vertices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "edges": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "root_edges": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        6
+      ]
+    ],
+    "chords": [
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "triangles": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        3
+      ],
+      [
+        0,
+        1,
+        4
+      ],
+      [
+        0,
+        1,
+        5
+      ],
+      [
+        0,
+        1,
+        6
+      ],
+      [
+        0,
+        2,
+        3
+      ],
+      [
+        0,
+        2,
+        4
+      ],
+      [
+        0,
+        2,
+        5
+      ],
+      [
+        0,
+        2,
+        6
+      ],
+      [
+        0,
+        3,
+        4
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        4
+      ],
+      [
+        1,
+        2,
+        5
+      ],
+      [
+        1,
+        2,
+        6
+      ],
+      [
+        1,
+        3,
+        4
+      ],
+      [
+        2,
+        3,
+        4
+      ]
+    ],
+    "n_vertices": 7,
+    "n_edges": 16,
+    "n_triangles": 16,
+    "cycle_rank": 10,
+    "vertex_positions": {
+      "0": [
+        0.0,
+        1.9
+      ],
+      "1": [
+        -0.95,
+        0.55
+      ],
+      "2": [
+        0.95,
+        0.55
+      ],
+      "3": [
+        -0.45,
+        -0.85
+      ],
+      "4": [
+        0.45,
+        -0.85
+      ],
+      "5": [
+        -1.95,
+        -0.45
+      ],
+      "6": [
+        1.95,
+        -0.45
+      ]
+    },
+    "root_edge_color": "#0072B2",
+    "chord_color": "#D55E00",
+    "edge_signs_assigned": false
+  },
+  "graph_outputs": [
+    "paper\\figures\\switching16_graph.pdf",
+    "paper\\figures\\switching16_graph.png"
+  ],
+  "graph_output_sha256": {
+    "pdf": "9e705d829be144a53eee770eaaffd4e88c8b46d869c5c10b4cdcfe7a494552f8",
+    "png": "40f325387641772af35e98c101c89af39daee33a75a362e5ced9b7261fbf10eb"
   }
 }
