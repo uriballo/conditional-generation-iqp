@@ -1,0 +1,157 @@
+{
+  "campaign": "two-reviewed",
+  "n_physical": 16,
+  "n_logical": 10,
+  "n_parameters": 2,
+  "n_target_per_condition": 128,
+  "n_target_per_fit": 512,
+  "n_final": 5,
+  "train_betas": [
+    0,
+    0.4,
+    0.8,
+    1.2
+  ],
+  "development_betas": [
+    0.18,
+    0.58,
+    0.98
+  ],
+  "reporting_betas": [
+    0.03,
+    0.11,
+    0.27,
+    0.37,
+    0.53,
+    0.67,
+    0.79,
+    0.93,
+    1.09,
+    1.17,
+    1.3,
+    1.4
+  ],
+  "dense_grid_scope": "71 post-selection diagnostic points including fitting/development temperatures; not a new held-out assessment",
+  "fits": [
+    {
+      "seed": 2026102021,
+      "selected_step": 1200,
+      "theta": [
+        0.14712985526095368,
+        -0.6842530655470089
+      ],
+      "receipt": "results/switching16-20261009/two-reviewed/final/128/two/lr0.015_init0.5/2026102021/fit.json"
+    },
+    {
+      "seed": 2026102022,
+      "selected_step": 200,
+      "theta": [
+        0.1577888165435228,
+        -0.6973733187086516
+      ],
+      "receipt": "results/switching16-20261009/two-reviewed/final/128/two/lr0.015_init0.5/2026102022/fit.json"
+    },
+    {
+      "seed": 2026102023,
+      "selected_step": 1100,
+      "theta": [
+        0.1548262653902143,
+        -0.7003898402828407
+      ],
+      "receipt": "results/switching16-20261009/two-reviewed/final/128/two/lr0.015_init0.5/2026102023/fit.json"
+    },
+    {
+      "seed": 2026102024,
+      "selected_step": 1400,
+      "theta": [
+        1.411402326241027,
+        -0.8705858837374519
+      ],
+      "receipt": "results/switching16-20261009/two-reviewed/final/128/two/lr0.015_init0.5/2026102024/fit.json"
+    },
+    {
+      "seed": 2026102025,
+      "selected_step": 1800,
+      "theta": [
+        0.15875650482060225,
+        -0.6999100133207898
+      ],
+      "receipt": "results/switching16-20261009/two-reviewed/final/128/two/lr0.015_init0.5/2026102025/fit.json"
+    }
+  ],
+  "winner": {
+    "128/two": "lr0.015_init0.5"
+  },
+  "input_sha256": {
+    "results/switching16-20261009/two-reviewed/final/128/two/lr0.015_init0.5/2026102021/checkpoint.npz": "22154622b51751eac0c6ef7105da843a6e9e642939c4d2b682b537db026cb474",
+    "results/switching16-20261009/two-reviewed/final/128/two/lr0.015_init0.5/2026102022/checkpoint.npz": "20e4de4b6dbe5775a421c13c2cf1b8e9a767ec437eb061756d95b33727bfc035",
+    "results/switching16-20261009/two-reviewed/final/128/two/lr0.015_init0.5/2026102023/checkpoint.npz": "7b9c573f38f017441579e1185ebb0d61bb291fc99e52a0bcb53037dde054fab3",
+    "results/switching16-20261009/two-reviewed/final/128/two/lr0.015_init0.5/2026102024/checkpoint.npz": "d4b08f7d3efde29cc424c74125c94d583215172315506e3fab8c328277a40120",
+    "results/switching16-20261009/two-reviewed/final/128/two/lr0.015_init0.5/2026102025/checkpoint.npz": "d91b3876d5aec15df4890cf149936f9348d8b7da75cf7719fe2a7f929181c96f"
+  },
+  "analysis_sha256": "a0385cacc2fecfc585eeafcf08efb171821740ff5fe30a4a6d1303f5a8844b10",
+  "analyzer_sha256": "34c5a7bddf584d70f42a1933f54cd14d0f2af019ef052a41a0b2837de69c9bc0",
+  "aggregation": "temperature mean within each fit, then mean and sample SD ddof1 across five fits; nonlinear fluctuations evaluated per fit",
+  "metrics": {
+    "mean_full_tvd": {
+      "mean": 0.17799157637569377,
+      "sample_sd": 0.0012977417369011725
+    },
+    "interpolation_tvd": {
+      "mean": 0.17746288989641668,
+      "sample_sd": 0.0006390588965536157
+    },
+    "extrapolation_tvd": {
+      "mean": 0.18063500877207922,
+      "sample_sd": 0.0046341196395484445
+    },
+    "worst_condition_tvd": {
+      "mean": 0.29814023615950647,
+      "sample_sd": 0.0018043236418787433
+    },
+    "report_balance_mae": {
+      "mean": 0.04954810328498673,
+      "sample_sd": 0.0006903694643697884
+    },
+    "dense_balance_mae": {
+      "mean": 0.04858545797057405,
+      "sample_sd": 0.0006835728157945856
+    },
+    "dense_fluctuation_mae": {
+      "mean": 0.3012289467556346,
+      "sample_sd": 0.005558799108315709
+    },
+    "clamped_input_tvd": {
+      "mean": 0.48859468029215447,
+      "sample_sd": 0.0010952037151500352
+    },
+    "encoder_only_tvd": 0.7275140806856961,
+    "fixed_classical_tvd": 0.11343563500599481
+  },
+  "physics": {
+    "target_peak_beta": 0.58,
+    "target_peak": 0.38973624531425116,
+    "target_endpoint_fluctuation": 0.05079822110452951,
+    "learned_endpoint_fluctuation": {
+      "mean": 1.1079255080412493,
+      "sample_sd": 0.017919213212204993
+    },
+    "fixed_endpoint_fluctuation": 0.04256404560327915,
+    "target_endpoint_balance": 0.993844250883752,
+    "learned_endpoint_balance": {
+      "mean": 0.9124289866074491,
+      "sample_sd": 0.0017668847056095003
+    }
+  },
+  "checks": {
+    "source_manifest": true,
+    "checkpoint_hashes": true,
+    "checkpoint_selection": true,
+    "public_predictor_replay": true,
+    "normalization": true,
+    "per_fit_energy_histogram_moments": true,
+    "baseline_uniformity": true,
+    "fixed_control_analytic_moments": true
+  },
+  "shared_triangle_edge_pairs": 57
+}

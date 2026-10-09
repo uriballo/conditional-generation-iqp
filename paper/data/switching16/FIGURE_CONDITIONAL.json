@@ -1,0 +1,32 @@
+{
+  "input": "paper/data/switching16/response.npz",
+  "input_sha256": "5b06ab17d26038dec88685e62a99eafaf1827473884abc461c50a83c6236fa53",
+  "summary": "paper/data/switching16/response-summary.json",
+  "summary_sha256": "0dfc3669080daca86d243f2791f9fbdb4fac6130043bd490d796236f38ddedd9",
+  "analysis_source_sha256": "528a6d4d0500f6ce86b350558661535a9772394837c93562eadcf177c1695b39",
+  "renderer_source_sha256": "edd2173cfc0e077acfe2b7c2f7864b32eec814f860f89154d10cc7f930c6e4c6",
+  "output_pdf": "paper/figures/conditional_symmetry_current.pdf",
+  "output_png": "paper/figures/conditional_symmetry_current.png",
+  "n_frozen_fits": 5,
+  "grid_points": 121,
+  "beta_range": [
+    0,
+    2.4
+  ],
+  "aggregation": "mean and sample SD (ddof=1) across five frozen fits",
+  "observables": [
+    "mean triangle balance",
+    "fully balanced-graph probability"
+  ],
+  "training_betas": [
+    0,
+    0.4,
+    0.8,
+    1.2
+  ],
+  "extrapolation_boundary": 1.2,
+  "post_selection": true,
+  "no_retraining": true,
+  "output_pdf_sha256": "50726005ec1d9e3d5a2980cc266aca2ac35b3f0bdd59e4d284459412b3b99d7a",
+  "output_png_sha256": "58c7ace931d5c6c228602a7edefc1c135b1109b4bbb218ed9a8eb4adca0b6f59"
+}

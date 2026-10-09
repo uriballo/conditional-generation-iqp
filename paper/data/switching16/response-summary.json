@@ -1,0 +1,71 @@
+{
+  "role": "author-requested post-selection extension to beta2.4; new metric chosen for target interpretation after reviewing original fluctuation result; no retraining or model selection",
+  "input_sha256": {
+    "ANALYSIS.npz": "a0385cacc2fecfc585eeafcf08efb171821740ff5fe30a4a6d1303f5a8844b10",
+    "SUMMARY.json": "023df668d852249b192b8ee755e075fa7a235b150c31309930e06ec76eff1b53"
+  },
+  "arrays_sha256": "5b06ab17d26038dec88685e62a99eafaf1827473884abc461c50a83c6236fa53",
+  "source_sha256": "528a6d4d0500f6ce86b350558661535a9772394837c93562eadcf177c1695b39",
+  "n_fit": 5,
+  "grid_points": 121,
+  "beta_min": 0,
+  "beta_max": 2.4,
+  "fitting_betas": [
+    0,
+    0.4,
+    0.8,
+    1.2
+  ],
+  "extrapolation_boundary": 1.2,
+  "primary_observables": {
+    "balance": "mean of16triangle products; E/16",
+    "balanced_probability": "probability all16triangle products positive, equivalently E16; sum over64physicalbitstrings; one logical quotientstate",
+    "reason": "both linear switching-invariant observables characterize conditional graph order without a Gibbs fluctuation-response assumption"
+  },
+  "aggregation": "compute each observable per frozen fit then mean and sample SD ddof1; all existing fivefits included",
+  "extended_reporting": {
+    "betas": [
+      1.5,
+      1.6,
+      1.7,
+      1.8,
+      1.9,
+      2.0,
+      2.1,
+      2.2,
+      2.3,
+      2.4
+    ],
+    "scope": "ten additional post-selection extrapolation temperatures; separate from the original reporting set",
+    "mean_full_tvd": {
+      "mean": 0.19811793434310102,
+      "sample_sd": 0.004597200376636218
+    },
+    "worst_full_tvd": {
+      "mean": 0.20131998904170018,
+      "sample_sd": 0.004582652061392719
+    }
+  },
+  "endpoint": {
+    "target_balance": 0.9998969429548032,
+    "learned_balance": {
+      "mean": 0.9147864421601106,
+      "sample_sd": 0.0017496533731770967
+    },
+    "target_balanced_probability": 0.9995898087378975,
+    "learned_balanced_probability": {
+      "mean": 0.7982698196961976,
+      "sample_sd": 0.004582652061392669
+    },
+    "target_fluctuation": 0.002391317269656383,
+    "learned_fluctuation": {
+      "mean": 3.1928812966144506,
+      "sample_sd": 0.052773414347217315
+    }
+  },
+  "checks": {
+    "original71point_replay": true,
+    "normalization": true,
+    "unique_balanced_quotient": true
+  }
+}
