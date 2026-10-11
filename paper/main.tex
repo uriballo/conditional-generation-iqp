@@ -55,7 +55,7 @@
 \date{\today}
 
 \begin{abstract}
-Instantaneous quantum polynomial-time (IQP) Born machines support classical training through an efficient estimation of the observables required by certain loss functions, such as the maximum mean discrepancy (MMD). However, their current formulation is limited to modeling single distributions. In this work, we introduce a formulation that encodes the target condition through an input state and jointly trains a shared IQP unitary across the distribution family. Notably, the encoder need not have IQP form, provided the reference state entering the IQP unitary supports efficient classical sampling and amplitude-ratio evaluation. We adapt established amplitude-ratio estimators to obtain unbiased classical estimates of a conditional MMD objective and its gradients. Furthermore, we also show how this framework can be used construct input states that enforce output bit-flp symmetries. Through numerical experiments we first show how conditional IQP models can learn how to conditionally translate the mean of a discrete Gaussian distribution, and also control both it's mean and width. Even for conditions absent from training. Next, we also show how they can also learn the temperature-dependent change from unimodal to bimodal magnetization profiles of the Curie--Weiss spin model. Furthermore, we showcase the scalability of this approach by training models of up to 2048 qubits. More broadly, our work showcases how IQP Born machines can be generalized for conditional tasks, expanding the number of problems that can be tackled with classically trainable IQP circuits.
+Instantaneous quantum polynomial-time (IQP) Born machines support classical training through efficient estimation of the observables required by certain loss functions, such as the maximum mean discrepancy (MMD). However, their current formulation is limited to modeling individual distributions. In this work, we introduce a conditional formulation that encodes the target condition through an input state and jointly trains a shared IQP unitary across a family of distributions. Notably, the encoder need not have an IQP form, provided that the reference state entering the IQP unitary supports efficient classical sampling and amplitude-ratio evaluation. We adapt established amplitude-ratio estimators to obtain unbiased classical estimates of a conditional MMD objective and its gradients. Furthermore, we show how this framework can be used to construct input states that enforce output bit-flip symmetries. Through numerical experiments, we demonstrate that conditional IQP models can learn to control the mean and width of discrete Gaussian distributions, including at conditions not encountered during training. We also show that these models can capture the temperature-dependent transition from unimodal to bimodal magnetization profiles in the Curie--Weiss spin model. Furthermore, we demonstrate the scalability of our approach by training models with up to 2048 qubits. More broadly, our work demonstrates how IQP Born machines can be generalized to conditional generation tasks, expanding the range of problems that can be addressed using classically trainable IQP circuits.
 \end{abstract}
 \maketitle
 \raggedbottom
@@ -68,32 +68,31 @@ Instantaneous quantum polynomial-time (IQP) Born machines support classical trai
 \end{figure*}
 
 \section{Introduction}
-Conditional generative models approximate a family of target distributions $p(\cdot\mid c)$ within a single model. They represent how a distribution depends on a condition, such as temperature in physics or a class label in image generation. Learning across conditions aims to capture structure common to the family and support generation at conditions absent from training. Classical examples include conditional generative adversarial networks, variational autoencoders and diffusion models \cite{mirzaConditionalGAN2014,sohnConditionalGenerative2015,hoClassifierFreeDiffusionGuidance2022}. Quantum circuit Born machines generate samples by measuring parameterized quantum circuits in the computational basis. They also support conditioning through input-state preparation, condition registers or postselection \cite{kissConditionalBornMachine2022,zengConditionalQCBM2023,zengLearningInferenceGenerative2019}.
+Conditional generative models approximate a family of target distributions $p(\cdot\mid c)$ using a single model. They capture how a distribution depends on one or more conditioning variables, such as temperature in a physical system or a class label in image generation. Learning across conditions aims to capture structures common to the family, which in turn supports generation at conditions not encountered during training. Classical examples include conditional variational autoencoders \cite{sohnConditionalGenerative2015, walkerUncertainFutureForecasting2016, yanAttribute2ImageConditionalImage2016}, generative adversarial networks \cite{mirzaConditionalGAN2014, miyatoCGANsProjectionDiscriminator2018, isolaImagetoImageTranslationConditional2018}, and diffusion models \cite{hoClassifierFreeDiffusionGuidance2022, dhariwalDiffusionModelsBeat2021}. In the quantum setting, one of the most common architectures is the quantum circuit Born machine (QCBM), which represents probability distributions through its measurement statistics \cite{liuDifferentiableLearning2018}. QCBMs have been applied to conditional generation tasks through various mechanisms, including input-state preparation, conditional registers, and postselection \cite{kissConditionalBornMachine2022,zengConditionalQCBM2023,zengLearningInferenceGenerative2019}.
 
-Instantaneous quantum polynomial-time (IQP) circuits offer a useful separation between output sampling and expectation-value estimation. Specifically, certain IQP circuit families are classically hard to sample from under standard complexity assumptions \cite{bremnerAverageCaseComplexityApproximate2016,marshallImprovedSeparationQuantum2024}. Nevertheless, classical algorithms can efficiently estimate expectation values of Pauli-$Z$ products for these same circuits to additive accuracy \cite{nestSimulatingQuantumComputers2011}. This distinction enables classical training of IQP Born machines because the Gaussian-kernel squared maximum mean discrepancy (MMD) objective can be expressed through these expectation values \cite{grettonKernelTwoSample2012,rudolphTrainabilityBarriersOpportunities2024}. Consequently, classical algorithms can estimate both the objective and its gradients, allowing optimization without quantum hardware \cite{recio-armengolTrainClassicalDeploy2026}.
+Instantaneous quantum polynomial-time (IQP) circuits offer a particularly attractive design for QCBMs, as certain families are conjectured to be classically hard to sample from under standard complexity-theoretic assumptions \cite{bremnerAverageCaseComplexityApproximate2016,marshallImprovedSeparationQuantum2024}. Nevertheless, classical algorithms exist that can efficiently estimate their Pauli-$Z$ expectation values to additive accuracy \cite{nestSimulatingQuantumComputers2011}. This distinction enables the classical training of IQP Born machines using objective functions such as the maximum mean discrepancy (MMD), which can be expressed in terms of these expectation values \cite{grettonKernelTwoSample2012,rudolphTrainabilityBarriersOpportunities2024}. Consequently, we can classically estimate the objective function and its gradients, while quantum hardware is required for sampling \cite{recio-armengolTrainClassicalDeploy2026}.
 
-Building on classical IQP training, recent methods introduce control by adapting parts of a generator. For example, ConQuER fits an additional controller to data filtered by a target condition while keeping a pretrained generator fixed \cite{zouConQuER2025}. Similarly, Liu \textit{et al.} retain a shared circuit core, fit a small parameter block separately at selected conditions, and interpolate the fitted parameters to generate at unseen conditions \cite{liuCorrelationComplexity2026}. Their subsequent work uses physics-informed initialization to improve condition-specific latent adaptation \cite{liuPhysicsInformedLatent2026}. These methods therefore introduce condition dependence through fitted controller or latent parameters. In our framework, by contrast, a prescribed encoder maps conditions to input states, and we train one shared IQP unitary jointly across conditions. Once trained, this unitary remains fixed, so new conditions enter directly through the encoder without fitting condition-specific parameters or interpolating a learned parameter trajectory.
+Recent efforts in the classical training of IQP circuits have explored how to introduce generative control by adapting components of the generator. For example, ConQuER fits an additional controller to data filtered by a target condition while keeping a pretrained generator fixed \cite{zouConQuER2025}. Similarly, Liu \textit{et al.} retain a shared circuit, fit a small parameter block separately for selected conditions, and interpolate the fitted parameters to generate samples at unseen conditions \cite{liuCorrelationComplexity2026}. Their subsequent work uses physics-informed initialization to improve condition-specific latent adaptation \cite{liuPhysicsInformedLatent2026}. In contrast, we introduce a classically trainable conditional IQP formulation in which an encoder prepares $\ket{\phi(c)}$ and a shared parameterized unitary defines $q_{\boldsymbol\theta}(x\mid c)=|\langle x|U_{\boldsymbol\theta}|\phi(c)\rangle|^2$. Notably, the encoder need not have a strict IQP form, provided that its reference state $\ket{\psi_c}=H^{\otimes n}\ket{\phi(c)}$ supports efficient classical sampling and amplitude-ratio evaluation. These operations allow us to apply established sparse-observable estimation methods to obtain unbiased estimates of conditional Pauli-$Z$ expectation values and their phase derivatives \cite{nestSimulatingQuantumComputers2011,havlicekAmplitudeRatiosNeural2023}. Combining these estimators with the MMD yields unbiased estimates of the conditional training objective and its gradients \cite{rudolphTrainabilityBarriersOpportunities2024,recio-armengolTrainClassicalDeploy2026}. Figure~\ref{fig:pipeline_workflow} summarizes the framework.
 
-We introduce a classically trainable conditional IQP framework in which an encoder prepares $\ket{\phi(c)}$ and a shared learned unitary defines $q_{\boldsymbol\theta}(x\mid c)=|\langle x|U_{\boldsymbol\theta}|\phi(c)\rangle|^2$. Notably, the encoder need not have strict IQP form, provided its reference state $\ket{\psi_c}=H^{\otimes n}\ket{\phi(c)}$ supports efficient classical sampling and amplitude-ratio evaluation. These operations let us apply established sparse-observable estimation methods to obtain unbiased estimates of conditional Pauli-$Z$ expectation values and their phase derivatives \cite{nestSimulatingQuantumComputers2011,havlicekAmplitudeRatiosNeural2023}. Combining these estimators with the moment formulation of squared MMD then yields unbiased estimates of the conditional training objective and its gradients \cite{rudolphTrainabilityBarriersOpportunities2024,recio-armengolTrainClassicalDeploy2026}. Furthermore, we construct correlated reference states whose parity constraints enforce prescribed output bit-flip symmetries in conditional and unconditional models. These states retain efficient classical sampling and amplitude-ratio evaluation. Figure~\ref{fig:pipeline_workflow} summarizes the framework.
+We validate the framework through sixteen-qubit numerical experiments. First, we show that conditional IQP models can control both the mean and width of families of discrete Gaussian distributions using simple product-state encoders. Next, we model a Curie--Weiss distribution and demonstrate that conditional IQP models can capture the temperature-dependent transition from unimodal to bimodal magnetization profiles, including at temperatures not encountered during training. We also present a graph-based encoder construction that enforces multiple independent output bit-flip symmetries as an example of utility of this framework beyond conditional generation. Finally, we demonstrate the computational feasibility of our approach through classical training runs with up to $2048$ qubits.
 
-We validate the framework through sixteen-qubit numerical experiments. First, we translate Gaussian-shaped profiles to demonstrate the basic conditioning mechanism. We then introduce a second phase-encoding coordinate to control profile width and generate at combinations absent from training. Both experiments use independently parameterized lattice layers and share an exact binomial center fixed by construction. To test larger changes in distributional shape, we use the Curie--Weiss model, where one shared conditional model reproduces the change from unimodal to bimodal magnetization profiles as temperature varies, including at temperatures absent from training. As a worked example of the symmetry construction, we also give a signed-graph encoder that imposes several independent output symmetries. Finally, we establish computational feasibility through classical training runs with up to $2048$ qubits.
+The rest of the paper is organized as follows: Sections~\ref{sec:cond_model} and \ref{sec:cond_training} describe the model and classical training. Section~\ref{sec:numerical-experiments} reports the experiments, and Section~\ref{sec:input-symmetry} discusses input-induced symmetries. Sections~\ref{sec:discussion} and \ref{sec:conclusions} discuss the findings and conclude.
 
-Sections~\ref{sec:cond_model} and \ref{sec:cond_training} describe the model and classical training. Section~\ref{sec:numerical-experiments} reports the experiments, and Section~\ref{sec:input-symmetry} discusses input-induced symmetries. Sections~\ref{sec:discussion} and \ref{sec:conclusions} discuss the findings and conclude.
 
 \section{Conditional IQP model}
 \label{sec:cond_model}
 
-We separate condition encoding from the learned unitary transformation. An encoder maps each condition $c\in\mathcal C$ to an input state $\ket{\phi(c)}$, and we apply the same parameterized IQP unitary $U_{\boldsymbol\theta}$ to every encoded state. For a target family $\{p(\cdot\mid c):c\in\mathcal C\}$ over $n$-bit strings, we define the model distribution as
+In this section, we present the conditional IQP model formulation, separating condition encoding from the learned unitary transformation. An encoder maps each condition $c\in\mathcal C$ to an input state $\ket{\phi(c)}$, and the same parameterized IQP unitary $U_{\boldsymbol\theta}$ is applied to every encoded state. For a target family of distributions $\{p(\cdot\mid c):c\in\mathcal C\}$ over $n$-bit strings, we define the model distribution as
 \begin{equation}
     q_{\boldsymbol{\theta}}(x\mid c)
     =\left|\bra{x}U_{\boldsymbol{\theta}}\ket{\phi(c)}\right|^2,
     \qquad x\in\{0,1\}^n .
-    \label{eq:cond_sampling}
+    \label{eq}
 \end{equation}
 
-Throughout this work, we use ``IQP unitary'' to denote only the learned block $U_{\boldsymbol\theta}$. The encoder need not have IQP form and may include non-diagonal operations, so the complete conditional circuit need not belong to the strict IQP circuit class.
+Throughout this work, we use ``IQP unitary'' to refer exclusively to the learned block $U_{\boldsymbol\theta}$. The encoder isn't restricted to an IQP form and may include non-diagonal operations. Consequently, the complete conditional circuit may not belong to the strict IQP circuit class.
 
-We parameterize the shared IQP unitary by an undirected graph $G=(V,E)$ with $n=|V|$ vertices. Each vertex $i\in V$ contributes a one-body generator $Z_i$, and each edge $\{i,j\}\in E$ contributes a two-body generator $Z_iZ_j$. We write the unitary as
+We parameterize the shared IQP unitary using an undirected graph $G=(V,E)$ with $n=|V|$ vertices. Each vertex $i\in V$ contributes a one-body generator $Z_i$, while each edge $\{i,j\}\in E$ contributes a two-body generator $Z_iZ_j$. The unitary is then expressed as
 \begin{equation}
     U_{\boldsymbol{\theta}}
     =H^{\otimes n}D_G(\boldsymbol{\theta})H^{\otimes n},
@@ -108,9 +107,9 @@ where
     \right).
     \label{eq:graph-diagonal}
 \end{equation}
-All generators in $D_G$ are diagonal in the computational basis and commute. In the numerical experiments, we use only one- and two-body generators. However, this formulation extends naturally to $k$-body interactions by adding the corresponding Pauli-$Z$ products to the exponent.
+Although we restrict the ansatz in our numerical experiments to one- and two-body generators, the formulation naturally extends to higher-order interactions by including additional $k$-body Pauli-$Z$ generators.
 
-The initial Hadamard layer maps the encoded input to the reference state $\ket{\psi_c}=H^{\otimes n}\ket{\phi(c)}$, immediately before the diagonal IQP layer. We assume that each encoded input is normalized and independent of the learned parameters $\boldsymbol\theta$, so the reference state has the same properties. We train the model using samples and amplitude ratios from this reference state. Its computational-basis amplitudes are
+The initial Hadamard layer maps the encoded input to the reference state $\ket{\psi_c}=H^{\otimes n}\ket{\phi(c)}$, immediately before the diagonal IQP layer. We assume that each encoded input is normalized and independent of the learned parameters $\boldsymbol\theta$, so the reference state inherits the same properties. We train the model using samples and amplitude ratios from this reference state. Its computational-basis amplitudes are
 \begin{equation}
     \psi_c(z)
     =\bra{z}\ket{\psi_c}=\bra{z}H^{\otimes n}\ket{\phi(c)},
@@ -129,40 +128,36 @@ The squared amplitudes $|\psi_c(z)|^2$ give the reference sampling distribution 
 \end{enumerate}
 We call these two operations the sampling-and-ratio interface.
 
-Throughout, we assume polynomial-size descriptions of the encoder and conditions and polynomially many IQP generators. Efficient access requires polynomial computational cost in $n$, these description lengths and the inverse accuracy needed for estimation. Our analytical guarantees assume exact sampling and arithmetic. Finite-precision implementations must also control sampling and numerical errors.
+%Throughout this work, we assume polynomial-size descriptions of the encoder and conditions, as well as polynomially many IQP generators. Efficient classical access requires computational cost polynomial in $n$, the description lengths, and the inverse of the desired estimation accuracy. Our analytical guarantees assume exact sampling and arithmetic, while finite-precision implementations must additionally control sampling and numerical errors.
 
-We estimate Pauli-$Z$ moments by combining reference amplitude ratios with phase factors from the IQP layer. For each sampled string $z$, the ratio $R_c(z,a)$ compares the reference amplitudes of $z$ and the paired string $z\oplus a$. The IQP layer contributes a complex phase factor determined by the phase difference between these strings. We multiply the amplitude ratio by this phase factor and average the real part over reference samples to estimate the corresponding Pauli-$Z$ moment \cite{nestSimulatingQuantumComputers2011}.
+We estimate Pauli-$Z$ moments by combining reference amplitude ratios with phase factors from the IQP layer. For each sampled string $z$, the ratio $R_c(z,a)$ compares the reference amplitudes of $z$ and the paired string $z\oplus a$. The IQP layer contributes a complex phase factor determined by the phase difference between these strings. Multiplying the amplitude ratio by this phase factor and averaging the real part over reference samples yields an estimate of the corresponding Pauli-$Z$ moment \cite{nestSimulatingQuantumComputers2011}. Note that, we evaluate amplitude ratios only on the support of $|\psi_c|^2$, since the sampling never selects strings for which $\psi_c(z)=0$.
 
-We evaluate amplitude ratios only on the support of $|\psi_c|^2$, because reference sampling never selects strings with $\psi_c(z)=0$. Computationally tractable reference states in the sense of Van den Nest admit efficient computational-basis sampling and amplitude evaluation \cite{nestSimulatingQuantumComputers2011}. These states provide a sufficient realization of the sampling-and-ratio interface when amplitude evaluation supplies the precision needed to compute the required ratios efficiently.
-
-The simplest case is a product-state encoder $\ket{\phi(c)}=\bigotimes_{i=1}^{n}\ket{\phi_i(c)}$. Its reference amplitudes factorize as $\psi_c(z)=\prod_i\psi_{c,i}(z_i)$, where $\psi_{c,i}(b)=\bra{b}H\ket{\phi_i(c)}$. We can therefore generate reference samples by drawing each bit independently, and the amplitude ratio is
+Computationally tractable reference states, in the sense of Van den Nest, admit efficient computational-basis sampling and amplitude evaluation \cite{nestSimulatingQuantumComputers2011}. These states provide a sufficient realization of the sampling-and-ratio interface, provided that their amplitudes can be evaluated with sufficient precision to compute the required ratios efficiently. The simplest example is a product-state encoder $\ket{\phi(c)}=\bigotimes_{i=1}^{n}\ket{\phi_i(c)}$. The corresponding reference amplitudes factorize as $\psi_c(z)=\prod_i\psi_{c,i}(z_i)$, where $\psi_{c,i}(b)=\bra{b}H\ket{\phi_i(c)}$. Reference samples can therefore be generated by drawing each bit independently, while the amplitude ratio takes the form
 \begin{equation}
 R_c(z,a)=
 \prod_{i:a_i=1}
 \frac{\psi_{c,i}(1-z_i)}{\psi_{c,i}(z_i)}.
 \end{equation}
-When the local amplitudes have constant arithmetic evaluation cost, both operations require at most $O(n)$ local operations. 
+When the local amplitudes can be evaluated at constant arithmetic cost, both operations require at most $O(n)$ local operations. Beyond this product-state example, Section~\ref{sec:input-symmetry} introduces correlated reference states that satisfy the same access requirements while enforcing exact output symmetries.
 
-Beyond this product-state example, Section~\ref{sec:input-symmetry} constructs correlated inputs that satisfy the same access requirements and impose exact output symmetries.
+However, efficient access to the sampling-and-ratio interface alone does not guarantee that the model can solve a given task, as the encoder also constrains how the output probabilities depend on the condition $c$. For rotation encodings with angles linear in $c$, the encoding generators determine the accessible Fourier frequencies, while the learned parameters control their coefficients within the constraints imposed by the circuit architecture \cite{schuldEffectDataEncoding2021}. Multidimensional Fourier analyses further characterize how the encoding and circuit architecture constrain the model's expressive capacity \cite{casasMultidimensionalFourier2023}. Moreover, Caro et al. derived encoding-dependent generalization bounds for parameterized quantum circuits \cite{caroEncodingdependentGeneralizationBounds2021}. Overall, these results highlight that encoder design plays a substantial role and can be as important as the choice of circuit architecture.
 
-The encoder also constrains how the model's output probabilities depend on the condition $c$. For rotation encodings with angles linear in $c$, the encoding generators determine the accessible Fourier frequencies, while the learned parameters control their coefficients within the constraints of the circuit architecture \cite{schuldEffectDataEncoding2021}. Multidimensional Fourier analyses further describe how the encoding and circuit architecture constrain the model's expressive capacity \cite{casasMultidimensionalFourier2023}. Caro et al. also derive encoding-dependent generalization bounds for parameterized quantum circuits \cite{caroEncodingdependentGeneralizationBounds2021}. We therefore distinguish encoder expressivity and generalization from the requirements for efficient classical estimation.
-
-Efficient classical estimation of the observables used for training does not imply efficient classical sampling from $q_{\boldsymbol\theta}(\cdot\mid c)$. Existing IQP sampling-hardness results apply to specific circuit families and do not establish hardness for arbitrary condition-dependent input states or trained parameter values \cite{bremnerClassicalSimulationCommuting2011,bremnerAverageCaseComplexityApproximate2016}. To generate conditional samples on a quantum computer, we also need efficient circuits that prepare $\ket{\phi(c)}$ and implement $U_{\boldsymbol\theta}$. The classical sampling-and-ratio interface alone does not guarantee such circuits.
+Lastly, existing IQP sampling-hardness results apply to specific circuit families and do not establish hardness for arbitrary condition-dependent input states or specific parameter values \cite{bremnerClassicalSimulationCommuting2011,bremnerAverageCaseComplexityApproximate2016}. Furthermore, to deploy conditional IQP circuits on a quantum computer we also need an efficient implementation for preparing $\ket{\phi(c)}$, which is not guaranteed by the classical sampling-and-ratio interface alone.
 
 \subsection{Conditional Pauli estimator and gradients}
 \label{sec:ratio-estimator}
 
-We express the conditional MMD objective in Section~\ref{sec:cond_training} in terms of Pauli-$Z$ moments. For a bit mask $a\in\{0,1\}^n$, we define $Z_a=\bigotimes_{i=1}^{n}Z_i^{a_i}$ and denote its conditional model expectation by $\mu_q(a\mid c)$. We use the sampling-and-ratio interface to derive estimators for this moment and its derivatives with respect to the learned phases.
+In Section~\ref{sec:cond_training}, we express the conditional MMD objective in terms of Pauli-$Z$ moments. For a bit mask $a\in\{0,1\}^n$, we define $Z_a=\bigotimes_{i=1}^{n}Z_i^{a_i}$ and denote its conditional model expectation by $\mu_q(a\mid c)$. We use the sampling-and-ratio interface to derive estimators for these moments and their derivatives with respect to the parameters of the IQP unitary.
 
-We specialize established classical estimation methods to conditional IQP reference states. Van den Nest established efficient sparse-observable estimation for computationally tractable states \cite{nestSimulatingQuantumComputers2011}, and Havl\'{i}\v{c}ek developed estimation using sampling and amplitude-ratio access \cite{havlicekAmplitudeRatiosNeural2023}. Recio-Armengol \textit{et al.} applied classical Pauli-moment estimation to MMD training of IQP Born machines \cite{recio-armengolTrainClassicalDeploy2026}. Here, we apply these methods to prescribed condition-dependent reference states, enabling joint training of one shared IQP unitary across conditions.
+Van den Nest established efficient sparse-observable estimation for computationally tractable states \cite{nestSimulatingQuantumComputers2011}, while Havl\'{i}\v{c}ek developed estimation methods based on sampling and amplitude-ratio access \cite{havlicekAmplitudeRatiosNeural2023}. Recio-Armengol \textit{et al.} applied classical Pauli-moment estimation to MMD training of IQP Born machines \cite{recio-armengolTrainClassicalDeploy2026}. Here, we extend these methods to prescribed condition-dependent reference states, enabling joint training of a single shared IQP unitary across conditions.
 
-We denote the diagonal IQP layer by $D_{\boldsymbol\theta}$ and write its action as
+We denote the diagonal IQP layer by $D_{\boldsymbol\theta}$ and express its action as
 \begin{equation}
     D_{\boldsymbol{\theta}}\ket{z}
     =
     e^{if_{\boldsymbol{\theta}}(z)}\ket{z},
 \end{equation}
-with
+where
 \begin{equation}
     f_{\boldsymbol{\theta}}(z)
     =
@@ -172,7 +167,7 @@ with
     \chi_{g_j}(z)=(-1)^{g_j\cdot z},
     \label{eq:iqp-phase-function}
 \end{equation}
-where $P$ is the number of generators and $g_j\in\{0,1\}^n$ specifies the support of the $j$th Pauli-$Z$ generator. We evaluate the dot product $g_j\cdot z$ modulo two. We define the phase difference associated with the mask $a$ as
+$P$ denotes the number of generators, and $g_j\in\{0,1\}^n$ specifies the support of the $j$th Pauli-$Z$ generator. The dot product $g_j\cdot z$ is evaluated modulo two. We define the phase difference associated with a bit mask $a$ as
 \begin{equation}
     \Delta_a f_{\boldsymbol{\theta}}(z)
     =
@@ -181,7 +176,7 @@ where $P$ is the number of generators and $g_j\in\{0,1\}^n$ specifies the suppor
     f_{\boldsymbol{\theta}}(z).
     \label{eq:conditional-phase-difference}
 \end{equation}
-The final Hadamard layer transforms $Z_a$ into $X_a=\bigotimes_i X_i^{a_i}$. Consequently, the conditional Pauli moment satisfies
+The final Hadamard layer transforms $Z_a$ into $X_a=\bigotimes_i X_i^{a_i}$. Consequently, the conditional Pauli moment can be expressed as
 \begin{equation}
 \begin{aligned}
     \mu_q(a\mid c)
@@ -191,11 +186,11 @@ The final Hadamard layer transforms $Z_a$ into $X_a=\bigotimes_i X_i^{a_i}$. Con
 \end{aligned}
 \label{eq:conditional-moment-expansion}
 \end{equation}
-Terms with $\psi_c(z)=0$ vanish. On the reference sampling support, we can write
+Terms with $\psi_c(z)=0$ vanish. On the support of the reference sampling distribution, we can write
 \begin{equation}
     \psi_c(z)^*\psi_c(z\oplus a)=|\psi_c(z)|^2 R_c(z,a).
 \end{equation}
-The sum therefore becomes an expectation over reference samples, with the amplitude ratio multiplied by the IQP phase factor. Since the Pauli moment is real, we take the real part of this product.
+The sum therefore becomes an expectation over reference samples, with each amplitude ratio multiplied by the corresponding IQP phase factor. Since the Pauli moment is real, we take the real part of this product.
 
 For a reference sample $z\sim|\psi_c|^2$, we define
 \begin{equation}
@@ -211,7 +206,7 @@ For a reference sample $z\sim|\psi_c|^2$, we define
 \end{aligned}
 \label{eq:ratio-sample}
 \end{equation}
-We define the derivative of the phase difference with respect to $\theta_j$ as
+The derivative of the phase difference with respect to $\theta_j$ is
 \begin{equation}
 \begin{aligned}
     d_{j,a}(z)
@@ -221,7 +216,7 @@ We define the derivative of the phase difference with respect to $\theta_j$ as
 \end{aligned}
 \end{equation}
 
-Fix a condition $c$ and a mask $a$. We assume that the reference state is normalized, independent of $\boldsymbol\theta$, and supports the sampling-and-ratio interface. For each reference sample, the phase-gradient estimator is
+For a fixed condition $c$ and bit mask $a$, we assume that the reference state is normalized, independent of $\boldsymbol\theta$, and supports the sampling-and-ratio interface. For each reference sample, we define the phase-gradient estimator as
 \begin{equation}
     Y'_{j,c,a}(z;\boldsymbol\theta)
     =\operatorname{Re}\!\left[
@@ -229,14 +224,14 @@ Fix a condition $c$ and a mask $a$. We assume that the reference state is normal
     \right].
     \label{eq:conditional-phase-gradient}
 \end{equation}
-For each fixed condition, define
+We also define the operators
 \begin{equation}
 \begin{aligned}
     A_a&=D_{\boldsymbol\theta}^{\dagger}X_aD_{\boldsymbol\theta},\\
-    B_{ja}&=\partial_{\theta_j}A_a=i[A_a,Z_{g_j}],
+    B_{ja}&=\partial_{\theta_j}A_a=i[A_a,Z_{g_j}].
 \end{aligned}
 \end{equation}
-Both operators are Hermitian and have at most one nonzero entry per row. Their local sparse-observable estimators have real parts $Y_{c,a}$ and $Y'_{j,c,a}$, respectively. Since the reference state is independent of $\boldsymbol\theta$, these estimators satisfy, with exact sampling and arithmetic,
+Both operators are Hermitian and have at most one nonzero entry per row. The real parts of their local sparse-observable estimators are $Y_{c,a}$ and $Y'_{j,c,a}$, respectively. Since the reference state is independent of $\boldsymbol\theta$, these estimators satisfy, under exact sampling and arithmetic,
 \begin{equation}
 \begin{aligned}
     \E[Y_{c,a}]&=\mu_q(a\mid c),\\
@@ -244,13 +239,13 @@ Both operators are Hermitian and have at most one nonzero entry per row. Their l
 \end{aligned}
 \label{eq:conditional-estimation-guarantee}
 \end{equation}
-The norm bounds $\|A_a\|=1$ and $\|B_{ja}\|\leq2$ give second moments bounded by one and four \cite[Sec.~3.4]{havlicekAmplitudeRatiosNeural2023}. We evaluate ratios only at sampled points with nonzero reference amplitude. In particular,
+The operator norm bounds $\|A_a\|=1$ and $\|B_{ja}\|\leq2$ imply second moments bounded by one and four, respectively \cite[Sec.~3.4]{havlicekAmplitudeRatiosNeural2023}. We evaluate amplitude ratios only at sampled points with nonzero reference amplitudes. In particular,
 \begin{equation}
     \E[|W_{c,a}|^2]
     =\sum_{z:\psi_c(z)\neq0}|\psi_c(z\oplus a)|^2\leq1.
     \label{eq:ratio-second-moment}
 \end{equation}
-Averaging $S$ independent samples therefore gives mean-square errors at most $1/S$ and $4/S$ for a specified moment and phase derivative. By Chebyshev's inequality, $O(\epsilon^{-2})$ samples suffice for additive error $\epsilon$ at fixed confidence.
+Averaging $S$ independent samples therefore yields mean-square errors of at most $1/S$ and $4/S$ for a given moment and phase derivative, respectively. By Chebyshev's inequality, $O(\epsilon^{-2})$ samples suffice to achieve additive error $\epsilon$ with fixed confidence.
 
 In practice, we draw $S$ independent reference samples $z_s\sim|\psi_c|^2$ and estimate the moment as
 \begin{equation}
@@ -261,9 +256,9 @@ In practice, we draw $S$ independent reference samples $z_s\sim|\psi_c|^2$ and e
     Y_{c,a}(z_s;\boldsymbol{\theta}).
     \label{eq:conditional-pauli-monte-carlo}
 \end{equation}
-We estimate the phase derivative by averaging the corresponding $Y'_{j,c,a}$ values over the same samples. For the standard IQP input $\ket{0}^{\otimes n}$, all reference amplitudes are equal, so $R_c(z,a)=1$. The moment estimator then reduces to $Y=\cos[\Delta_a f_{\boldsymbol\theta}(z)]$, recovering the usual IQP cosine estimator \cite{nestSimulatingQuantumComputers2011,recio-armengolIQPoptFastOptimization2025}.
+Similarly, we estimate the phase derivative by averaging the corresponding $Y'_{j,c,a}$ values over the same samples. For the standard IQP input $\ket{0}^{\otimes n}$, all reference amplitudes are equal, giving $R_c(z,a)=1$. The moment estimator then reduces to $Y=\cos[\Delta_a f_{\boldsymbol\theta}(z)]$, recovering the usual IQP cosine estimator \cite{nestSimulatingQuantumComputers2011,recio-armengolIQPoptFastOptimization2025}.
 
-For a circuit with $r$ ancillary qubits, we apply the same estimator to the joint reference state, provided it supports the sampling-and-ratio interface. If we discard the ancillary measurement outcomes, we extend each visible-bit mask $a$ to $(a,0^r)$, where $0^r$ denotes $r$ zeros. The zero entries ensure that the observable acts as the identity on the ancillary qubits.
+%For circuits with $r$ ancillary qubits, the same estimator applies to the joint reference state, provided that it supports the sampling-and-ratio interface. When ancillary measurement outcomes are discarded, each visible-bit mask $a$ is extended to $(a,0^r)$, where $0^r$ denotes a string of $r$ zeros. This ensures that the corresponding observable acts as the identity on the ancillary qubits.
 
 \section{Conditional IQP training}
 \label{sec:cond_training}
