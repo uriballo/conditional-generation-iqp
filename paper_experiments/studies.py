@@ -14,10 +14,14 @@ TRAIN = (0.6, 0.8, 1.2, 1.4)
 SCALING_REPORT = (0.4, 0.95, 1.0, 1.05, 1.6)
 
 
-def make_encoder(conditions, width, kind):
+def make_encoder(conditions, width, kind, *, scale=0.75):
     values = np.asarray(conditions, dtype=np.float64).ravel()
     if kind == "phase_075":
         return BroadcastPhaseEncoder.from_betas(values, width)
+    if kind == "parity":
+        from .parity_encoder import ParityEncoder
+
+        return ParityEncoder.from_betas(values, width, scale=scale)
     raise ValueError("unsupported paper encoder")
 
 
@@ -66,6 +70,8 @@ def build_study(job, config):
         development_conditions=None,
         make_targets=make_targets,
         target_probabilities=target_probabilities,
-        make_encoder=lambda cond, c: make_encoder(cond, c.n_total, c.encoder),
+        make_encoder=lambda cond, c: make_encoder(
+            cond, c.n_total, c.encoder, scale=c.encoder_scale
+        ),
         make_ansatz=lambda c: rectangular_lattice_ansatz(c.n_total),
     )

@@ -1,12 +1,9 @@
 {
-  "renderer": "paper_experiments/figures.py",
-  "renderer_sha256": "6c432a1e2a658bb9b0145a226d7a7e74d5c1b426609b272583fc422b5f152388",
-  "inputs": {
-    "figure_data.json": "fd7558c86e36214a25ed0ce85a661b14d4a034d9705b9cfbc48509a15fb71ce6"
-  },
-  "primary_metric": "full_tvd",
-  "secondary_metric": "profile_tvd",
-  "selection_metric": "profile_tvd",
-  "aggregation": "Mean raw profiles; full-TVD tables: mean/sample SD of individual-seed errors. Encoder is deterministic.",
-  "selection_changed": false
+  "input_sha256": "fa7b0e446903d2d1892049e567a500b6b4532cfbe741afcf7ab623c5ceeb3974",
+  "renderer_sha256": "afa8b65ae664d2456ad65eece4ba05bc14f207d1372dae535d0aa40aec2aa34d",
+  "stage": "final",
+  "repeats": 10,
+  "aggregation": "within-repeat metrics; means and sample SD ddof=1; all repeats retained",
+  "selection_changed": false,
+  "figure": "curie_weiss_model_comparison"
 }

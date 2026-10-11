@@ -1,0 +1,14 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{Matched shared-encoder comparison. Marker columns give exact full-distribution TVD; $J$ and $P$ use the same 101-point reporting grid for both encoders. Values are means $\pm$ sample standard deviations over ten fresh final repeats. Lower is better for all errors. The comparison changes input correlations and encoder phase generators as well as enforced spin-flip symmetry.}
+\label{tab:cw_product_ablation}
+\begin{tabular}{lrrrrr}
+\toprule
+Model & $\beta=0.4$ & $\beta=1$ & $\beta=2$ & $J$ & $P$ \\
+\midrule
+Shared parity & $0.1185\pm0.0107$ & $0.1396\pm0.0048$ & $0.0832\pm0.0103$ & $0.1281\pm0.0027$ & $0.0865\pm0.0088$ \\
+Shared product & $0.1576\pm0.0079$ & $0.2242\pm0.0113$ & $0.1104\pm0.0169$ & $0.2051\pm0.0088$ & $0.1393\pm0.0107$ \\
+\bottomrule
+\end{tabular}
+\end{table*}

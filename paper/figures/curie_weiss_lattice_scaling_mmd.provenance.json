@@ -1,0 +1,187 @@
+{
+  "inputs": {
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n1024-s100/summary.json": "6978ecd57ab17b7e211d9971313c34c46410c46b4914b209bd4492ef543baa61",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n1024-s100/provenance.json": "5d883e368f8dbf4ca01a038627e872e35abdb872ab038b36a7d27ae12283fcce",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n1024-s101/summary.json": "e184e3d4d3189d6019b6d65516b309a62e3a8759d89317d89f5bf24415ff7636",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n1024-s101/provenance.json": "4694fb5b7a54c06a40ef403338b3651f847dae9287b38c46f740cd8c8273a324",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n1024-s102/summary.json": "200488af78e5bfb35ff443f0f086a54eddea8030bd97ec567328995421ded018",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n1024-s102/provenance.json": "8f7d82a563b07009c73d184033e664ffc076c9e5eb344d72a592de12bd916673",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n128-s100/summary.json": "cd1b2abb94108d1d0b58d350f10aafdb5593e257a8f9f1a887cacd78610ab355",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n128-s100/provenance.json": "ff9dd9eb0ec1317d0bfa4b8cc98a9d5ccf0edd7ffecf7473a5dc7832858eb57b",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n128-s101/summary.json": "1981d5f07dd7646d6fd604d8a024152987c90db8438fa8483607b9b562e972cc",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n128-s101/provenance.json": "d518b81b12ce23636377b2c87952b9efbda77a4f7b3cf8d1dd1a86f42b751083",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n128-s102/summary.json": "3f11e767e7d846d06d880c45a2971d5bfefabfb92c20ac0e94e34bbf3b18f605",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n128-s102/provenance.json": "65a67ee019814c616b3366ad194dbc191678b56ff505a9d2e5a45643f09b6d33",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n2048-s100/summary.json": "d6e9283afe92bb2e349e6728a5e0695ac71bcc149d1ace23d75ad6608c07fa76",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n2048-s100/provenance.json": "2dd8261d7b35ccc211600e53b06d8de40236455255c6002e2cdff249b6f8b15c",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n2048-s101/summary.json": "35a6093b1679717066afb4aef887b4d0cb91d598e5e1451c26d9ff37f2775b75",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n2048-s101/provenance.json": "9c84ae61d7a9795348c46a05472d0f9ae9231def843d9de6b35e4cc776e51589",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n2048-s102/summary.json": "8c3d3b5d2cd5a5ab9b5605eb60bdeedf602f9d6ace655f6961f42654ff9ae3dd",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n2048-s102/provenance.json": "64b0f003bc990746021d20459bd1a054663bb5f5f0b7b2d09a43acd62c8838d8",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n256-s100/summary.json": "ebc24a576c79ba5c52dd3800e3c2b16902fc9dc6172f41e5589d0eb2f79cf077",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n256-s100/provenance.json": "5f672ac29735b97a092d276a02b8cc718b8cdcdee42daffcd288ac916ae7c812",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n256-s101/summary.json": "9ce0a3feb93c94ee1b5294035c745681e185b59f735d885f2a1f8e5ea002ba5b",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n256-s101/provenance.json": "a1d48b99ec3e73c28ea4079f72ff0b004879de4a9b5d6cfff804407dd86d9e44",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n256-s102/summary.json": "113dc235ce7ba12ddd46e0b40a79e96815c3d98b950bbc70010b67b4f5acdaa8",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n256-s102/provenance.json": "b7b26ffe6b927131d2f056137446d6ed85d4afbebd0e9bf15e08b31ba5505b84",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n512-s100/summary.json": "8ef28b94620292ff0ef041c3d1fb9db5163b2caa28fc2c564730f89d1b760116",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n512-s100/provenance.json": "87ee5934c9db24ceb990581d584624385b0adfbbba026199f32d66b1c1356964",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n512-s101/summary.json": "a0183292146f22a9c0dc3869cf9f9661f26c3696e490f94cc232cfa3b73e8f1f",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n512-s101/provenance.json": "fb0f33642ffae12106e315572a418d09f38f3a635899ef3eb6a4ea1c45d8f90b",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n512-s102/summary.json": "37dfd5a5b75cdf3251f78613a6250bb7bce9d24545cae0f8080bcf42f4d7aac8",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n512-s102/provenance.json": "e399eede7b36192fcdac3a8d8e0614dbed6fb8cdfc77434afcbc4e7b9d669274",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n64-s100/summary.json": "287410dfc8441b15efdde8fee9ad4d330d792df85b4deb9ff5a8a0c6e13ba1bb",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n64-s100/provenance.json": "ad7a1e611a5ad9ffde4a1a8389976743263771aea556696c70189151abdbe798",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n64-s101/summary.json": "8abd9c8b11ccfc438931e68f522dfc281a493bdb9565fef11a032d1955cb3333",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n64-s101/provenance.json": "f994f2cfbea0e3cebbac79529eb53db27b307371eeebafe34bd9a08d46f1425b",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n64-s102/summary.json": "9e04b8103975197ddefeca7e878f6b3c6cb790be69363c460afc36fec488772d",
+    "results/scaling-transfer-20261010/review/results/campaign/mmd/n64-s102/provenance.json": "640a3fd406e6ee421dd842d4a3fed80b7f341510bfe4a7ab17f8a8cba86f09ff"
+  },
+  "figure_data_sha256": "b73d273cc469cb9005ba945b06e02987c3345ffad1c0f1517bbb11c17393f81d",
+  "renderer": "paper_experiments/figures.py",
+  "renderer_sha256": "ac1cec570bb5afaea956a6390466472babbe679634ec7e83dcd29f7637d240ff",
+  "script": ".local_research/scaling-transfer-20261010/plot_scaling.py",
+  "script_sha256": "b27d0d06cfcda415c55506a981dfa6650ad38c42fe807c58129af9cd09072a96",
+  "sizes": [
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "seeds": [
+    100,
+    101,
+    102
+  ],
+  "steps": [
+    0,
+    500,
+    1000,
+    1500,
+    2000,
+    2500,
+    3000,
+    3500,
+    4000,
+    4500,
+    5000
+  ],
+  "held_out_betas": [
+    0.4,
+    0.95,
+    1.0,
+    1.05,
+    1.6
+  ],
+  "aggregation": "mean over 5 held-out banks and 5 held-out temperatures per seed; median/IQR across three seeds in renderer",
+  "selected_restarts_and_steps": {
+    "n64-s100": {
+      "restart": 0,
+      "step": 900
+    },
+    "n64-s101": {
+      "restart": 2,
+      "step": 2900
+    },
+    "n64-s102": {
+      "restart": 1,
+      "step": 2300
+    },
+    "n128-s100": {
+      "restart": 1,
+      "step": 1300
+    },
+    "n128-s101": {
+      "restart": 2,
+      "step": 2900
+    },
+    "n128-s102": {
+      "restart": 1,
+      "step": 3300
+    },
+    "n256-s100": {
+      "restart": 1,
+      "step": 4200
+    },
+    "n256-s101": {
+      "restart": 1,
+      "step": 4500
+    },
+    "n256-s102": {
+      "restart": 1,
+      "step": 3700
+    },
+    "n512-s100": {
+      "restart": 2,
+      "step": 4200
+    },
+    "n512-s101": {
+      "restart": 2,
+      "step": 4700
+    },
+    "n512-s102": {
+      "restart": 1,
+      "step": 4900
+    },
+    "n1024-s100": {
+      "restart": 1,
+      "step": 4200
+    },
+    "n1024-s101": {
+      "restart": 1,
+      "step": 4700
+    },
+    "n1024-s102": {
+      "restart": 0,
+      "step": 4900
+    },
+    "n2048-s100": {
+      "restart": 1,
+      "step": 4400
+    },
+    "n2048-s101": {
+      "restart": 0,
+      "step": 4700
+    },
+    "n2048-s102": {
+      "restart": 1,
+      "step": 5000
+    }
+  },
+  "candidate": {
+    "b1": 0.8221262156648609,
+    "b2": 0.9624190935021856,
+    "encoder_scale": 1.1842981420325214,
+    "final_ratio": 0.11985145465965139,
+    "id": "trial034",
+    "init_scale": 0.012980306384998162,
+    "learning_rate": 0.001893257136562782
+  },
+  "ansatz": {
+    "64": [
+      "trial034 sparse untied 1/2-body X-phase"
+    ],
+    "128": [
+      "trial034 sparse untied 1/2-body X-phase"
+    ],
+    "256": [
+      "trial034 sparse untied 1/2-body X-phase"
+    ],
+    "512": [
+      "trial034 sparse untied 1/2-body X-phase"
+    ],
+    "1024": [
+      "trial034 sparse untied 1/2-body X-phase"
+    ],
+    "2048": [
+      "trial034 sparse untied 1/2-body X-phase"
+    ]
+  },
+  "adopted_from": "results/scaling-transfer-20261010/figures",
+  "artifacts_sha256": {
+    "pdf": "2d540aa8c41e1bc7b58a1f59e6c813041577c425cd24ab88572b614947e047fb",
+    "png": "3c5616cd430fa0484d398057f986e028b1d1c664431ed6b83b3af4c972777bc5"
+  }
+}

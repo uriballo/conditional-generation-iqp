@@ -12,7 +12,7 @@ from paper_experiments.figures import curie_tables, gaussian_tables, render_all
 DATA = Path(__file__).resolve().parents[1] / "paper/data"
 
 
-def test_curie_data_are_current_five_seed_results():
+def test_historical_curie_data_retains_five_seed_results():
     p = json.loads((DATA / "curie-weiss/figure_data.json").read_text())
     assert p["seeds"] == [2026100610, 2026100611, 2026100612, 2026100613, 2026100614]
     np.testing.assert_allclose(
@@ -42,9 +42,12 @@ def test_curie_data_are_current_five_seed_results():
             assert len(record["checkpoint_sha256"]) == 64
 
 
-def test_original_scaling_endpoint_metrics():
+def test_scaling_endpoint_metrics():
     p = json.loads((DATA / "scaling/figure_data.json").read_text())
-    for n, initial, final in [(64, 0.0504, 0.0350), (2048, 0.0490, 0.0417)]:
+    for n, initial, final in [
+        (64, 0.04192022992567725, 0.003793493720688655),
+        (2048, 0.04202849501756168, 0.00708035039603097),
+    ]:
         values = np.asarray(p["curves"][str(n)]["held_out"]["overall_per_seed"])
         np.testing.assert_allclose(
             np.median(values, axis=0)[[0, -1]], [initial, final], atol=5e-5
@@ -56,14 +59,28 @@ def test_all_numerical_figures_render(tmp_path):
     assert {p.name for p in paths if p.suffix == ".pdf"} == {
         "gaussian_translation_profiles.pdf",
         "curie_weiss_lattice_scaling_mmd.pdf",
-        "gaussian2d_phase_heatmaps.pdf",
-        "gaussian2d_phase_mean_response.pdf",
-        "gaussian2d_phase_width_response.pdf",
+        "gaussian2d_lattice_heatmaps.pdf",
+        "gaussian2d_lattice_mean_response.pdf",
+        "gaussian2d_lattice_width_response.pdf",
+        "curie_weiss_model_comparison.pdf",
+        "curie_weiss_physical_response.pdf",
+        "curie_weiss_product_ablation.pdf",
+    }
+    assert len([p for p in paths if p.suffix == ".png"]) == 8
+    assert all(p.is_file() and p.stat().st_size > 100 for p in paths)
+
+
+def test_historical_switching16_remains_explicitly_renderable(tmp_path):
+    historical_paths = render_all(
+        DATA, tmp_path / "switching", experiment="switching16"
+    )
+    assert {path.name for path in historical_paths if path.suffix == ".pdf"} == {
         "conditional_symmetry_current.pdf",
         "conditional_symmetry_fluctuation.pdf",
     }
-    assert len([p for p in paths if p.suffix == ".png"]) == 7
-    assert all(p.is_file() and p.stat().st_size > 100 for p in paths)
+    assert all(
+        path.is_file() and path.stat().st_size > 100 for path in historical_paths
+    )
 
 
 def test_historical_curie_data_remains_explicitly_renderable(tmp_path):
@@ -80,8 +97,8 @@ def test_historical_curie_data_remains_explicitly_renderable(tmp_path):
     ]
 
 
-def test_gaussian_render_exports_profiles_and_response(tmp_path):
-    render_all(DATA, tmp_path, experiment="gaussian")
+def test_historical_gaussian_render_exports_profiles_and_response(tmp_path):
+    render_all(DATA, tmp_path, experiment="gaussian-historical")
     for name in (
         "gaussian_translation_profiles.png",
         "gaussian_translation_profiles.pdf",

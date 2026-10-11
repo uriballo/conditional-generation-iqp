@@ -1,0 +1,9 @@
+{
+  "input_sha256": "fa7b0e446903d2d1892049e567a500b6b4532cfbe741afcf7ab623c5ceeb3974",
+  "renderer_sha256": "3b8d2bf09d8a54d5d87b72f7bff016ac9288df7d61199da2444065723e92c309",
+  "stage": "final",
+  "repeats": 10,
+  "aggregation": "within-repeat metrics; means and sample SD ddof=1; all repeats retained",
+  "selection_changed": false,
+  "figure": "curie_weiss_product_ablation"
+}

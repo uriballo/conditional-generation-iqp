@@ -1,0 +1,16 @@
+\begin{table*}[!t]
+\caption{Two-coordinate reporting errors.
+Values are means and sample standard deviations of per-fit mean errors
+across five independent fits. Full TVD is the primary metric and selects
+checkpoints on separate development conditions. The two fitting geometries
+have different reporting sets, so columns do not form a paired accuracy
+comparison. Lower is better.}
+\label{tab:gaussian-two-dimensional}
+\centering
+\begin{tabular}{lcc}\toprule
+ & Axis fitting, sixteen pairs & Grid fitting, thirty-two pairs\\\midrule
+Encoder only, full and profile TVD & $0.3867$ & $0.3586$\\
+Learned model, full TVD & $0.0468\pm0.0143$ & $0.0397\pm0.0093$\\
+Learned model, profile TVD & $0.0173\pm0.0066$ & $0.0156\pm0.0036$\\
+\bottomrule\end{tabular}
+\end{table*}

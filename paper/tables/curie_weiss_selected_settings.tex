@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{Configurations selected by fresh confirmation. Independent-family settings apply jointly to three circuits with separately learned phases. Optimizer and unlisted settings follow the frozen protocol. Displayed continuous values are rounded; machine-readable settings retain full precision.}
+\label{tab:cw_selected_settings}
+\begin{tabular}{lrrrr}
+\toprule
+Parameter & Shared parity & Shared product & Independent parity & Independent unconditional \\
+\midrule
+Initial learning rate & 0.00341745 & 0.0300696 & 0.00430287 & 0.0898283 \\
+Width $s_\theta$ (radians) & 0.0221053 & 0.0454769 & 0.0300356 & 0.0326103 \\
+\texttt{Adam} $b_1$ & 0.801879 & 0.826492 & 0.899094 & 0.946166 \\
+\texttt{Adam} $b_2$ & 0.991964 & 0.998983 & 0.96613 & 0.998814 \\
+Schedule & cosine & constant & constant & cosine \\
+Encoder scale $s$ & 0.683987 & 0.657269 & 0.582332 & -- \\
+Expected kernel weights & [2, 4, 7.5] & [2, 4, 5] & [2, 7.5, 7.99] & [2, 5, 5.5] \\
+\bottomrule
+\end{tabular}
+\end{table*}

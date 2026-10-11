@@ -9,6 +9,16 @@ from pathlib import Path
 
 from .config import RunConfig
 
+SCALING_PROTOCOL = json.loads(
+    (
+        Path(__file__).parents[1]
+        / "paper"
+        / "data"
+        / "scaling"
+        / "scaling_protocol.json"
+    ).read_text()
+)
+
 GAUSSIAN_SEEDS = tuple(range(17100, 17105))
 SCALING_SIZES = (64, 128, 256, 512, 1024, 2048)
 SCALING_SEEDS = (100, 101, 102)
@@ -23,10 +33,12 @@ SELECTED = {
     ),
     "scaling": dict(
         name="adam",
-        learning_rate=0.01,
-        final_learning_rate_ratio=0.1,
-        init_scale=0.1,
-        b1=0.9,
+        learning_rate=SCALING_PROTOCOL["candidate"]["learning_rate"],
+        final_learning_rate_ratio=SCALING_PROTOCOL["candidate"]["final_ratio"],
+        init_scale=SCALING_PROTOCOL["candidate"]["init_scale"],
+        encoder_scale=SCALING_PROTOCOL["candidate"]["encoder_scale"],
+        b1=SCALING_PROTOCOL["candidate"]["b1"],
+        b2=SCALING_PROTOCOL["candidate"]["b2"],
     ),
 }
 
@@ -71,7 +83,8 @@ def config_for(job, *, smoke=False):
     base = dict(
         study=f"paper_{kind}_{job['stage']}_{digest(p)[:12]}",
         seeds=(seed,),
-        encoder="phase_075",
+        encoder="parity" if kind == "scaling" else "phase_075",
+        encoder_scale=float(p.get("encoder_scale", 0.75)),
         n_visible=16,
         n_ancillas=0,
         n_train=10000,
@@ -114,7 +127,7 @@ def config_for(job, *, smoke=False):
         )
     elif kind == "scaling":
         base.update(
-            encoder="phase_075",
+            encoder="parity",
             n_visible=job["size"],
             steps=5000,
             n_ops=512,
@@ -123,6 +136,10 @@ def config_for(job, *, smoke=False):
             validation_mc_samples=1024,
             bodyness_targets=(2.0, 4.0),
             selection_mode="validation_mmd",
+            validation_banks=4,
+            validation_interval=100,
+            validation_scales=tuple(SCALING_PROTOCOL["scales"][str(job["size"])]),
+            shared_restart_streams=True,
         )
     config = RunConfig(**base)
     if smoke:
@@ -203,7 +220,13 @@ def execute_job(job, output_root, *, smoke=False):
         return old["record"]
     config = config_for(job, smoke=smoke)
     study = build_study(job, config)
-    settings = {k: v for k, v in job["optimizer"].items() if k != "init_scale"}
+    settings = {
+        k: v
+        for k, v in job["optimizer"].items()
+        if k not in {"init_scale", "encoder_scale"}
+    }
+    if job["experiment"] == "scaling":
+        settings["compute_validation_mmd"] = False
     trainer = make_trainer(settings)
     if job["experiment"] == "scaling":
         from .scaling import _evaluate_mmd_trajectory

@@ -270,7 +270,7 @@ def write_table(path):
         "\\label{tab:gaussian-phase-finite-validation}",
         "\\begin{tabular}{lcc}",
         "\\toprule",
-        "Model & Separate variation & Joint variation \\\\",
+        "Model & Axis training & Grid training \\\\",
         "\\midrule",
     ]
     for name, label in (

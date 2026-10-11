@@ -1,0 +1,8 @@
+\section{Binary-linear conditional encoders}
+\label{app:binary-linear-encoders}
+
+Injectivity of $C$ makes the states $\ket{Cu}$ mutually orthogonal. The factor normalization in Eq.~\eqref{eq:binary-encoder-factors} therefore gives $\langle\psi_c|\psi_c\rangle=1$ and the independent-bit sampling law stated in Section~\ref{sec:input-symmetry}.
+
+Precompute a binary left inverse $L$, satisfying $LC=I_k$. For a sampled configuration $z$, recover its latent coordinates as $u=Lz$. For a mask $a$, compute $d=La$ and test whether $Cd=a$. If this equality fails, translation by $a$ takes every reference configuration outside $\operatorname{im}C$. Otherwise, translation changes $u$ to $u\oplus d$, giving the product ratio in Eq.~\eqref{eq:binary-linear-ratio}. After polynomial preprocessing, sampling and ratio evaluation require $O(nk+n)$ elementary operations, assuming bounded arithmetic cost for each factor.
+
+Extend the columns of $C$ to an invertible binary matrix $M$. Prepare the $k$ single-qubit factor states and initialize the remaining visible qubits in $\ket0$. A reversible linear circuit implementing $M$ maps $\ket{u,0}$ to $\ket{Cu}$. Standard binary elimination gives an implementation using $O(n^2)$ CNOT gates with unrestricted connectivity, without additional ancillary qubits \cite{patelOptimalSynthesisLinear2008}. Applying the final Hadamards prepares $\ket{\phi(c)}$. Efficient deployment also requires efficient preparation of the single-qubit factors.

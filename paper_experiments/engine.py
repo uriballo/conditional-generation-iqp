@@ -711,6 +711,13 @@ def run_large(
     validation_targets = study.make_targets(
         training_conditions, config.n_visible, config.n_validation, rng
     )
+    selection_metric = None
+    if config.validation_scales:
+        from .scaling import make_validation_selector
+
+        selection_metric = make_validation_selector(
+            model, validation_targets, config, seed
+        )
     results: list[ciqp.training.TrainingResult] = []
     restart_snapshots: list[dict[int, np.ndarray]] = []
     restart_wall_seconds: list[float] = []
@@ -734,10 +741,11 @@ def run_large(
             model,
             training_targets,
             validation_targets,
-            seed=seed + restart,
+            seed=seed if config.shared_restart_streams else seed + restart,
             config=config.training_config(),
             initial_params=initial,
             checkpoint_callback=record_snapshot,
+            selection_metric=selection_metric,
         )
         restart_wall_seconds.append(time.perf_counter() - start)
         results.append(result)
@@ -766,14 +774,24 @@ def run_large(
         "ansatz": compact_ansatz_metadata(model),
         "selected_restart": selected_restart,
         "best_step": selected.best_step,
-        "best_validation_loss": float(selected.best_validation_loss),
+        "best_validation_loss": (
+            float(selected.best_validation_loss)
+            if np.isfinite(selected.best_validation_loss) else None
+        ),
         "best_selection_score": float(selected.best_selection_score),
-        "selection_metric": "validation_mmd",
+        "selection_metric": (
+            "normalized_fixed_bank_validation_mmd"
+            if config.validation_scales else "validation_mmd"
+        ),
         "wall_seconds": float(sum(restart_wall_seconds)),
         "peak_process_rss_bytes": peak_rss_bytes,
         "restart_wall_seconds": restart_wall_seconds,
         "validation_steps": np.asarray(selected.validation_steps).tolist(),
-        "validation_losses": np.asarray(selected.validation_losses).tolist(),
+        "validation_losses": [
+            float(value) if np.isfinite(value) else None
+            for value in selected.validation_losses
+        ],
+        "selection_scores": np.asarray(selected.selection_scores).tolist(),
         "config_digest": config.digest(),
         "held_out_evaluation": assessment,
     }

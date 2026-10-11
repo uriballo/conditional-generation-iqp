@@ -129,7 +129,7 @@ def write_tables(result, output):
     start = (
         "\\centering\n"
         "\\begin{tabular}{lcc}\\toprule\n"
-        " & Separate variation & Joint variation\\\\\n"
+        " & Axis training & Grid training\\\\\n"
         " & $16$ reporting pairs & $32$ reporting pairs\\\\\\midrule\n"
     )
     main = (
@@ -152,9 +152,11 @@ def write_tables(result, output):
     (output / "gaussian2d_phase_tvd.tex").write_text(main)
     appendix = (
         "\\begin{table*}[!t]\n"
-        "\\caption{Selection and fixed-control diagnostics on the same reporting "
-        "sets as Table~\\ref{tab:gaussian-two-dimensional}. Initial, selected and "
-        "terminal rows summarize the same five sampled fits per design. The "
+        "\\caption{Full-distribution TVD on the same reporting sets as "
+        "Table~\\ref{tab:gaussian-two-dimensional}. Initial, selected and "
+        "terminal rows report means $\\pm$ sample standard deviations of per-fit "
+        "mean errors across the same five sampled fits per design. Lower is better. "
+        "The "
         "analytic controls use target-slope information, were derived after the "
         "campaign and underwent no training. They are descriptive diagnostics. "
         "The product prior retains the quadratic entangling phase.}\n"

@@ -811,6 +811,7 @@ def export_completed(root, destination):
             steps = [0, 2, 4]
         curves = {}
         encoders = set()
+        encoder_scales = set()
         ansatz_by_size = {}
         for n in sizes:
             curves[str(n)] = {}
@@ -828,6 +829,7 @@ def export_completed(root, destination):
                     record = cases[0]
                     config = record.get("job", {}).get("config", {})
                     encoders.add(config.get("encoder", record.get("encoder")))
+                    encoder_scales.add(config.get("encoder_scale"))
                     ansatz = record.get("ansatz", record.get("job", {}).get("ansatz"))
                     if ansatz is not None:
                         ansatz_by_size.setdefault(str(n), set()).add(
@@ -847,6 +849,8 @@ def export_completed(root, destination):
                 )
         if len(encoders) > 1:
             raise ValueError("scaling records use mixed encoders")
+        if len(encoder_scales) > 1:
+            raise ValueError("scaling records use mixed encoder scales")
         payload = dict(
             sizes=sizes,
             seeds=seeds,
@@ -854,6 +858,7 @@ def export_completed(root, destination):
             curves=curves,
             model_metadata=dict(
                 encoder=next(iter(encoders), None),
+                encoder_scale=next(iter(encoder_scales), None),
                 ansatz_by_size={
                     n: [json.loads(value) for value in sorted(values)]
                     for n, values in ansatz_by_size.items()
@@ -871,12 +876,24 @@ def export_completed(root, destination):
 def render_all(data_root=None, output_root=None, experiment="all"):
     data = Path(data_root) if data_root else ROOT / "paper/data"
     output = Path(output_root) if output_root else ROOT / "results/paper/figures"
-    if experiment in ("curie-weiss", "curie-weiss-followup"):
+    followup_data = data / "curie-weiss-followup" / "figure_data.json"
+    if experiment == "curie-weiss-followup":
+        experiment = "curie-weiss"
+    if experiment == "curie-weiss" and not followup_data.exists():
         raise ValueError(
-            "current Curie-Weiss figures are pending final fits; "
+            "current Curie-Weiss figures require completed final data; "
             "earlier appendix evidence uses curie-weiss-historical"
         )
+    gaussian_lattice = data / "gaussian_lattice"
+    has_lattice = (gaussian_lattice / "SUMMARY.json").exists()
     available = [name for name in ("gaussian", "scaling") if (data / name).is_dir()]
+    if has_lattice:
+        available = [name for name in available if name != "gaussian"]
+        available.append("gaussian-lattice")
+    if (data / "gaussian").is_dir():
+        available.append("gaussian-historical")
+    if followup_data.exists():
+        available.append("curie-weiss")
     if (data / "curie-weiss").is_dir():
         available.append("curie-weiss-historical")
     if (data / "reported-results.json").exists():
@@ -890,9 +907,34 @@ def render_all(data_root=None, output_root=None, experiment="all"):
         available.append("switching16")
     renderers = {
         "gaussian": _gaussian,
+        "gaussian-historical": _gaussian,
         "curie-weiss-historical": _curie,
         "scaling": _scaling,
     }
+    if has_lattice:
+        from paper.figure_sources.gaussian_lattice import main as render_lattice
+
+        renderers["gaussian-lattice"] = lambda data_dir, output_dir: (
+            render_lattice(["--results", str(data_dir), "--output", str(output_dir)])
+            or [
+                output_dir / name
+                for name in (
+                    "gaussian_translation_profiles.pdf",
+                    "gaussian_translation_profiles.png",
+                    "gaussian2d_lattice_heatmaps.pdf",
+                    "gaussian2d_lattice_heatmaps.png",
+                    "gaussian2d_lattice_mean_response.pdf",
+                    "gaussian2d_lattice_mean_response.png",
+                    "gaussian2d_lattice_width_response.pdf",
+                    "gaussian2d_lattice_width_response.png",
+                )
+                if (output_dir / name).exists()
+            ]
+        )
+    if "curie-weiss" in available:
+        from .cw_followup_reporting import render as render_followup
+
+        renderers["curie-weiss"] = render_followup
     if "gaussian2d-phase" in available:
         from paper.figure_sources.gaussian2d_phase import main as render_phase
 
@@ -907,8 +949,16 @@ def render_all(data_root=None, output_root=None, experiment="all"):
             return render_switching_main(data_dir, output_dir)
 
         renderers["switching16"] = render_switching
+    if experiment == "gaussian" and has_lattice:
+        experiment = "gaussian-lattice"
     selected = (
-        [name for name in available if name != "curie-weiss-historical"]
+        [
+            name
+            for name in available
+            if name
+            not in {"curie-weiss-historical", "gaussian-historical", "switching16"}
+            and not (has_lattice and name == "gaussian2d-phase")
+        ]
         if experiment == "all"
         else [experiment]
     )
@@ -917,8 +967,11 @@ def render_all(data_root=None, output_root=None, experiment="all"):
         if name not in available:
             raise ValueError("requested experiment has no completed data")
         input_name = {
+            "curie-weiss": "curie-weiss-followup",
             "curie-weiss-historical": "curie-weiss",
             "gaussian2d-phase": "gaussian2d_phase",
+            "gaussian-lattice": "gaussian_lattice",
+            "gaussian-historical": "gaussian",
         }.get(name, name)
         paths.extend(renderers[name](data / input_name, output))
     return paths

@@ -6,11 +6,16 @@ one reproduction entry point backed by `paper_experiments/`.
 - Do not edit or publish the library from this repository. Use its public API.
 - Retain only experiments and diagnostics described by the current manuscript.
 - Current Curie--Weiss HPO is `cw_followup_*`: parity/product inputs and independent
-  parity/unconditional baselines. Final comparisons are pending. Older product
-  evidence is retained only for the transitional appendix.
-- Default reported fits cover Gaussian translation and original product-input
-  lattice scaling. Phase-conditioned Gaussian and switching16 have compact replay
-  workflows; their frozen training sources remain in local research archives.
+  parity/unconditional baselines. Audited final comparisons are bundled in
+  `paper/data/curie-weiss-followup/`. Older product evidence remains explicitly
+  replayable and is excluded from current manuscript comparisons.
+- Current reported Gaussian evidence is the self-contained binomial-centred
+  Gaussian-shaped family, covering translation and two-coordinate conditioning
+  with 40 independent 4x4 lattice parameters. Gaussian campaign selection uses
+  exact development full TVD. Parity-input lattice scaling remains the default
+  scaling evidence. Legacy Gaussian bundles are historical replay only.
+  Signed-graph switching is an encoder/symmetry construction; empirical response
+  replay is historical and explicitly selected.
 - Resume pre-cleanup campaigns only from their frozen source workspaces; never
   weaken source identity checks or replace a running campaign's source.
 - Preserve manuscript settings, seed schedules, selection and aggregation when
@@ -23,8 +28,8 @@ Commands:
 
 ```sh
 uv sync --locked --extra hpo
-uv run python run_experiments.py --dry-run
-uv run python run_experiments.py --smoke
+uv run python run_experiments.py --experiment scaling --dry-run
+uv run python run_experiments.py --experiment scaling --smoke
 uv run python run_experiments.py --mode figures
 uv run pytest
 uv run ruff check paper_experiments tests run_experiments.py

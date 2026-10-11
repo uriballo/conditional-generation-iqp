@@ -1,4 +1,4 @@
-"""Scaling export and rendering audits for manuscript product-input runs."""
+"""Scaling export and rendering audits for sampled-MMD trajectories."""
 
 import json
 
@@ -7,7 +7,7 @@ import pytest
 from paper_experiments.figures import _scaling, export_completed
 
 
-def _record(seed=100, size=64, encoder="phase_075", value=-0.25):
+def _record(seed=100, size=64, encoder="parity", value=-0.25, scale=1.1842981420325214):
     rows = [
         {
             "step": step,
@@ -24,7 +24,7 @@ def _record(seed=100, size=64, encoder="phase_075", value=-0.25):
         "job": {
             "size": size,
             "job_id": f"job-{seed}",
-            "config": {"encoder": encoder},
+            "config": {"encoder": encoder, "encoder_scale": scale},
         },
         "held_out_evaluation": {"rows": rows},
         "ansatz": {"name": f"lattice_{size}", "n_qubits": size},
@@ -43,7 +43,8 @@ def test_scaling_export_records_model_identity_and_sampled_mmd_provenance(tmp_pa
     _write_records(source, [_record()])
     export_completed(source, destination)
     payload = json.loads((destination / "scaling/figure_data.json").read_text())
-    assert payload["model_metadata"]["encoder"] == "phase_075"
+    assert payload["model_metadata"]["encoder"] == "parity"
+    assert payload["model_metadata"]["encoder_scale"] == 1.1842981420325214
     assert payload["model_metadata"]["ansatz_by_size"]["64"][0]["name"] == "lattice_64"
     assert payload["model_metadata"]["job_ids"] == ["job-100"]
     _scaling(destination / "scaling", tmp_path / "rendered")
@@ -61,6 +62,13 @@ def test_scaling_export_rejects_mixed_encoders(tmp_path):
     source = tmp_path / "runs"
     _write_records(source, [_record(), _record(seed=101, encoder="parity_075")])
     with pytest.raises(ValueError, match="mixed encoders"):
+        export_completed(source, tmp_path / "export")
+
+
+def test_scaling_export_rejects_mixed_encoder_scales(tmp_path):
+    source = tmp_path / "runs"
+    _write_records(source, [_record(), _record(seed=101, scale=0.75)])
+    with pytest.raises(ValueError, match="mixed encoder scales"):
         export_completed(source, tmp_path / "export")
 
 

@@ -81,10 +81,15 @@ class RunConfig:
     validation_mc_samples: int = 1000
     initialization: str = "random"
     init_scale: float = 0.5
+    encoder_scale: float = 0.75
+    validation_banks: int = 1
+    validation_scales: tuple[float, ...] = ()
+    shared_restart_streams: bool = False
     restarts: int = 3
     seeds: tuple[int, ...] = (0,)
 
     def __post_init__(self) -> None:
+        object.__setattr__(self, "validation_scales", tuple(self.validation_scales))
         if self.n_visible < 2:
             raise ValueError("n_visible must be at least two")
         if self.n_ancillas < 0:
@@ -121,6 +126,18 @@ class RunConfig:
             raise ValueError("only random initialization is supported")
         if self.init_scale <= 0.0:
             raise ValueError("init_scale must be positive")
+        if not math.isfinite(self.encoder_scale) or self.encoder_scale <= 0.0:
+            raise ValueError("encoder_scale must be positive and finite")
+        if (
+            isinstance(self.validation_banks, bool)
+            or not isinstance(self.validation_banks, int)
+            or self.validation_banks < 1
+        ):
+            raise ValueError("validation_banks must be a positive integer")
+        if any(
+            not math.isfinite(scale) or scale <= 0.0 for scale in self.validation_scales
+        ):
+            raise ValueError("validation_scales must be positive and finite")
         if self.restarts < 1:
             raise ValueError("restarts must be positive")
         if not self.bodyness_targets or any(

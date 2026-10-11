@@ -2,20 +2,20 @@
   "input_sha256": "cd1ae5810f31bfe28394d7b6149db6de91172811eaac8c5db773abd2e2afff40",
   "summary_sha256": "4cf54dd9fc4af0d8bbc071f5cb7204272fb5e0ee680f82d3a9c7c1c8c88cd320",
   "source_copy_hashes": {
-    "README.md": "742371eb97c846ec97160876e248f10d076bb823164fb0684dc570c33e12804c",
+    "README.md": "ddd724d83622d19a9eedf3d1ede2e99f0812bcc83a3dc41244fe8c9e41b11f5a",
     "SUMMARY.json": "4cf54dd9fc4af0d8bbc071f5cb7204272fb5e0ee680f82d3a9c7c1c8c88cd320",
     "DIAGNOSTICS.npz": "cd1ae5810f31bfe28394d7b6149db6de91172811eaac8c5db773abd2e2afff40"
   },
-  "renderer_sha256": "588433b2229079d05e92304a9cd9fc49562b1fa8970cf63cb0d910db706f611d",
+  "renderer_sha256": "5d589d1cb6302982c9b3579b140978db5d4a0d3c4b2d48e2a38bce53887aee73",
   "protocols": [
-    "separate variation",
-    "joint variation"
+    "axis training",
+    "grid training"
   ],
   "response_aggregation": "median and IQR across five final fits per protocol",
   "heatmaps": {
     "order": [
-      "separate variation",
-      "joint variation"
+      "axis training",
+      "grid training"
     ],
     "axis_transform": "mu=8+3u; sigma_G=2(1+0.2v)",
     "aggregation": "arithmetic mean across five final fits per protocol",
@@ -31,7 +31,14 @@
     },
     "vmin": 0,
     "vmax": 0.06,
-    "smoothing": "none"
+    "smoothing": "none",
+    "cmap": "Blues",
+    "training_marker_color": "#505050",
+    "training_hull_color": "#6B6B6B",
+    "panel_titles": [
+      "(a) Axis training:\ninterpolation and extrapolation",
+      "(b) Grid training:\ninterpolation"
+    ]
   },
   "fixed_control": {
     "theta": 1.1780972450961724,

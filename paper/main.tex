@@ -55,36 +55,30 @@
 \date{\today}
 
 \begin{abstract}
-Instantaneous quantum polynomial-time (IQP) Born machines admit classical estimation of training observables for suitable input states, allowing model optimization without quantum circuit sampling. However, their standard fixed-input formulation models a single distribution. In this work, we introduce a conditional framework that encodes conditions into input states before applying a learned IQP unitary shared across conditions. The input preparation need not have strict IQP form, provided its reference state supports efficient classical sampling and amplitude-ratio evaluation. These operations enable unbiased classical estimation of Pauli-$Z$ moments and their gradients. Experiments on sixteen-qubit discrete Gaussian families and the Curie--Weiss model demonstrate conditional generation. A phase-conditioned Gaussian input supports two-dimensional generation and generalization to mean--width combinations absent from fitting and development. For Curie--Weiss, the shared model achieves lower mean full-distribution total variation distance than both independent baseline families at two of three held-out temperatures, although the baselines are fitted directly at those temperatures and each family uses three times the total parameters and optimizer updates. Additional runs demonstrate the computational feasibility of classical conditional training from $64$ to $2048$ qubits. A sixteen-qubit signed-graph construction further combines correlated temperature encoding with exact switching symmetry and finite-data learning of two shared angles.
+Instantaneous quantum polynomial-time (IQP) Born machines allow classical estimation of Pauli-$Z$ expectation values required for Gaussian-kernel maximum mean discrepancy (MMD) training, decoupling optimization from quantum hardware. However, their standard formulation learns a single distribution. We introduce a classically trainable conditional framework that encodes conditions in input states and jointly trains one shared IQP unitary. The trained unitary remains fixed when the input state encodes new conditions, including those absent from training. Notably, the encoder need not have IQP form, provided the reference state entering the diagonal IQP layer supports efficient classical sampling and amplitude-ratio evaluation. By combining amplitude-ratio estimation of these expectation values with the MMD formulation, we derive unbiased classical estimators of the conditional objective and its gradients. Furthermore, the framework supports input states that impose exact output symmetries in both conditional and unconditional models. In sixteen-qubit numerical experiments, we validate conditional generation through translations of Gaussian-shaped profiles. A correlated phase encoder then enables joint center and width control at combinations absent from training. For the Curie--Weiss model, our shared conditional model reproduces the temperature-dependent change from unimodal to bimodal magnetization profiles, including at temperatures absent from training. Finally, classical training reduces held-out sampled MMD$^{2}$ in models with up to 2048 qubits.
 \end{abstract}
 \maketitle
 \raggedbottom
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.800\textwidth]{figures/conditional_iqp_workflow.pdf}
-\caption{Proposed framework for classical training and quantum sampling of conditional instantaneous quantum polynomial-time (IQP) Born machines. An encoder maps each condition $c_i$ to an input state $\ket{\phi(c_i)}$. During classical training, samples and amplitude ratios from the reference state $H^{\otimes n}\ket{\phi(c_i)}$, together with phase differences induced by the IQP layer, yield estimates of conditional Pauli-$Z$ moments and their gradients. We use these estimates to optimize one shared parameter vector $\boldsymbol\theta$ with a squared maximum mean discrepancy (MMD) objective averaged across training conditions. During quantum sampling, a chosen condition $c_i$ determines the input state. Applying the trained IQP unitary $U_{\boldsymbol\theta}$ and measuring in the computational basis produces samples from the learned conditional distribution $q_{\boldsymbol\theta}(\cdot\mid c_i)$.}
+\includegraphics[width=\textwidth]{figures/conditional_iqp_workflow.pdf}
+\caption{Proposed framework for classical training and quantum sampling of conditional instantaneous quantum polynomial-time (IQP) Born machines. An encoder maps each condition $c_i$ to an input state $\ket{\phi(c_i)}$. The local rotations illustrate a product-state encoder; the framework also admits correlated encoders that satisfy the reference-state access requirements. During classical training, samples and amplitude ratios from the reference state $H^{\otimes n}\ket{\phi(c_i)}$, together with phase differences induced by the IQP layer, yield estimates of conditional Pauli-$Z$ moments and their gradients. We use these estimates to optimize one shared parameter vector $\boldsymbol\theta$ with a squared maximum mean discrepancy (MMD) objective averaged across training conditions. During quantum sampling, a chosen condition $c_i$ determines the input state. Applying the trained IQP unitary $U_{\boldsymbol\theta}$ and measuring in the computational basis produces samples from the learned conditional distribution $q_{\boldsymbol\theta}(\cdot\mid c_i)$.}
 \label{fig:pipeline_workflow}
 \end{figure*}
 
 \section{Introduction}
-Conditional generative models approximate a family of target distributions $p(\cdot\mid c)$ with a model $q_{\boldsymbol\theta}(\cdot\mid c)$, where $c$ denotes the condition and $\boldsymbol\theta$ contains learned parameters shared across conditions. Classical examples include conditional generative adversarial networks \cite{mirzaConditionalGAN2014, isolaImagetoImageTranslationConditional2018,miyatoCGANsProjectionDiscriminator2018}, conditional variational autoencoders \cite{sohnConditionalGenerative2015, walkerUncertainFutureForecasting2016, yanAttribute2ImageConditionalImage2016}, and conditional diffusion models \cite{dhariwalDiffusionModelsBeat2021, hoClassifierFreeDiffusionGuidance2022, rombachHighResolutionImageSynthesis2022}. In the quantum domain, researchers have also adapted quantum circuit Born machines (QCBMs) \cite{liuDifferentiableLearning2018,benedettiGenerativeModeling2019} to conditional tasks \cite{heConditionalGenerativeModel2019}. Researchers can introduce conditioning through input-state preparation or dedicated condition registers before applying a shared parameterized circuit \cite{benedettiVariationalInference2021,kissConditionalBornMachine2022,zengConditionalQCBM2023,certoConditionalGenerativeModels2023}. Alternatively, postselection on a learned joint Born distribution can also yield conditional samples \cite{zengLearningInferenceGenerative2019}. Beyond QCBMs, quantum diffusion models have explored conditional generation of both classical data and quantum states \cite{cacioppoQuantumDiffusionModels2023,chenOvercomingDimensionalFactorization2026,quinnConditioningGenerativeQuantum2026}.
+Conditional generative models approximate a family of target distributions $p(\cdot\mid c)$ within a single model. They represent how a distribution depends on a condition, such as temperature in physics or a class label in image generation. Learning across conditions aims to capture structure common to the family and support generation at conditions absent from training. Classical examples include conditional generative adversarial networks, variational autoencoders and diffusion models \cite{mirzaConditionalGAN2014,sohnConditionalGenerative2015,hoClassifierFreeDiffusionGuidance2022}. Quantum circuit Born machines generate samples by measuring parameterized quantum circuits in the computational basis. They also support conditioning through input-state preparation, condition registers or postselection \cite{kissConditionalBornMachine2022,zengConditionalQCBM2023,zengLearningInferenceGenerative2019}.
 
-Existing complexity-theoretic results support the conjecture that classical algorithms cannot efficiently sample from certain output families of instantaneous quantum polynomial-time (IQP) Born machines under standard assumptions \cite{shepherdInstantaneousQuantumComputation2009,bremnerClassicalSimulationCommuting2011,bremnerAverageCaseComplexityApproximate2016,bremnerAchievingQuantumSupremacy2017,marshallImprovedSeparationQuantum2024}. Yet, for maximum mean discrepancy (MMD) training with a Gaussian kernel \cite{grettonKernelTwoSample2012}, as commonly used for QCBMs \cite{coyleBornSupremacyQuantum2020,liuDifferentiableLearning2018}, classical algorithms can efficiently estimate the required Pauli-$Z$ expectation values and their parameter gradients \cite{recio-armengolTrainClassicalDeploy2026}. These estimators build on Van den Nest's techniques for computationally tractable input states \cite{nestSimulatingQuantumComputers2011}. However, the standard IQP formulation models a single target distribution per circuit. Extending IQP Born machines to conditional generation requires a conditioning mechanism that preserves classical access to the training observables and their gradients.
+Instantaneous quantum polynomial-time (IQP) circuits offer a useful separation between output sampling and expectation-value estimation. Specifically, certain IQP circuit families are classically hard to sample from under standard complexity assumptions \cite{bremnerAverageCaseComplexityApproximate2016,marshallImprovedSeparationQuantum2024}. Nevertheless, classical algorithms can efficiently estimate expectation values of Pauli-$Z$ products for these same circuits to additive accuracy \cite{nestSimulatingQuantumComputers2011}. This distinction enables classical training of IQP Born machines because the Gaussian-kernel squared maximum mean discrepancy (MMD) objective can be expressed through these expectation values \cite{grettonKernelTwoSample2012,rudolphTrainabilityBarriersOpportunities2024}. Consequently, classical algorithms can estimate both the objective and its gradients, allowing optimization without quantum hardware \cite{recio-armengolTrainClassicalDeploy2026}.
 
-In this work, we develop a classically trainable framework for conditional IQP Born machines. We apply one learned IQP unitary \(U_{\boldsymbol\theta}\) to condition-dependent input states \(\ket{\phi(c)}\), giving \(q_{\boldsymbol\theta}(x\mid c)=|\langle x|U_{\boldsymbol\theta}|\phi(c)\rangle|^2\). We establish sufficient conditions on the encoder for efficient classical estimation of the conditional training observables and their gradients, and construct encoders satisfying these conditions. Specifically, for the reference amplitudes \(\psi_c(z)=\langle z|H^{\otimes n}|\phi(c)\rangle\), we require efficient sampling from \(|\psi_c|^2\) and evaluation of amplitude ratios.
+Building on classical IQP training, recent methods introduce control by adapting parts of a generator. For example, ConQuER fits an additional controller to data filtered by a target condition while keeping a pretrained generator fixed \cite{zouConQuER2025}. Similarly, Liu \textit{et al.} retain a shared circuit core, fit a small parameter block separately at selected conditions, and interpolate the fitted parameters to generate at unseen conditions \cite{liuCorrelationComplexity2026}. Their subsequent work uses physics-informed initialization to improve condition-specific latent adaptation \cite{liuPhysicsInformedLatent2026}. These methods therefore introduce condition dependence through fitted controller or latent parameters. In our framework, by contrast, a prescribed encoder maps conditions to input states, and we train one shared IQP unitary jointly across conditions. Once trained, this unitary remains fixed, so new conditions enter directly through the encoder without fitting condition-specific parameters or interpolating a learned parameter trajectory.
 
-Building on sparse-observable methods \cite{nestSimulatingQuantumComputers2011,havlicekAmplitudeRatiosNeural2023} and IQP training methods \cite{recio-armengolTrainClassicalDeploy2026}, we derive unbiased estimators of conditional Pauli-$Z$ moments and their derivatives with respect to the learned phases. We bound the second moments of the moment and derivative estimators by one and four, respectively. These bounds imply that \(O(\epsilon^{-2})\) reference samples suffice to estimate each specified moment or derivative to additive error \(\epsilon\) at fixed confidence. We combine these estimators to obtain unbiased finite-sample estimates of the conditional MMD$^2$ objective and its gradients, enabling classical optimization of a single IQP Born machine across conditions. Figure~\ref{fig:pipeline_workflow} summarizes the framework.
+We introduce a classically trainable conditional IQP framework in which an encoder prepares $\ket{\phi(c)}$ and a shared learned unitary defines $q_{\boldsymbol\theta}(x\mid c)=|\langle x|U_{\boldsymbol\theta}|\phi(c)\rangle|^2$. Notably, the encoder need not have strict IQP form, provided its reference state $\ket{\psi_c}=H^{\otimes n}\ket{\phi(c)}$ supports efficient classical sampling and amplitude-ratio evaluation. These operations let us apply established sparse-observable estimation methods to obtain unbiased estimates of conditional Pauli-$Z$ expectation values and their phase derivatives \cite{nestSimulatingQuantumComputers2011,havlicekAmplitudeRatiosNeural2023}. Combining these estimators with the moment formulation of squared MMD then yields unbiased estimates of the conditional training objective and its gradients \cite{rudolphTrainabilityBarriersOpportunities2024,recio-armengolTrainClassicalDeploy2026}. Furthermore, we construct correlated reference states whose parity constraints enforce prescribed output bit-flip symmetries in conditional and unconditional models. These states retain efficient classical sampling and amplitude-ratio evaluation. Figure~\ref{fig:pipeline_workflow} summarizes the framework.
 
-We evaluate the framework on discrete Gaussian families and Curie--Weiss distributions at sixteen qubits. A product-state encoder first illustrates conditional translation of Gaussian profiles. We then encode both mean and width through phases of a fixed correlated input and calibrate one angle shared across sixteen local rotations. Training the two coordinates separately tests generalization to unseen joint combinations, including pairs outside the joint training hull but within both marginal ranges.
+We validate the framework through sixteen-qubit numerical experiments. First, we translate Gaussian-shaped profiles to demonstrate the basic conditioning mechanism. We then introduce a second phase-encoding coordinate to control profile width and generate at combinations absent from training. Both experiments use independently parameterized lattice layers and share an exact binomial center fixed by construction. To test larger changes in distributional shape, we use the Curie--Weiss model, where one shared conditional model reproduces the change from unimodal to bimodal magnetization profiles as temperature varies, including at temperatures absent from training. As a worked example of the symmetry construction, we also give a signed-graph encoder that imposes several independent output symmetries. Finally, we establish computational feasibility through classical training runs with up to $2048$ qubits.
 
-For the Curie--Weiss model, we train a single model at four inverse temperatures. The model captures the change from unimodal to bimodal magnetization profiles, including the emergence of bimodality at the held-out inverse temperature $\beta=1.0$. The encoder represents temperature through input phases while maintaining uniform computational-basis probabilities. The learned circuit converts this phase dependence into temperature-dependent output distributions. We compare this model with conditional and unconditional baseline families. Each family contains three independent circuits that we fit directly at the evaluation temperatures and uses three times the total parameters and optimizer updates of the shared model. The shared model achieves lower mean full-distribution total variation distance (TVD) than both baseline families at two of the three held-out temperatures, including $\beta=1.6$, beyond the training range.
-
-We also assess computational feasibility through optimization runs from $64$ to $2048$ qubits, tracking sampled MMD$^2$ at held-out temperatures throughout training.
-
-Input-state design also allows exact output symmetries without restricting the learned IQP phases. A sixteen-qubit signed-graph experiment encodes temperature through correlated triangle phases and imposes sixty-four vertex switches at every condition. We train two shared local angles using $128$ target samples at each of four temperatures and evaluate conditional graph order beyond the fitting range. Appendix~\ref{app:switching16} specifies the reference access, finite-data protocol and accuracy limitations.
-
-The remainder of this paper is organized as follows. In Section~\ref{sec:cond_model}, we introduce the conditional IQP model and its classical estimators. In Section~\ref{sec:cond_training}, we develop the conditional MMD training protocol. In Section~\ref{sec:numerical-experiments}, we describe the numerical experiments and report their results. In Section~\ref{sec:input-symmetry}, we show how input-state preparation can enforce output symmetries. In Section~\ref{sec:discussion}, we discuss the implications and limitations of our findings, and in Section~\ref{sec:conclusions}, we summarize the contributions.
+Sections~\ref{sec:cond_model} and \ref{sec:cond_training} describe the model and classical training. Section~\ref{sec:numerical-experiments} reports the experiments, and Section~\ref{sec:input-symmetry} discusses input-induced symmetries. Sections~\ref{sec:discussion} and \ref{sec:conclusions} discuss the findings and conclude.
 
 \section{Conditional IQP model}
 \label{sec:cond_model}
@@ -97,9 +91,7 @@ We separate condition encoding from the learned unitary transformation. An encod
     \label{eq:cond_sampling}
 \end{equation}
 
-Throughout this work, we use ``IQP unitary'' to denote only the learned block $U_{\boldsymbol\theta}$. The encoder need not have IQP form and may include non-diagonal operations, so the complete conditional circuit need not belong to the strict IQP circuit class. Our conditions constrain classical access to the reference state rather than the encoder's gate structure: the reference state must support efficient sampling and amplitude-ratio evaluation.
-
-The encoder also constrains how the model's output probabilities depend on the condition $c$. For rotation encodings with angles linear in $c$, the encoding generators determine the accessible Fourier frequencies, while the learned parameters control their coefficients within the constraints of the circuit architecture \cite{schuldEffectDataEncoding2021}. Multidimensional Fourier analyses further describe how the encoding and circuit architecture constrain the model's expressive capacity \cite{casasMultidimensionalFourier2023}. Caro et al. also derive encoding-dependent generalization bounds for parameterized quantum circuits \cite{caroEncodingdependentGeneralizationBounds2021}. We therefore distinguish encoder expressivity and generalization from the requirements for efficient classical estimation.
+Throughout this work, we use ``IQP unitary'' to denote only the learned block $U_{\boldsymbol\theta}$. The encoder need not have IQP form and may include non-diagonal operations, so the complete conditional circuit need not belong to the strict IQP circuit class.
 
 We parameterize the shared IQP unitary by an undirected graph $G=(V,E)$ with $n=|V|$ vertices. Each vertex $i\in V$ contributes a one-body generator $Z_i$, and each edge $\{i,j\}\in E$ contributes a two-body generator $Z_iZ_j$. We write the unitary as
 \begin{equation}
@@ -118,13 +110,13 @@ where
 \end{equation}
 All generators in $D_G$ are diagonal in the computational basis and commute. In the numerical experiments, we use only one- and two-body generators. However, this formulation extends naturally to $k$-body interactions by adding the corresponding Pauli-$Z$ products to the exponent.
 
-We train the model using samples and amplitude ratios from the reference state $\ket{\psi_c}$ immediately before the diagonal IQP layer, without sampling the circuit's output distribution. We define its computational-basis amplitudes as
+The initial Hadamard layer maps the encoded input to the reference state $\ket{\psi_c}=H^{\otimes n}\ket{\phi(c)}$, immediately before the diagonal IQP layer. We assume that each encoded input is normalized and independent of the learned parameters $\boldsymbol\theta$, so the reference state has the same properties. We train the model using samples and amplitude ratios from this reference state. Its computational-basis amplitudes are
 \begin{equation}
     \psi_c(z)
-    =\bra{z}H^{\otimes n}\ket{\phi(c)},
+    =\bra{z}\ket{\psi_c}=\bra{z}H^{\otimes n}\ket{\phi(c)},
     \label{eq:reference-amplitude}
 \end{equation}
-The squared amplitudes $|\psi_c(z)|^2$ give the reference sampling distribution for condition $c$. We require encoders that support two efficient classical operations for the relevant conditions $c$ and bit masks $a$:
+The squared amplitudes $|\psi_c(z)|^2$ give the reference sampling distribution for condition $c$. Our requirements concern classical access to this state rather than the encoder's gate structure. For the relevant conditions $c$ and bit masks $a$, we require two efficient classical operations:
 \begin{enumerate}
     \item Sample $z\sim |\psi_c(z)|^2$.
     \item Evaluate the amplitude ratio
@@ -136,6 +128,8 @@ The squared amplitudes $|\psi_c(z)|^2$ give the reference sampling distribution 
     for sampled $z$, where $\oplus$ denotes bitwise addition modulo two.
 \end{enumerate}
 We call these two operations the sampling-and-ratio interface.
+
+Throughout, we assume polynomial-size descriptions of the encoder and conditions and polynomially many IQP generators. Efficient access requires polynomial computational cost in $n$, these description lengths and the inverse accuracy needed for estimation. Our analytical guarantees assume exact sampling and arithmetic. Finite-precision implementations must also control sampling and numerical errors.
 
 We estimate Pauli-$Z$ moments by combining reference amplitude ratios with phase factors from the IQP layer. For each sampled string $z$, the ratio $R_c(z,a)$ compares the reference amplitudes of $z$ and the paired string $z\oplus a$. The IQP layer contributes a complex phase factor determined by the phase difference between these strings. We multiply the amplitude ratio by this phase factor and average the real part over reference samples to estimate the corresponding Pauli-$Z$ moment \cite{nestSimulatingQuantumComputers2011}.
 
@@ -149,12 +143,18 @@ R_c(z,a)=
 \end{equation}
 When the local amplitudes have constant arithmetic evaluation cost, both operations require at most $O(n)$ local operations. 
 
+Beyond this product-state example, Section~\ref{sec:input-symmetry} constructs correlated inputs that satisfy the same access requirements and impose exact output symmetries.
+
+The encoder also constrains how the model's output probabilities depend on the condition $c$. For rotation encodings with angles linear in $c$, the encoding generators determine the accessible Fourier frequencies, while the learned parameters control their coefficients within the constraints of the circuit architecture \cite{schuldEffectDataEncoding2021}. Multidimensional Fourier analyses further describe how the encoding and circuit architecture constrain the model's expressive capacity \cite{casasMultidimensionalFourier2023}. Caro et al. also derive encoding-dependent generalization bounds for parameterized quantum circuits \cite{caroEncodingdependentGeneralizationBounds2021}. We therefore distinguish encoder expressivity and generalization from the requirements for efficient classical estimation.
+
 Efficient classical estimation of the observables used for training does not imply efficient classical sampling from $q_{\boldsymbol\theta}(\cdot\mid c)$. Existing IQP sampling-hardness results apply to specific circuit families and do not establish hardness for arbitrary condition-dependent input states or trained parameter values \cite{bremnerClassicalSimulationCommuting2011,bremnerAverageCaseComplexityApproximate2016}. To generate conditional samples on a quantum computer, we also need efficient circuits that prepare $\ket{\phi(c)}$ and implement $U_{\boldsymbol\theta}$. The classical sampling-and-ratio interface alone does not guarantee such circuits.
 
 \subsection{Conditional Pauli estimator and gradients}
 \label{sec:ratio-estimator}
 
 We express the conditional MMD objective in Section~\ref{sec:cond_training} in terms of Pauli-$Z$ moments. For a bit mask $a\in\{0,1\}^n$, we define $Z_a=\bigotimes_{i=1}^{n}Z_i^{a_i}$ and denote its conditional model expectation by $\mu_q(a\mid c)$. We use the sampling-and-ratio interface to derive estimators for this moment and its derivatives with respect to the learned phases.
+
+We specialize established classical estimation methods to conditional IQP reference states. Van den Nest established efficient sparse-observable estimation for computationally tractable states \cite{nestSimulatingQuantumComputers2011}, and Havl\'{i}\v{c}ek developed estimation using sampling and amplitude-ratio access \cite{havlicekAmplitudeRatiosNeural2023}. Recio-Armengol \textit{et al.} applied classical Pauli-moment estimation to MMD training of IQP Born machines \cite{recio-armengolTrainClassicalDeploy2026}. Here, we apply these methods to prescribed condition-dependent reference states, enabling joint training of one shared IQP unitary across conditions.
 
 We denote the diagonal IQP layer by $D_{\boldsymbol\theta}$ and write its action as
 \begin{equation}
@@ -181,6 +181,22 @@ where $P$ is the number of generators and $g_j\in\{0,1\}^n$ specifies the suppor
     f_{\boldsymbol{\theta}}(z).
     \label{eq:conditional-phase-difference}
 \end{equation}
+The final Hadamard layer transforms $Z_a$ into $X_a=\bigotimes_i X_i^{a_i}$. Consequently, the conditional Pauli moment satisfies
+\begin{equation}
+\begin{aligned}
+    \mu_q(a\mid c)
+    &=\bra{\psi_c}D_{\boldsymbol\theta}^{\dagger}X_aD_{\boldsymbol\theta}\ket{\psi_c}\\
+    &=\sum_z \psi_c(z)^*\psi_c(z\oplus a)\\
+    &\quad\times e^{i\Delta_a f_{\boldsymbol\theta}(z)}.
+\end{aligned}
+\label{eq:conditional-moment-expansion}
+\end{equation}
+Terms with $\psi_c(z)=0$ vanish. On the reference sampling support, we can write
+\begin{equation}
+    \psi_c(z)^*\psi_c(z\oplus a)=|\psi_c(z)|^2 R_c(z,a).
+\end{equation}
+The sum therefore becomes an expectation over reference samples, with the amplitude ratio multiplied by the IQP phase factor. Since the Pauli moment is real, we take the real part of this product.
+
 For a reference sample $z\sim|\psi_c|^2$, we define
 \begin{equation}
 \begin{aligned}
@@ -205,70 +221,36 @@ We define the derivative of the phase difference with respect to $\theta_j$ as
 \end{aligned}
 \end{equation}
 
-The following proposition establishes unbiased estimators for conditional Pauli-$Z$ moments and their phase derivatives, and bounds their sampling error. We obtain these estimators by adapting amplitude-ratio methods for sparse observables \cite{havlicekAmplitudeRatiosNeural2023}. For computationally tractable reference states, efficient estimation also follows from Van den Nest's sparse-operator theorem \cite{nestSimulatingQuantumComputers2011}.
-
-\begin{proposition}[Classical estimation from reference-state access]
-\label{prop:conditional-estimation}
-Fix a condition $c$, a bit mask $a$, and a phase function with polynomially many diagonal Pauli-$Z$ terms, as in Eq.~\eqref{eq:iqp-phase-function}. We assume that the reference state is normalized and independent of $\boldsymbol\theta$. We also assume that we can efficiently draw independent samples from $|\psi_c|^2$ and evaluate $R_c(z,a)$ for each sampled $z$. For a reference sample $z\sim|\psi_c|^2$, we define the moment and derivative estimators as follows:
+Fix a condition $c$ and a mask $a$. We assume that the reference state is normalized, independent of $\boldsymbol\theta$, and supports the sampling-and-ratio interface. For each reference sample, the phase-gradient estimator is
+\begin{equation}
+    Y'_{j,c,a}(z;\boldsymbol\theta)
+    =\operatorname{Re}\!\left[
+        i\,d_{j,a}(z)W_{c,a}(z;\boldsymbol\theta)
+    \right].
+    \label{eq:conditional-phase-gradient}
+\end{equation}
+For each fixed condition, define
 \begin{equation}
 \begin{aligned}
-    Y &= \operatorname{Re}W_{c,a}(z;\boldsymbol\theta),\\
-    Y'_j &= \operatorname{Re}\!\left[
-        i\,d_{j,a}(z)W_{c,a}(z;\boldsymbol\theta)
-    \right]
+    A_a&=D_{\boldsymbol\theta}^{\dagger}X_aD_{\boldsymbol\theta},\\
+    B_{ja}&=\partial_{\theta_j}A_a=i[A_a,Z_{g_j}],
 \end{aligned}
 \end{equation}
-With exact sampling and arithmetic, these estimators have the following expectations and second-moment bounds:
+Both operators are Hermitian and have at most one nonzero entry per row. Their local sparse-observable estimators have real parts $Y_{c,a}$ and $Y'_{j,c,a}$, respectively. Since the reference state is independent of $\boldsymbol\theta$, these estimators satisfy, with exact sampling and arithmetic,
 \begin{equation}
 \begin{aligned}
-    \E[Y]&=\mu_q(a\mid c),
-    &\E[Y^2]&\leq1,\\
-    \E[Y'_j]&=\partial_{\theta_j}\mu_q(a\mid c),
-    &\E[(Y'_j)^2]&\leq4.
+    \E[Y_{c,a}]&=\mu_q(a\mid c),\\
+    \E[Y'_{j,c,a}]&=\partial_{\theta_j}\mu_q(a\mid c).
 \end{aligned}
 \label{eq:conditional-estimation-guarantee}
 \end{equation}
-We obtain unbiased estimates of the moment and its phase derivative by averaging $Y$ and $Y'_j$ over $S$ independent reference samples. Their mean-square errors are at most $1/S$ and $4/S$, respectively. We can therefore estimate a specified moment or phase derivative to additive error $\epsilon$ at fixed confidence using $S=O(\epsilon^{-2})$ reference samples. These guarantees hold even when some reference amplitudes vanish.
-\end{proposition}
-
-\begin{proof}
-We define the support of the reference distribution as $S_c=\{z:\psi_c(z)\neq0\}$. Using $HZH=X$, we conjugate the measured observable $Z_a$ through the final Hadamard layer to obtain $X_a=\bigotimes_{i=1}^{n}X_i^{a_i}$. This operator flips the bits selected by $a$, so
-\begin{equation}
-\begin{aligned}
-    \mu_q(a\mid c)
-    &=\bra{\psi_c}D_{\boldsymbol\theta}^{\dagger}
-    X_aD_{\boldsymbol\theta}\ket{\psi_c}\\
-    &=\operatorname{Re}\sum_{z\in S_c}
-    \psi_c(z)^*\psi_c(z\oplus a)
-    e^{i\Delta_a f_{\boldsymbol\theta}(z)}\\
-    &=\E_{z\sim|\psi_c|^2}[Y].
-\end{aligned}
-\label{eq:conditional-pauli-estimator}
-\end{equation}
-The last equality rewrites the sum as an expectation under $|\psi_c|^2$, using the amplitude ratio and the definition of $Y$.
-
-The reference state does not depend on $\boldsymbol\theta$, so its sampling distribution and amplitude ratios remain fixed. We therefore differentiate only the IQP phase factor in the finite sum to obtain
-\begin{equation}
-\begin{aligned}
-    \partial_{\theta_j}\mu_q(a\mid c)
-    &=\E_{z\sim|\psi_c|^2}\!\left[
-    \operatorname{Re}\left(i\,d_{j,a}(z)W_{c,a}(z;\boldsymbol\theta)\right)
-    \right]\\
-    &=\E[Y'_j].
-\end{aligned}
-\label{eq:conditional-phase-gradient}
-\end{equation}
-Thus $Y'_j$ is an unbiased estimator of the phase derivative.
-
-Although individual amplitude ratios can be large, normalization bounds their second moment. The phase factor has unit magnitude, and the sampling probability $|\psi_c(z)|^2$ cancels the denominator in $|R_c(z,a)|^2$ when we take the expectation. We therefore obtain
+The norm bounds $\|A_a\|=1$ and $\|B_{ja}\|\leq2$ give second moments bounded by one and four \cite[Sec.~3.4]{havlicekAmplitudeRatiosNeural2023}. We evaluate ratios only at sampled points with nonzero reference amplitude. In particular,
 \begin{equation}
     \E[|W_{c,a}|^2]
-    =\sum_{z\in S_c}|\psi_c(z\oplus a)|^2
-    \leq1.
-\label{eq:ratio-second-moment}
+    =\sum_{z:\psi_c(z)\neq0}|\psi_c(z\oplus a)|^2\leq1.
+    \label{eq:ratio-second-moment}
 \end{equation}
-The final inequality follows because bit flipping maps $S_c$ to a subset of all bit strings and the reference state is normalized. Since $Y$ is the real part of $W_{c,a}$, we have $\E[Y^2]\leq1$. Combining $|d_{j,a}(z)|\leq2$ with the same bound gives $\E[(Y'_j)^2]\leq4$. Averaging $Y$ and $Y'_j$ over $S$ independent reference samples therefore gives mean-square errors at most $1/S$ and $4/S$, respectively. Chebyshev's inequality then yields the stated fixed-confidence sample complexity. The argument allows vanishing reference amplitudes because we evaluate ratios only for sampled strings.
-\end{proof}
+Averaging $S$ independent samples therefore gives mean-square errors at most $1/S$ and $4/S$ for a specified moment and phase derivative. By Chebyshev's inequality, $O(\epsilon^{-2})$ samples suffice for additive error $\epsilon$ at fixed confidence.
 
 In practice, we draw $S$ independent reference samples $z_s\sim|\psi_c|^2$ and estimate the moment as
 \begin{equation}
@@ -279,13 +261,13 @@ In practice, we draw $S$ independent reference samples $z_s\sim|\psi_c|^2$ and e
     Y_{c,a}(z_s;\boldsymbol{\theta}).
     \label{eq:conditional-pauli-monte-carlo}
 \end{equation}
-We estimate the phase derivative by averaging the corresponding $Y'_j$ values over the same samples. For the standard IQP input $\ket{0}^{\otimes n}$, all reference amplitudes are equal, so $R_c(z,a)=1$. The moment estimator then reduces to $Y=\cos[\Delta_a f_{\boldsymbol\theta}(z)]$, recovering the usual IQP cosine estimator \cite{nestSimulatingQuantumComputers2011,recio-armengolIQPoptFastOptimization2025}.
+We estimate the phase derivative by averaging the corresponding $Y'_{j,c,a}$ values over the same samples. For the standard IQP input $\ket{0}^{\otimes n}$, all reference amplitudes are equal, so $R_c(z,a)=1$. The moment estimator then reduces to $Y=\cos[\Delta_a f_{\boldsymbol\theta}(z)]$, recovering the usual IQP cosine estimator \cite{nestSimulatingQuantumComputers2011,recio-armengolIQPoptFastOptimization2025}.
 
 For a circuit with $r$ ancillary qubits, we apply the same estimator to the joint reference state, provided it supports the sampling-and-ratio interface. If we discard the ancillary measurement outcomes, we extend each visible-bit mask $a$ to $(a,0^r)$, where $0^r$ denotes $r$ zeros. The zero entries ensure that the observable acts as the identity on the ancillary qubits.
 
 \section{Conditional IQP training}
 \label{sec:cond_training}
-We now formulate the training protocol for conditional IQP Born machines. Throughout this work, we use \emph{classically trainable} to mean that we can efficiently estimate the training objective and its phase gradients to a prescribed additive accuracy on a classical computer.
+Section~\ref{sec:cond_model} provides classical estimators of conditional Pauli-$Z$ moments and their phase gradients. We now combine these estimators with the moment formulation of Gaussian-kernel squared MMD to train one shared IQP unitary across conditions. Throughout this work, we use \emph{classically trainable} to mean that we can efficiently estimate the training objective and its phase gradients to a prescribed additive accuracy on a classical computer.
 
 \subsection{Condition-balanced MMD objective}
 We optimize the shared parameter vector $\boldsymbol{\theta}$ by minimizing the squared maximum mean discrepancy (MMD) across the training conditions. For distributions $p$ and $q$ on $\{0,1\}^n$ and a positive-definite kernel $k$, the population squared MMD is \cite{grettonKernelTwoSample2012}
@@ -309,7 +291,7 @@ Throughout this work, we use the Gaussian kernel on binary strings,
     \right],
     \label{eq:hamming-rbf-kernel}
 \end{equation}
-where $d_H(x,y)$ is the Hamming distance, which counts the positions at which $x$ and $y$ differ, and $\sigma>0$ is the kernel bandwidth.
+Here, $d_H(x,y)$ is the Hamming distance, which counts the positions at which $x$ and $y$ differ, and $\sigma>0$ is the kernel bandwidth. For binary strings, $d_H(x,y)=\|x-y\|_2^2$, so this is the standard Gaussian kernel on the binary domain. For any finite positive $\sigma$, its population squared MMD vanishes exactly when $p=q$ \cite{grettonKernelTwoSample2012}.
 
 Let $\mathcal C_{\mathrm{train}}$ denote the set of training conditions and $\tau$ the set of kernel bandwidths. We train the shared model by minimizing the condition-balanced objective
 \begin{equation}
@@ -330,7 +312,7 @@ Here, $\mmd_\sigma^2$ denotes the squared MMD computed with the kernel $k_\sigma
 
 \subsection{Character expansion}
 
-For binary strings, the Gaussian kernel admits an exact expansion in binary characters. We sample a visible-bit mask $a\in\{0,1\}^n$ by drawing its coordinates independently according to
+We use the Gaussian-kernel expansion into binary characters employed in earlier Born-machine and classical IQP training work \cite{rudolphTrainabilityBarriersOpportunities2024,recio-armengolTrainClassicalDeploy2026}. We apply this expansion separately at each condition to express the shared training objective through conditional Pauli-$Z$ moments. We sample a visible-bit mask $a\in\{0,1\}^n$ by drawing its coordinates independently according to
 \begin{equation}
     a_i\sim\operatorname{Bernoulli}(p_\sigma),
     \qquad
@@ -342,7 +324,7 @@ The corresponding binary character is
 \begin{equation}
     \chi_a(x)=(-1)^{a\cdot x},
 \end{equation}
-which records the parity of the bits selected by $a$. Averaging the product of these characters over $a$ gives
+which records the parity of the bits selected by $a$. For each bit where $x$ and $y$ agree, the expected character-product factor is $1$. Where they differ, it is $1-2p_\sigma=e^{-1/(2\sigma^2)}$. Since the mask coordinates are independent, multiplying these factors recovers the Gaussian kernel:
 \begin{equation}
     k_\sigma(x,y)
     =
@@ -408,7 +390,7 @@ The bandwidth $\sigma$ determines which correlation orders the objective emphasi
 \end{equation}
 Each bandwidth therefore induces a distribution over correlation orders. Large bandwidths favor lower-order correlations, whereas decreasing $\sigma$ shifts weight toward higher-order correlations, with $\E[K]\rightarrow n/2$ as $\sigma\rightarrow0$.
 
-The choice of bandwidth can also influence the model's trainability. Previous results demonstrate that cost functions consisting of global terms can induce barren plateaus \cite{mccleanBarrenPlateausQuantum2018, laroccaBarrenPlateausVariational2025}, even in shallow quantum circuits \cite{cerezoCostFunctionDependent2021}. This creates a trade-off between trainability and sensitivity to higher-order correlations. Improving trainability may require restricting the objective to low-body correlations, which limits its ability to distinguish distributions that differ in higher-order correlations \cite{rudolphTrainabilityBarriersOpportunities2024}. Researchers have proposed several strategies to address these difficulties, including tailored generator sets and restricted initializations \cite{shenCharacterizingTrainability2026,lerchIQPInitialization2026}, and adversarial kernel adaptation \cite{kurkinUniversalityKernelAdaptive2025}. How best to balance trainability and sensitivity to higher-order correlations remains an open question beyond the scope of this work.
+The bandwidth can also influence optimization behavior. Under suitable circuit and initialization assumptions, objectives dominated by global terms can exhibit barren plateaus, in which gradients vanish exponentially with system size \cite{mccleanBarrenPlateausQuantum2018,laroccaBarrenPlateausVariational2025,cerezoCostFunctionDependent2021}. These optimization difficulties are distinct from the efficient classical estimation of objectives and gradients that we call classical trainability. Emphasizing lower-order correlations can mitigate vanishing gradients in some settings, but it reduces sensitivity to higher-order differences between distributions \cite{rudolphTrainabilityBarriersOpportunities2024}. For every finite positive bandwidth, the Gaussian kernel retains all correlation orders with positive weight. Increasing the bandwidth therefore changes their relative emphasis rather than removing them. In contrast, restricting an objective to low-order moments can make distinct distributions indistinguishable. Proposed approaches to improving optimization include tailored generator sets, restricted initializations and adversarial kernel adaptation \cite{shenCharacterizingTrainability2026,lerchIQPInitialization2026,kurkinUniversalityKernelAdaptive2025}. Determining how these approaches extend to our conditional framework remains beyond the scope of this work.
 
 \subsection{Unbiased finite-sample MMD and gradients}
 \label{sec:unbiased-conditional-mmd}
@@ -432,6 +414,8 @@ We denote the corresponding sample means by
     \qquad
     \overline Y=\frac{1}{S}\sum_{s=1}^{S}Y_s.
 \end{equation}
+
+We follow the independent-pair construction used for unbiased IQP MMD estimation \cite[Appendix~A.2.1]{recio-armengolTrainClassicalDeploy2026}, applying it to the conditional reference estimators and target moments.
 
 The direct estimate $(\overline Y-\overline T)^2$ overestimates the squared moment difference on average because it includes the sampling variances of both sample means. We remove this bias by excluding products that use the same draw twice:
 \begin{equation}
@@ -457,19 +441,7 @@ Independence within each pair gives
 \end{equation}
 Thus, Eq.~\eqref{eq:conditional-mmd-ustatistic} provides an unbiased finite-sample estimator of the squared character-moment difference appearing in Eq.~\eqref{eq:mmd-character-moments}. An unbiased finite-sample estimate of $\mmd^2$ may be negative.
 
-We evaluate the pair sums using the identities
-\begin{equation}
-    \sum_{s\neq t}Y_sY_t
-    =
-    \left(\sum_sY_s\right)^2-\sum_sY_s^2,
-\end{equation}
-and, since $T_b^2=1$,
-\begin{equation}
-    \sum_{b\neq b'}T_bT_{b'}
-    =
-    \left(\sum_bT_b\right)^2-B.
-\end{equation}
-Once we have computed the sample values, we can therefore evaluate the estimator in time linear in the numbers of target and reference samples.
+Once we have computed the sample values, we evaluate the estimator in time linear in the numbers of target and reference samples. Appendix~\ref{sec:appendix_estimator_evaluation} gives the pair-sum identities used for this calculation.
 
 The same construction gives an unbiased estimator of the phase gradients. For a phase parameter $\theta_j$, let
 \begin{equation}
@@ -508,6 +480,15 @@ Taking the expectation yields
 \end{equation}
 which is the gradient of the corresponding squared moment difference.
 
+Since $|T_b|=1$, independence of distinct draws and the triangle inequality in $L^2$ give
+\[
+\begin{aligned}
+    \E\!\left[\bigl(\widehat{\Delta_c^2}(a)\bigr)^2\right]&\leq16,\\
+    \E\!\left[\bigl(\partial_{\theta_j}\widehat{\Delta_c^2}(a)\bigr)^2\right]&\leq64.
+\end{aligned}
+\]
+Averaging over conditions, bandwidths and sampled masks preserves these uniform bounds. Therefore, averaging $N$ independent repetitions of the complete estimator gives mean-square error at most $16/N$ for the objective and $64/N$ for a specified phase-gradient component. By Chebyshev's inequality, $O(\epsilon^{-2})$ repetitions suffice for additive error $\epsilon$ at fixed confidence.
+
 At a fixed parameter vector, the expectations above average over independent draws from the target distribution and the reference sampling law. During training, we sample target minibatches with replacement from fixed training pools; the stochastic gradient is therefore unbiased for the empirical objective associated with those pools.
 
 We exclude the diagonal terms $s=t$ because $Y_s$ and $Y'_s$ can be correlated when we compute them from the same reference draw. The fixed encoder makes the reference sampling law independent of $\boldsymbol{\theta}$. We therefore hold the sampled reference strings fixed during automatic differentiation to evaluate the phase gradients without differentiating through the sampler.
@@ -543,24 +524,14 @@ We draw $M$ nonidentity masks $a_1,\ldots,a_M$ independently from $P_\sigma(a\mi
     \widehat{\Delta_c^2}(a_m),
     \label{eq:sampled-mmd-estimator}
 \end{equation}
-where $\widehat{\Delta_c^2}$ is the unbiased finite-sample estimator in Eq.~\eqref{eq:conditional-mmd-ustatistic}. Averaging over the mask, target, and reference draws recovers the full kernel squared MMD.
+Here, $\widehat{\Delta_c^2}$ is the unbiased finite-sample estimator in Eq.~\eqref{eq:conditional-mmd-ustatistic}. For each sampled condition and bandwidth, we use the same target and reference batches for all masks, drawing these batches independently of the masks. Sharing batches correlates the estimates across masks, but linearity of expectation preserves unbiasedness. Averaging over the mask, target and reference draws therefore recovers the full kernel squared MMD.
 
-We evaluate each distinct sampled mask only once. Let $\mathcal U$ denote the set of distinct masks and $m_u$ the number of times mask $u$ occurs. We rewrite Eq.~\eqref{eq:sampled-mmd-estimator} as
-\begin{equation}
-    \widehat{\mmd}_{\sigma}^2(c)
-    =
-    Q_\sigma^+
-    \sum_{u\in\mathcal U}
-    \frac{m_u}{M}
-    \widehat{\Delta_c^2}(u).
-    \label{eq:compressed-mmd-estimator}
-\end{equation}
-Weighting each distinct mask by $m_u/M$ preserves the sampled objective and its gradient while reducing the number of Pauli moments we evaluate.
+Repeated masks use the same target and reference batches, so they yield identical estimates and phase gradients. We therefore evaluate each distinct mask once and weight its contribution by its frequency among the $M$ draws. This preserves the sampled objective and its gradient, as detailed in Appendix~\ref{sec:appendix_estimator_evaluation}.
 
 \section{Numerical experiments}
 \label{sec:numerical-experiments}
 
-We evaluate the proposed architecture on Gaussian families controlled by translation or by both mean and width, and on the Curie--Weiss model at sixteen qubits. We also assess computational feasibility through optimization runs from $64$ to $2048$ qubits. For the sixteen-qubit benchmarks, we use the exact full-distribution total variation distance as the primary accuracy metric,
+We use numerical experiments to assess the capabilities of the conditional framework. Translation of Gaussian-shaped profiles tests the basic conditioning mechanism, while two-coordinate conditioning tests joint control of profile center and width at combinations absent from training. The Curie--Weiss model tests whether one shared unitary can reproduce temperature-dependent changes in distribution shape. These benchmarks use sixteen qubits. Finally, training runs from $64$ to $2048$ qubits assess computational feasibility. For the sixteen-qubit benchmarks, we use the exact full-distribution total variation distance as the primary accuracy metric,
 \begin{equation}
     \operatorname{TVD}(p,q)=\frac{1}{2}\sum_{x\in\{0,1\}^n}|p(x)-q(x)|.
     \label{eq:full-distribution-tvd}
@@ -569,192 +540,245 @@ We also report the exact TVD between Hamming-weight profiles as a diagnostic,
 \begin{equation}
     \operatorname{TVD}_K(p,q)=\frac{1}{2}\sum_{k=0}^{n}|\rho_p(k)-\rho_q(k)|,
 \end{equation}
-where $\rho_p(k)$ and $\rho_q(k)$ give the probabilities of observing Hamming weight $k$ under $p$ and $q$, respectively. Grouping bitstrings by Hamming weight gives $\operatorname{TVD}_K(p,q)\leq\operatorname{TVD}(p,q)$. The targets assign equal probability to all bitstrings with the same Hamming weight, but the learned models need not preserve this property. Profile TVD therefore does not resolve errors within Hamming-weight shells. We compute both metrics using the same exact circuit probabilities.
+where $\rho_p(k)$ and $\rho_q(k)$ give the probabilities of observing Hamming weight $k$ under $p$ and $q$, respectively. Grouping bitstrings by Hamming weight gives $\operatorname{TVD}_K(p,q)\leq\operatorname{TVD}(p,q)$. The Gaussian-shaped and Curie--Weiss targets assign equal probability to all bitstrings with the same Hamming weight, but the learned models need not preserve this property. Profile TVD therefore does not resolve errors within Hamming-weight shells. We compute both metrics using the same exact circuit probabilities.
 
-We train the models by minimizing the squared-MMD objective. We select checkpoints for the one-dimensional Gaussian translation experiment using mean exact profile TVD over the development conditions. The initial two-dimensional Gaussian benchmark and the trained sixteen-qubit Curie--Weiss models use exact full-distribution TVD for hyperparameter and checkpoint selection. We additionally evaluate the two-dimensional Gaussian model with finite-target validation, using empirical MMD for checkpoint selection. Appendices~\ref{sec:appendix_hyperparams} and \ref{sec:gaussian-two-dimensional-protocol} specify the protocols and distinguish the target information available in each experiment.
+We train the models by minimizing the squared-MMD objective. We use hyperparameter optimization for the two-coordinate, Curie--Weiss and scaling benchmarks. Appendices~\ref{sec:appendix_hyperparams} and \ref{sec:gaussian-two-dimensional-protocol} specify the training settings, hyperparameter searches and evaluation protocols. Code and data are available in the accompanying repository \cite{balloConditionalGenerationIQP2026}.
 
-\subsection{Discrete Gaussian translation}
+\subsection{Translation of Gaussian-shaped profiles}
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=0.900\linewidth]{figures/gaussian_translation_profiles.pdf}
-    \caption{Conditional translation of discrete Gaussian Hamming-weight profiles at sixteen qubits. (a) Solid colored curves show exact model profiles averaged across five runs at the development conditions $c\in\{0.125,0.375,0.625,0.875\}$. We use these conditions for checkpoint selection and exclude them from fitting. (b) The solid black curve shows the median across runs of the model's mean output Hamming weight at each of $80$ held-out conditions. Shading shows the interquartile range. Dashed curves show exact targets, dotted gray curves show the encoder alone, and gray circles mark training conditions on the target response. Table~\ref{tab:gaussian_tvd} reports exact full-distribution and profile errors.}
+    \caption{Conditional translation of Gaussian-shaped Hamming-weight profiles at sixteen qubits. (a) Solid colored curves show exact model profiles averaged across five fits at four held-out conditions spread throughout $[0,1]$; dashed curves show their targets. The upper labels identify the target mean Hamming weight for each color. (b) The solid blue curve and shading show the median and interquartile range of the model's mean output Hamming weight at $80$ held-out conditions. The dashed black curve shows the exact target response. Dotted gray curves show the uniform encoder's binomial profile and constant mean; gray markers denote fitting conditions. The open circle at $c=0.5$ marks exact agreement imposed by construction. Table~\ref{tab:gaussian_tvd} reports full-distribution and profile errors.}
     \label{fig:gaussian-translation}
 \end{figure*}
 
-Our first experiment illustrates the conditioning mechanism with a translated discrete Gaussian Hamming-weight profile. For $n=16$ bits, let $K=|x|$ denote the Hamming weight of bitstring $x$. The condition $c\in[0,1]$ controls the nominal center $5+6c$ of the profile. The target distribution assigns equal probability to all bitstrings with the same Hamming weight.
-
-We use a fixed product-state encoder that applies the same two rotations to every qubit:
+Our first experiment tests whether one shared unitary converts condition-dependent input phases into translated output profiles. For $n=16$ bits, let $K=|x|$ denote Hamming weight. We define a Gaussian-shaped family by tilting a binomial profile,
 \begin{equation}
-    \ket{\phi(c)} = \bigotimes_{i=1}^{16} R_Z\!\left(c - \frac{1}{2}\right)R_Y(1.5)\ket{0}_i .
+ \rho(k\mid c)\propto\binom{16}{k}
+ \exp\!\left[\frac34(2c-1)(k-8)\right],
+ \label{eq:gaussian-translation-target}
 \end{equation}
-Changing $c$ modifies the input phases but leaves the encoder's computational-basis measurement distribution unchanged.
+for $k\in\{0,\ldots,16\}$ and $c\in[0,1]$. The target bitstring law is $p(x\mid c)=\rho(|x|\mid c)/\binom{16}{|x|}$. At $c=0.5$, it is exactly uniform and $K$ is binomial. The linear tilt gives a binomial profile with condition-dependent success probability. It shifts the mean and also changes the standard deviation. These profiles are Gaussian-shaped, rather than exact discrete Gaussians of fixed width.
 
-The shared unitary uses a $4\times4$ lattice with 16 one-body phase gates and 24 two-body phase gates between horizontal and vertical nearest neighbors, giving 40 trainable parameters.
+The product-state encoder stores $c$ only in phases,
+\begin{equation}
+ \ket{\phi(c)}=\bigotimes_{i=1}^{16}
+ R_Z(c-1/2)R_Y(\pi/2)\ket{0}_i.
+\end{equation}
+Measuring this input always gives a uniform bitstring distribution. The learned IQP unitary must therefore convert phases into the nonuniform target probabilities away from the center. At $c=0.5$, however, the input is $\ket{+}^{\otimes16}$, an eigenstate of every $X$-type IQP generator. Every parameter vector preserves its uniform output law, so agreement at this condition is architectural and does not provide evidence of learning.
 
-We train at $c\in\{0,0.25,0.5,0.75,1\}$ and evaluate at $80$ held-out conditions. The median across runs of the mean full-distribution TVD over these conditions is $0.0995$, compared with $0.2922$ for the encoder alone (Table~\ref{tab:gaussian_tvd}). The corresponding profile TVD is $0.0464$. The higher full-distribution TVD reveals discrepancies within Hamming-weight shells that the profile metric does not resolve. Figure~\ref{fig:gaussian-translation} shows the translated profiles and conditional response. Appendix~\ref{sec:appendix_gaussian} gives the training and evaluation protocol.
+We use a $4\times4$ lattice with sixteen one-body and twenty-four nearest-neighbor two-body generators, each with an independent learned parameter. We fit at $c\in\{0,0.25,0.5,0.75,1\}$ and evaluate at $80$ held-out conditions spaced throughout $[0,1]$. Appendix~\ref{sec:appendix_gaussian} specifies sampled training and exact development selection.
+
+The median across five fits of mean full-distribution TVD over these reporting conditions is $0.0668$, compared with $0.2848$ for the encoder alone. Profile TVD is $0.0212$. Figure~\ref{fig:gaussian-translation} shows how the shared unitary shifts the profiles and follows the target mean between fitting conditions. The larger full-distribution error reveals discrepancies that Hamming-weight aggregation conceals. These results validate the conditioning mechanism away from the fixed central baseline.
 
 \input{tables/gaussian_tvd.tex}
 
-\subsection{Two-dimensional Gaussian conditioning and generalization}
+\subsection{Two-coordinate conditioning and generalization}
 \label{sec:gaussian-two-dimensional}
 
-We next ask whether a shared model can generate distributions controlled by two coordinates and generalize to combinations absent from fitting. We extend Gaussian translation to changes in both center and width, while keeping the encoder amplitudes independent of the conditions. For sixteen bits, we define the target distribution by its Hamming-weight profile,
+We next test joint control of profile center and width, including coordinate combinations absent from fitting. We extend Eq.~\eqref{eq:gaussian-translation-target} to
 \begin{align}
  p(x\mid u,v)&=\frac{\rho_{u,v}(|x|)}{\binom{16}{|x|}},\label{eq:gaussian-two-dimensional-target}\\
- \rho_{u,v}(k)&\propto\exp\!\left[-\frac{(k-\mu(u))^2}{2\sigma_{\mathrm G}(v)^2}\right],
+ \rho_{u,v}(k)&\propto\binom{16}{k}
+ \exp\!\left[-\frac{(k-8-3u)^2}{8(1+0.2v)^2}
+              +\frac{(k-8)^2}{8}\right],
 \end{align}
-where $u,v\in[-1,1]$, $\mu(u)=8+3u$ and $\sigma_{\mathrm G}(v)=2(1+0.2v)$. We normalize over $k\in\{0,\ldots,16\}$. The coordinates control the nominal center and width; discretization and truncation cause small differences from the actual target moments.
+where $u,v\in[-1,1]$ and we normalize over $k\in\{0,\ldots,16\}$. The previous family is the slice $u=2c-1$, $v=0$. The linear and quadratic tilts control center and width, respectively, but their finite-support moments also depend on one another. We therefore compare generated responses with actual target means and standard deviations. At $(u,v)=(0,0)$, the target is exactly uniform.
 
-We encode both coordinates through linear and quadratic phases of Hamming weight. These provide smooth conditional features without preparing the requested conditional profile in the input amplitudes. We first prepare one fixed state,
+We encode the coordinates through collective phases on a uniform input. With $J_z=\tfrac12\sum_jZ_j$, the encoder prepares
 \begin{equation}
- \ket{G_0}=\sum_{k=0}^{16}\sqrt{r_0(k)}\ket{D_k^{(16)}},\qquad
- r_0(k)\propto e^{-(k-8)^2/8},
-\end{equation}
-where $\ket{D_k^{(16)}}$ is the normalized uniform superposition of bitstrings of weight $k$, and $r_0$ is normalized over the same finite support. With $J_z=\tfrac12\sum_j Z_j$, we encode the conditions as
-\begin{equation}
- \ket{\phi(u,v)}=e^{-i(u/2)J_z}e^{-i(v/40)J_z^2}\ket{G_0}.
+ \ket{\phi(u,v)}=e^{-i(u/2)J_z}e^{-i(v/40)J_z^2}
+ \ket{+}^{\otimes16}.
  \label{eq:gaussian-two-dimensional-input}
 \end{equation}
-The first phase is linear in Hamming weight and consists of identical $R_Z(u/2)$ rotations. The second is quadratic in Hamming weight and introduces a collective phase controlled by $v$. Measuring the encoder alone always gives $r_0$, independently of either condition. Conditional changes in the output therefore arise when the subsequent rotation converts these phases into probabilities.
+The linear phase gives a constant phase increment between neighboring Hamming-weight sectors. The quadratic phase makes this increment depend on Hamming weight and introduces correlations for nonzero $v$. These phases provide condition-dependent features, while every input has the same uniform computational-basis probabilities. Consequently, the encoder does not prepare the requested noncentral distributions. One shared IQP transformation must convert the features into changes in the output law.
 
-We use one learned angle shared across all sixteen local rotations,
-\begin{equation}
- U_\theta=e^{i\theta\sum_j X_j}=R_X(-2\theta)^{\otimes16}.
-\end{equation}
-The encoder and learned layer preserve permutation symmetry, so their bitstring probabilities are uniform within each Hamming-weight shell. Full-distribution TVD therefore equals profile TVD for this model. The reference state $H^{\otimes16}\ket{\phi(u,v)}$ also has only seventeen distinct amplitudes, enabling efficient sampling and amplitude-ratio evaluation. Appendix~\ref{sec:gaussian-two-dimensional-protocol} gives the reference operations and preparation costs.
+The learned layer uses the same forty independently parameterized lattice generators as translation. Its parameters need not preserve permutation symmetry, so full-distribution TVD can exceed profile TVD. Only the encoder and reference state retain seventeen distinct weight-dependent amplitudes. This structure permits polynomial-cost reference sampling and amplitude-ratio evaluation, as detailed in Appendix~\ref{sec:gaussian-two-dimensional-protocol}. At the central condition, every learned unitary preserves the uniform law. We design the target family to share this fixed baseline and assess learned responses away from it.
 
-We compare two training designs, each with nine fitting conditions and a fixed pool of $1024$ target strings per condition. Separate variation changes $u$ at $v=0$ or $v$ at $u=0$, excluding mixed pairs from both fitting and development. Joint variation fits the $3\times3$ grid $\{-1,0,1\}^2$. The initial benchmark selects configurations and checkpoints using exact development TVD and evaluates five final fits per design. This provides a reference for conditional fidelity, but selection accesses target-distribution information beyond the finite fitting pools.
+We compare two fitting geometries. Axis training varies $u$ at $v=0$ and $v$ at $u=0$, excluding mixed pairs from fitting and development selection. Reporting then tests new combinations within and beyond the diamond-shaped fitting hull, while remaining within each observed coordinate range. Grid training fits $\{-1,0,1\}^2$ and tests interpolation within its rectangular hull. Both designs use nine fitting conditions and five independent final fits. We select optimizer settings and checkpoints using exact development TVD, with protocol details in Appendix~\ref{sec:gaussian-two-dimensional-protocol}.
 
 \begin{figure*}[!t]
  \centering
- \includegraphics[width=\linewidth]{figures/gaussian2d_phase_heatmaps.pdf}
- \caption{Two-coordinate Gaussian generation with fixed input amplitudes and condition-dependent phases. Shading shows exact full-distribution TVD averaged across five fits selected with exact development TVD at each point of a $41\times41$ grid. Crosses mark fitting conditions and dashed lines bound their convex hulls. (a) Separate variation excludes mixed pairs from fitting and development. Points outside the diamond combine individually observed coordinate values beyond the joint fitting hull. (b) Joint variation fits a $3\times3$ grid and tests interpolation between its points. Both panels use the same color scale; the axes show nominal target center and width. We evaluate the grid after selection, including fitting and development points. Table~\ref{tab:gaussian-two-dimensional} uses separate reporting sets that exclude fitting and development. Earlier exploratory studies informed the encoder and examined some reporting conditions.}
+ \includegraphics[width=\linewidth]{figures/gaussian2d_lattice_heatmaps.pdf}
+ \caption{Two-coordinate conditional generation with forty independent lattice parameters. Blue shading shows the pointwise mean full-distribution TVD across five fits on a $41\times41$ diagnostic grid. Dark gray crosses mark fitting conditions and gray dashed lines delimit their convex hulls. (a) Axis training tests new combinations within and beyond the diamond-shaped hull; all displayed conditions remain within the individual coordinate ranges seen during fitting. (b) Grid training tests interpolation within the rectangular hull. Both panels share one color scale. The open circle at $(u,v)=(0,0)$ marks the uniform target and model law fixed by construction. Dense sweeps include fitting and development conditions; reporting averages use separate sets.}
  \label{fig:gaussian-two-dimensional}
 \end{figure*}
 
-\input{tables/gaussian2d_phase_tvd.tex}
+\input{tables/gaussian2d_lattice_tvd.tex}
 
-Separate variation gives mean reporting TVD $0.0258\pm0.0005$ over sixteen unseen mixed pairs. Four pairs interpolate within its joint fitting hull and give $0.0159\pm0.0016$; twelve lie outside that hull and give $0.0290\pm0.0005$. Every pair combines coordinate values encountered separately during fitting. Joint variation gives $0.0222\pm0.0013$ over thirty-two withheld pairs. We average errors over conditions within each fit, then report the mean and sample standard deviation across fits. Figure~\ref{fig:gaussian-two-dimensional} shows the broader conditional domain. Response sweeps recover approximately $96$--$97\%$ of the target mean displacement and $91$--$95\%$ of the width change, with increasing width along every tested slice (Appendix~\ref{sec:gaussian-two-dimensional-protocol}).
+Axis training gives mean reporting full-distribution TVD $0.0468\pm0.0143$ over sixteen unseen mixed pairs. Four lie within its fitting hull and give $0.0185\pm0.0060$; twelve lie outside and give $0.0563\pm0.0171$. Grid training gives $0.0397\pm0.0093$ over thirty-two withheld pairs. We average errors over conditions within each fit, then report the mean and sample standard deviation across fits. Mean-response sweeps follow the target displacement across all tested widths. Every final fit increases width along each tested slice, although the amount of broadening varies across fits. Appendix~\ref{sec:gaussian-two-dimensional-protocol} shows the mean and width responses and distinguishes full-distribution errors from profile errors.
 
-We then test whether this behavior persists when checkpoint selection uses finite target observations. With the encoder and optimizer fixed, five additional fits per design select checkpoints using empirical validation MMD and exact model moments. Each fit uses $9216$ fitting samples and an additional $1024$ validation samples for separate variation or $2560$ for joint variation. Mean reporting TVD is $0.0288\pm0.0058$ and $0.0280\pm0.0035$, respectively. These fits recover approximately the full target mean displacement and $89$--$93\%$ of the endpoint width change on the tested slices, without adjacent width reversals. Thus useful two-coordinate response survives finite-target validation. This check removes population target information from checkpoint selection, while retaining the earlier choices of encoder and optimizer.
+These experiments test a shared transformation across a task-informed family. They demonstrate responses at combinations absent from fitting and development selection, but do not establish that the lattice is necessary or that the selected encoder generalizes to unrelated families. The condition sets and phase features were explored during earlier design, and exact development targets contribute to selection. We therefore interpret the results as conditional capability within the studied domain.
 
-Simple calibration controls clarify what fitting contributes. The model's analytic mean response allows us to estimate its shared angle directly from the finite fitting-pool means. This gives reporting TVD $0.0263\pm0.0025$ for separate variation and $0.0259\pm0.0019$ for joint variation, without iterative optimization or validation data. Replacing the fixed Gaussian prior with $\ket{+}^{\otimes16}$ and calibrating the angle in the same way gives slightly lower errors, $0.0241\pm0.0026$ and $0.0230\pm0.0019$. The quadratic conditional phase remains entangling in this control. Appendix~\ref{sec:gaussian-two-dimensional-protocol} gives the response identity, calibration rule, terminal-checkpoint results and estimator comparison.
+\subsection{Curie--Weiss spin model}
+\label{sec:cw_main}
 
-Together, these experiments demonstrate structured conditional generation and generalization to mean--width combinations withheld from fitting and development. The conditions change only phases of a fixed input, and the readout converts those phases into distributional changes. The chosen features nevertheless supply a task-informed prior for both responses; fitting calibrates that prior rather than discovering an unknown conditional law. The calibration controls show that neither iterative optimization nor Gaussian amplitude preparation is necessary for the observed fidelity. Earlier studies informed the encoder and examined the reporting conditions, so we interpret the results as a conditional-capability demonstration rather than an independent confirmatory test.
-
-\subsection{Curie-Weiss spin model}
-
-We use the zero-field Curie--Weiss model \cite{ellisEntropyLargeDeviations2006} to test whether the architecture captures changes in distributional shape. The spins $s_i\in\{-1,+1\}$ interact with equal strength across all pairs, so the target assigns equal probability to bitstrings with the same Hamming weight. As the inverse temperature $\beta$ increases, the finite-size Hamming-weight profile changes from a central peak to two symmetric modes.
-
-We encode the inverse temperature using the fixed product-state encoder
+We use the zero-field Curie--Weiss model \cite{ellisEntropyLargeDeviations2006} to test conditional generation across a change in distribution shape. For $n=16$ spins $s_i\in\{-1,+1\}$ with unit interaction strength, the target distribution is
 \begin{equation}
-    \ket{\phi(\beta)} = \bigotimes_{i=1}^{16} R_Z(0.75\beta)R_Y\!\left(\frac{\pi}{2}\right)\ket{0}_i .
+ p(x\mid\beta)=\frac{1}{\mathcal Z_\beta}
+ \exp\!\left[\frac{\beta}{2n}(2|x|-n)^2\right],
+ \label{eq:cw_target}
 \end{equation}
-The $R_Z$ rotations encode $\beta$ in the input phases while leaving the computational-basis measurement distribution uniform. We parameterize the IQP unitary with all one- and two-body generators, giving $136$ trainable parameters. We train at $\beta\in\{0.6,0.8,1.2,1.4\}$ and evaluate at the held-out inverse temperatures $\beta\in\{0.4,1.0,1.6\}$.
+where $\beta$ is inverse temperature and $\mathcal Z_\beta$ normalizes the distribution. The target assigns equal probability to bitstrings with the same Hamming weight and is invariant under global spin flip. As $\beta$ increases, its finite-size Hamming-weight profile changes from a central peak to two symmetric modes.
 
-We compare the shared conditional IQP model with two independently tuned baseline families. Each family comprises three circuits, which we fit separately at the three evaluation temperatures. The independent conditional IQPs retain the corresponding temperature encoder, whereas the independent unconditional IQPs use $\ket{0}^{\otimes16}$ as their input state.
+We encode temperature through correlated input phases chosen to preserve the target's global spin-flip symmetry:
+\begin{equation}
+ \ket{\phi_{\mathrm P}(\beta;s)}=
+ \exp\!\left[-\frac{i s\beta}{2}\sum_{i=1}^{15}Z_iZ_{16}\right]
+ \ket{+}^{\otimes16},
+ \label{eq:cw_parity_input}
+\end{equation}
+where $s$ is an encoder scale selected by hyperparameter optimization. These pairwise rotations introduce temperature-dependent phase correlations, but leave the computational-basis probabilities uniform at every temperature. Thus the encoder supplies conditional information without producing the target family itself. The learned IQP unitary must convert this information into the different target distributions through one shared transformation across temperatures.
 
-We use exact full-distribution TVD for hyperparameter optimization (HPO) and model selection. We tune the shared model on development temperatures and each independent family jointly across its fitted temperatures. Appendix~\ref{sec:cw_hpo} details the protocol.
+A preparation circuit applies $R_X(s\beta)$ to each of the first fifteen qubits initially in $\ket{0}$, copies their parity to qubit sixteen using CNOTs, and applies a Hadamard to every qubit. This construction uses no ancillas and has a classically tractable reference state $\ket{\psi_{\mathrm P}}=H^{\otimes16}\ket{\phi_{\mathrm P}}$.
 
-Each independent baseline family uses three circuits and therefore three times the total parameters and optimizer updates of the shared model. The shared model uses more training-pool samples, with $4{,}096$ entries per run compared with $3{,}072$ for each independent family. Appendix~\ref{sec:appendix_cw} reports the detailed budgets.
+Let $u\in\{0,1\}^{15}$ and let $b$ denote the final bit. The reference amplitudes are
+\begin{equation}
+ \psi_{\mathrm P}(u,b)=
+ \mathbf{1}_{b=\oplus_i u_i}
+ \cos(s\beta/2)^{15-|u|}
+ [-i\sin(s\beta/2)]^{|u|}.
+\end{equation}
+We sample the first fifteen bits independently with probability $\sin^2(s\beta/2)$ and set the final bit to their XOR. Reference amplitude ratios follow from the displayed product on its support and vanish when the mask has odd parity. These operations meet the sampling-and-ratio interface in $O(n)$ arithmetic operations for the corresponding $n$-qubit construction.
+
+The reference has even total parity, so $Z^{\otimes16}\ket{\psi_{\mathrm P}}=\ket{\psi_{\mathrm P}}$ and $X^{\otimes16}\ket{\phi_{\mathrm P}}=\ket{\phi_{\mathrm P}}$. Every generator in the learned IQP unitary commutes with $X^{\otimes16}$, giving
+\begin{equation}
+ q_{\boldsymbol\theta}(x\mid\beta)
+ =q_{\boldsymbol\theta}(\bar x\mid\beta)
+\end{equation}
+for every parameter vector, where $\bar x$ flips all bits. This guarantees zero signed mean magnetization and a symmetric Hamming-weight profile. It does not guarantee permutation invariance, uniformity within shells or agreement with the target distribution.
+
+We use all one- and two-body IQP generators, giving $136$ independent learned phases per circuit. The shared model fits $\beta\in\{0.1,0.7,1.3,1.95\}$ and reports at the common markers $\beta\in\{0.4,1,2\}$ and on a separate dense grid. Each independent baseline family contains three circuits fitted directly at the markers. The independent parity-input family uses Eq.~\eqref{eq:cw_parity_input}, with one jointly selected scale and optimizer configuration across its circuits. The independent unconditional family uses $\ket{0}^{\otimes16}$ and does not impose global spin-flip symmetry. Appendix~\ref{sec:cw_product_ablation} compares the shared parity model with a shared product-state encoder using the same learned IQP ansatz. This comparison assesses the encoder construction as a whole, since the replacement changes both input correlations and the enforced spin-flip symmetry.
+
+% AUTHOR NOTE: Defer a second Curie--Weiss encoder comparison to future work. Retain the existing product-input comparison as a comparison of the complete encoder construction, without attributing its fidelity difference to symmetry alone. A control retaining the temperature-dependent ZZ generators while removing enforced global spin-flip symmetry requires a different initial state or an additional symmetry-breaking operation; its design remains future work.
+
+We train with sampled squared MMD and perform hyperparameter optimization separately for each model family. For checkpoint and hyperparameter selection, we use exact target probabilities, with full-distribution TVD as the primary criterion and physical-observable agreement as a secondary criterion. Appendix~\ref{sec:cw_hpo} specifies the optimization and selection protocols. We report means and sample standard deviations over ten independent final repeats, retaining all outcomes.
 
 \begin{figure*}[!t]
-    \centering
-    \includegraphics[width=0.900\linewidth]{figures/curie_weiss_model_comparison.pdf}
-    \caption{Curie--Weiss magnetization profiles at sixteen qubits. We write the magnetization as $m=(2k-16)/16$, where $k$ is the Hamming weight. Panels show (a) encoder only, (b) shared conditional IQP, (c) independent conditional IQPs, and (d) independent unconditional IQPs. Colors distinguish $\beta=0.4,1.0,1.6$, and dashed curves show exact targets. Solid curves show exact model profiles averaged over five confirmation runs used for model selection and reporting; the encoder-only profile is deterministic. We evaluate the shared model at temperatures excluded from fitting and model selection, whereas we fit the independent circuits directly at each displayed temperature. Table~\ref{tab:curie_weiss_full_tvd} reports full-distribution TVD.}
-    \label{fig:curie_weiss_phase_flip}
+ \centering
+ \includegraphics[width=\linewidth]{figures/curie_weiss_model_comparison.pdf}
+ \caption{Curie--Weiss magnetization profiles at sixteen qubits. The horizontal axis shows magnetization per spin, $m=(2k-16)/16$, where $k$ is the Hamming weight of a bitstring. Model curves show mean exact Hamming-weight probability masses over ten fresh final repeats, and shaded bands show sample standard deviations. The dashed black curve is the exact target. The shared parity model excludes the displayed markers from fitting and selection. Independent circuits fit directly at each marker. Full-distribution TVD in Table~\ref{tab:curie_weiss_full_tvd} also measures errors within Hamming-weight shells.}
+ \label{fig:curie_weiss_phase_flip}
 \end{figure*}
 
 \input{tables/curie_weiss_full_tvd.tex}
 
-The shared conditional model captures the change from unimodal to bimodal magnetization profiles, including bimodality at the held-out inverse temperature $\beta=1.0$ (Figure~\ref{fig:curie_weiss_phase_flip}). It achieves lower mean full-distribution TVD than both independent baseline families at $\beta=1.0$ and $1.6$, with mean errors of $0.2175$ and $0.1709$, respectively (Table~\ref{tab:curie_weiss_full_tvd}). The temperature $\beta=1.6$ lies beyond the training range. At $\beta=0.4$, the independent conditional family achieves lower mean TVD than the shared model ($0.1240$ versus $0.2240$), while the uniform encoder-only baseline achieves the lowest error ($0.1180$). Together with the held-out results, this comparison suggests that learning across conditions may provide a useful inductive bias for generalization.
+Figure~\ref{fig:curie_weiss_phase_flip} shows that the shared parity model reproduces the change from a central magnetization profile to a strongly polarized bimodal profile, although shape discrepancies remain near $\beta=1$. At the cold marker $\beta=2$, its mean full-distribution TVD is $0.0832\pm0.0103$, compared with $0.1525\pm0.0021$ for independent parity, a $45.4\%$ reduction. This advantage depends on temperature: independent parity performs better at $\beta=0.4$, while shared parity has modestly lower full-distribution TVD at $\beta=1$ despite larger profile error. Table~\ref{tab:curie_weiss_full_tvd} gives the complete marker comparison.
 
-The profile diagnostic in Appendix~\ref{sec:appendix_cw} (Table~\ref{tab:curie_weiss_profile_tvd}) gives a different ranking from full-distribution TVD. At $\beta=1.0$, both independent baseline families achieve lower mean profile TVD than the shared model but higher mean full-distribution TVD. At $\beta=0.4$, the shared model reduces mean profile TVD relative to the encoder while increasing mean full-distribution TVD. These differences show that agreement in Hamming-weight profiles does not ensure accurate bitstring probabilities.
+Across the separate $101$-point reporting grid in $[0,2]$, shared parity achieves inverse-temperature-averaged TVD $0.1033\pm0.0036$ and per-repeat maximum TVD $0.1406\pm0.0037$. Its mean error peaks near $\beta=0.98$, placing the largest discrepancies near the crossover. The reporting markers test interpolation and, at $\beta=2$, slight extrapolation beyond the largest fitting temperature $1.95$. These conditions are excluded from shared fitting and selection, although earlier studies examined this temperature range. At $\beta=0$, the encoder prepares $\ket{+}^{\otimes16}$, which the learned unitary changes only by a global phase. The uniform output at this endpoint therefore follows from the architecture independently of training.
 
-We also evaluate physical observables to distinguish magnetization magnitude from energy fluctuations. The exact zero-field target has $\langle m\rangle=0$ at finite size, so we report the mean absolute magnetization $\langle |m|\rangle$, with $m=n^{-1}\sum_i s_i$ and $n=16$. For the Hamiltonian $H=-nm^2/2$, we define the per-spin heat-capacity fluctuation estimate
+We also assess whether the learned distributions reproduce changes in physical observables. With $m=n^{-1}\sum_i s_i$, we use mean absolute magnetization $\langle|m|\rangle$, since the parity model enforces zero signed mean magnetization. For $H=-nm^2/2$, we define the per-spin energy-fluctuation statistic
 \begin{equation}
-    c_{\mathrm{fluc}}(\beta)=\frac{\beta^2}{n}
-    \bigl(\langle H^2\rangle-\langle H\rangle^2\bigr).
-    \label{eq:cw_heat_fluctuation}
+ c_{\mathrm{fluc}}(\beta)=\frac{\beta^2}{n}
+ \bigl(\langle H^2\rangle-\langle H\rangle^2\bigr).
+ \label{eq:cw_heat_fluctuation}
 \end{equation}
-This expression equals the per-spin equilibrium heat capacity for the Gibbs target. For a learned distribution, it measures energy fluctuations and need not equal the temperature derivative of the mean energy per spin. We compute both observables from exact probabilities for the same five selected confirmation circuits on a grid from $\beta=0$ to $2$ in steps of $0.02$, without additional fitting or model selection. The sweep includes fitting and development temperatures as well as temperatures beyond the fitting range; it is not an entirely held-out evaluation. Appendix~\ref{sec:cw_physical_observables} specifies the calculation and aggregation.
+For the Gibbs target, this equals the equilibrium heat capacity per spin. A learned distribution need not satisfy the corresponding temperature-derivative identity. Appendix~\ref{sec:cw_physical_observables} gives the observable calculations.
 
-\begin{figure}[!htbp]
-    \centering
-    \includegraphics[width=\linewidth]{figures/curie_weiss_physical_response.pdf}
-    \caption{Sixteen-qubit Curie--Weiss observables: (a) mean absolute magnetization and (b) per-spin heat-capacity fluctuation estimate, Eq.~\eqref{eq:cw_heat_fluctuation}. Dashed and dotted curves show the exact target and uniform encoder reference. Conditional IQP curves and bands show mean and sample standard deviation across five frozen confirmation circuits at $101$ temperatures. Independent markers use separately fitted circuits at $\beta=0.4,1.0,1.6$, with the same summaries. We compute nonlinear observables within each run before aggregation. The sweep includes fitting, development and extrapolation conditions. For learned distributions, panel (b) measures energy fluctuations rather than a verified temperature response.}
-    \label{fig:cw_physical_response}
-\end{figure}
-
-The dense response reveals errors that the three-temperature distribution comparison does not fully describe (Figure~\ref{fig:cw_physical_response}). At $\beta=1.0$, the shared model overestimates mean absolute magnetization ($0.525$ versus the target $0.451$), while the independent fitted baselines are closer. At higher inverse temperatures, the shared response levels off and underestimates the target ($0.855$ versus $0.936$ at $\beta=2$). Energy fluctuations show a different discrepancy. The target's heat capacity reaches its maximum on the evaluated grid near $\beta=1.52$ and then decreases, whereas the shared model's fluctuation estimate continues increasing through $\beta=2$, reaching $1.299$ versus the target $0.504$. At $\beta=1.6$, however, the shared estimate remains closer to the target than either independent baseline. Thus, capturing the change in magnetization magnitude does not ensure recovery of the target's energy fluctuations, and the relative accuracy depends on the observable and temperature.
-
-\input{sections/conditional_switching.tex}
-
-\begin{figure*}[!htbp]
-\centering
-\begin{minipage}[c]{0.48\textwidth}
-\centering
-\textbf{(a)}\par
-\includegraphics[width=\linewidth]{figures/switching16_graph.pdf}
-\end{minipage}\hfill
-\begin{minipage}[c]{0.48\textwidth}
-\centering
-\textbf{(b)}\par
-\includegraphics[width=\linewidth]{figures/triangle_motif_draft.pdf}
-\end{minipage}
-\caption{Triangle-based temperature encoding. Panel (a) shows the seven-vertex graph, with six root edges forming a spanning tree and ten chords. Panel (b) shows the preparation motif for a fundamental triangle. A chord rotation $R_X(t_\beta)$ and two CNOTs prepare $\cos(t_\beta/2)\ket{000}-i\sin(t_\beta/2)\ket{111}$ on edges $0i,0j,ij$. The full encoder repeats the rotation and CNOT construction for ten chords with shared root edges, then applies the global Hadamard layer once. The displayed motif is therefore an illustration, rather than an independent three-qubit block repeated with its own Hadamards. Every rotation uses $t_\beta=(\pi/2)\tanh(1.5\beta)$.}
-\label{fig:switching16-encoder}
+\begin{figure*}[t]
+ \centering
+ \includegraphics[width=\linewidth]{figures/curie_weiss_physical_response.pdf}
+ \caption{Mean absolute magnetization and energy fluctuations for sixteen-qubit Curie--Weiss models. The dashed black curves show the exact target. Shared parity curves and shaded bands show means and sample standard deviations over ten fresh final repeats on the fixed reporting grid. Independent parity and unconditional models appear as marker means with sample-standard-deviation error bars at their directly fitted temperatures $\beta=0.4,1,2$. Grey triangles mark the four shared fitting anchors. Each observable is computed within each repeat before aggregation. Equation~\eqref{eq:cw_heat_fluctuation} defines the fluctuation statistic for learned distributions; it does not verify a thermal derivative.}
+ \label{fig:cw_physical_response}
 \end{figure*}
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\linewidth]{figures/conditional_symmetry_current.pdf}
-\caption{Temperature dependence of signed-graph balance. Panel (a) shows the mean triangle balance $\langle E\rangle/16$, and panel (b) shows the probability that all sixteen triangle products are positive. Solid blue curves show means across five independently trained models, with bands indicating one sample standard deviation. Dashed black curves show the exact Gibbs target, and dotted gray curves show the encoder-only distribution, which remains uniform at every temperature. Downward triangles mark fitting temperatures; shading identifies temperatures beyond the fitting range. We evaluate the models after selection on $121$ temperatures over $\beta\in[0,2.4]$, including fitting and development conditions.}
-\label{fig:switching16-response}
-\end{figure}
+Figure~\ref{fig:cw_physical_response} shows that shared parity captures the broad magnetization change and fluctuation peak. However, observable agreement does not follow the full-distribution TVD ranking. At $\beta=1$, independent parity reproduces mean absolute magnetization more accurately, whereas shared parity better matches energy fluctuations. At $\beta=2$, shared parity has lower TVD but larger fluctuation error. The independent unconditional model also shows substantial variation across repeats at this cold marker. These results demonstrate conditional distribution learning while identifying limitations in the recovered physical observables. Table~\ref{tab:cw_physics_errors} reports the complete observable-error comparison.
 
-\input{tables/conditional_switching_tvd.tex}
+
+
+
+
+
+
 
 \subsection{Scaling}
 
-We assess the computational feasibility of classical training at $n\in\{64,128,256,512,1024,2048\}$ visible qubits, without ancillas. We use the fixed product-state encoder $R_Z(0.75\beta)R_Y(\pi/2)$ on every qubit. The learned unitary uses independent one-body phase gates and two-body phase gates between horizontal and vertical nearest neighbors on an open rectangular lattice. For an $L_x\times L_y$ lattice with $n=L_xL_y$, the model has $3n-L_x-L_y$ trainable parameters, so the parameter count grows linearly with $n$. Appendix~\ref{sec:appendix_scaling} gives the lattice dimensions and optimization settings.
+We next assess the computational feasibility of classical conditional training beyond sixteen qubits. We train Curie--Weiss models at $n\in\{64,128,256,512,1024,2048\}$, without ancillas, using the parity encoder introduced above. This encoder preserves global spin-flip symmetry at every system size. The learned unitary contains independent one-body phases and two-body phases between horizontal and vertical nearest neighbors on an open rectangular lattice. An $L_x\times L_y$ lattice therefore contains $3n-L_x-L_y$ trainable parameters, giving linear parameter growth.
 
-
-At each system size, we train at $\beta\in\{0.6,0.8,1.2,1.4\}$ and track the mean sampled MMD$^{2}$ over the held-out temperatures throughout optimization (Figure~\ref{fig:curie_weiss_qubit_scaling}). Appendix~\ref{sec:appendix_scaling} specifies the training and reporting protocol.
-
-The scaling study demonstrates the computational feasibility of classical conditional training up to 2048 qubits (Figure~\ref{fig:curie_weiss_qubit_scaling}). At 64 qubits, the median held-out sampled MMD$^{2}$ decreases from $0.0504$ to $0.0350$ after 5,000 updates; at 2048 qubits, it decreases from $0.0490$ to $0.0417$. These modest reductions suggest limited progress under the chosen training configuration and may reflect suboptimal hyperparameters. The runs use a sparse lattice ansatz and optimizer settings that differ from the tuned sixteen-qubit comparison. Further tuning and benchmarking are needed for a systematic assessment of generative performance. Because the kernel bandwidths vary with system size, the absolute MMD$^{2}$ values do not directly compare distributional fidelity across sizes.
-
-\begin{figure}[!htbp]
+\begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{figures/curie_weiss_lattice_scaling_mmd.pdf}
-    \caption{Classical training of conditional IQP Born machines from 64 to 2048 qubits. At each plotted update, we average sampled MMD$^{2}$ over the held-out inverse temperatures $\beta\in\{0.4,0.95,1.0,1.05,1.6\}$. Curves and shaded bands show the median and interquartile range of these averages across three independent training runs. We fix the expected mask weights at $w\in\{2,4\}$ for each system size, so the corresponding kernel bandwidths vary with $n$.}
+    \caption{Classical training of conditional IQP Born machines with the parity encoder from 64 to 2048 qubits. At each plotted update, we average sampled MMD$^{2}$ over the held-out inverse temperatures $\beta\in\{0.4,0.95,1.0,1.05,1.6\}$. For each run, we show the trajectory of its selected initialization. Curves and shaded bands show the median and interquartile range across the three training runs. We fix the expected mask weights at $w\in\{2,4\}$, so the corresponding kernel bandwidths vary with system size.}
     \label{fig:curie_weiss_qubit_scaling}
 \end{figure}
+
+
+We perform hyperparameter optimization at 64 and 256 qubits, then use the same selected configuration at all six sizes. At each size, we train at $\beta\in\{0.6,0.8,1.2,1.4\}$ and track sampled MMD$^{2}$ at held-out temperatures. Appendix~\ref{sec:appendix_scaling} specifies the architectures, optimization and evaluation protocols.
+
+Figure~\ref{fig:curie_weiss_qubit_scaling} shows a decrease in held-out sampled MMD$^{2}$ at every size, followed by a plateau. After 5000 updates, the median decreases from $0.0419$ to $0.00379$ at 64 qubits and from $0.0420$ to $0.00708$ at 2048 qubits. These results demonstrate classical conditional training with a symmetry-preserving encoder up to 2048 qubits, with progress on conditions excluded from fitting and selection. However, a low sampled MMD$^{2}$ does not by itself establish high full-distribution fidelity. The kernel retains all correlation orders, but the fixed expected mask weights $w\in\{2,4\}$ emphasize low-order Pauli-$Z$ moments. Discrepancies in higher-order correlations may therefore remain weakly penalized or poorly resolved by finite sampling. Moreover, the size-dependent kernel bandwidths prevent direct fidelity comparisons across system sizes.
+
+
 
 \section{Input-state induced symmetries in IQP Born machines}
 \label{sec:input-symmetry}
 
-Input-state encoding can also enforce exact output symmetries without restricting the learned phases. For a nonzero bit mask $s\in\{0,1\}^n$, the bit-flip operator $X_s=\bigotimes_{i=1}^n X_i^{s_i}$ commutes with the IQP unitary. If each encoded input is an eigenstate of $X_s$, the output state retains the same eigenvalue. Its computational-basis amplitudes at $x$ and $x\oplus s$ therefore differ at most by a sign, giving equal probabilities for every condition and parameter vector. This applies the commuting-symmetry construction of Recio-Armengol \textit{et al.} \cite[Sec.~6]{recio-armengolTrainClassicalDeploy2026} to conditional inputs. Such constraints provide inductive biases in variational quantum models \cite{meyerExploitingSymmetry2023}.
+Input-state encoding can also enforce exact output symmetries without restricting the learned phases. For a nonzero bit mask $s\in\{0,1\}^n$, the bit-flip operator $X_s=\bigotimes_{i=1}^n X_i^{s_i}$ commutes with the IQP unitary. If each encoded input is an eigenstate of $X_s$, the output state retains the same eigenvalue. Its computational-basis amplitudes at $x$ and $x\oplus s$ therefore differ at most by a sign, giving equal probabilities for every condition and parameter vector. This symmetry principle underlies the input-state construction of Recio-Armengol \textit{et al.} \cite[Sec.~6]{recio-armengolTrainClassicalDeploy2026}. Building on it, we construct condition-dependent encoders that enforce several prescribed bit-flip symmetries while retaining efficient reference sampling and amplitude-ratio evaluation. Such constraints provide inductive biases in variational quantum models \cite{meyerExploitingSymmetry2023}.
 
-The conditional switching experiment in Section~\ref{sec:conditional-switching16} implements this criterion for six independent masks simultaneously. Its reference state has even incidence parity at every graph vertex. After the Hadamards, the input is a simultaneous $+1$ eigenstate of all vertex switches, so any subsequent $X$-generated IQP layer preserves the constraints. Parameter tying reduces the fitted model to two angles but is not required for the symmetry guarantee. This separates an architectural property from distributional accuracy, which still depends on the target, encoder and optimization.
+Our construction maps independent latent bits to reference bitstrings that satisfy specified parity constraints. The Hadamard layer then converts these constraints into bit-flip symmetries. Specifically, let $h_1,\ldots,h_r\in\mathbb F_2^n$ be linearly independent symmetry masks. Choose a matrix $C\in\mathbb F_2^{n\times k}$, with $k=n-r$, whose columns form a basis of their common orthogonal subspace. Thus, $h_j^\top C=0$ for every prescribed mask, and $C$ maps the $k$ latent bits to an allowed $n$-bit reference configuration. All matrix operations below are over $\mathbb F_2$.
+
+For each condition $c$, choose efficiently evaluable factors satisfying
+\begin{equation}
+    |f_\ell(0;c)|^2+|f_\ell(1;c)|^2=1.
+    \label{eq:binary-encoder-factors}
+\end{equation}
+Define
+\begin{equation}
+\begin{aligned}
+    \ket{\psi_c}
+    &=\sum_{u\in\mathbb F_2^k}
+    \left[\prod_{\ell=1}^k f_\ell(u_\ell;c)\right]\ket{Cu},\\
+    \ket{\phi(c)}&=H^{\otimes n}\ket{\psi_c}.
+\end{aligned}
+\label{eq:binary-linear-reference}
+\end{equation}
+The matrix $C$ fixes the symmetry constraints, while the factors supply the condition dependence.
+
+Reference sampling draws the latent bits independently with probabilities $|f_\ell(1;c)|^2$ and returns $Cu$. For a mask $a=Cd$, injectivity of $C$ gives a unique displacement $d$, and
+\begin{equation}
+    R_c(Cu,a)=\prod_{\ell=1}^k
+    \frac{f_\ell(u_\ell\oplus d_\ell;c)}{f_\ell(u_\ell;c)}.
+    \label{eq:binary-linear-ratio}
+\end{equation}
+If $a\notin\operatorname{im}C$, the ratio is zero. We evaluate denominators only at sampled configurations with nonzero amplitude.
+
+Every $h\in\ker C^\top$ satisfies $Z_h\ket{\psi_c}=\ket{\psi_c}$, and hence $X_h\ket{\phi(c)}=\ket{\phi(c)}$. The learned IQP unitary preserves these eigenstates, giving
+\begin{equation}
+    q_{\boldsymbol\theta}(x\mid c)
+    =q_{\boldsymbol\theta}(x\oplus h\mid c)
+    \qquad\text{for all }h\in\ker C^\top.
+    \label{eq:binary-linear-symmetry}
+\end{equation}
+This relation holds for every condition and parameter vector. The construction therefore guarantees a subgroup of $2^r$ bit-flip symmetries. Particular factor functions or parameter values can produce additional symmetries.
+
+The Curie--Weiss encoder in Eq.~\eqref{eq:cw_parity_input} uses $Cu=(u,\bigoplus_\ell u_\ell)$, which guarantees global spin-flip symmetry. The switching encoder in Section~\ref{sec:conditional-switching16} uses $C=B^\top$, where $B$ is the fundamental-cycle matrix defined in Appendix~\ref{app:switching16}, and guarantees the six independent vertex switches. Both constructions preserve the sampling-and-ratio interface. Their symmetry guarantees hold independently of parameter tying and training accuracy. Appendix~\ref{app:binary-linear-encoders} establishes normalization, access costs and state preparation.
+
+\input{sections/conditional_switching.tex}
 
 \section{Discussion}
 \label{sec:discussion}
 
-Our framework establishes sufficient conditions for classical training of conditional IQP Born machines with input preparation beyond strict IQP form. Efficient sampling and amplitude-ratio evaluation of the reference state enable unbiased estimation of conditional training moments and their gradients, while one learned unitary shares parameters across conditions. The sixteen-qubit experiments demonstrate conditional translations and changes in distributional shape through condition-dependent input phases. The two-dimensional Gaussian experiment approximates mean--width combinations absent from fitting and development, including pairs outside the joint training hull of separately varied coordinates. Its phase law supplies a structured response prior that one shared angle calibrates. Finite-target validation preserves useful mean and width responses, while direct calibration from fitting-pool means achieves comparable or lower error without iterative optimization. A product-prior control also matches or improves fidelity. We therefore interpret this benchmark as structured conditional generation and calibration, without claiming that training discovers the response law or that Gaussian amplitude preparation is necessary. For Curie--Weiss, the shared model achieves lower mean full-distribution TVD than both independent baseline families at $\beta=1.0$ and $1.6$, with the latter extending beyond the training range. Each baseline family fits these temperatures directly and uses three times the aggregate parameters and optimizer updates, whereas the shared model uses more training-pool samples. At $\beta=0.4$, the uniform encoder-only distribution achieves the lowest error among the models in the primary comparison. Joint training may provide useful regularization, but comparisons with matched data and optimization budgets are needed to assess this explanation.
+Our framework extends classically trainable IQP Born machines to distribution families by combining reference-state estimators of Pauli-$Z$ moments and their phase gradients with a conditional MMD objective. One learned IQP unitary then acts across conditions, and the encoder need not have IQP form. Efficient reference sampling and amplitude-ratio evaluation allow encoder design to incorporate conditional structure and exact symmetries while preserving efficient classical estimation of the objective and its gradients.
 
-Input-state design can impose exact output symmetries while preserving classical trainability. The conditional signed-graph construction guarantees sixty-four switching translations for every learned parameter vector. Five independent finite-data fits give mean reporting TVD $0.1780\pm0.0013$ with two learned angles, while the graph-order response extends beyond the fitting range. This symmetry guarantee does not ensure a faithful Gibbs response: the learned balance saturates below the target and high-inverse-temperature energy fluctuations remain inaccurate. A fixed classical switching control achieves lower reporting TVD, and the model admits exact quotient evaluation. These results support correlated conditional encoding and symmetry control without establishing a classical fidelity or computational advantage.
+The Gaussian-shaped benchmarks test how one shared lattice transformation converts conditional phases into shifts and changes in width. Their encoder probabilities remain uniform at every condition, while the targets are nonuniform away from the origin. The two-coordinate experiment recovers target mean responses and increasing width at new joint combinations, with larger errors beyond the axis-fitting hull and variation in the amount of broadening. However, the family and encoder are task-informed, and exact development targets select configurations and checkpoints. These results demonstrate conditional capability within the studied family, rather than a necessity for forty independent phases or robustness to arbitrary encoder design. Central agreement is architectural and does not contribute to the reporting averages.
 
-The methodological limitations concern distributional evaluation and the scope of the scaling evidence. Efficient, unbiased MMD estimation does not ensure accurate recovery of every relevant correlation \cite{herreroBornUltimatum2025}. Although the Gaussian kernel includes all correlation orders, its bandwidth weights them unequally, and finite sampling and optimization may fail to resolve weakly weighted discrepancies. Agreement in Hamming-weight profiles can therefore coexist with errors in individual bitstring probabilities, making full-distribution diagnostics necessary whenever feasible. The observable sweep further shows that recovering magnetization trends does not ensure accurate energy fluctuations, especially beyond the fitting range. For Curie--Weiss, reporting reuses the confirmation runs used to select hyperparameters, so the reported spread does not independently assess model selection. The reporting temperatures are excluded from fitting and selection but were examined in earlier experiments. Independent final fits and previously unexamined conditions, evaluated with configurations fixed in advance, would strengthen the generalization evidence. The sparse-lattice runs establish computational feasibility up to $2048$ qubits, with modest reductions in held-out sampled MMD$^2$. Their connectivity and optimizer settings differ from the sixteen-qubit comparison. Fixed expected mask weights emphasize low-order correlations as the system grows, while size-dependent bandwidths prevent direct comparisons of distributional accuracy across sizes.
+The Curie--Weiss benchmark then tests a more pronounced change in distribution shape. A shared unitary learns the temperature-dependent transition from a central peak to two separated peaks, while the parity encoder guarantees global spin-flip symmetry. The comparison with product inputs favors the correlated encoder under the tested protocol, but changes both correlations and encoder phase generators, so it does not isolate the effect of symmetry. Independently fitted models remain more accurate at some temperatures and for some physical observables, while requiring separate parameter sets and more total optimizer updates.
 
-Future work should examine richer tractable encoders and optimization strategies that improve conditional accuracy. Broader families of correlated inputs and multidimensional encodings should be assessed alongside state-preparation and estimation costs, with particular attention to calibration of each conditional response. Conditional extensions of spectral Born machines would require corresponding sampling, amplitude-ratio and gradient estimators \cite{huangSpectralBorn2026}. Generator selection, initialization and adaptive kernels merit investigation \cite{shenCharacterizingTrainability2026,lerchIQPInitialization2026,kurkinUniversalityKernelAdaptive2025}, including whether gradients from different conditions reinforce or cancel one another. Quantum deployment should assess how noise and circuit partitioning affect the conditional response and imposed symmetries \cite{balloShallowIQP2026,ryuDeploymentLargeIQP2026}. Practical quantum sampling advantage remains open: our Gaussian, Curie--Weiss and signed-graph targets admit efficient classical sampling. Demonstrations would require comparisons with strong classical generative models and sampling-hardness or verification arguments appropriate to the trained conditional circuits.
+The signed-graph construction extends symmetry control from one global spin-flip symmetry to six independent vertex-switching symmetries. A fundamental-cycle reference supplies the required binary parity constraints, while independent chord sampling and product amplitudes retain efficient classical access. These guarantees hold for every condition and IQP parameter vector. This worked example establishes the encoder construction rather than empirical accuracy for the associated Gibbs family.
+
+The methodological limitations concern distributional evaluation and the scope of the scaling evidence. Efficient, unbiased MMD estimation does not ensure accurate recovery of every relevant correlation \cite{herreroBornUltimatum2025}. Although the Gaussian kernel includes all correlation orders, its bandwidth weights them unequally, and finite sampling and optimization may fail to resolve weakly weighted discrepancies. Agreement in Hamming-weight profiles can therefore coexist with errors in individual bitstring probabilities, making full-distribution diagnostics necessary whenever feasible. For example, the unconditional Curie--Weiss baseline has mean profile TVD $0.0281$ at $\beta=0.4$ but full TVD $0.3787$. The parity constraint fixes signed mean magnetization but does not establish accurate magnetization magnitude or energy fluctuations.
+
+For the shared Curie--Weiss models, we exclude evaluation temperatures from fitting and configuration selection. However, selection uses exact target information, including a physical-observable criterion, and the temperature range was explored during earlier model design. The results therefore assess generalization within an already studied family and temperature range. Uncertainties across ten independent fits describe training variability, while evaluation on a finite grid does not establish accuracy throughout the temperature interval.
+
+At larger sizes, the sparse-lattice runs demonstrate classical conditional training with a symmetry-preserving parity encoder up to 2048 qubits. Hyperparameter optimization at 64 and 256 qubits yields one configuration used across all six sizes, with substantial reductions in held-out sampled MMD$^{2}$. Although these runs use the same encoder construction as the sixteen-qubit Curie--Weiss benchmark, their learned connectivity and separately selected optimization settings differ. Moreover, low sampled MMD$^{2}$ does not establish high full-distribution fidelity: the fixed expected mask weights emphasize low-order correlations, and size-dependent kernel bandwidths prevent direct fidelity comparisons across sizes.
+
+Future work should examine richer tractable encoders and optimization strategies that improve conditional accuracy. Broader families of correlated inputs and multidimensional encodings should be assessed alongside state-preparation and estimation costs, with particular attention to calibration of each conditional response. Conditional extensions of spectral Born machines would require corresponding sampling, amplitude-ratio and gradient estimators \cite{huangSpectralBorn2026}. Generator selection, initialization and adaptive kernels merit investigation \cite{shenCharacterizingTrainability2026,lerchIQPInitialization2026,kurkinUniversalityKernelAdaptive2025}, including whether gradients from different conditions reinforce or cancel one another. Quantum deployment should assess how noise and circuit partitioning affect the conditional response and imposed symmetries \cite{balloShallowIQP2026,ryuDeploymentLargeIQP2026}. Practical quantum sampling advantage remains open: our Gaussian-shaped and Curie--Weiss benchmark targets admit efficient classical sampling. Demonstrations would require comparisons with strong classical generative models and sampling-hardness or verification arguments appropriate to the trained conditional circuits.
 
 \section{Conclusions}
 \label{sec:conclusions}
 
-We introduced a conditional framework for IQP Born machines that combines a shared learned unitary with encoders that need not have IQP form. Efficient reference-state sampling and amplitude-ratio evaluation enable unbiased classical estimation of conditional training observables and their gradients, allowing optimization without quantum circuit sampling. Input-state design also lets us impose exact output symmetries independently of the learned parameters.
+We introduced a conditional framework for IQP Born machines by combining reference-state estimation of Pauli-$Z$ moments and their phase gradients with a conditional MMD objective. Efficient reference-state sampling and amplitude-ratio evaluation yield unbiased classical estimators of the objective and its gradients, enabling joint optimization of one shared IQP unitary across a distribution family. Notably, the encoder need not have IQP form. Furthermore, input-state design can impose exact output symmetries for every condition, independently of the learned parameters.
 
-Our sixteen-qubit experiments demonstrate conditional translations and changes in distributional shape through input phases. The two-dimensional Gaussian model generalizes to joint mean--width combinations absent from fitting and development using one angle shared across sixteen local rotations. For the Curie--Weiss model, the shared model achieves lower mean full-distribution TVD than both independently fitted baseline families at two held-out temperatures, including one beyond the training range, with fewer aggregate parameters and optimizer updates. The signed-graph experiment demonstrates finite-data conditional generation with exact switching symmetry and two learned angles. Additional runs establish the computational feasibility of classical conditional training up to 2048 qubits. Together, the theoretical constructions and numerical results establish conditional generation and symmetry control within a framework that supports classical training. Further work must assess distributional accuracy at larger scales and practical quantum advantage.
+Sixteen-qubit numerical experiments demonstrate the framework's capabilities. Translation of Gaussian-shaped profiles validates the conditioning mechanism, while two-coordinate phase encoding demonstrates generation at center--width combinations absent from training. Both use a shared lattice layer; their exact central binomial law follows from construction. The Curie--Weiss model then tests a larger change in distribution shape: one shared unitary reproduces the temperature-dependent transition from unimodal to bimodal magnetization profiles, while the parity encoder guarantees global spin-flip symmetry. A separate signed-graph construction shows how tractable input encoding imposes six independent switching symmetries without restricting the IQP phases. Finally, scaling runs demonstrate computational feasibility and reductions in held-out sampled MMD$^{2}$ up to 2048 qubits. However, these reductions do not establish high full-distribution fidelity. The framework thus supports conditional generation and systematic symmetry control through tractable input-state design, while full-distribution accuracy at larger scales and practical quantum sampling advantage remain open.
 \section*{DATA AVAILABILITY}
 The code and data supporting this study are available on GitHub \cite{balloConditionalGenerationIQP2026}.
 
@@ -774,37 +798,37 @@ OB is a fellow of Eurecat’s ``Vicente L\'opez'' PhD grant program.
 
 \subsection{Common training settings}
 
-We train all models using the unbiased estimator of the squared-MMD objective. We keep the encoders fixed and initialize the circuit phases independently as $\theta_j\sim\mathcal N(0,s_\theta^2)$. At each update, we sample one fitting condition and one kernel bandwidth uniformly, then draw a target minibatch with replacement. We draw fresh nonidentity masks and apply the probability correction for excluding the identity mask. Mask budgets count draws, including repeated masks. We draw reference samples independently of the target minibatch and reuse them across masks. Table~\ref{tab:training_hyperparams} summarizes the translation, Curie--Weiss and scaling settings. Appendices~\ref{sec:gaussian-two-dimensional-protocol} and \ref{app:switching16} give the separate two-dimensional Gaussian and conditional switching protocols.
+We train all models using the unbiased estimator of the squared-MMD objective and keep the encoders fixed within each fit. For Gaussian translation and scaling, we initialize the circuit phases independently as $\theta_j\sim\mathcal N(0,s_\theta^2)$. The other experiments use the initialization protocols specified in their respective appendices. At each update, we sample one fitting condition and one kernel bandwidth uniformly, then draw a target minibatch with replacement. We draw fresh nonidentity masks and apply the probability correction for excluding the identity mask. Mask budgets count draws, including repeated masks. We draw reference samples independently of the target minibatch and reuse them across masks. Table~\ref{tab:training_hyperparams} summarizes the translation and scaling settings. Section~\ref{sec:cw_hpo} specifies the Curie--Weiss search and completed confirmation and final fitting, with selected hyperparameters in Table~\ref{tab:cw_selected_settings}. Appendix~\ref{sec:gaussian-two-dimensional-protocol} gives the separate two-coordinate protocol.
 
-For each initialization, we reset the optimizer and draw new circuit phases while reusing the target pools. For the experiments summarized in Table~\ref{tab:training_hyperparams}, each training run includes all prescribed initializations, and we select the checkpoint with the lowest selection score across them. Reported uncertainty summarizes variation across independent training runs.
+For each initialization, we reset the optimizer and draw new circuit phases while reusing the target pools. For the experiments summarized in Table~\ref{tab:training_hyperparams}, each training run includes all prescribed initializations, and we select the checkpoint with the lowest selection score across them. Reported uncertainty summarizes variation across training runs.
 
-We train the Gaussian and scaling models with \texttt{Adam} \cite{kingmaAdam2015}, using cosine learning-rate decay to one tenth of the initial rate. For the Curie--Weiss models, we use the optimizer selected by HPO and keep the learning rate constant. We set $b_1=0.9$, and use $b_2=0.999$ and $\epsilon=10^{-8}$ for the \texttt{Adam} variants. We set weight decay to zero.
+We train the Gaussian translation and scaling models with \texttt{Adam} \cite{kingmaAdam2015}, using cosine learning-rate decay. Table~\ref{tab:training_hyperparams} gives the initial learning rates, final-to-initial learning-rate ratios, and moment coefficients. Both experiments use $\epsilon=10^{-8}$ and zero weight decay. The sixteen-qubit Curie--Weiss protocol specifies its optimizer settings separately.
 
 \begin{table}[!htbp]
 \centering
-\caption{Training settings and budgets per circuit. Mask and reference budgets give the number of draws per update. We select Curie--Weiss hyperparameters and checkpoints using full-distribution TVD. Table~\ref{tab:cw_hpo_ranges} gives the search space for the optimizer, learning rate and initialization width. We report selected learning rates and initialization widths to three significant figures and display the expected mask weight $7.99$ as $8$. For Curie--Weiss, the update and initialization budgets apply to confirmation and evaluation; screening uses the smaller budgets specified in Sec.~\ref{sec:cw_hpo}.}
+\caption{Gaussian translation and final scaling settings per circuit. Mask and reference budgets count draws per update. The Curie--Weiss follow-up uses the separate budgets in Table~\ref{tab:cw_baseline_budgets}. Tuned scaling values are rounded to six significant digits.}
 \label{tab:training_hyperparams}
 \small
-\setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.12}
-\begin{tabular}{lccccc}
+\begin{tabular}{lcc}
 \toprule
-\hpCell{.22\textwidth}{Setting} & \hpCell{.135\textwidth}{Gaussian translation} & \hpCell{.135\textwidth}{Shared product input} & \hpCell{.135\textwidth}{Independent conditional} & \hpCell{.135\textwidth}{Independent unconditional} & \hpCell{.135\textwidth}{Scaling} \\
+Setting & Gaussian translation & Scaling \\
 \midrule
-\hpCell{.22\textwidth}{Updates per initialization} & 1,024 & 2,000 & 2,000 & 2,000 & 5,000 \\
-\hpCell{.22\textwidth}{Initializations per run} & 1 & 3 & 3 & 3 & 3 \\
-\hpCell{.22\textwidth}{Reported runs} & 5 & 5 & 5 & 5 & 3 \\
-\hpCell{.22\textwidth}{Training targets per condition} & 512 & 1,024 & 1,024 & 1,024 & 10,000 \\
-\hpCell{.22\textwidth}{Target minibatch} & 128 & 256 & 256 & 256 & 450 \\
-\hpCell{.22\textwidth}{Training mask draws} & 1,024 & 2,048 & 2,048 & 2,048 & 512 \\
-\hpCell{.22\textwidth}{Training reference draws} & 1,024 & 2,048 & 2,048 & 2,048 & 1,024 \\
-\hpCell{.22\textwidth}{Expected mask weights} & $\{1\}$ & $\{2,4,8\}$ & $\{2,4,8\}$ & $\{2,4,8\}$ & $\{2,4\}$ \\
-\hpCell{.22\textwidth}{Checkpoint interval} & 32 & 100 & 100 & 100 & 25 \\
-\hpCell{.22\textwidth}{Optimizer} & \texttt{Adam} & \texttt{Adam} & \shortstack{\texttt{AdamW}\\\texttt{ScheduleFree}} & \texttt{Adam} & \texttt{Adam} \\
-\hpCell{.22\textwidth}{Learning rate} & $0.005$ & $0.0310$ & $0.0603$ & $0.00844$ & $0.01$ \\
-\hpCell{.22\textwidth}{Learning-rate schedule} & Cosine & Constant & Constant & Constant & Cosine \\
-\hpCell{.22\textwidth}{Initialization width $s_\theta$} & $0.25$ & $0.696$ & $0.119$ & $0.117$ & $0.1$ \\
-\hpCell{.22\textwidth}{Coefficient $b_1$} & $0.9$ & $0.9$ & $0.9$ & $0.9$ & $0.9$ \\
+Updates per initialization & 1,024 & 5,000 \\
+Initializations per run & 1 & 3 \\
+Reported runs & 5 & 3 \\
+Training targets per condition & 512 & 10,000 \\
+Target minibatch & 128 & 450 \\
+Training mask draws & 1,024 & 512 \\
+Training reference draws & 1,024 & 1,024 \\
+Expected mask weights & $\{1\}$ & $\{2,4\}$ \\
+Checkpoint interval & 32 & 100 \\
+Optimizer & \texttt{Adam} & \texttt{Adam} \\
+Learning rate & $0.005$ & $0.00189326$ \\
+Learning-rate schedule & Cosine & Cosine \\
+Initialization width $s_\theta$ & $0.25$ & $0.0129803$ \\
+Coefficient $b_1$ & $0.9$ & $0.822126$ \\
+Final-to-initial learning-rate ratio & $0.1$ & $0.119851$ \\
+Coefficient $b_2$ & $0.999$ & $0.962419$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -814,52 +838,71 @@ For an expected mask weight $w$, we set the Gaussian bandwidth to
     \sigma(n,w)=\left[-2\ln\left(1-\frac{2w}{n}\right)\right]^{-1/2},
     \qquad 0<w<n/2,
 \end{equation}
-where $n$ denotes the number of visible qubits and $w$ is the expected mask weight before excluding the identity mask. We weight the bandwidths equally in the objective. For the sixteen-qubit Curie--Weiss models, we use $w\in\{2,4,7.99\}$ and display $7.99$ as $8$. Using $7.99$ keeps $w<n/2$ and the bandwidth strictly positive.
+where $n$ denotes the number of visible qubits and $w$ is the expected mask weight before excluding the identity mask. We weight the bandwidths equally in the objective. For the sixteen-qubit Curie--Weiss follow-up, we tune two of the three expected-weight slots as specified in Table~\ref{tab:cw_hpo_ranges}. Repeated slots retain their separate sampling probabilities. The upper grid value $7.99$ keeps $w<n/2$ and the bandwidth strictly positive.
 
 We report rotation angles in radians and compute sixteen-qubit full and profile TVDs from exact circuit probabilities. Sampled-MMD diagnostics do not enter these calculations.
 
-\subsection{Discrete Gaussian translation}
+\subsection{Efficient evaluation of the sampled estimator}
+\label{sec:appendix_estimator_evaluation}
+
+For the sample values defined in Sec.~\ref{sec:unbiased-conditional-mmd}, we compute the pair sums using
+\begin{equation}
+    \sum_{s\neq t}Y_sY_t
+    =
+    \left(\sum_sY_s\right)^2-\sum_sY_s^2,
+\end{equation}
+and, since $T_b^2=1$,
+\begin{equation}
+    \sum_{b\neq b'}T_bT_{b'}
+    =
+    \left(\sum_bT_b\right)^2-B.
+\end{equation}
+These identities allow us to evaluate Eq.~\eqref{eq:conditional-mmd-ustatistic} in $O(S+B)$ arithmetic operations once the sample values are available.
+
+For the sampled-mask estimator in Eq.~\eqref{eq:sampled-mmd-estimator}, let $\mathcal U$ denote the set of distinct sampled masks and $m_u$ the multiplicity of mask $u$. Since repeated masks use the same batches, we can write
+\begin{equation}
+    \widehat{\mmd}_{\sigma}^2(c)
+    =
+    Q_\sigma^+
+    \sum_{u\in\mathcal U}
+    \frac{m_u}{M}
+    \widehat{\Delta_c^2}(u).
+    \label{eq:compressed-mmd-estimator}
+\end{equation}
+This regrouping preserves the sampled objective and its gradient while reducing the number of Pauli moments we evaluate.
+
+\subsection{Translation of Gaussian-shaped profiles}
 \label{sec:appendix_gaussian}
 
-We use 16 visible qubits on an open $4\times4$ lattice. The learned unitary contains 16 one-body phase gates and 24 two-body phase gates between horizontal and vertical nearest neighbors. We prepare the input state with the fixed product-state encoder
-\begin{equation}
-    \ket{\phi_{\mathrm G}(c)}
-    =
-    \bigotimes_{i=1}^{16}
-    R_Z(c-1/2)R_Y(1.5)\ket{0}_i.
-\end{equation}
+Translation uses the $v=0$, $u=2c-1$ slice of the two-coordinate target family and encoder. All forty parameters on the open $4\times4$ lattice are independent. At $c=0.5$, the exact uniform law is fixed for every parameter vector, so no learned transformation contributes at that condition. The encoder also has uniform probabilities at all other conditions, whereas their targets are nonuniform.
 
-We choose the near-equatorial angle $1.5$ radians empirically to avoid an input state whose output distribution the learned unitary cannot change. At $c=0.5$, replacing this angle with $\pi/2$ would prepare $\ket{+}^{\otimes16}$, a simultaneous eigenstate of every $X$-type generator in the IQP unitary. The learned parameters would then contribute only a global phase, leaving a uniform output distribution with a fixed binomial Hamming-weight profile. Using $1.5$ removes this exact invariance and allows the learned parameters to modify the output distribution at $c=0.5$.
+Each of five independent fits uses $512$ target strings at each of $c\in\{0,0.25,0.5,0.75,1\}$, for $2560$ strings. The initialization draws all forty phases independently from $\mathcal N(0,0.25^2)$. We use $1024$ sampled \texttt{Adam} updates, initial learning rate $0.005$ and cosine decay to one tenth of that value. Each update draws one fitting condition, a minibatch of $128$ targets with replacement, $1024$ reference samples in chunks of $256$ and $1024$ nonidentity masks. The bandwidth corresponds to expected mask weight one before nonidentity conditioning. Other optimizer and precision conventions match the two-coordinate protocol.
 
-We use the target Hamming-weight profile $\rho(k\mid c)\propto\exp[-(k-(5+6c))^2/8]$, where $k=|x|$. Within each Hamming-weight shell, we assign equal probability to all bitstrings. We train at $c\in\{0,0.25,0.5,0.75,1\}$, using $512$ target samples per condition and $2560$ per run.
-
-We evaluate the model at initialization and every $32$ updates through update $1024$, selecting the checkpoint with the lowest mean exact profile TVD over the development conditions $c\in\{0.125,0.375,0.625,0.875\}$. We then evaluate the selected model at $80$ held-out conditions, $c_j=(j+1/3)/80$ for $j=0,\ldots,79$. We draw $1000$ target samples per evaluation condition for auxiliary sampled-MMD diagnostics.
-
-We compute full-distribution and profile TVDs from exact circuit probabilities. For each run, we average each error over the evaluation conditions and report the median of these averages across five independent runs. Figure~\ref{fig:gaussian-translation} averages exact profiles across the five selected circuits at the development conditions and shows the median and interquartile range of their mean output Hamming weights at each held-out condition.
+We evaluate initialization, every $32$ updates and the final update, selecting the lowest mean exact full-distribution TVD at $c\in\{0.125,0.375,0.625,0.875\}$. Reporting uses $80$ disjoint conditions, $c_j=(j+1/3)/80$ for $j=0,\ldots,79$. We compute exact full and profile TVDs, average over these conditions within each fit, and report the median across fits. Figure~\ref{fig:gaussian-translation} averages profiles at four reporting conditions, $c\approx\{0.004,0.329,0.667,0.992\}$, chosen to spread the profiles across the interval. It also shows the median and interquartile range of the reporting mean response. Exact development targets contribute to checkpoint selection. The median terminal-checkpoint mean full TVD is $0.0674$.
 
 \subsection{Curie--Weiss models}
 \label{sec:appendix_cw}
 
-We use the sixteen-qubit target $p(x\mid\beta)\propto\exp[\beta(2|x|-16)^2/32]$. For all trained sixteen-qubit Curie--Weiss models, we parameterize the learned unitary with 16 one-body phase gates and 120 two-body phase gates, without ancillas. For the shared product-input model, we prepare $R_Z(0.75\beta)R_Y(\pi/2)\ket{0}$ on every qubit.
+We use the sixteen-qubit target $p(x\mid\beta)\propto\exp[\beta(2|x|-16)^2/32]$. Every trained circuit contains 16 one-body and 120 two-body IQP phase parameters, without ancillas or parameter tying. The campaign compares shared parity-input, shared product-input, independent parity-input and independent unconditional models. The shared product-input model provides a matched encoder ablation. All current comparisons use the fresh final cohort described below.
 
-We train the shared product-input model at $\beta\in\{0.6,0.8,1.2,1.4\}$, use $\beta\in\{0.5,0.7,1.3,1.5\}$ for model selection, and report performance at $\beta\in\{0.4,1.0,1.6\}$. Each independent baseline family comprises three circuits that we fit directly at these reporting temperatures, using either the corresponding product input or $\ket{0}^{\otimes16}$. For each baseline family, we select one optimizer, learning rate and initialization width jointly for its three circuits.
+For encoder scale $s$, the product input prepares $R_Z(s\beta)R_Y(\pi/2)\ket{0}$ on every qubit. The parity input prepares $\ket{+}^{\otimes16}$ and applies $\exp[-i(s\beta/2)\sum_{i=1}^{15}Z_iZ_{16}]$. This input and the learned $X$-generated IQP unitary preserve global spin-flip invariance. They do not impose full permutation invariance. The unconditional input is $\ket{0}^{\otimes16}$ and has no encoder-scale parameter.
 
-We train each circuit using $1024$ target samples per fitting temperature and run, minibatches of $256$, and $2048$ mask draws and $2048$ reference draws per update. Table~\ref{tab:cw_baseline_budgets} summarizes the aggregate fitting resources.
+We fit each shared model at $\beta\in\{0.1,0.7,1.3,1.95\}$. Each independent family contains three circuits fitted directly at $\beta\in\{0.4,1,2\}$. One hyperparameter configuration applies jointly to the three circuits in each independent family, while their learned phases remain separate.
 
-For auxiliary sampled-MMD diagnostics, we use $2048$ validation targets per fitting temperature and $2048$ independently drawn test targets per reporting temperature. Each diagnostic uses $2048$ mask draws per condition and bandwidth, and $2048$ reference samples per condition shared across bandwidths. We do not use these diagnostics for model selection.
+Each fitting temperature supplies a fixed pool of $1024$ sampled targets per repeat. We reuse these pools across updates and initializations, pair compatible pools and random streams across candidates and matched families within each stage, and use independent streams between screening, confirmation and final fitting. Each update draws a target minibatch of $256$, $2048$ nonidentity masks and $1024$ reference samples. Shared fits sample each fitting temperature with probability $1/4$. We sample the three kernel slots with equal probability, retaining duplicate slots when their weights coincide.
 
 \begin{table}[!htbp]
 \centering
-\caption{Curie--Weiss fitting budgets per run for confirmation and evaluation. Training-target counts sum the pool entries over fitting temperatures and exclude repeated minibatch draws. Optimizer-update counts include all three initializations of every circuit. The shared model fits one circuit, and each independent baseline family fits three.}
+\caption{Curie--Weiss budgets per circuit. The last column totals optimizer updates across all repeats and initializations. All stages use 2000 updates per initialization and checkpoints at initialization and every 100 updates. Each shared repeat fits one circuit using 4096 target-pool entries; each independent-family repeat fits three circuits using 3072 entries. Thus the independent families use three times the learned phases and optimizer updates per repeat.}
 \label{tab:cw_baseline_budgets}
 \small
 \begin{tabular}{lrrr}
 \toprule
-Model & Trained circuits & Training targets & Optimizer updates \\
+Stage & Repeats & Starts per repeat & Updates per circuit \\
 \midrule
-Shared product input & 1 & 4,096 & 6,000 \\
-Independent conditional & 3 & 3,072 & 18,000 \\
-Independent unconditional & 3 & 3,072 & 18,000 \\
+Screening, per proposal & 5 & 1 & 10,000 \\
+Confirmation, per candidate & 5 & 3 & 30,000 \\
+Final fitting, per family & 10 & 3 & 60,000 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -868,41 +911,97 @@ Independent unconditional & 3 & 3,072 & 18,000 \\
 \label{sec:cw_hpo}
 \label{sec:cw_full_tvd_hpo}
 
-We report one Optuna study for each of the three Curie--Weiss model families, using a tree-structured Parzen estimator (TPE) \cite{akibaOptuna2019}. Each study evaluates $60$ configurations. We tune the optimizer choice among \texttt{Adam}, \texttt{AdamWScheduleFree} and \texttt{SGDScheduleFree}, the constant learning rate, and the Gaussian initialization width \cite{kingmaAdam2015,defazioRoadLessScheduled2024}. Table~\ref{tab:cw_hpo_ranges} gives the search space. We assign each family the same number of trials, although each independent-family trial fits three circuits per run.
+We use full-distribution accuracy as the primary selection criterion, giving the worst-temperature error twice the weight of the temperature-averaged error. When selecting checkpoints and the final hyperparameter configuration, we minimize the physical-observable score among candidates whose primary score lies within $0.01$ of the best available value.
 
-We use random search as a reference for the trial budget \cite{bergstraRandomSearch2012}. For $60$ independent configurations drawn from a fixed sampling distribution, the probability of sampling at least one configuration in its best-performing $5\%$ is $1-0.95^{60}\approx0.954$. This calculation motivates the budget but does not establish equivalent coverage for adaptive TPE proposals.
+For a grid $G$ and nonnegative error curve $e$, define
+\begin{equation}
+ R_G(e)=\frac{2\max_{\beta\in G}e(\beta)+\overline e_G}{3},
+\end{equation}
+where $\overline e_G$ is the trapezoidal integral divided by the actual grid span. At a single temperature, both terms equal the point error. We compute each fit's primary score as $J=R_G(\mathrm{TVD})$ using exact probabilities over all $2^{16}$ bitstrings. The physics score is
+\begin{equation}
+ P=\frac{R_G(e_m)+R_G(e_c)}{2},\quad
+ e_m=\left|\langle|m|\rangle_q-\langle|m|\rangle_p\right|,
+\end{equation}
+with $e_c=|c_{\mathrm{fluc},q}-c_{\mathrm{fluc},p}|/c_\star$ and the fixed target-only normalization $c_\star\approx0.823110$. Signed mean magnetization and spin-flip defect remain diagnostics and do not enter selection. The fluctuation statistic does not establish thermal-derivative consistency.
+
+Shared checkpoint selection always uses the development grid
+\begin{align}
+ A={}&\{0.05+0.12j:j=0,\ldots,15\}\nonumber\\
+ &\cup\{1.975\}.
+\end{align}
+For each circuit and repeat, we pool every scheduled checkpoint across all available initializations, find the minimum $J$, and choose the smallest $P$ among checkpoints with $J\leq J_{\min}+0.01$. Ties favor smaller $J$, then earlier updates and lower initialization index. The tolerance applies once over the complete pool and does not imply statistical equivalence. Independent circuits use this rule at their directly fitted temperatures.
+
+We assign one \texttt{Optuna} study to each of the four model families \cite{akibaOptuna2019}. Each study comprises $60$ independent random proposals followed by $60$ adaptive tree-structured Parzen estimator (TPE) proposals, for $120$ screening proposals per family. TPE continues the same study using the random-stage observations. We retain the categorical kernel representation chosen during earlier development and do not repeat its pilot. Table~\ref{tab:cw_hpo_ranges} specifies the fixed search space, and Table~\ref{tab:cw_selected_settings} gives the configurations selected by fresh confirmation.
+
+The random stage provides a probabilistic justification for the initial budget \cite{bergstraRandomSearch2012}. Under the fixed search distribution, $60$ independent proposals have probability $1-0.95^{60}\approx0.954$ of including at least one configuration in its best-performing $5\%$ according to the screening objective. This statement concerns a quantile of the specified search distribution, not proximity to a global optimum or a prescribed accuracy. The subsequent $60$ TPE proposals adapt to the observed screening scores; the independent-sampling calculation does not establish their coverage or guarantee final performance.
 
 \begin{table}[!htbp]
 \centering
-\caption{Curie--Weiss hyperparameter search space. We treat optimizer choice as categorical and search learning rates and Gaussian initialization widths on a logarithmic scale.}
+\caption{Curie--Weiss follow-up search space and initial random sampling distributions. TPE adapts these proposals after the random stage. We fix the optimizer to \texttt{Adam}. The encoder scale applies only to conditional families.}
 \label{tab:cw_hpo_ranges}
 \label{tab:cw_full_tvd_hpo_ranges}
 \small
-\begin{tabular}{ll}
+\begin{tabular}{lll}
 \toprule
-Hyperparameter & Options or range \\
+Parameter & Options or range & Initial prior \\
 \midrule
-Optimizer & \texttt{Adam}, \texttt{AdamWScheduleFree}, \texttt{SGDScheduleFree} \\
-Learning rate, \texttt{Adam} variants & $[3\times10^{-4},10^{-1}]$ \\
-Learning rate, \texttt{SGDScheduleFree} & $[10^{-3},1]$ \\
-Initialization width $s_\theta$ & $[0.01,0.7]$ radians \\
+Learning rate & $[3\times10^{-4},10^{-1}]$ & Log-uniform \\
+Width $s_\theta$ & $[0.01,1]$ radians & Log-uniform \\
+$b_1$ & $[0.8,0.95]$ & Uniform \\
+$1-b_2$ & $[0.001,0.05]$ & Log-uniform \\
+Schedule & Constant, cosine & Equal probabilities \\
+Encoder scale $s$ & $[0.25,1.5]$ & Log-uniform \\
+Kernel pair $(w_2,w_3)$ & 45 ordered pairs & Uniform categorical \\
 \bottomrule
 \end{tabular}
+\par\smallskip
+\parbox{\columnwidth}{The kernel slots are $(2,w_2,w_3)$, where $w_2\leq w_3$ and $w_2,w_3\in\{4,4.5,5,5.5,6,6.5,7,7.5,7.99\}$. Repetitions are allowed.}
 \end{table}
 
-We begin each study with $12$ startup trials, including one reference configuration per optimizer. We set the reference learning rates to $0.01$ for the \texttt{Adam} variants and $0.1$ for \texttt{SGDScheduleFree}, with $s_\theta=0.5$ for all reference configurations. We do not prune trials.
+We fix $\epsilon=10^{-8}$ and weight decay to zero, with no warmup or gradient clipping. The cosine schedule decreases the learning rate to one tenth of its initial value over $2000$ updates. We sample the initial phases from the stated Gaussian without clipping or wrapping. The encoder-scale range keeps $s\beta\leq3<\pi$ over $\beta\in[0,2]$; it does not bound the Gaussian circuit phases. We use multivariate TPE with $60$ startup observations and $24$ expected-improvement candidates, without pruning or queued reference configurations. Numerical failures consume proposal slots and receive a flagged search penalty of $1$, which is not a measured TVD. Invalid configurations cannot enter confirmation. All $480$ screening proposals were valid, and confirmation and final fitting had no numerical failures.
 
-We fix the optimizer coefficients as specified in the common training settings and use no warmup or gradient clipping. For schedule-free optimizers, we set the learning-rate weighting exponent to $2$ and score checkpoints using the averaged parameters provided for evaluation.
+Screening ranks shared candidates on $A$. For independent families, we combine the three selected temperature cases within each repeat using $R_G$, then average the resulting $J$ and $P$ across the five repeats. Shared candidate scores likewise average repeat scores. TPE receives only the primary score $J$; we retain $P$ and the component curves separately.
 
-For each screening trial, we train every circuit for $1000$ updates on each of three runs, using one initialization per run. We compute exact TVD from the full distribution over the $2^{16}$ computational-basis states at initialization and every $100$ updates. For each shared model, we select the checkpoint with the lowest mean TVD over the development temperatures. Within each independent baseline family, we select each circuit's checkpoint using TVD at its fitted temperature and average the three selected errors within each run. We then take the median of the three run scores as the trial score.
+The confirmation stage shortlists three or four distinct valid configurations per study from all $120$ screening proposals. It includes the best $J$, the best $P$ within $J_{\min}+0.01$, further candidates ranked by $J$ to reach three, and the global best $P$ if not already included. This yielded three shared-parity candidates and four candidates in each other family. Each candidate receives five fresh repeats with three initializations per circuit. Shared checkpoints still use $A$, but confirmation ranks the selected fits on $A\cup B$, where
+\begin{align}
+ B={}&\{0.075,0.135,0.23,0.35,0.47,0.59,\nonumber\\
+ &0.675,0.735,0.83,0.95,1.07,1.19,\nonumber\\
+ &1.275,1.335,1.43,1.55,1.67,1.79,1.9,1.9625\}.
+\end{align}
+Independent confirmation uses the direct-fit markers. We select the smallest confirmed $P$ among candidates within $0.01$ of the minimum confirmed $J$. Confirmation does not feed further TPE proposals.
 
-We confirm the three best distinct configurations from each study on five fresh runs, training each circuit for $2000$ updates from each of three initializations per run. We select each circuit's checkpoint across its initializations using the same TVD criterion as in screening, then choose the configuration with the lowest median score across the five runs.
+After freezing one configuration per family, the final stage fits ten fresh repeats with three initializations per circuit. Checkpoint selection continues to use $A$ for shared models and the fitted temperature for each independent circuit. Reporting retains all ten selected repeat outcomes and computes metrics before their means and sample standard deviations, using the sample denominator $9$. It does not select the best repeat. The shared reporting grid contains $101$ points: $0$, $2$ and $(6j-4)/297$ for $j=1,\ldots,99$, with separate evaluations at the common markers. This grid is disjoint from fitting anchors and shared selection grids, and never selects checkpoints or configurations. These finite-grid evaluations do not establish accuracy throughout a continuum.
 
-We report performance using the five selected confirmation runs, without further fitting or checkpoint selection. Because these runs also inform hyperparameter selection, they do not provide an independent final evaluation. In the current protocol, we exclude the shared models' reporting temperatures from fitting and selection, although earlier experiments examined them. We fit the independent circuits directly at their reporting temperatures. For each temperature, we report the mean and sample standard deviation across the five runs.
+We reviewed the four studies after their random stages and again after TPE, then completed confirmation and final fitting without changing the objective, grids or selection rule. The common markers are absent from shared fitting and development grids, but their temperature range was explored during earlier development. Independent baselines provide direct-fit marker comparisons, not full-grid estimates. We use double precision for circuit parameters and exact probabilities, while the sampled estimator's matrix products use single precision. Exact probability normalization uses absolute tolerance $10^{-8}$ with no relative tolerance.
+
+\input{tables/curie_weiss_selected_settings.tex}
+
+\subsubsection{Product-input ablation}
+\label{sec:cw_product_ablation}
+
+We compare the shared parity model with a shared product input
+\begin{equation}
+ \ket{\phi_{\mathrm{prod}}(\beta;s)}=
+ \bigotimes_{i=1}^{16}R_Z(s\beta)R_Y(\pi/2)\ket{0}_i.
+\end{equation}
+This ablation removes enforced global spin-flip symmetry while retaining temperature encoding in input phases. It also changes the input correlations and encoder phase generators, so a fidelity difference does not isolate symmetry as its sole cause. Both models have uniform computational-basis input probabilities, use $136$ independent IQP phases and share the fitting anchors, search ranges and per-circuit budgets. Compatible random streams and target pools are paired. Each encoder has its own HPO study and selected configuration, listed in Table~\ref{tab:cw_selected_settings}. We evaluate both on the same grids using ten fresh final repeats.
+
+Table~\ref{tab:cw_product_ablation} gives the matched comparison. Shared parity has robust TVD score $J=0.1281\pm0.0027$, compared with $0.2051\pm0.0088$ for shared product, a $37.5\%$ reduction in mean score. Its physics score is $P=0.0865\pm0.0088$ versus $0.1393\pm0.0107$, a $37.9\%$ reduction. Mean parity TVD is lower at every nonzero point of the reporting grid. Product has inverse-temperature-averaged TVD $0.1662\pm0.0063$ and per-repeat maximum TVD $0.2245\pm0.0112$, compared with $0.1033\pm0.0036$ and $0.1406\pm0.0037$ for parity. Observable errors still cross at some temperatures, as Figure~\ref{fig:cw_product_ablation} shows. Lower aggregate $P$ therefore does not imply better agreement for every observable at every condition.
+
+\input{tables/curie_weiss_product_ablation.tex}
+
+\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=\linewidth]{figures/curie_weiss_product_ablation.pdf}
+ \caption{Matched shared-encoder comparison on the fixed $101$-point reporting grid. Curves and shaded bands show means and sample standard deviations over ten fresh final repeats. The left panel shows exact full-distribution TVD; the right shows absolute energy-fluctuation error divided by the fixed target scale $c_\star\approx0.823110$. Lower is better in both panels. Both models use the same fitting anchors and per-circuit search and training budgets, with separately selected configurations. The uniform output at $\beta=0$ is fixed by both architectures.}
+ \label{fig:cw_product_ablation}
+\end{figure}
+
+\subsubsection{Profile and full-distribution errors}
 
 \input{tables/curie_weiss_profile_tvd.tex}
 
-Table~\ref{tab:curie_weiss_profile_tvd} reports exact Hamming-weight profile errors for the primary Curie--Weiss comparison.
+Table~\ref{tab:curie_weiss_profile_tvd} reports profile TVD from the same ten fresh final repeats as the full-distribution comparison. We compute the profile error in each repeat before averaging, rather than the error of the averaged profile. At $\beta=0.4$, the independent unconditional model has mean profile TVD $0.0281\pm0.0247$ but full TVD $0.3787\pm0.0034$, exposing errors within Hamming-weight shells. At $\beta=1$, independent parity has smaller profile TVD than shared parity, $0.0642\pm0.0028$ versus $0.1203\pm0.0046$, although its full TVD is larger. Profiles and full distributions thus give different rankings, which is why full TVD remains the primary objective.
 
 \subsubsection{Physical observables}
 \label{sec:cw_physical_observables}
@@ -914,14 +1013,16 @@ For a distribution $q$, let $\rho_q(k\mid\beta)$ denote its exact Hamming-weight
 \end{equation}
 The observables depend only on the shell profile and do not test uniformity within shells. For the Gibbs target, differentiating the mean energy per spin with respect to $T=\beta^{-1}$ gives this fluctuation expression. We do not assume that the learned family satisfies the same derivative identity.
 
-We evaluate the five selected shared product-input circuits on $101$ equally spaced inverse temperatures $\beta_j=0.02j$, $j=0,\ldots,100$, with parameters fixed after selection. The grid includes fitting and development temperatures, as well as extrapolation below and above the fitting range. These are the same confirmation runs used for hyperparameter selection, so the sweep is not an independent assessment of model selection. We compute each observable within each run before taking its mean and sample standard deviation, including the nonlinear heat-capacity estimate. The independent baselines appear only at their fitted temperatures, with the same calculation and aggregation. The uniform encoder reference has the binomial shell law $\rho_0(k)=2^{-n}\binom{n}{k}$.
+The final observable sweep evaluates ten fresh selected circuits per shared family on the fixed reporting grid, with parameters frozen after checkpoint selection on $A$. The independent baselines appear only at their fitted markers. We compute each observable, its absolute target error and the nonlinear fluctuation statistic within each repeat before taking means and sample standard deviations. Table~\ref{tab:cw_physics_errors} reports $e_m$ and $e_c$ at the common markers for all four families. On these same markers, $P$ is $0.0914\pm0.0102$ for shared parity, $0.1130\pm0.0223$ for shared product, $0.0363\pm0.0018$ for independent parity and $1.2223\pm0.6289$ for independent unconditional models. These common-marker scores differ from the shared full-grid scores in Table~\ref{tab:cw_product_ablation}. The large unconditional fluctuation error at $\beta=2$ accompanies the unstable distributional fits and remains in the reported cohort. The uniform output at $\beta=0$ has binomial shell law $\rho_0(k)=2^{-n}\binom{n}{k}$ and is exact for both shared encoders independently of training.
+
+\input{tables/curie_weiss_physics_errors.tex}
 
 \subsection{Scaling}
 \label{sec:appendix_scaling}
 
-We use the product-state Curie--Weiss encoder on every qubit, with no ancillas, and adopt the open lattice architectures listed in Table~\ref{tab:scaling_architectures}. At size $n$, the target distribution is $p(x\mid\beta)\propto\exp[\beta(2|x|-n)^2/(2n)]$.
+We use the parity encoder in Eq.~\eqref{eq:cw_parity_input}, generalized to $n$ visible qubits, without ancillas. Its selected scale is $s=1.18430$, and it preserves global spin-flip symmetry at every size. The learned unitary uses the open rectangular lattice architectures in Table~\ref{tab:scaling_architectures}. At size $n$, the target distribution is $p(x\mid\beta)\propto\exp[\beta(2|x|-n)^2/(2n)]$.
 
-We train at $\beta\in\{0.6,0.8,1.2,1.4\}$, using $10{,}000$ target samples per condition and $40{,}000$ per run. We evaluate at $\beta\in\{0.4,0.95,1.0,1.05,1.6\}$ and use three independent runs at each size. We use the cosine-decay \texttt{Adam} settings in Table~\ref{tab:training_hyperparams}, with $5000$ updates per initialization and three initializations per run. These settings differ from the selected sixteen-qubit configurations. We have not tested the transfer of those configurations or retuned the scaling models.
+We train at $\beta\in\{0.6,0.8,1.2,1.4\}$, using fixed pools of $10{,}000$ target samples per condition. We draw a separate validation pool of $2000$ targets per training condition. Held-out temperatures $\beta\in\{0.4,0.95,1.0,1.05,1.6\}$ enter reporting only and do not select checkpoints or hyperparameters.
 
 \begin{table}[!htbp]
 \centering
@@ -942,16 +1043,49 @@ Visible qubits & Lattice & Trainable parameters \\
 \end{tabular}
 \end{table}
 
-We select the checkpoint with the lowest mean sampled validation MMD$^{2}$ across training temperatures and bandwidths. We evaluate initialization and every $25$ updates across three initializations. We exclude held-out temperatures from fitting and selection.
+Checkpoint selection uses four mask-and-reference banks evaluated on the same validation pools. Each bank uses $512$ nonidentity mask draws per condition and bandwidth, and $1024$ reference draws per condition, shared across bandwidths. We reuse each bank's random numbers across checkpoints and pair compatible streams across candidates within each search stage. Let $\overline M_n^2(\boldsymbol\theta;\beta)$ denote the sampled validation MMD$^{2}$ averaged over the four banks and two bandwidths. We select checkpoints using
+\begin{equation}
+V_n(\boldsymbol\theta)=\frac14\sum_{\beta\in\{0.6,0.8,1.2,1.4\}}\frac{\overline M_n^2(\boldsymbol\theta;\beta)}{d_{n,\beta}}.
+\label{eq:scaling-selection-score}
+\end{equation}
 
-For each run, we report the selected initialization at update $0$ and every $500$ updates through update $5000$. At each reporting update, we average five independent MMD$^{2}$ estimates over the evaluation temperatures and bandwidths. Each estimate uses $2000$ target draws per condition, $512$ mask draws per condition and bandwidth, and $1024$ reference draws per condition. We reuse reporting sample sets across updates and share reference samples across bandwidths. Figure~\ref{fig:curie_weiss_qubit_scaling} shows the median and interquartile range across the three runs. We retain negative unbiased MMD$^{2}$ estimates.
+Each fixed scale $d_{n,\beta}$ is the median independently evaluated training-temperature MMD$^{2}$ across three earlier baseline runs, floored at $10^{-3}$. These candidate-independent scales balance the temperatures' contributions to selection. Training continues to sample conditions and bandwidths uniformly, and reporting uses unnormalized MMD$^{2}$. We retain negative unbiased estimates.
 
-\section{Two-dimensional Gaussian encoder and evaluation protocol}
+We optimize the six hyperparameters in Table~\ref{tab:scaling_hpo_ranges}. The first $16$ proposals comprise a baseline configuration, a proposal from earlier sixteen-qubit parity-model optimization, and $14$ random proposals. The remaining $32$ proposals use a tree-structured Parzen estimator.
+
+\begin{table}[!htbp]
+\centering
+\caption{Scaling hyperparameter search space and initial random sampling distributions.}
+\label{tab:scaling_hpo_ranges}
+\small
+\begin{tabular}{lcc}
+\toprule
+Hyperparameter & Range & Initial random sampling \\
+\midrule
+Initial learning rate & $[10^{-4},0.05]$ & Log-uniform \\
+Initialization width $s_\theta$ & $[0.005,0.3]$ & Log-uniform \\
+Encoder scale $s$ & $[0.25,1.5]$ & Uniform \\
+$b_1$ & $[0.8,0.95]$ & Uniform \\
+$b_2$ & $[0.95,0.999]$ & Uniform \\
+Final-to-initial learning-rate ratio & $[0.05,1]$ & Log-uniform \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Screening evaluates each of the $48$ proposals at $64$ and $256$ qubits, with one initialization and $2000$ updates per size. Each proposal's score averages its minimum checkpoint-selection score across the two sizes. We confirm the three leading proposals using three fresh runs per size, one initialization per run, and $5000$ updates. We also evaluate the baseline under the same confirmation budgets. The lowest mean confirmation score determines the configuration used at all six sizes.
+
+Final fits use the settings in Table~\ref{tab:training_hyperparams}, with three runs per size and three initializations of $5000$ updates per run. The runs use separate target pools and stochastic training streams. However, their initialization sets overlap, giving five distinct starting parameter vectors per system size. Within each run, the initializations reuse target pools and stochastic training streams, while resetting the optimizer and drawing new phases. We evaluate initialization and every $100$ updates, then select the lowest-scoring checkpoint across all three initializations.
+
+For each run, we report the selected initialization's trajectory at update $0$ and every $500$ updates through update $5000$. At each reporting update, we average five independent MMD$^{2}$ estimates over the held-out temperatures and bandwidths. Each estimate uses $2000$ target draws per condition, $512$ mask draws per condition and bandwidth, and $1024$ reference draws per condition. Reporting samples are independent of training and selection, reused across updates, and share reference samples across bandwidths. Figure~\ref{fig:curie_weiss_qubit_scaling} shows the median and interquartile range across the three run-level averages. These summaries combine variation from training and sampled evaluation.
+
+\section{Two-coordinate encoder and evaluation protocol}
 \label{sec:gaussian-two-dimensional-protocol}
 
 \subsection{Fitting, development and reporting conditions}
 
-For joint variation, fitting uses $\{-1,0,1\}^2$ and development uses
+We use the binomial-centered target family in Eq.~\eqref{eq:gaussian-two-dimensional-target} and the phase encoder in Eq.~\eqref{eq:gaussian-two-dimensional-input}. Grid training tests interpolation, while axis training tests new combinations inside and outside the joint fitting hull. Fitting conditions drive sampled MMD updates, development conditions select configurations and checkpoints, and reporting conditions assess the selected models.
+
+Grid fitting uses $\{-1,0,1\}^2$ and development uses
 \[
  \{-1,-0.5,0,0.5,1\}\times\{-0.75,-0.25,0.25,0.75\}.
 \]
@@ -960,127 +1094,73 @@ The reporting grid is
  u&\in\{-1,-0.83,-0.37,0.19,0.61,1\},\\
  v&\in\{-1,-0.79,-0.31,0.23,0.67,1\}.
 \end{align*}
-We exclude its four fitted corners from reporting averages, retaining thirty-two pairs.
+Excluding its four fitted corners leaves thirty-two pairs.
 
-Separate variation fits $(u,0)$ at $u\in\{-1,-0.37,0,0.37,1\}$ and $(0,v)$ at $v\in\{-1,-0.31,0.31,1\}$. Development uses $(u,0)$ at $u\in\{-0.73,-0.17,0.17,0.73\}$ and $(0,v)$ at $v\in\{-0.69,-0.13,0.13,0.69\}$. Reporting uses sixteen mixed pairs,
+Axis fitting uses $(u,0)$ at $u\in\{-1,-0.37,0,0.37,1\}$ and $(0,v)$ at $v\in\{-1,-0.31,0.31,1\}$. Development uses $(u,0)$ at $u\in\{-0.73,-0.17,0.17,0.73\}$ and $(0,v)$ at $v\in\{-0.69,-0.13,0.13,0.69\}$. Reporting uses sixteen mixed pairs,
 \[
  \{-1,-0.37,0.37,1\}\times\{-1,-0.31,0.31,1\}.
 \]
-Four satisfy $|u|+|v|\leq1$ and lie inside the fitting hull; twelve lie outside. Every individual coordinate value appears in fitting, but no mixed reporting pair appears in fitting or development. We reuse previously explored condition sets, so this evaluates generalization of the fitted models rather than an independent confirmatory test of the selected encoder.
+Four satisfy $|u|+|v|\leq1$ and lie inside the fitting hull; twelve lie outside. Each individual coordinate value appears in fitting, but no mixed reporting pair appears in fitting or development. These sets were explored before the present campaign, so they test the fitted models within an already studied domain.
 
 \subsection{Sampled training and exact development selection}
 
-We fix the encoder before sampled training. A preceding exact-capacity pilot compared quadratic-phase coefficients $s\in\{0.2,0.4,0.8\}$ in $e^{-i(sv/16)J_z^2}$. It optimized the shared angle on fitting conditions and selected $s=0.4$ using development TVD for both designs. This pilot also informed the nonzero initialization branch. The present experiment tests sampled calibration of this constructed family.
+Each fit uses a fixed pool of $1024$ target bitstrings at each of nine fitting conditions. An update draws one condition and one bandwidth uniformly, $256$ target strings with replacement, $1024$ fresh reference samples and $1024$ nonidentity masks. Expected mask weights before conditioning on nonidentity are $\{2,4\}$, with bandwidth $\sigma=(-2\ln(1-2w/16))^{-1/2}$ and the identity-mask correction. Conditional on the pool, sampled MMD targets the empirical distribution. We use \texttt{Adam} with $b_1=0.9$, $b_2=0.999$, $\epsilon=10^{-8}$ and zero weight decay. Cosine decay reduces the learning rate to one tenth of its initial value. Estimator accumulation uses double precision, matrix products use single precision, and reference batches use chunks of $256$.
 
-Each fit has a fixed pool of $1024$ target bitstrings at each of nine fitting conditions, giving $9216$ strings. Each update samples one condition and one bandwidth uniformly, draws $256$ target strings with replacement, and draws $1024$ fresh reference samples and $1024$ nonidentity operator masks. We use expected mask weights $\{2,4\}$ before conditioning on a nonidentity mask, with bandwidth $\sigma=(-2\ln(1-2w/16))^{-1/2}$ for expected weight $w$ and the identity-mask probability correction. Conditional on the fixed pool, sampled MMD targets the empirical distribution. Adam uses $b_1=0.9$, $b_2=0.999$, $\epsilon=10^{-8}$ and zero weight decay; cosine decay reduces the learning rate to one tenth of its initial value. We accumulate estimators in double precision, use single-precision matrix products and process reference draws in chunks of $256$.
+For each geometry, we screen four settings for $512$ updates. The sixteen one-body parameters are independent draws from $\mathcal N(m,0.1^2)$, with $m\in\{0,\pi/3\}$; the twenty-four pair parameters are independent draws from $\mathcal N(0,0.1^2)$. Initial learning rates are $0.01$ or $0.03$. We retain the two lowest development scores, run two $2000$-update confirmations per candidate, and choose the lower mean confirmation score. Both geometries select $m=\pi/3$ and learning rate $0.01$. We freeze both configurations before reporting evaluation, then run five independent final fits per geometry. Screening, confirmation and final fitting total twenty-six fits.
 
-For each design, we screen four settings using $512$ updates. Initialization is $\theta_0\sim\mathcal N(m,0.1^2)$ with $m\in\{0,\pi/3\}$, and the initial learning rate is $0.01$ or $0.03$. We retain the two settings with lowest exact development TVD, run two $2000$-update confirmations per setting, and select the lower mean confirmation score. Both designs select $m=\pi/3$ and learning rate $0.03$. Five final fits per design use seeds independent of configuration selection. The campaign comprises $26$ fits, including screening and confirmation.
+Checkpoints minimize mean exact full-distribution TVD on development conditions. We evaluate initialization, every $64$ screening updates or $100$ updates otherwise, and the final update. Pools and stochastic streams are paired across settings and geometries at each repeat, while final repeats are independent of configuration selection. This procedure uses exact development targets in addition to finite fitting pools; it is not a finite-data-only pipeline. The phase coefficients and family design also reflect preceding exploratory work. All ten final fits select a checkpoint after at least $1000$ updates. The nonzero initialization branch gives lower development scores in this search, so the campaign does not establish robustness across initialization regimes.
 
-Checkpoint selection minimizes mean exact full-distribution TVD on the declared development conditions. We evaluate initialization, every $64$ updates during screening or $100$ updates otherwise, and the final update. Thus configuration and checkpoint selection have access to exact development target distributions in addition to the sampled fitting pools. The reported errors do not represent a pipeline restricted to those pools alone.
+Independent checks compare reference samples, amplitude ratios, circuit probabilities and sampled losses and gradients with dense or public circuit calculations. At four qubits, $512$ independent sampled estimates agree with an exact empirical-pool MMD calculation within $0.67$ standard errors for the loss and $1.43$ standard errors for every gradient coordinate. A sixteen-qubit check at three condition pairs agrees with direct circuit probabilities to below $6\times10^{-18}$. These checks test implementation agreement at the stated settings, rather than bounding estimator tails throughout the domain.
 
-We pair pools and random streams across settings and designs; the stored numerical records retain their identifiers. One separate-variation fit returns its initialization. Initializations near zero do not reliably recover the desired width direction, so these results do not establish robustness across initialization branches.
+\subsection{Reference access and circuit preparation}
 
-We verify samples, amplitude ratios, scalar losses and scalar gradients against the original encoder representation. At four qubits, $256$ independent estimates agree with a dense empirical-pool MMD oracle within one standard error for both loss and gradient. These checks establish implementation agreement at the tested settings; they do not quantify production-scale rare-event tails. Frozen source, pool and checkpoint hashes support replay of all $26$ fits. Selected sixteen-qubit probabilities agree with the public circuit oracle at three checked pairs per final fit.
-
-\subsection{Reference access and preparation resources}
-
-The encoder amplitude for a bitstring of weight $k$ is
+The input amplitude for a bitstring of weight $k$ is
 \begin{equation}
- a_{u,v}(k)=\sqrt{\frac{r_0(k)}{\binom{16}{k}}}
- \exp\!\left[\frac{iu(k-8)}2-\frac{iv(k-8)^2}{40}\right].
+ a_{u,v}(k)=2^{-8}\exp\!\left[\frac{iu(k-8)}2
+                       -\frac{iv(k-8)^2}{40}\right].
 \end{equation}
-For a reference bitstring of weight $j$, the Hadamard-transformed amplitude is
+For a reference bitstring of weight $j$, grouping Hadamard signs by the overlap of occupied positions gives
 \begin{align}
  \psi_{u,v}(j)&=2^{-8}\sum_{k=0}^{16}a_{u,v}(k)\mathcal K_k(j),\\
- \mathcal K_k(j)&=\sum_{\ell=0}^{k}(-1)^\ell\binom{j}{\ell}\binom{16-j}{k-\ell},
+ \mathcal K_k(j)&=\sum_{\ell=0}^{k}(-1)^\ell
+              \binom{j}{\ell}\binom{16-j}{k-\ell},
 \end{align}
-with invalid binomial coefficients set to zero. We tabulate seventeen amplitudes, draw $j$ with probability $\binom{16}{j}|\psi_{u,v}(j)|^2$, then draw a uniform weight-$j$ bitstring. For a sample $z$ and mask $b$, we evaluate the amplitude ratio using the entries at $|z|$ and $|z\oplus b|$. We divide only on sampled support. For general $n$, the table, transform and sampling operations require polynomial work. Concentrated reference laws can still produce rare, large ratios; tractable access does not imply small estimator variance for every condition.
+with invalid binomial coefficients set to zero. We tabulate seventeen reference amplitudes, draw $j$ with probability $\binom{16}{j}|\psi_{u,v}(j)|^2$, then draw a uniform weight-$j$ bitstring. The ratio for a sample $z$ and mask $b$ uses table entries at $|z|$ and $|z\oplus b|$, dividing only on sampled support. At the center, the reference is exactly $\ket{0}^{\otimes16}$. For general $n$, these operations require polynomial work. However, efficient access does not ensure that the chosen sample budgets resolve small losses or gradient components.
 
-The fixed prior admits a polynomial counter-based preparation. Write the per-string probability as $g(k)=r_0(k)/\binom nk$, set $F(n,k)=g(k)$, and recursively compute $F(i,k)=F(i+1,k)+F(i+1,k+1)$. At prefix length $i$ and weight $k$, a counter-controlled rotation of angle $2\arcsin\sqrt{F(i+1,k+1)/F(i,k)}$ prepares the next bit. We update the counter after each visible bit and uncompute it at the end. At sixteen qubits this uses five clean workspace qubits, $136$ controlled rotations and $160$ counter-update or uncomputation operations. These are high-level operation counts, not compiled gate depth. Small-register preparation checks support this construction; the sampled campaign uses classical reference access and explicit state-vector preparation for circuit validation.
-
-The remaining conditional preparation applies sixteen $R_Z(u/2)$ gates and $120$ pairwise $ZZ$ rotations. Since
+Preparation starts with sixteen Hadamard gates, followed by sixteen $R_Z(u/2)$ rotations and $120$ pairwise $ZZ$ rotations. Since
 \[
  J_z^2=\frac n4I+\frac12\sum_{i<j}Z_iZ_j,
 \]
-$e^{-i(v/40)J_z^2}$ uses $\operatorname{IsingZZ}(v/40)$ on every pair, up to a global phase. The learned layer adds sixteen $R_X(-2\theta)$ rotations. Efficient reference access and physical preparation are distinct resource requirements; this experiment does not measure hardware depth or deployment fidelity.
+applying $\operatorname{IsingZZ}_{ij}(v/40)=e^{-ivZ_iZ_j/80}$ to every pair implements the quadratic phase up to a global phase. No ancillas or target amplitude preparation are required. The learned lattice layer adds sixteen one-body and twenty-four nearest-neighbor two-body phases with independent parameters. These are high-level gate counts; the experiment does not assess compiled depth or deployment noise.
 
-\subsection{Evaluation, conditional response and fixed controls}
+\subsection{Full-distribution evaluation and response diagnostics}
 
-We compute exact output probabilities in the seventeen-dimensional Dicke basis. Permutation symmetry makes full TVD equal to shell-profile TVD. We average over reporting conditions within each fit, then calculate the mean and sample standard deviation across five fits. The two designs have different reporting sets, so their table columns do not define a paired accuracy ranking.
+The reference remains permutation symmetric, but the independently parameterized lattice generally breaks this symmetry. We therefore compute all $2^{16}$ output probabilities for evaluation and use full-distribution TVD as the primary metric. Profile TVD aggregates probabilities by Hamming weight and may hide errors within shells. Dense evaluation is a small-system diagnostic, distinct from classical sampled training.
 
-After selection we also evaluate all $1681$ pairs on the grid $u,v\in\{-1,-0.95,\ldots,0.95,1\}$. Figure~\ref{fig:gaussian-two-dimensional} includes fitting and development conditions and shows the pointwise arithmetic mean of exact TVDs, rather than the TVD of a mixture. We display directly evaluated cells without smoothing. This dense sweep and the response curves are post-selection diagnostics.
+We average reporting errors over conditions within each fit and report means and sample standard deviations across five fits. The two geometries have different reporting sets, so their columns do not define a paired accuracy ranking. Terminal-checkpoint mean full TVDs are $0.0489\pm0.0137$ for axis training and $0.0412\pm0.0087$ for grid training. We retain these outcomes to distinguish final-update performance from development-selected performance.
+
+After selection, we evaluate all $1681$ pairs on $u,v\in\{-1,-0.95,\ldots,0.95,1\}$. Figure~\ref{fig:gaussian-two-dimensional} shows the pointwise arithmetic mean of full TVDs, rather than TVD of the mixture, without smoothing. This sweep includes fitting and development conditions and is diagnostic.
 
 \begin{figure*}[!t]
  \centering
- \includegraphics[width=\linewidth]{figures/gaussian2d_phase_width_response.pdf}
- \caption{Width response of the phase-conditioned Gaussian model. Columns fix $u=-1,0,1$; rows show separate and joint variation. Blue curves and bands show the pointwise median and interquartile range across five selected fits. Dashed black curves show exact target standard deviations, dotted orange curves use the fixed rotation $\theta=3\pi/8$, and dash-dotted gray lines show the condition-independent encoder width. All displayed model slices increase with $v$. These $21$-point sweeps include previously examined conditions and are diagnostic.}
+ \includegraphics[width=\linewidth]{figures/gaussian2d_lattice_width_response.pdf}
+ \caption{Width response with independently parameterized lattice layers. Columns fix $u=-1,0,1$; rows show axis and grid fitting. Blue curves and shading show the pointwise median and interquartile range across five selected fits. Dashed black curves show actual target standard deviations, and dotted gray lines show the encoder's constant binomial width. These $21$-point sweeps are post-selection diagnostics and include previously examined conditions.}
  \label{fig:gaussian-phase-width}
 \end{figure*}
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
  \centering
- \includegraphics[width=85mm]{figures/gaussian2d_phase_mean_response.pdf}
- \caption{Mean response at $v=0$ for the same five selected fits per design. Curves, bands and controls follow Figure~\ref{fig:gaussian-phase-width}. The fixed encoder mean is eight for every condition.}
+ \includegraphics[width=\linewidth]{figures/gaussian2d_lattice_mean_response.pdf}
+ \caption{Mean response for the same selected fits. Columns fix $v=-1,0,1$; rows show axis and grid fitting. Curves and shading follow Figure~\ref{fig:gaussian-phase-width}. The target mean depends on both coordinates, while the encoder mean is eight at every condition.}
  \label{fig:gaussian-phase-mean}
-\end{figure}
+\end{figure*}
 
-The mean endpoint response is $0.961$ after separate variation and $0.973$ after joint variation, relative to the exact target displacement between $u=-1$ and $u=1$ at $v=0$. Width endpoint ratios at $u=(-1,0,1)$ are $(0.948,0.913,0.948)$ and $(0.945,0.909,0.945)$, respectively. We average each fit's ratio of output to target standard-deviation change between $v=-1$ and $v=1$. None of the ten fits reverses an adjacent width step on these sweeps. These endpoint diagnostics do not imply perfect calibration throughout the domain.
+We measure endpoint response ratios by dividing each model's mean change between $u=-1$ and $u=1$, or its width change between $v=-1$ and $v=1$, by the corresponding exact target change. Averaged across five fits, mean-displacement ratios at $v=(-1,0,1)$ are $(0.966,1.000,1.043)$ for axis training and $(0.964,0.998,1.042)$ for grid training. Width-change ratios at $u=(-1,0,1)$ are $(0.917,0.829,0.917)$ and $(0.898,0.814,0.898)$, respectively. Individual fits recover between $0.507$ and $1.073$ of the target width change. None reverses an adjacent width step on the tested sweeps. These summaries describe response magnitude on the tested slices, not perfect calibration throughout the domain. In particular, agreement at the origin holds for every parameter vector and is excluded from the separate reporting averages.
 
-The structured input already provides much of the response. Let $J=8$, $m=J-k$, $a_m=\sqrt{r_0(J-m)}$ and $b=v/40$. Direct evaluation gives
-\begin{align}
- A(b)&=\sum_{m=-J}^{J-1}a_{m+1}a_m\sqrt{(J-m)(J+m+1)}\nonumber\\
- &\hspace{1em}\times\cos[b(2m+1)],\\
- \mathbb E[K]&=8+\sin(2\theta)A(b)\sin(u/2).
-\end{align}
-Matching the local mean slope to the nominal target slope $3$ gives the analytic angle
-\[
- \theta_{\rm a}=\tfrac12\{\pi-\arcsin[6/A(0)]\}\simeq1.146708.
-\]
-This controls the local slope rather than reproducing the entire discretized target law. Its reporting TVD matches or improves on the sampled selected means (Table~\ref{tab:gaussian-phase-controls}).
-
-The fixed prior has squared overlap $0.999806$ with $\ket{+}^{\otimes16}$. Replacing it with that product state, while retaining both phases and the analytic angle, gives still lower diagnostic TVD. The quadratic phase continues to introduce entanglement for nonzero $v$; the replacement removes the Gaussian amplitude preparation, not the conditional pair gates. We derived these analytic controls after the campaign using target information and did not train the product replacement. The $3\pi/8$ control was frozen before sampled training after the capacity pilot. These comparisons support a constructed conditional-capability example, without establishing a benefit from the Gaussian prior or a necessity for stochastic learning.
-
-\input{tables/gaussian2d_phase_controls.tex}
-
-Terminal-checkpoint reporting errors are $0.0304\pm0.0049$ for joint variation and $0.0364\pm0.0037$ for separate variation, compared with selected errors $0.0222\pm0.0013$ and $0.0258\pm0.0005$. The development oracle therefore contributes materially to the reported fidelity. We retain both outcomes when interpreting sampled calibration and do not attribute selected performance to the fitting samples alone.
-
-\subsection{Finite-target validation and direct calibration}
-\label{sec:gaussian-finite-validation}
-
-We repeat sampled training with the previously selected encoder and optimizer, using five paired fits per design for the original estimator and a bounded pair-averaged estimator. The twenty fits share fitting and validation pools, initialization and random streams within each estimator pair. We keep the same fitting, development and reporting geometries. Each fit uses $9216$ fixed fitting strings and $128$ independent validation strings per development condition, totaling $1024$ additional strings for separate variation or $2560$ for joint variation. We evaluate reporting conditions only after all fits finish. The fresh pools do not remove the earlier target-informed configuration choices or previous examination of reporting conditions.
-
-We select among initialization and twenty subsequent checkpoints using the model-dependent part of empirical validation MMD. Let $q_c(k)$ denote the model's shell profile, $\widehat p_c(k)$ the empirical validation profile and $\mathcal K_{kl}$ the kernel averaged over uniformly drawn bitstrings of weights $k,l$. The selection score averages
-\[
- q_c^T\mathcal Kq_c-2q_c^T\mathcal K\widehat p_c
-\]
-over development conditions. Shell projection preserves the model-dependent terms because $q_c$ is uniform within each shell. The empirical target self-term is independent of the learned angle and can be omitted when ranking checkpoints. We evaluate model moments exactly in the seventeen-dimensional symmetric subspace; target information comes only from the finite validation strings. Training remains sampled. Thus this protocol uses finite-target selection with exact model evaluation, rather than fully sampled validation.
-
-The original estimator gives selected reporting TVD $0.0288\pm0.0058$ for separate variation and $0.0280\pm0.0035$ for joint variation. Terminal errors are $0.0332\pm0.0053$ and $0.0350\pm0.0043$. One separate-variation fit selects initialization. Mean per-fit worst-reporting-condition TVD is approximately $0.042$ in both designs. Selected mean-displacement ratios are $1.005$ and $1.007$; width-change ratios at $u=(-1,0,1)$ are approximately $(0.933,0.892,0.933)$ in both designs. No selected fit reverses an adjacent width step on the checked slices. Clamping $v$ to zero increases selected reporting TVD to approximately $0.071$ and $0.068$, respectively. These interventions show sensitivity to the width coordinate but do not substitute for independently retrained width-blind models.
-
-For the bounded estimator, write $R=\psi(z\oplus a)/\psi(z)$ and $\Delta$ for the learned phase difference. We replace each real moment sample $\operatorname{Re}[Re^{i\Delta}]$ with
-\[
- \widetilde Y=\frac{2\operatorname{Re}[Re^{i\Delta}]}{1+|R|^2}.
-\]
-This is the reference-probability-weighted average over the unordered pair $\{z,z\oplus a\}$. It preserves the moment mean and satisfies $|\widetilde Y|\leq1$. Applying it to independent reference draws preserves the diagonal-excluded squared-moment estimator. Fixed-mask conditional averaging reduces moment and gradient variance, but shared draws across masks do not provide a general aggregate-variance guarantee. The selected reporting TVDs are $0.0289\pm0.0057$ and $0.0279\pm0.0029$, with mixed signs of the paired accuracy differences. These runs therefore do not establish a practical fidelity benefit from pair averaging.
-
-The mean-response identity above also yields a direct finite-data calibration. For each fitting condition $c=(u_c,v_c)$, define $g_c=A(v_c/40)\sin(u_c/2)$ and let $\overline K_c$ be its fitting-pool mean. Least squares estimates
-\[
- \widehat s=\frac{\sum_c g_c(\overline K_c-8)}{\sum_cg_c^2},\qquad
- \widehat\theta=\frac{\pi-\arcsin[\operatorname{clip}(\widehat s,-1,1)]}{2}.
-\]
-The previously chosen branch retains positive width response. This uses fitting observations and the encoder's response law, without validation data or population target probabilities. For the product prior, the same calculation uses $A(b)=8\cos^{15}(b)$. Both controls give slightly lower mean TVD than the corresponding sampled fits (Table~\ref{tab:gaussian-phase-finite-validation}). They calibrate this particular one-angle model and are not general substitutes for sampled conditional training.
-
-\input{tables/gaussian2d_phase_finite_validation.tex}
-
-Checkpoint and selection replay, paired-input checks, and independent circuit comparisons support the reported finite-validation results. The bounded loss and gradient agree with the standalone estimator, and the original estimator reproduces the frozen short training trajectory. Efficient reference access, estimator control and output fidelity remain distinct properties. In particular, the finite-validation comparison does not establish an advantage from the bounded estimator or from Gaussian prior preparation.
+\input{appendices/binary_linear_encoders.tex}
 
 \input{appendices/conditional_switching.tex}
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=85mm]{figures/conditional_symmetry_fluctuation.pdf}
-\caption{Energy-fluctuation response of the learned distributions. (a) Mean triangle balance, repeated for context. (b) The fluctuation statistic $\beta^2\operatorname{Var}(E)/16$. This statistic equals heat capacity per edge for the equilibrium Gibbs target; the generated distribution need not satisfy the fluctuation-response relation. Styles, sample-standard-deviation bands, fitting markers and shading follow Figure~\ref{fig:switching16-response}. The generated fluctuations remain substantially larger than the target at large inverse temperature. We compute the variance within each fit before aggregation.}
-\label{fig:switching16-fluctuations}
-\end{figure}
+
 
 \end{document}

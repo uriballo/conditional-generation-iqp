@@ -1,7 +1,10 @@
-# Conditional switching response assets
+# Signed-graph construction and historical response assets
 
-These assets contain the frozen empirical response used for the manuscript's
-conditional symmetry section. `response.npz` is an exact copy of
+These assets contain two related records. The graph and encoder illustrations
+are current manuscript material for the signed-graph symmetry construction.
+The empirical response arrays below are historical learning evidence retained
+for explicit replay; they are not current manuscript results. `response.npz` is
+an exact copy of
 `results/switching16-20261009/ANALYSIS_RANGE2P4.npz`; it contains five frozen
 fits evaluated on 121 points over `0 <= beta <= 2.4`. The response summary
 records the original analysis source hash and the five-fit aggregation. The
@@ -15,10 +18,11 @@ MPLCONFIGDIR=/tmp/iqp-circuit-mpl .venv/bin/python paper/data/switching16/render
 ```
 
 The renderer performs no training or model evaluation. It aggregates the stored
-fit arrays and writes figures and provenance receipts to
+historical fit arrays and writes figures and provenance receipts to
 `results/switching16-publication-replay/`. The repository command
 `uv run python run_experiments.py --mode figures --experiment switching16`
-also replays both response figures to its selected output directory.
+also explicitly replays both historical response figures to its selected output
+directory. Default figure generation excludes them.
 
 The encoder illustration source has a separate explicit publication rebuild:
 

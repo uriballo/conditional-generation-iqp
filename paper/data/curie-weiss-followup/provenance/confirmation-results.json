@@ -1,0 +1,956 @@
+{
+  "shared_parity": [
+    {
+      "trial_id": 44,
+      "config": {
+        "learning_rate": 0.0010525164850513794,
+        "init_scale": 0.06024206497315235,
+        "b1": 0.8096619130095202,
+        "b2": 0.9953405452328755,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          6.5,
+          7.99
+        ],
+        "beta_scale": 0.6709902715819724
+      },
+      "J": 0.12751452429377388,
+      "P": 0.07946115086439703,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.12238842760521218,
+          "P": 0.0790285238612787,
+          "max_tvd": 0.1309503376691435,
+          "mean_tvd": 0.10526460747734954
+        },
+        {
+          "J": 0.12780153316581117,
+          "P": 0.07544103554983668,
+          "max_tvd": 0.1384998544470079,
+          "mean_tvd": 0.10640489060341768
+        },
+        {
+          "J": 0.1259848508261522,
+          "P": 0.08157316837486592,
+          "max_tvd": 0.1358400118521499,
+          "mean_tvd": 0.10627452877415688
+        },
+        {
+          "J": 0.13218699358687125,
+          "P": 0.07870262150343398,
+          "max_tvd": 0.14478327928647383,
+          "mean_tvd": 0.10699442218766611
+        },
+        {
+          "J": 0.12921081628482253,
+          "P": 0.08256040503256991,
+          "max_tvd": 0.14177125059746792,
+          "mean_tvd": 0.1040899476595317
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/7c8c7c06f04a0362683883895c47ba051962b525a0d1026b293551c8f012d9b5",
+        "/work/results/campaign/confirmation/fits/39d5f7662ea8db18f19264e01bdd3ec5a146da21eb35d40ca370294880eae0ff",
+        "/work/results/campaign/confirmation/fits/917bf20391e786bd9447c51cd7e9b696a9d5d58e01cfc04d0a4d8aaa13659503",
+        "/work/results/campaign/confirmation/fits/48bea80366dcf88a4e7ff2c042c56ea83f1d474dd4b9d5b05e803924a266036d",
+        "/work/results/campaign/confirmation/fits/be0b7be1bcaae012209f5adefe09e540caa5f8ae3cb8b97a3fd9067df364e37f"
+      ]
+    },
+    {
+      "trial_id": 103,
+      "config": {
+        "learning_rate": 0.003417450659093187,
+        "init_scale": 0.022105341315296574,
+        "b1": 0.8018785446110164,
+        "b2": 0.9919640457804435,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          4,
+          7.5
+        ],
+        "beta_scale": 0.6839867061196403
+      },
+      "J": 0.12806135007136304,
+      "P": 0.07448960899344201,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.12569577531273585,
+          "P": 0.07458286988953518,
+          "max_tvd": 0.13843210453709753,
+          "mean_tvd": 0.10022311686401249
+        },
+        {
+          "J": 0.13001679354123408,
+          "P": 0.0727509369481897,
+          "max_tvd": 0.1430070211394978,
+          "mean_tvd": 0.10403633834470667
+        },
+        {
+          "J": 0.1239042926307794,
+          "P": 0.07803676841026055,
+          "max_tvd": 0.13354432564641916,
+          "mean_tvd": 0.10462422659949985
+        },
+        {
+          "J": 0.1307235686137682,
+          "P": 0.07721761069501837,
+          "max_tvd": 0.14165304933705103,
+          "mean_tvd": 0.10886460716720253
+        },
+        {
+          "J": 0.12996632025829766,
+          "P": 0.0698598590242062,
+          "max_tvd": 0.14477809175021805,
+          "mean_tvd": 0.10034277727445691
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/109f4b929443cb70f591c550232f2df2ba77dccb9fe1cf7bb03b87a9391b2594",
+        "/work/results/campaign/confirmation/fits/f972ba0c5cec3fd43dfadd455ccbe7837e07cb5e79758388635c15ebf9f63ee3",
+        "/work/results/campaign/confirmation/fits/2ebf61ec443ec9f960a0c2fa8117d7f40eadf645fd15caa9c6ff8447ba02445d",
+        "/work/results/campaign/confirmation/fits/ba57b5f3379404eab1e10b01db1383d3b36c66bd46c60fc42bcae7bebcbf7aaf",
+        "/work/results/campaign/confirmation/fits/b5ef1fe0a95ea898615cdffb464c4887f484c7e70e440ef8b3483faba05a1d06"
+      ]
+    },
+    {
+      "trial_id": 106,
+      "config": {
+        "learning_rate": 0.001518539837114324,
+        "init_scale": 0.026180568904542366,
+        "b1": 0.8045626439336986,
+        "b2": 0.9924217737273455,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          4,
+          7.5
+        ],
+        "beta_scale": 0.6638788601795942
+      },
+      "J": 0.1303696959104033,
+      "P": 0.08250546760719515,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.12140024391861676,
+          "P": 0.08495090846546181,
+          "max_tvd": 0.1293781901198548,
+          "mean_tvd": 0.10544435151614068
+        },
+        {
+          "J": 0.13530826372604865,
+          "P": 0.08046203779801506,
+          "max_tvd": 0.14794194037479694,
+          "mean_tvd": 0.11004091042855207
+        },
+        {
+          "J": 0.12592594267188342,
+          "P": 0.08533818362250443,
+          "max_tvd": 0.1345735745147255,
+          "mean_tvd": 0.10863067898619921
+        },
+        {
+          "J": 0.13195455427431246,
+          "P": 0.07987546207558963,
+          "max_tvd": 0.14326944157784063,
+          "mean_tvd": 0.10932477966725612
+        },
+        {
+          "J": 0.1372594749611551,
+          "P": 0.08190074607440478,
+          "max_tvd": 0.15197075079369524,
+          "mean_tvd": 0.1078369232960748
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/e1b68bffc528f1616c1f1457f902a02df040e58da413751a67ac4cf52b51267f",
+        "/work/results/campaign/confirmation/fits/801bd617eb4345ad377f1cb05f5782ee1eeb783b7fd7e8af895360f074dc27fd",
+        "/work/results/campaign/confirmation/fits/871b19b6e27be101dacc5dbcf317384c8a31b81a4c130a38841e9b36efcc7282",
+        "/work/results/campaign/confirmation/fits/730b944bfb8037ac5732052123fd7d01af9d799cf0809cf05a014785f063fc09",
+        "/work/results/campaign/confirmation/fits/c0ec3fdad90a50dd41c0da7d3171fd7a03fb1d46c0c922c074c6b5a031539f93"
+      ]
+    }
+  ],
+  "shared_product": [
+    {
+      "trial_id": 118,
+      "config": {
+        "learning_rate": 0.024988813013235453,
+        "init_scale": 0.035445345005162325,
+        "b1": 0.8329460849316322,
+        "b2": 0.9988047668881582,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          5,
+          7
+        ],
+        "beta_scale": 0.5648243796856768
+      },
+      "J": 0.2711511149655864,
+      "P": 0.3429964006190643,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.4424159005915178,
+          "P": 0.9945753827031643,
+          "max_tvd": 0.5052176935716941,
+          "mean_tvd": 0.31681231463116516
+        },
+        {
+          "J": 0.2289385244890739,
+          "P": 0.1833192393569449,
+          "max_tvd": 0.2546712375569069,
+          "mean_tvd": 0.17747309835340788
+        },
+        {
+          "J": 0.2297852149344853,
+          "P": 0.18005233824682654,
+          "max_tvd": 0.25610928149872114,
+          "mean_tvd": 0.17713708180601367
+        },
+        {
+          "J": 0.22613467219342973,
+          "P": 0.1882530627021218,
+          "max_tvd": 0.25146770962542053,
+          "mean_tvd": 0.17546859732944814
+        },
+        {
+          "J": 0.22848126261942525,
+          "P": 0.1687819800862637,
+          "max_tvd": 0.25413121851726417,
+          "mean_tvd": 0.17718135082374742
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/7e5aaf1da4edae4f2d1102e691290d525c44afc9043db0e1777ab03d7ed77bca",
+        "/work/results/campaign/confirmation/fits/7683c626962d4ccbdee2e23c67efde1028fd2a82932e5adf495b470b6bc7deb5",
+        "/work/results/campaign/confirmation/fits/34741f2f2b1f92d0f5332318b81bf282cd922fde89b68137367f24e102038f08",
+        "/work/results/campaign/confirmation/fits/ee58abb32280e9bea0758a58a054f38bd2637fe87a427e8d616364b5acc6f676",
+        "/work/results/campaign/confirmation/fits/a3af0736f9b01b81fd9093a331fd7d7bb1dfb3b19a673791e8bfc43782323d19"
+      ]
+    },
+    {
+      "trial_id": 104,
+      "config": {
+        "learning_rate": 0.02319492855618158,
+        "init_scale": 0.028025261902147193,
+        "b1": 0.8274691882793088,
+        "b2": 0.9983892842750176,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          7.5,
+          7.5
+        ],
+        "beta_scale": 0.5896192717650409
+      },
+      "J": 0.24713668770674949,
+      "P": 0.3482227873867447,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.1967880181503681,
+          "P": 0.17057900099464032,
+          "max_tvd": 0.21160586461155578,
+          "mean_tvd": 0.16715232522799275
+        },
+        {
+          "J": 0.20072927839572308,
+          "P": 0.1694125011590172,
+          "max_tvd": 0.21645395059587225,
+          "mean_tvd": 0.1692799339954247
+        },
+        {
+          "J": 0.2061640775740281,
+          "P": 0.18830356266846035,
+          "max_tvd": 0.22576563509912492,
+          "mean_tvd": 0.1669609625238344
+        },
+        {
+          "J": 0.20179384643043166,
+          "P": 0.1684752384757276,
+          "max_tvd": 0.21771183285057924,
+          "mean_tvd": 0.16995787359013653
+        },
+        {
+          "J": 0.4302082179831965,
+          "P": 1.0443436336358782,
+          "max_tvd": 0.4913045657522531,
+          "mean_tvd": 0.3080155224450831
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/4fa67acdccb0e04fbd09aa22f7f30c9dab3dd5113950000d02d0db658eae94d4",
+        "/work/results/campaign/confirmation/fits/4f128e69f33e345a64e9cd6e113fe9a3e85dd6d767b311c3b20b956bcb4dc4aa",
+        "/work/results/campaign/confirmation/fits/fa338e925f067298f8eda1c7cad596f0fc2f13520b2a7e5f69163e0accb6ee40",
+        "/work/results/campaign/confirmation/fits/d82e1250b9e76796f2d871121ca72f980d550a5786fc50b42ef8f10252a23f07",
+        "/work/results/campaign/confirmation/fits/edc4a69a8bfb14c5b179cea49d2ba2a3f516cd659252d54d22403ed42813d63b"
+      ]
+    },
+    {
+      "trial_id": 87,
+      "config": {
+        "learning_rate": 0.030069581844167872,
+        "init_scale": 0.045476913658824,
+        "b1": 0.8264919223569808,
+        "b2": 0.9989832057002374,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          4,
+          5
+        ],
+        "beta_scale": 0.6572686512368282
+      },
+      "J": 0.1948012414331159,
+      "P": 0.13750486124979244,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.19068252730071933,
+          "P": 0.12968986636515198,
+          "max_tvd": 0.20706254311111597,
+          "mean_tvd": 0.157922495679926
+        },
+        {
+          "J": 0.2090704857278558,
+          "P": 0.16310104447530896,
+          "max_tvd": 0.23435120175755605,
+          "mean_tvd": 0.15850905366845536
+        },
+        {
+          "J": 0.18264107548842434,
+          "P": 0.12570994899798374,
+          "max_tvd": 0.19644138139770284,
+          "mean_tvd": 0.15504046366986735
+        },
+        {
+          "J": 0.19129945217504385,
+          "P": 0.12790528446382504,
+          "max_tvd": 0.20881369574001524,
+          "mean_tvd": 0.15627096504510105
+        },
+        {
+          "J": 0.2003126664735361,
+          "P": 0.14111816194669263,
+          "max_tvd": 0.21100943242119063,
+          "mean_tvd": 0.178919134578227
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/676b5b825a465caa7958890178e0f79bfe1a14d5a610dc34e1026726efb435d0",
+        "/work/results/campaign/confirmation/fits/27276a825bfa484646c0e2c1a78fcf15053cffd9a13f1783a029cee861fe7191",
+        "/work/results/campaign/confirmation/fits/f5a88f3953c83256c1c85feeb02ce56855e1aabef249c44fb46a8078abc9ebc9",
+        "/work/results/campaign/confirmation/fits/3f52b79b1fabea9edef0f4034e31eb9f9e0378fbbfe0b86f3f4f88e3d5b1360f",
+        "/work/results/campaign/confirmation/fits/75402005c8dacaf0c7ce099fd5289d17be533588aaf80aaeef1f9cd601d26d07"
+      ]
+    },
+    {
+      "trial_id": 92,
+      "config": {
+        "learning_rate": 0.0260180484239577,
+        "init_scale": 0.029254070529495996,
+        "b1": 0.8237127304985619,
+        "b2": 0.9983752903841157,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          5,
+          7
+        ],
+        "beta_scale": 0.627067675040485
+      },
+      "J": 0.21153409549616414,
+      "P": 0.17434942491575,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.20962521192630743,
+          "P": 0.16803741167410602,
+          "max_tvd": 0.22768465369553104,
+          "mean_tvd": 0.1735063283878602
+        },
+        {
+          "J": 0.1986327682284481,
+          "P": 0.1709799911618459,
+          "max_tvd": 0.22188632822645524,
+          "mean_tvd": 0.15212564823243388
+        },
+        {
+          "J": 0.21592034062065368,
+          "P": 0.17817606432386593,
+          "max_tvd": 0.24108994738136647,
+          "mean_tvd": 0.1655811270992281
+        },
+        {
+          "J": 0.21126963496455078,
+          "P": 0.16539153306004684,
+          "max_tvd": 0.22992695926467813,
+          "mean_tvd": 0.17395498636429613
+        },
+        {
+          "J": 0.2222225217408608,
+          "P": 0.18916212435888538,
+          "max_tvd": 0.25074166158778943,
+          "mean_tvd": 0.16518424204700358
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/34514091ef3a8d7583b5bfb36a525504913e1603f109fef62c34abae17d68187",
+        "/work/results/campaign/confirmation/fits/77ceb290114dc6b80dd66eced8f752712681c424b4e708b99887686cf4c84aa8",
+        "/work/results/campaign/confirmation/fits/6056001ad10978dca474c0f6b9c2b67e10c16b8eaa941dffcd67a03bcd450fe7",
+        "/work/results/campaign/confirmation/fits/9d2537884812a1878bcdd6ede7f6bebd39d3af8db054e85ae1d0eea6ea5d4e12",
+        "/work/results/campaign/confirmation/fits/d81a48a802ca929b0be5867f87e01753b1bdeb0e6ead763c4408514d9d02fc48"
+      ]
+    }
+  ],
+  "independent_parity": [
+    {
+      "trial_id": 83,
+      "config": {
+        "learning_rate": 0.0016398870605973156,
+        "init_scale": 0.045726873420551074,
+        "b1": 0.9466529529187317,
+        "b2": 0.962266752580343,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          5,
+          7.99
+        ],
+        "beta_scale": 0.5917332954073148
+      },
+      "J": 0.14277045152664578,
+      "P": 0.04212906013257005,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.13813094795652336,
+          "P": 0.04129089277240135,
+          "max_tvd": 0.14455600491153275,
+          "mean_tvd": 0.1252808340465046
+        },
+        {
+          "J": 0.13427694105987087,
+          "P": 0.04682307921284724,
+          "max_tvd": 0.13968976578128417,
+          "mean_tvd": 0.12345129161704424
+        },
+        {
+          "J": 0.14218469549858584,
+          "P": 0.04062460596696659,
+          "max_tvd": 0.14892250310770053,
+          "mean_tvd": 0.12870908028035644
+        },
+        {
+          "J": 0.14416190185432218,
+          "P": 0.04163076687775687,
+          "max_tvd": 0.15096639070340487,
+          "mean_tvd": 0.13055292415615682
+        },
+        {
+          "J": 0.15509777126392668,
+          "P": 0.04027595583287816,
+          "max_tvd": 0.16449111844020708,
+          "mean_tvd": 0.13631107691136593
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/dba4713d157836e6a02e420b2e2ee1112bb8e63017f6aab07a0bb235688c42d5",
+        "/work/results/campaign/confirmation/fits/d89dada1e6fb5d7f8c4e720652668f4ecde04ddd05f68cf446d03dc6b5ca9d02",
+        "/work/results/campaign/confirmation/fits/d6074f6a694e3d7006ff1704b8f513877cc439b61a3229ebc23578e9c75f34de",
+        "/work/results/campaign/confirmation/fits/21119393d289c6804e40ac9a2fbba1ac2d91bcdc9d6ff2e3cceb00f45eb7788c",
+        "/work/results/campaign/confirmation/fits/cb43c83a0d4995aa39dcb93a075223631f552e6d73892690fe87b1fecab90f7b",
+        "/work/results/campaign/confirmation/fits/9552aeb1503c0235d2748d3be36a9fb0eae578b2c1da11863be4e608a713be36",
+        "/work/results/campaign/confirmation/fits/23bec94bc2b5a0d3e9f925640cf4c0505eeb5d4731142ef246cf21b559b53881",
+        "/work/results/campaign/confirmation/fits/0ac265346b913aa8a14159a8ddd86e29ba5744959532de25d88798347555b743",
+        "/work/results/campaign/confirmation/fits/8237e124bf1b525a9a821ca4c4be30fc5eb968786a65d64daf6a0e13a4414a52",
+        "/work/results/campaign/confirmation/fits/64b06725114deaed2732e57a53a6716bef3420b1312ad513d51e92931871a5f0",
+        "/work/results/campaign/confirmation/fits/b30f3754784ca776cd676e8724953d69916d6614ae3b8f385e4564b23f09866b",
+        "/work/results/campaign/confirmation/fits/63419115037ae725cda3cbb7b1344130828f2e01eb5e3728fd582963a81aae67",
+        "/work/results/campaign/confirmation/fits/5331edaa49884728da1483d8953c1bf34a411eb6633d05e076d9b6ce2af839d1",
+        "/work/results/campaign/confirmation/fits/0ba9c1a3bd7c3302d5e1b8f00ff8d51c3b326017f22a5e191a738a66d4cf98e8",
+        "/work/results/campaign/confirmation/fits/51e3bd32d12ce778dcf007416835d2087763144dc3eed6fd5a369b82db092edc"
+      ]
+    },
+    {
+      "trial_id": 105,
+      "config": {
+        "learning_rate": 0.0043028682430981706,
+        "init_scale": 0.0300355949382362,
+        "b1": 0.8990943669881644,
+        "b2": 0.9661303855974087,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          7.5,
+          7.99
+        ],
+        "beta_scale": 0.5823317471765032
+      },
+      "J": 0.14673859576219148,
+      "P": 0.03731390421401349,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.145457626089587,
+          "P": 0.03705896040218506,
+          "max_tvd": 0.15242759359716218,
+          "mean_tvd": 0.13151769107443664
+        },
+        {
+          "J": 0.14376921857571945,
+          "P": 0.036381652088276,
+          "max_tvd": 0.1511825793440812,
+          "mean_tvd": 0.128942497038996
+        },
+        {
+          "J": 0.14653929911162564,
+          "P": 0.03771129641876756,
+          "max_tvd": 0.15190323187647278,
+          "mean_tvd": 0.13581143358193135
+        },
+        {
+          "J": 0.14641685437055862,
+          "P": 0.037130514932773036,
+          "max_tvd": 0.15178597627538204,
+          "mean_tvd": 0.13567861056091177
+        },
+        {
+          "J": 0.15150998066346663,
+          "P": 0.038287097228065815,
+          "max_tvd": 0.1587060126845491,
+          "mean_tvd": 0.13711791662130166
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/7783eaabaab6dbee412e911abc85f3092699bc9763bc1b2e5301ec16f6cfc625",
+        "/work/results/campaign/confirmation/fits/8c3c69ae6e5c7482576bade408125b08fd451f49318669a0220fbce15ac51f37",
+        "/work/results/campaign/confirmation/fits/95ba6c5aa67cf731dbf7f42a37682c6a96331a43a0e8623ee71dc710fd198bfd",
+        "/work/results/campaign/confirmation/fits/6b246ce4fd3d22f0f2ae1fbd792d258f31616e55647b56a929e645ecbf8746fb",
+        "/work/results/campaign/confirmation/fits/8af94d88e2b764567011df1f5f3ecaa39c9e7118dd502c7ad74f5aa4f2470045",
+        "/work/results/campaign/confirmation/fits/d776438ee4dea4b3fc895faf8b0aaae16bfa298bde2618accecf0485e683794c",
+        "/work/results/campaign/confirmation/fits/025ff5806d828d1d81b9eeb01e8654a8ec6129bc9d651fe25f2eb9879e3f237b",
+        "/work/results/campaign/confirmation/fits/8189ee0a59d092128bd27b7c34f7191abf8ac746eba38dc413f089eeb6dc3fad",
+        "/work/results/campaign/confirmation/fits/5e03f575697409ee5c1a0aa31d620119fe4d757c20d57964989393d681e4d58a",
+        "/work/results/campaign/confirmation/fits/24c5fca4d710a507ff168d829a3ae29b9ccc38291b81e87ff956306526f1d8b9",
+        "/work/results/campaign/confirmation/fits/296f06b525330f34eb483ab16ac11cf3fac5de723e0c644c35acf8a99c56719a",
+        "/work/results/campaign/confirmation/fits/0eb47129d543e75a35d3099d41770bda6514c0614e48893ee5d3dd26d1926f05",
+        "/work/results/campaign/confirmation/fits/efc98658e7580a7663251da295a7fbba07ec32b43ba733dd9d1a63d94983de0d",
+        "/work/results/campaign/confirmation/fits/ce40061a7531192c0cd0455e1d8a76a1d148983be3cb7c8ea5904462ffce41ec",
+        "/work/results/campaign/confirmation/fits/88bb25e139ea513e162fc8f43fec7edc9cf974b5bcbd55673029a40b5c01c87f"
+      ]
+    },
+    {
+      "trial_id": 118,
+      "config": {
+        "learning_rate": 0.005093279778313153,
+        "init_scale": 0.021977791439170658,
+        "b1": 0.9277747255765815,
+        "b2": 0.9748360426699341,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          5,
+          7.99
+        ],
+        "beta_scale": 0.5998323668290483
+      },
+      "J": 0.14050169826594733,
+      "P": 0.05229252246959145,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.13557530046789298,
+          "P": 0.05237209311296227,
+          "max_tvd": 0.14521038033581424,
+          "mean_tvd": 0.11630514073205044
+        },
+        {
+          "J": 0.12826540489762836,
+          "P": 0.04578270702903952,
+          "max_tvd": 0.13700420996828266,
+          "mean_tvd": 0.11078779475631972
+        },
+        {
+          "J": 0.14129206979087006,
+          "P": 0.056489241682257496,
+          "max_tvd": 0.1515467795966453,
+          "mean_tvd": 0.12078265017931955
+        },
+        {
+          "J": 0.141844699070246,
+          "P": 0.04753003413623958,
+          "max_tvd": 0.15303813100143554,
+          "mean_tvd": 0.11945783520786689
+        },
+        {
+          "J": 0.15553101710309927,
+          "P": 0.05928853638745842,
+          "max_tvd": 0.16987550570146864,
+          "mean_tvd": 0.1268420399063606
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/7b1ffc6d873655302fa5b9bc572fd1523ae96ecf857b5bda49809f8ea04e81ba",
+        "/work/results/campaign/confirmation/fits/0cc29449c5a2a0bb7932a4f6476447309a7d7b91983e7ea3d242e4fb7f779994",
+        "/work/results/campaign/confirmation/fits/7c41179b1111df7b0dcd9d5c4f4ce55db9ef731997cf7fdfb4f1b2d706f63f80",
+        "/work/results/campaign/confirmation/fits/0266b6c7d6efdf05a9771522acea7972a85042378d8e14a67437340fb98f5e1b",
+        "/work/results/campaign/confirmation/fits/02929af3611512c7df87a7c081a3cc7a4709df1106a01b8c915aa092e539a93b",
+        "/work/results/campaign/confirmation/fits/2cae4fcce939926b768e53309a620907a404384afba70f89ade0b4c9036ec73f",
+        "/work/results/campaign/confirmation/fits/e45dcc9412f781af703362c1c9dd362acc0a9e0ab315da4b51b6acbaf8915b49",
+        "/work/results/campaign/confirmation/fits/82f6629dc33e5dd0ebd37a7fc0f4e7ccf8332e2b58bae8d30ecbb5f88f2a2847",
+        "/work/results/campaign/confirmation/fits/4ca20ef40a27d70a92e51d0f708e8a422b99996e0d3e23252c04ffcc9d9d61f0",
+        "/work/results/campaign/confirmation/fits/81409bcd4cf4c9c8b456d77c0913556be9b81fb64a09e82cd40e9987a04c4960",
+        "/work/results/campaign/confirmation/fits/a11a5b29ed50a7a3b04a494f47fcd1dc03ce65c18b561442e8ed363f932ca283",
+        "/work/results/campaign/confirmation/fits/16eff834965835c4859b722e7430c69d8d039cb80fa7ee45f47af78525a28297",
+        "/work/results/campaign/confirmation/fits/573fe701169c68d0a8f30b1982cf9b2fb77b4ec59100462bf0fc97a5b36a4ae0",
+        "/work/results/campaign/confirmation/fits/ad71c02141aab7792209bf59c9be376d87a6204b8b174acd129e1774b32b52d5",
+        "/work/results/campaign/confirmation/fits/da963326ee1630e307d93390753076f5fcba0d88af8503aa1843b4e81e3961e7"
+      ]
+    },
+    {
+      "trial_id": 46,
+      "config": {
+        "learning_rate": 0.0032588209629091196,
+        "init_scale": 0.12066386032490696,
+        "b1": 0.8228960154286533,
+        "b2": 0.9615567922776809,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          4,
+          7
+        ],
+        "beta_scale": 0.6933732857120124
+      },
+      "J": 0.17410442151901023,
+      "P": 0.005891055398068426,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.17759059011541134,
+          "P": 0.01081314164284773,
+          "max_tvd": 0.1955305399992998,
+          "mean_tvd": 0.1417106903476344
+        },
+        {
+          "J": 0.138464457675351,
+          "P": 0.0038333484419555905,
+          "max_tvd": 0.14912238700622332,
+          "mean_tvd": 0.11714859901360643
+        },
+        {
+          "J": 0.1847970394350813,
+          "P": 0.0020191036895182454,
+          "max_tvd": 0.20624566500768104,
+          "mean_tvd": 0.14189978828988176
+        },
+        {
+          "J": 0.16803438595221207,
+          "P": 0.002668364541329826,
+          "max_tvd": 0.18423887443612363,
+          "mean_tvd": 0.13562540898438896
+        },
+        {
+          "J": 0.20163563441699553,
+          "P": 0.010121318674690741,
+          "max_tvd": 0.22439472076576272,
+          "mean_tvd": 0.15611746171946114
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/7e8b8e6dace9b9b5d6efea40e06bcd39eb26efc9fcf553612360f358425ae0bb",
+        "/work/results/campaign/confirmation/fits/b600230fa79486326eb92d406caf1d6dfd21e0a62a4e51c54df0ffb79cc98066",
+        "/work/results/campaign/confirmation/fits/00d5a18e6bddfe1acf7153436d2544998ac3cb27245e8197f1d10425853f412c",
+        "/work/results/campaign/confirmation/fits/68bcc0b3411c1e91e94b6eb7a647d41c60e68f0dd2fb1d820a463f97c24ccb6e",
+        "/work/results/campaign/confirmation/fits/558128f499fcd88117917ea584748110a78f946d3f94fb594d3bc891eb51e9fb",
+        "/work/results/campaign/confirmation/fits/00d9d34829c16772bf5a107a15a3bdc0502b86f565bb655ede259e812998bc04",
+        "/work/results/campaign/confirmation/fits/c1f7eba3752f8baa98d904f332abcd1a7a7c500059baad8859e40a7f0ce30dba",
+        "/work/results/campaign/confirmation/fits/e2d81dc3e86ad822d5e0b28b6552a056f5bb5a949e30f521fa8cd4568f91d3c9",
+        "/work/results/campaign/confirmation/fits/7091c784ec3249146ce1ad185d70ac6f343dc4da10e2e446d149d14117b35034",
+        "/work/results/campaign/confirmation/fits/203127d60cfaab2f235423e83d522bdb90f975bc582fe1ef97e55844d889eb7b",
+        "/work/results/campaign/confirmation/fits/2bff79065b5c61a1e8e051c48c907e330a55d7cd75a6e0453fb108068f59275e",
+        "/work/results/campaign/confirmation/fits/09207042078e32ad99e6929316f813d19366832dc912e546cb921006b30d6cb1",
+        "/work/results/campaign/confirmation/fits/b3dba633f720da1ca0d2cb51841dbe10d9407d2e402b72e544451470a1e3e52b",
+        "/work/results/campaign/confirmation/fits/a53ba5dff60c5ac5476b2a0bf5f363ac88218d609ce62fe6911f6640a2915981",
+        "/work/results/campaign/confirmation/fits/df85bcb48a3e3fafb4f3a113bf702d40ed451daa20d9e9b3c0a5eb8f055276a7"
+      ]
+    }
+  ],
+  "independent_unconditional": [
+    {
+      "trial_id": 92,
+      "config": {
+        "learning_rate": 0.070938197195931,
+        "init_scale": 0.040865193910079096,
+        "b1": 0.9392884587047642,
+        "b2": 0.9980533581126549,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          5.5,
+          5.5
+        ]
+      },
+      "J": 0.4374096882864458,
+      "P": 1.5152048391877098,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.4361276702997164,
+          "P": 1.519737756579903,
+          "max_tvd": 0.487396534430354,
+          "mean_tvd": 0.3335899420384412
+        },
+        {
+          "J": 0.4319974529016259,
+          "P": 1.531694036166094,
+          "max_tvd": 0.48627686609589593,
+          "mean_tvd": 0.3234386265130857
+        },
+        {
+          "J": 0.44259094303858487,
+          "P": 1.4900679777106682,
+          "max_tvd": 0.487483552950059,
+          "mean_tvd": 0.3528057232156366
+        },
+        {
+          "J": 0.4368708739879265,
+          "P": 1.5405694251299096,
+          "max_tvd": 0.48962049335506347,
+          "mean_tvd": 0.3313716352536526
+        },
+        {
+          "J": 0.4394615012043752,
+          "P": 1.493955000351974,
+          "max_tvd": 0.4894350491135972,
+          "mean_tvd": 0.3395144053859312
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/0f4b2c0eabf46440ce8b8b8e5da5366a1d45e219be860cd13bf52c5474b03a50",
+        "/work/results/campaign/confirmation/fits/7af34fc27d34de251c9179acb52b2ceb5f315c31b669eff6fa1659d3c4d8d220",
+        "/work/results/campaign/confirmation/fits/6ebf8d9836145f130fc99b86d8b1428c2a07b3ccd223483ec3dab05bcc2e68cd",
+        "/work/results/campaign/confirmation/fits/270ea758c552d9f0a0085866be3fdfc12156a584bbdc645474ddb44641b186a9",
+        "/work/results/campaign/confirmation/fits/10a99b388c2823edbbafcc89af4cc253234e94e1ffdc4babee87171152c83d8f",
+        "/work/results/campaign/confirmation/fits/9798dd7199d2f75e0e985af7c000034fccdac41f6585c5b64923ad571d87afdb",
+        "/work/results/campaign/confirmation/fits/26b23b3d6e8bf80f5e65929035f801468417189101ddb727ce4603ee2489c158",
+        "/work/results/campaign/confirmation/fits/1d0c7fa85cc0c5ea448cc87422e0df6462c570de9b91e7ad478411c16167678d",
+        "/work/results/campaign/confirmation/fits/4120850960f00166e0c2c59b28ee81d9b353f10d02db19e7aca3b09863b76b94",
+        "/work/results/campaign/confirmation/fits/212824fad138b4fdd7ecaf91ecc154a2e26d3ebf0946ad286ff3ff79c87563a0",
+        "/work/results/campaign/confirmation/fits/d376390846082ae358c381e647623da33ca1ab4e9800e29848b0e41adc57d94c",
+        "/work/results/campaign/confirmation/fits/acbba7bb5b3de03d95adcd4cd6254b6ab1e2b99f175181a6a8d0026043355254",
+        "/work/results/campaign/confirmation/fits/8ce8c019c9651c1c8986f46f54aefef71eef6293d161b65fc5f365542949011a",
+        "/work/results/campaign/confirmation/fits/d7dd58b9b756675ef12bddd1c9fe79f5b66906080f14a526734b27f3aa4e6b88",
+        "/work/results/campaign/confirmation/fits/476cae29124db853996bd08c7d29c2bee777029e90d4c5acb152481f936a2dc9"
+      ]
+    },
+    {
+      "trial_id": 117,
+      "config": {
+        "learning_rate": 0.0898282783014765,
+        "init_scale": 0.03261026907014013,
+        "b1": 0.9461663714952426,
+        "b2": 0.9988144798843216,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          5,
+          5.5
+        ]
+      },
+      "J": 0.4097528706792861,
+      "P": 0.9238214956764411,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.45184128364805193,
+          "P": 1.4687235004293793,
+          "max_tvd": 0.48329139786924397,
+          "mean_tvd": 0.38894105520566796
+        },
+        {
+          "J": 0.33431640505420845,
+          "P": 0.03579753263773757,
+          "max_tvd": 0.37442111251251214,
+          "mean_tvd": 0.254106990137601
+        },
+        {
+          "J": 0.34696070151249386,
+          "P": 0.02440720560636618,
+          "max_tvd": 0.38013259002178956,
+          "mean_tvd": 0.28061692449390263
+        },
+        {
+          "J": 0.45690406552126434,
+          "P": 1.5313992405483163,
+          "max_tvd": 0.48877697347200033,
+          "mean_tvd": 0.3931582496197922
+        },
+        {
+          "J": 0.4587418976604119,
+          "P": 1.558779999160406,
+          "max_tvd": 0.4860328382332162,
+          "mean_tvd": 0.4041600165148035
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/bf0a04f600d962820574215844924f5c8f9429b9442d8e2041a8fefbbd962add",
+        "/work/results/campaign/confirmation/fits/50a8c69cc1a38302e8dad0d507fa8b6dcceb138564a2b9cdd0b72c42c08602a0",
+        "/work/results/campaign/confirmation/fits/65bd410ee55a95ff5fbd9379d246b56e8d899df32b2eaf51243eb550b8efaf0f",
+        "/work/results/campaign/confirmation/fits/fac63fb9e66b6b58f0f0d7fdbe8c19bf6d27064d7ec1d03c7457c3e9851705ac",
+        "/work/results/campaign/confirmation/fits/8f34c571d1c138202f750f26898a17ee2047e97d512b91ee6a7dbeab68938a92",
+        "/work/results/campaign/confirmation/fits/c06e190a1a5e3dcfdeac34e678d153da05bf93629d952dac7fe3e1fae79f2c9d",
+        "/work/results/campaign/confirmation/fits/57e6126a4f01b590438933facb16e9424e611c74996374c3bb6d3d8f46367f47",
+        "/work/results/campaign/confirmation/fits/fd206562dbd12a41032dd6410694ba08469f8ee37c33c89e3297e4c29e4eff7e",
+        "/work/results/campaign/confirmation/fits/a4927711b6625f23256d23a30debd0636c0f85a39ce75b602c329536985c9002",
+        "/work/results/campaign/confirmation/fits/377b54c773045dfd60f87e28938b1258883eb5e4b4758863b4ad040625b5666d",
+        "/work/results/campaign/confirmation/fits/a3f298586d2e17e8bc0bbe1d426c53cf73fe039df5f8b9c7c02b8bbe1127b0e5",
+        "/work/results/campaign/confirmation/fits/c185313891bacd53a0f91ac56cc5549d3c66a22d6b8e97606904b1e1b72bcbf4",
+        "/work/results/campaign/confirmation/fits/41d0dd91bfa4e5ba419fa05be1a86f9f41aef6cb3fc530dd3ff2af7efe43f648",
+        "/work/results/campaign/confirmation/fits/0b1725e7e16e00132b33e8b75128cb06959c404e8b34c0ccf8b4584427693c46",
+        "/work/results/campaign/confirmation/fits/298b86349e76c3cc0f29f2a1604d9d55cdd4b2c2a1c15fcd7b14cfefac4d2222"
+      ]
+    },
+    {
+      "trial_id": 110,
+      "config": {
+        "learning_rate": 0.06810853730783262,
+        "init_scale": 0.043485897415804345,
+        "b1": 0.9484854754504912,
+        "b2": 0.9986246353512405,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          5.5,
+          5.5
+        ]
+      },
+      "J": 0.40290258056685485,
+      "P": 1.0332778984148814,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.44507943479480905,
+          "P": 1.319412281654315,
+          "max_tvd": 0.4942724175312783,
+          "mean_tvd": 0.3466934693218705
+        },
+        {
+          "J": 0.4099219942124055,
+          "P": 0.9047600295740064,
+          "max_tvd": 0.45403167111199805,
+          "mean_tvd": 0.32170264041322033
+        },
+        {
+          "J": 0.44499566250924444,
+          "P": 1.4630418152343918,
+          "max_tvd": 0.4938299491221013,
+          "mean_tvd": 0.34732708928353073
+        },
+        {
+          "J": 0.44537177125980093,
+          "P": 1.46753580880931,
+          "max_tvd": 0.4940509144755505,
+          "mean_tvd": 0.34801348482830174
+        },
+        {
+          "J": 0.26914404005801457,
+          "P": 0.011639556802383065,
+          "max_tvd": 0.30207873393673595,
+          "mean_tvd": 0.20327465230057176
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/cd888862b27f27b5ce882b8972b5a292eb348805a6e6e815ddacebcdf2341f52",
+        "/work/results/campaign/confirmation/fits/c5f793ec1e7b05591ddfd627ba6590110f107f10fe6efe18b635a8a69a61edb3",
+        "/work/results/campaign/confirmation/fits/ad93ae6af71f63bb9306e93efb93541772adc310a3419e961653ce046a9a9299",
+        "/work/results/campaign/confirmation/fits/2b1f943b07678155b39477a25e2030a5c7d85626262f9b554196da87b37d766e",
+        "/work/results/campaign/confirmation/fits/a54d1f869889228cd0a7d836899360e06f8ff4c74446e125330a1bbef4157ddc",
+        "/work/results/campaign/confirmation/fits/c257fefa6bfaaac1515a4969af6f2d4c80dbe5100388916e70b7539ff1eb2ca0",
+        "/work/results/campaign/confirmation/fits/dc96888629d5abdbfc84cb67d2c66b912fb6f518e4b41a1d85c73ce9ad178e06",
+        "/work/results/campaign/confirmation/fits/07a4c55115ff5d5aa382f414b1e17379397ecea8c75b474b2298f8ffe1c3e56b",
+        "/work/results/campaign/confirmation/fits/108fcbc72ebbedc70e32b8ea5d3a81604aed60eeb926377f3c621a3d4994adb1",
+        "/work/results/campaign/confirmation/fits/bf862e028d177d2eb72946cdef9262bdbad08aea4183241f9db8cc8577f308f7",
+        "/work/results/campaign/confirmation/fits/fe853b7bfb452b126d643d21561df2e388d74e57785192f4c47f7f47a78da0e4",
+        "/work/results/campaign/confirmation/fits/5e43aecf76bf7c7f5caf41ce9d40f486218fe3a07f981bee8fbe8361170c7ebb",
+        "/work/results/campaign/confirmation/fits/e457f2b29206397ad3aeb47907c663c0eef48ff095c736e320893963dd2124b8",
+        "/work/results/campaign/confirmation/fits/fb4f71eb9a18e122969ae30667382723981697b5e4157ec5bbc358294583ea3b",
+        "/work/results/campaign/confirmation/fits/282fad729790e4541aaada6786f8fc9150926f63f494e60bce04c9d4c251f3c9"
+      ]
+    },
+    {
+      "trial_id": 28,
+      "config": {
+        "learning_rate": 0.00041366214659597627,
+        "init_scale": 0.03034873189475622,
+        "b1": 0.8509519365971434,
+        "b2": 0.9971721829174749,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          7,
+          7
+        ]
+      },
+      "J": 0.5806083581184602,
+      "P": 0.30195504394225886,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.5793791961227982,
+          "P": 0.3031241817333225,
+          "max_tvd": 0.5836430244489521,
+          "mean_tvd": 0.5708515394704904
+        },
+        {
+          "J": 0.5760625893230925,
+          "P": 0.28885135837558995,
+          "max_tvd": 0.5795203800624505,
+          "mean_tvd": 0.5691470078443767
+        },
+        {
+          "J": 0.5823173473123979,
+          "P": 0.304972190797202,
+          "max_tvd": 0.5866523953354856,
+          "mean_tvd": 0.5736472512662225
+        },
+        {
+          "J": 0.5774935651035117,
+          "P": 0.311144668764368,
+          "max_tvd": 0.58233650170719,
+          "mean_tvd": 0.5678076918961553
+        },
+        {
+          "J": 0.5877890927305006,
+          "P": 0.301682820040812,
+          "max_tvd": 0.5937460863652344,
+          "mean_tvd": 0.5758751054610332
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/57155b9af22b0075eea91fb80b2cf32be36f4e6f5b6ae3fa329d2db84f3a9bde",
+        "/work/results/campaign/confirmation/fits/48d95148efd3fc872507bce5778bd7fcc81863d901021a1d955e0f83e48ebfb3",
+        "/work/results/campaign/confirmation/fits/d4aaa9c378da59265bf359c9dfcb8c9965c48e1c459233f8553aa9375f00e915",
+        "/work/results/campaign/confirmation/fits/82a22a7e08e268374496d9457a6a0431c4bbc921ffea28eea31e64c008805381",
+        "/work/results/campaign/confirmation/fits/523ce50fde8a9ae6d5fc732f210084496e3c3ce5be30adecd2f68deb67faf37d",
+        "/work/results/campaign/confirmation/fits/7c29a5902d294f1418405dbfcbf3348b3ae965ecb389d1e252ecbc0a299e1cc9",
+        "/work/results/campaign/confirmation/fits/3a6a06899996614172573374611f96c0c55a6a7573e8fcec727f22a2e0429e4a",
+        "/work/results/campaign/confirmation/fits/d022de36bd156cea59c080223ff4133dacb03407c31053f2338e68d1a231bc18",
+        "/work/results/campaign/confirmation/fits/d93103ccb2aaf6461df28148e8403f6f6e66340012fe66f9b2d93e6b45901ddb",
+        "/work/results/campaign/confirmation/fits/181eb5cce19a4f275516771711fe6a3728371fdb8367b92b47393073a4965654",
+        "/work/results/campaign/confirmation/fits/ac0ae03a19659b0f8e8a6385f3be8f7fe37e38de14a899632debf83bb1f4cdd1",
+        "/work/results/campaign/confirmation/fits/72cea53b07a88938fc56f446d17d11581d337024276fb6f84a985de1c2049703",
+        "/work/results/campaign/confirmation/fits/1746b047a1046e576fd56ec99e6cca8ad8d887485942aed9260b499a737205dc",
+        "/work/results/campaign/confirmation/fits/5c1a8558d8fcdc87e0fcf7a4024e70f89db29240bb63db06cbe4292d966c6ca3",
+        "/work/results/campaign/confirmation/fits/56e73d7fb8edfd03169c6d73f23073be861c0f3e5512ff647da4034df89d7a71"
+      ]
+    }
+  ]
+}

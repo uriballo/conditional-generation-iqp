@@ -1,15 +1,71 @@
-"""Original fixed-bank scaling evaluation, independent of fitting."""
+"""Fixed-bank scaling selection and independent trajectory evaluation."""
 
 from __future__ import annotations
 
 import iqp_cond as ciqp
 import jax
+import jax.numpy as jnp
 import numpy as np
 
 from .config import RunConfig
 from .studies import make_encoder, make_targets
 
 TRAINING_BETAS = (0.6, 0.8, 1.2, 1.4)
+
+
+def normalized_validation_score(values, scales):
+    """Average temperature-normalized MMD without clipping negative estimates."""
+    values, scales = np.asarray(values), np.asarray(scales)
+    if values.ndim != 1 or values.shape != scales.shape or not values.size:
+        raise ValueError("validation values and scales must have matching vectors")
+    if (
+        not np.isfinite(values).all()
+        or not np.isfinite(scales).all()
+        or (scales <= 0).any()
+    ):
+        raise ValueError("finite validation values and positive scales required")
+    return float(np.mean(values / scales))
+
+
+def make_validation_selector(model, targets, config, seed):
+    """Reproduce the frozen four-bank scaling checkpoint-selection protocol."""
+    tc = config.training_config()
+    scales = np.asarray(config.validation_scales)
+    if scales.shape != (model.encoder.n_conditions,):
+        raise ValueError("one validation scale per training condition required")
+    normalized_validation_score(np.zeros_like(scales), scales)
+    keys = jnp.stack(
+        [
+            jax.random.PRNGKey(seed + 4_000_000 + rep)
+            for rep in range(config.validation_banks)
+        ]
+    )
+    targets = jnp.asarray(targets)
+
+    def evaluate_one(theta, key):
+        result = model.mmd(
+            theta,
+            targets,
+            key,
+            sigmas=tc.sigmas,
+            n_ops=tc.validation_n_ops,
+            n_samples=tc.validation_mc_samples,
+            shared_samples=True,
+            gemm_dtype=tc.gemm_dtype,
+            estimator_dtype=tc.estimator_dtype,
+            sample_chunk=tc.sample_chunk,
+        )
+        return result.per_condition
+
+    evaluate = jax.jit(jax.vmap(evaluate_one, in_axes=(None, 0)))
+
+    def select(theta):
+        values = np.asarray(evaluate(jnp.asarray(theta), keys))
+        if values.shape != (config.validation_banks, model.encoder.n_conditions):
+            raise ValueError("validation bank dimensions differ")
+        return normalized_validation_score(values.mean(axis=0), scales)
+
+    return select
 
 
 def _evaluate_mmd_trajectory(
@@ -65,7 +121,9 @@ def _evaluate_mmd_trajectory(
     for grid_index, (label, betas) in enumerate(grids.items()):
         evaluation_model = ciqp.ConditionalModel(
             model.ansatz,
-            make_encoder(betas, config.n_total, config.encoder),
+            make_encoder(
+                betas, config.n_total, config.encoder, scale=config.encoder_scale
+            ),
             n_visible=config.n_visible,
         )
         for step in steps:
@@ -87,6 +145,7 @@ def _evaluate_mmd_trajectory(
                     n_samples=config.validation_mc_samples,
                     shared_samples=True,
                     gemm_dtype=training_config.gemm_dtype,
+                    estimator_dtype=training_config.estimator_dtype,
                     sample_chunk=config.sample_chunk,
                 )
                 estimates.append(np.asarray(estimate.per_condition, dtype=np.float64))

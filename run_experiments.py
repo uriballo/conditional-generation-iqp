@@ -19,12 +19,18 @@ def _execute(arguments):
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--mode", choices=("reported", "hpo", "figures"), default="reported")
-    p.add_argument("--hpo-phase", choices=("random", "tpe"), default="random")
+    p.add_argument(
+        "--hpo-phase",
+        choices=("random", "tpe", "confirmation", "final", "reporting"),
+        default="random",
+    )
     p.add_argument(
         "--experiment",
         choices=(
             "all",
             "gaussian",
+            "gaussian-lattice",
+            "gaussian-historical",
             "curie-weiss",
             "curie-weiss-followup",
             "curie-weiss-historical",
@@ -47,26 +53,38 @@ def main(argv=None):
     if args.workers < 1:
         p.error("--workers must be positive")
     cw_choices = ("all", "curie-weiss", "curie-weiss-followup")
-    if args.hpo_phase == "tpe" and not (
+    if args.hpo_phase != "random" and not (
         args.mode == "hpo" and args.experiment in cw_choices
     ):
-        p.error("--hpo-phase tpe applies only to Curie-Weiss HPO")
+        p.error("--hpo-phase applies only to Curie-Weiss HPO")
     if args.mode == "hpo":
         if args.experiment not in cw_choices:
             p.error("HPO applies only to the current Curie-Weiss campaign")
         from paper_experiments.cw_followup_hpo import protocol
 
-        if args.hpo_phase == "tpe":
+        if args.hpo_phase in ("confirmation", "final", "reporting"):
+            from paper_experiments.cw_followup_stages import run_all
+        elif args.hpo_phase == "tpe":
             from paper_experiments.cw_followup_tpe import run_all
         else:
             from paper_experiments.cw_followup_hpo import run_all
     if args.mode == "reported":
+        if args.experiment in ("all", "gaussian", "gaussian-lattice"):
+            p.error(
+                "current Gaussian results require the explicit sampled campaign; "
+                "use the Gaussian campaign module, or --mode figures --experiment "
+                "gaussian-lattice/gaussian-historical"
+            )
         if args.experiment in ("curie-weiss", "curie-weiss-followup"):
-            p.error("Curie-Weiss final configurations are pending; use --mode hpo")
+            p.error(
+                "Curie-Weiss uses the explicit HPO/confirmation/final workflow; "
+                "use --mode figures to replay the audited final data"
+            )
         if args.experiment in (
             "gaussian2d-phase",
             "switching16",
             "curie-weiss-historical",
+            "gaussian-historical",
         ):
             p.error(
                 "this experiment supports --mode figures; frozen training sources "
@@ -78,8 +96,8 @@ def main(argv=None):
             plan = inventory(args.experiment, smoke=args.smoke)
         elif args.mode == "hpo":
             plan = protocol(args.smoke)
-            if args.hpo_phase == "tpe":
-                plan = {"phase": "tpe", "protocol": plan}
+            if args.hpo_phase != "random":
+                plan = {"phase": args.hpo_phase, "protocol": plan}
         else:
             plan = dict(
                 data=str(args.data_root or Path("paper/data")),
@@ -106,16 +124,20 @@ def main(argv=None):
         print("\n".join(str(path) for path in paths))
         return 0
     if args.mode == "hpo":
+        extra = (
+            {"phase": args.hpo_phase}
+            if args.hpo_phase in ("confirmation", "final", "reporting")
+            else {}
+        )
         run_all(
             namespace / "hpo" if args.smoke else namespace,
             smoke=args.smoke,
             workers=args.workers,
+            **extra,
         )
-        message = (
-            "TPE HPO complete, paused for review"
-            if args.hpo_phase == "tpe"
-            else "Random HPO complete, paused for review"
-        )
+        message = f"Curie-Weiss {args.hpo_phase} complete"
+        if args.hpo_phase in ("random", "tpe"):
+            message += ", paused for review"
         print(f"{message}: {namespace}")
         return 0
     jobs = inventory(args.experiment, smoke=args.smoke)

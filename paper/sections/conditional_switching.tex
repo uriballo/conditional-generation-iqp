@@ -1,20 +1,38 @@
-\subsection{Conditional signed-graph generation with exact switching symmetry}
+\subsection{Signed-graph encoding with exact switching symmetry}
 \label{sec:conditional-switching16}
 
-We use signed graphs to demonstrate conditional generation with an exact symmetry. Each edge carries a positive or negative sign. A vertex switch reverses the signs of all edges incident on that vertex. This operation preserves every triangle product because it reverses either zero or two signs within each triangle. We construct a temperature-dependent input that preserves this symmetry throughout training and conditional generation.
+The Curie--Weiss encoder enforces one global spin-flip symmetry. To illustrate how the binary-linear construction imposes several independent symmetries, we now consider signed graphs. Different edge-sign configurations can share the same triangle interactions, providing a concrete setting for symmetry-preserving conditional inputs.
 
-Sixteen qubits represent the edge signs of a seven-vertex graph. We connect every pair among vertices $0,\ldots,4$, and connect each of vertices $5$ and $6$ to vertices $0,1,2$. Each edge bit $x_{ij}$ specifies a sign $s_{ij}=(-1)^{x_{ij}}$. At inverse temperature $\beta$, we use the Gibbs target
+Each edge carries a positive or negative sign. A vertex switch reverses the signs of all edges incident on that vertex. However, it preserves every triangle product because it reverses either zero or two signs within each triangle. Distributions governed by these products therefore remain invariant under vertex switches. For the seven-vertex graph considered here, six independent switches generate $64$ symmetry transformations. We construct a temperature-dependent encoder that guarantees all these output symmetries for every IQP parameter vector.
+
+Sixteen qubits represent the edge signs of a seven-vertex graph. We connect every pair among vertices $0,\ldots,4$, and connect each of vertices $5$ and $6$ to vertices $0,1,2$. Each edge bit $x_{ij}$ specifies a sign $s_{ij}=(-1)^{x_{ij}}$. A Gibbs family at inverse temperature $\beta$ has the form
 \begin{equation}
  p_\beta(x)=Z_\beta^{-1}e^{\beta E(x)},\qquad
  E(x)=\sum_{\{i,j,k\}\in\mathcal T}s_{ij}s_{ik}s_{jk},
 \end{equation}
 where $\mathcal T$ contains the graph's sixteen triangles and $Z_\beta$ normalizes the distribution. We call a triangle balanced when the product of its three edge signs is positive. Increasing $\beta$ therefore favors graphs with more balanced triangles.
 
-We describe combinations of vertex switches using signs $h_i\in\{-1,+1\}$, where $h_i=-1$ indicates a switch at vertex $i$. Their combined action replaces each edge sign $s_{ij}$ by $h_i s_{ij}h_j$. Switching all seven vertices reverses every edge twice and leaves the graph unchanged. We therefore fix $h_0=1$ to remove duplicate representations. The remaining six binary choices give $2^6=64$ distinct switching transformations, including the identity. We denote their corresponding edge-bit masks by $G$; applying a mask $g\in G$ flips the indicated bits, $x\mapsto x\oplus g$. Every transformation preserves the target distribution at every temperature.
+We describe combinations of vertex switches using signs $h_i\in\{-1,+1\}$, where $h_i=-1$ indicates a switch at vertex $i$. Their combined action replaces each edge sign $s_{ij}$ by $h_i s_{ij}h_j$. Switching all seven vertices reverses every edge twice and leaves the graph unchanged. We therefore fix $h_0=1$ to remove duplicate representations. The remaining six binary choices give $2^6=64$ distinct switching transformations, including the identity. We denote their corresponding edge-bit masks by $G$; applying a mask $g\in G$ flips the indicated bits, $x\mapsto x\oplus g$. Every transformation preserves this Gibbs distribution at every temperature.
 
 We encode temperature using ten triangles that share vertex $0$. The six root edges $0i$, with $i=1,\ldots,6$, form a spanning tree: they connect all seven vertices without forming a cycle. We call the remaining ten edges \emph{chords} and denote their set by $\mathcal C$. Each chord $ij$, together with root edges $0i$ and $0j$, forms a triangle $(0,i,j)$.
 
 We initialize all sixteen qubits in $\ket{0}$. For each chord $ij$, we apply $R_X(t_\beta)$ to its qubit, then use that qubit to control two CNOT gates targeting root edges $0i$ and $0j$. On an isolated triangle initially in $\ket{000}$, this motif creates a superposition of $\ket{000}$ and $\ket{111}$ (Figure~\ref{fig:switching16-encoder}). In either component, each vertex touches zero or two edges with bit value one, giving even incidence parity.
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}[c]{0.48\textwidth}
+\centering
+\textbf{(a)}\par
+\includegraphics[width=\linewidth]{figures/switching16_graph.pdf}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.48\textwidth}
+\centering
+\textbf{(b)}\par
+\includegraphics[width=\linewidth]{figures/triangle_motif_draft.pdf}
+\end{minipage}
+\caption{Triangle-based temperature encoding. Panel (a) shows the seven-vertex graph, with six root edges forming a spanning tree and ten chords. Panel (b) shows the preparation motif for a fundamental triangle. A chord rotation $R_X(t_\beta)$ and two CNOTs prepare $\cos(t_\beta/2)\ket{000}-i\sin(t_\beta/2)\ket{111}$ on edges $0i,0j,ij$. The full encoder repeats the rotation and CNOT construction for ten chords with shared root edges, then applies the global Hadamard layer once. The displayed motif is therefore an illustration, rather than an independent three-qubit block repeated with its own Hadamards. Every rotation uses $t_\beta=(\pi/2)\tanh(1.5\beta)$.}
+\label{fig:switching16-encoder}
+\end{figure*}
 
 In the full graph, the triangles share root-edge qubits. We repeat the rotation-and-CNOT pattern for all ten chords, combining the shared root-edge bits modulo two. This preserves even incidence parity at every vertex. Finally, we apply a single Hadamard layer to all sixteen qubits.
 
@@ -24,9 +42,9 @@ After the Hadamard layer, the encoded input takes the form
  \sum_{(i,j)\in\mathcal C}Z_{0i}Z_{0j}Z_{ij}\right]\ket{+}^{\otimes16},\\
  t_\beta&=\frac{\pi}{2}\tanh(1.5\beta).
 \end{align}
-We fix this temperature map throughout training. Each Pauli-$Z$ product contributes a phase determined by the edge-sign product of its triangle. Because these operators are diagonal in the computational basis, they leave the uniform measurement probabilities of $\ket{+}^{\otimes16}$ unchanged. Temperature therefore enters entirely through correlated phases, which the learned circuit must convert into changes in the output distribution.
+We use this fixed temperature map as a concrete example; the symmetry guarantee does not depend on its form. Each Pauli-$Z$ product contributes a phase determined by the edge-sign product of its triangle. Because these operators are diagonal in the computational basis, they leave the uniform measurement probabilities of $\ket{+}^{\otimes16}$ unchanged. Temperature therefore enters entirely through correlated phases. An IQP transformation can convert these phases into changes in the output distribution, while preserving the imposed symmetries.
 
-We prepare the encoded input using ten rotations, twenty CNOTs and sixteen Hadamards, without ancillary qubits. For classical training, we use the state before the Hadamard layer as the reference. To sample its measurement distribution, we draw the ten chord bits independently, assigning each a value of one with probability $\sin^2(t_\beta/2)$. We then set each root-edge bit $0i$ to the sum, modulo two, of the chord bits incident on vertex $i$. The chord bits also determine each supported amplitude through a product of ten rotation coefficients, allowing us to evaluate the required amplitude ratios directly. Appendix~\ref{app:switching16} gives the explicit expressions.
+We prepare the encoded input using ten rotations, twenty CNOTs and sixteen Hadamards, without ancillary qubits. The state before the Hadamard layer provides the reference for classical estimation. To sample its measurement distribution, we draw the ten chord bits independently, assigning each a value of one with probability $\sin^2(t_\beta/2)$. We then set each root-edge bit $0i$ to the sum, modulo two, of the chord bits incident on vertex $i$. The chord bits also determine each supported amplitude through a product of ten rotation coefficients, allowing us to evaluate the required amplitude ratios directly. Appendix~\ref{app:switching16} gives the explicit expressions.
 
 The Hadamard layer converts the reference state's even incidence parity into invariance under vertex switches:
 \begin{equation}
@@ -34,26 +52,9 @@ The Hadamard layer converts the reference state's even incidence parity into inv
 \end{equation}
 where $X^g$ flips the edge bits specified by the switching mask $g$. Every IQP layer generated by Pauli-$X$ strings commutes with these switching operators and therefore preserves this invariance, regardless of its learned parameters.
 
-For this experiment, we use two trainable angles:
+The resulting model satisfies
 \begin{equation}
- U_{\alpha,\gamma}=\exp\!\left(i\alpha\sum_{i=1}^{6}X_{0i}
- +i\gamma\sum_{(i,j)\in\mathcal C}X_{ij}\right).
+ q_{\boldsymbol\theta}(x\mid\beta)
+ =q_{\boldsymbol\theta}(x\oplus g\mid\beta),\qquad g\in G,
 \end{equation}
-The angle $\alpha$ controls the six root-edge rotations, while $\gamma$ controls the ten chord rotations. We share both angles across all temperatures. This layer adds sixteen local rotations and no entangling gates. The resulting model satisfies
-\begin{equation}
- q_{\alpha,\gamma}(x\mid\beta)
- =q_{\alpha,\gamma}(x\oplus g\mid\beta)
-\end{equation}
-for every $g\in G$, throughout training and at unseen temperatures, without averaging the output over switches.
-
-We train at $\beta\in\{0,0.4,0.8,1.2\}$, using $128$ target samples per temperature and $512$ in total per fit. We optimize sampled MMD and use exact target distributions at separate development temperatures for model selection. After fixing the hyperparameters, we train five independent models.
-
-We evaluate full-distribution TVD exactly by grouping configurations related by vertex switches, as detailed in Appendix~\ref{app:switching16}. Across twelve evaluation temperatures excluded from training and model selection, we obtain a mean TVD of $0.1780\pm0.0013$. We first average TVD over temperatures within each fit, then report the mean and sample standard deviation across the five fits. Table~\ref{tab:switching16} separates interpolation from extrapolation and reports the worst-temperature errors.
-
-We characterize graph balance using two observables. Mean triangle balance, $b=\langle E\rangle/16$, averages the triangle-sign products over triangles and generated graphs. The probability of complete balance, $P_{\mathrm{bal}}=\Pr(E=16)$, measures how often all sixteen triangle products are positive. Figure~\ref{fig:switching16-response} compares the learned and target responses over $\beta\in[0,2.4]$, together with the uniform encoder-only baseline. We evaluate this temperature sweep after model selection; it includes fitting and development temperatures.
-
-The learned distributions increasingly favor balanced triangles as inverse temperature increases, but their response saturates below the target. At $\beta=2.4$, the models achieve $b=0.9148\pm0.0017$ and $P_{\mathrm{bal}}=0.7983\pm0.0046$, compared with target values of $0.9999$ and $0.9996$, respectively. Across ten additional evaluation temperatures from $1.5$ to $2.4$, beyond the original evaluation range, we obtain a mean full-distribution TVD of $0.1981\pm0.0046$.
-
-To assess the role of conditioning, we hold each trained model's input temperature fixed at $\beta=0.6$. This increases mean TVD across the twelve evaluation temperatures from $0.1780\pm0.0013$ to $0.4886\pm0.0011$, while the encoder-only uniform distribution gives $0.7275$. The increase shows that the learned response depends on the encoded temperature. This control measures sensitivity to conditioning; it does not evaluate an independently optimized model with a fixed input.
-
-The experiment demonstrates conditional generation with a classically accessible correlated reference and exact switching symmetry, using two learned angles. The current models still misrepresent the target's energy fluctuations at large inverse temperatures, and a fixed classical model that enforces switching symmetry achieves lower mean TVD. Appendix~\ref{app:switching16} presents these diagnostics. The results therefore establish the construction's symmetry capability without demonstrating a performance advantage over the classical control.
+for every condition and parameter vector, without averaging the output over switches. Thus, the encoder enforces six independent switching symmetries while leaving the IQP phases unrestricted. This example demonstrates the construction and its classical-access requirements; it does not assess learning accuracy for the Gibbs family.

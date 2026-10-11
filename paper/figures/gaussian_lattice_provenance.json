@@ -1,0 +1,32 @@
+{
+  "summary_sha256": "beb40d6052c0fa8d94e2dafbb47eaacaf814143d7a96c65af5519e536bdd366e",
+  "diagnostics_sha256": "a102dbed56531b305b1e096cd46343b1011352f6a1fedf908d6729481e651748",
+  "renderer_sha256": "653cf2998d34619312ff414aa436bf8172dfcc43dc1e8950e76a0d0bbbbab5ae",
+  "aggregation": "five final fits: median and IQR for responses; mean across fits for heatmaps",
+  "center_baseline": "fixed encoder-only baseline at central condition, marked as an open circle",
+  "smoothing": "none",
+  "uncertainty": "IQR across five final fits only",
+  "protocols": [
+    "grid",
+    "axes"
+  ],
+  "translation_profile_indices": [
+    0,
+    26,
+    53,
+    79
+  ],
+  "translation_profile_conditions": [
+    0.004166666666666652,
+    0.32916666666666666,
+    0.6666666666666667,
+    0.9916666666666666
+  ],
+  "translation_profile_target_means": [
+    5.15495467017703,
+    6.980572218744717,
+    8.99482401417277,
+    10.823182933575673
+  ],
+  "translation_profile_geometry": "fixed held-out reporting subset; selection unchanged"
+}

@@ -1,20 +1,15 @@
-\begin{table*}[!htbp]
+\begin{table*}[t]
 \centering
 \small
-\caption{Exact Hamming-weight profile TVD for sixteen-qubit Curie--Weiss models. We report means $\pm$ sample standard deviations across the five confirmation runs used for model selection and reporting. We select models using full-distribution TVD; encoder-only values are deterministic. We evaluate the shared model at temperatures excluded from fitting and selection, and fit each independent circuit at its reporting temperature. Bold entries identify the lowest mean error at each temperature, including the encoder-only baseline.}
+\caption{Exact Hamming-weight profile TVD at sixteen qubits. Values are means $\pm$ sample standard deviations over ten fresh final repeats, computed within each repeat before aggregation. Lower is better. Shared parity excludes markers from fitting and selection; independent models fit directly at each marker.}
 \label{tab:curie_weiss_profile_tvd}
-\setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{1.12}
-\begin{tabular}{llccc}
+\begin{tabular}{lrrr}
 \toprule
-Model & Evaluation & \multicolumn{3}{c}{Hamming-weight profile TVD $\downarrow$} \\
-\cmidrule(lr){3-5}
- & & $\beta=0.4$ & $\beta=1.0$ & $\beta=1.6$ \\
+Model & $\beta=0.4$ & $\beta=1$ & $\beta=2$ \\
 \midrule
-Encoder only & Baseline & $0.1180$ & $0.4406$ & $0.8699$ \\
-Shared conditional IQP & Held-out & $0.0976 \pm 0.0269$ & $0.1301 \pm 0.0317$ & $\boldsymbol{0.0631 \pm 0.0135}$ \\
-Independent conditional IQPs & Fitted & $\boldsymbol{0.0939 \pm 0.0073}$ & $0.0885 \pm 0.0116$ & $0.3948 \pm 0.0003$ \\
-Independent unconditional IQPs & Fitted & $0.1186 \pm 0.0040$ & $\boldsymbol{0.0780 \pm 0.0320}$ & $0.3293 \pm 0.0119$ \\
+Shared parity & $0.0438\pm0.0040$ & $0.1203\pm0.0046$ & $0.0646\pm0.0124$ \\
+Independent parity & $0.0149\pm0.0065$ & $0.0642\pm0.0028$ & $0.1298\pm0.0065$ \\
+Independent unconditional & $0.0281\pm0.0247$ & $0.0833\pm0.0158$ & $0.4003\pm0.1736$ \\
 \bottomrule
 \end{tabular}
 \end{table*}

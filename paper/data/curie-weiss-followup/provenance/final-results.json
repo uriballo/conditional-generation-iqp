@@ -1,0 +1,421 @@
+{
+  "shared_parity": [
+    {
+      "trial_id": 103,
+      "config": {
+        "learning_rate": 0.003417450659093187,
+        "init_scale": 0.022105341315296574,
+        "b1": 0.8018785446110164,
+        "b2": 0.9919640457804435,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          4,
+          7.5
+        ],
+        "beta_scale": 0.6839867061196403
+      },
+      "J": 0.12814262832781548,
+      "P": 0.08649095594383478,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.12932447208936157,
+          "P": 0.07849246347073091,
+          "max_tvd": 0.14481609113590163,
+          "mean_tvd": 0.09834123399628145
+        },
+        {
+          "J": 0.12441078728154986,
+          "P": 0.10083880309075698,
+          "max_tvd": 0.13475494644550862,
+          "mean_tvd": 0.10372246895363234
+        },
+        {
+          "J": 0.12773508839504485,
+          "P": 0.0966745556441386,
+          "max_tvd": 0.14101373741448503,
+          "mean_tvd": 0.10117779035616448
+        },
+        {
+          "J": 0.12738233016580292,
+          "P": 0.07362796262326636,
+          "max_tvd": 0.13982074002667796,
+          "mean_tvd": 0.10250551044405284
+        },
+        {
+          "J": 0.12834086001829273,
+          "P": 0.08378021181626784,
+          "max_tvd": 0.14218576352338608,
+          "mean_tvd": 0.10065105300810599
+        },
+        {
+          "J": 0.1274131962509366,
+          "P": 0.09018990329518915,
+          "max_tvd": 0.13772454784934635,
+          "mean_tvd": 0.10679049305411711
+        },
+        {
+          "J": 0.1295054232610645,
+          "P": 0.09373084428036023,
+          "max_tvd": 0.14002403424753762,
+          "mean_tvd": 0.10846820128811832
+        },
+        {
+          "J": 0.1247458475651148,
+          "P": 0.08534845441098997,
+          "max_tvd": 0.13637460120340222,
+          "mean_tvd": 0.1014883402885399
+        },
+        {
+          "J": 0.12832011364967696,
+          "P": 0.07796426612368619,
+          "max_tvd": 0.1419751650268713,
+          "mean_tvd": 0.10101001089528833
+        },
+        {
+          "J": 0.13424816460131006,
+          "P": 0.08426209468296149,
+          "max_tvd": 0.14697075463128445,
+          "mean_tvd": 0.10880298454136127
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/final/fits/0178d01e1804193f5ae7503ca1841d0ed2bd3df9041499422fb4f2299d7eec5e",
+        "/work/results/campaign/final/fits/083aea0139c5f3e9cfc323566b1d653873be42522cd998490561e237223869f8",
+        "/work/results/campaign/final/fits/4ea0efccbd8ade5ae7d5e1bb428f89e2cbbe3e92105400a72ce83b6a73ff01e4",
+        "/work/results/campaign/final/fits/7b2cc2b17dfce9581222e37a81da69dba033d1527c7ad3f7ed8309f5d382199a",
+        "/work/results/campaign/final/fits/0dff96c52a6c2716b8a43dd811df69d3ad57f51f056fd97de4faebf7f36d0089",
+        "/work/results/campaign/final/fits/8e680ca0b554d7f2f842b7b8214cd42f5e2de385d27bdadb352e18846cc2174a",
+        "/work/results/campaign/final/fits/9f9d7d07bd283abd2f414d9da3c2a1ee91eee925c3cb6b45fe4b43974ae7df53",
+        "/work/results/campaign/final/fits/830450613a82801f1f6fbaf4cbc7b2715c7e7fc71d9a604b3ef0b2ba4f4d59ce",
+        "/work/results/campaign/final/fits/ec59ff89856c40f479658d2bd9c25f470461b81834c75569fc180b082f6afc08",
+        "/work/results/campaign/final/fits/b69637535b3b6d1325bb8e4e0768e440f6a49c00789f818c0708adfbc6de32c8"
+      ]
+    }
+  ],
+  "shared_product": [
+    {
+      "trial_id": 87,
+      "config": {
+        "learning_rate": 0.030069581844167872,
+        "init_scale": 0.045476913658824,
+        "b1": 0.8264919223569808,
+        "b2": 0.9989832057002374,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          4,
+          5
+        ],
+        "beta_scale": 0.6572686512368282
+      },
+      "J": 0.20508290706527244,
+      "P": 0.13931643947878541,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.20515953843136214,
+          "P": 0.14240631343955093,
+          "max_tvd": 0.22768188725020105,
+          "mean_tvd": 0.16011484079368432
+        },
+        {
+          "J": 0.19354737573867217,
+          "P": 0.13037066164162686,
+          "max_tvd": 0.21194068690235726,
+          "mean_tvd": 0.156760753411302
+        },
+        {
+          "J": 0.21337625924827117,
+          "P": 0.1526620696587632,
+          "max_tvd": 0.23521397041556233,
+          "mean_tvd": 0.16970083691368876
+        },
+        {
+          "J": 0.20640917311620308,
+          "P": 0.13812804725663008,
+          "max_tvd": 0.22140328389321903,
+          "mean_tvd": 0.1764209515621711
+        },
+        {
+          "J": 0.19063472234715095,
+          "P": 0.12537743466054493,
+          "max_tvd": 0.20677845335962208,
+          "mean_tvd": 0.15834726032220864
+        },
+        {
+          "J": 0.22141093114467328,
+          "P": 0.15283752770828948,
+          "max_tvd": 0.24626359686683927,
+          "mean_tvd": 0.1717055997003413
+        },
+        {
+          "J": 0.2066472308296482,
+          "P": 0.14723673475926205,
+          "max_tvd": 0.22645327997050987,
+          "mean_tvd": 0.16703513254792485
+        },
+        {
+          "J": 0.2008363505674522,
+          "P": 0.13556472854479384,
+          "max_tvd": 0.21817334343723685,
+          "mean_tvd": 0.16616236482788294
+        },
+        {
+          "J": 0.205783649076398,
+          "P": 0.12296146072865298,
+          "max_tvd": 0.22344594679756086,
+          "mean_tvd": 0.17045905363407235
+        },
+        {
+          "J": 0.2070238401528932,
+          "P": 0.1456194163897397,
+          "max_tvd": 0.22766718210308906,
+          "mean_tvd": 0.16573715625250154
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/final/fits/a20432d9462a0c7d4f0208af5622b2591266dc782f949fdb45e7eb7c89f34ad6",
+        "/work/results/campaign/final/fits/91101e50796a0508846fedafb93e27726f29771d0cacff3224354ff44684e1d6",
+        "/work/results/campaign/final/fits/86b7b0ec25f5854cef8b21115a76526aa251ca4e9e9081f780486dfc6d603c63",
+        "/work/results/campaign/final/fits/43f7a369456b51e84b2b3e361251b68f3c8277dc99ac4bf5e0f7428d6ca99c73",
+        "/work/results/campaign/final/fits/7e4e7375ae065e15da83f8cf6e32dee9455548cc33d215f07ff5b1d98788add6",
+        "/work/results/campaign/final/fits/5c3bc8918fb6c9691685b499b34f00faa2c9d4aef055153cdb143436f0bf131f",
+        "/work/results/campaign/final/fits/0a18ac683a6c8663c3089a4cb1f49e9eed9e587e79d7602f45143b6b22ef6594",
+        "/work/results/campaign/final/fits/2a90c464da88b60d8ad4e4ab984fa99fd0a86fa8dfb8c2b5be06c66327a0fe9a",
+        "/work/results/campaign/final/fits/3417c771db86c0bfcc52b2e968dc80b4f9ad517f87ff06c32c83e601a6b6de6b",
+        "/work/results/campaign/final/fits/30aac7bea1eea5002e972fb81c15d84837b9eb514b83cb002c44ecee86280a0a"
+      ]
+    }
+  ],
+  "independent_parity": [
+    {
+      "trial_id": 105,
+      "config": {
+        "learning_rate": 0.0043028682430981706,
+        "init_scale": 0.0300355949382362,
+        "b1": 0.8990943669881644,
+        "b2": 0.9661303855974087,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          7.5,
+          7.99
+        ],
+        "beta_scale": 0.5823317471765032
+      },
+      "J": 0.14734719192581996,
+      "P": 0.03628218585043815,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.14684957989372513,
+          "P": 0.03770817641318321,
+          "max_tvd": 0.15193527612483126,
+          "mean_tvd": 0.1366781874315128
+        },
+        {
+          "J": 0.14891993992628386,
+          "P": 0.03414899055737172,
+          "max_tvd": 0.15580241610993678,
+          "mean_tvd": 0.13515498755897803
+        },
+        {
+          "J": 0.14579976827370103,
+          "P": 0.03683252980170925,
+          "max_tvd": 0.1525726458353997,
+          "mean_tvd": 0.13225401315030375
+        },
+        {
+          "J": 0.14237418078645261,
+          "P": 0.03362193933618225,
+          "max_tvd": 0.14881965157803193,
+          "mean_tvd": 0.12948323920329405
+        },
+        {
+          "J": 0.15300649272692868,
+          "P": 0.033779012018158874,
+          "max_tvd": 0.15866174987110065,
+          "mean_tvd": 0.14169597843858472
+        },
+        {
+          "J": 0.15480590443644482,
+          "P": 0.038521456677157714,
+          "max_tvd": 0.16210717827446736,
+          "mean_tvd": 0.14020335676039974
+        },
+        {
+          "J": 0.14629882736452904,
+          "P": 0.03749365079405277,
+          "max_tvd": 0.15240033915197848,
+          "mean_tvd": 0.13409580378963012
+        },
+        {
+          "J": 0.1439586817712045,
+          "P": 0.037269993591400846,
+          "max_tvd": 0.15186546732401524,
+          "mean_tvd": 0.128145110665583
+        },
+        {
+          "J": 0.14713881356502542,
+          "P": 0.03694019111838815,
+          "max_tvd": 0.15207985554562653,
+          "mean_tvd": 0.13725672960382315
+        },
+        {
+          "J": 0.14431973051390487,
+          "P": 0.03650591819677673,
+          "max_tvd": 0.15150128087471318,
+          "mean_tvd": 0.12995662979228823
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/final/fits/d6f609d28a348f26fd237a027e1ef3a637661dbd43a2ae50d4f751bb60eb46e1",
+        "/work/results/campaign/final/fits/498d682607d61aa555768a35b177654ed81e8fb7fdae8ef20264734a4ce49111",
+        "/work/results/campaign/final/fits/f8b3ff3cdce45e35b2d940ff6abad4d7e4d764037c7b83aff0450c5fd301121b",
+        "/work/results/campaign/final/fits/cf1b7bf33de905f36f3e902a27cc75d3b4c4dd945abb5bbea8247edc06338c80",
+        "/work/results/campaign/final/fits/4bcd0eb3eb449cb0ba0710413c49b0a46d628a8e5683594752d39360315a2824",
+        "/work/results/campaign/final/fits/2f1fa1ea91d9288f8009c312cccbe38d1f30462751b5126655e910d7784c439d",
+        "/work/results/campaign/final/fits/a78468346dc2074ffb73dbf8e984e874db365164f2cd92cc523bc707c8c03aa9",
+        "/work/results/campaign/final/fits/6e114da337eee7a5849574ee3216a284ce0a9e1a7db5be48d38e3f5f62dd41c5",
+        "/work/results/campaign/final/fits/b956f448b4dee9cc21ebff899f6a9cdaa962be9ca00eb7f92ed2e4c933d01f3a",
+        "/work/results/campaign/final/fits/1de69ab76aabfce6df67f286d4e81fca35748b9a896270ea4f5a2076946f90d4",
+        "/work/results/campaign/final/fits/3124fb23f194baa67b39e55fd1212ea22ca26b5a9ceae018e4d3caabde28bbc9",
+        "/work/results/campaign/final/fits/764536e720bd9bcb54e6599bc5ed474c83a73abc5153724a234ff61bbdda3900",
+        "/work/results/campaign/final/fits/6a14293c29cd65a7e8d6a73f38466c3103e5ca02d4bdbb93cd874360294632d8",
+        "/work/results/campaign/final/fits/b7857e42c6118a0c0b65213a7d299ba37c9a31f7be55fe63ae84004588b07f56",
+        "/work/results/campaign/final/fits/9ecdd4d932cb5e07790c969986ebffdeceeeb3dd7e3f9f6643d1eb505e93b933",
+        "/work/results/campaign/final/fits/6dcab33c4d0deebb92ff07c999e029a1766aceb505fd0a9c8ebeb771c6c1c07b",
+        "/work/results/campaign/final/fits/6941d31cf03798642832dd2c29592f47a3873d06439e666724188f9187a97af2",
+        "/work/results/campaign/final/fits/9e5e55290516140da9c5170f3f7f68608ae39ecc2c95b35e4c38ba90353b3276",
+        "/work/results/campaign/final/fits/cd72e18660259c385b35d33eb65b2b48bf724071a66175c1c7e35c31eea572b6",
+        "/work/results/campaign/final/fits/a510b03bd9c84ab7344863f898c4518e40bdd70e457fac601146f73451642809",
+        "/work/results/campaign/final/fits/75f91a4568a7d03ab12b9b365b1d9438e2a1dca9bd4361da6fcb6657383f2ab7",
+        "/work/results/campaign/final/fits/ab9eb82f2b1958abfe8e32d57ea9030a73806281f9781258da791979d2ca6961",
+        "/work/results/campaign/final/fits/75d89ba517b71e350ac8d939117724dab30a5958af5be7e9aa052d90406271e5",
+        "/work/results/campaign/final/fits/11f3dd6326ac2744c02f74290e92d15776c417cc2f8e8efdd9fabe9f10e2577a",
+        "/work/results/campaign/final/fits/cd05ce318c4f53f51139b2c7940c3f0c5d0208ece894970592964c4d75cc989c",
+        "/work/results/campaign/final/fits/665f1434a6ac09e0df737b0d7fe57ddf36b5d9c7e70b58ea1b479dc3588209a1",
+        "/work/results/campaign/final/fits/e9b780499e0ccdfdf11e2f6f9221199c203ba2a65cc2725fb5afbf84f5b07a86",
+        "/work/results/campaign/final/fits/f23db5cd60a0ca421a55344c286219ce6830bd5b9ab31b55378a33c66c292926",
+        "/work/results/campaign/final/fits/ba02addf26d5732d93560c045f4beaf95c6657853ad7e8b4d988a4f098de862d",
+        "/work/results/campaign/final/fits/fefd25dd8b9ad6629be74dbb8b88de551076f3358197757ea07bf96e98e5b1b7"
+      ]
+    }
+  ],
+  "independent_unconditional": [
+    {
+      "trial_id": 117,
+      "config": {
+        "learning_rate": 0.0898282783014765,
+        "init_scale": 0.03261026907014013,
+        "b1": 0.9461663714952426,
+        "b2": 0.9988144798843216,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          5,
+          5.5
+        ]
+      },
+      "J": 0.4332272993605847,
+      "P": 1.2223345524243292,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.46187943991037006,
+          "P": 1.4561691933754215,
+          "max_tvd": 0.4937189304622257,
+          "mean_tvd": 0.3982004588066587
+        },
+        {
+          "J": 0.456785635458757,
+          "P": 1.510090359536934,
+          "max_tvd": 0.4879257110929801,
+          "mean_tvd": 0.3945054841903108
+        },
+        {
+          "J": 0.44515598879240165,
+          "P": 1.5192656529738786,
+          "max_tvd": 0.4748384841204305,
+          "mean_tvd": 0.3857909981363439
+        },
+        {
+          "J": 0.34387722805333604,
+          "P": 0.025613313242399672,
+          "max_tvd": 0.3806904464835236,
+          "mean_tvd": 0.27025079119296097
+        },
+        {
+          "J": 0.45423705215653554,
+          "P": 1.5612527558258895,
+          "max_tvd": 0.48634668680627735,
+          "mean_tvd": 0.3900177828570518
+        },
+        {
+          "J": 0.45679587042173625,
+          "P": 1.5601075592738014,
+          "max_tvd": 0.4863540568058307,
+          "mean_tvd": 0.3976794976535472
+        },
+        {
+          "J": 0.33783724619580163,
+          "P": 0.03518490726648558,
+          "max_tvd": 0.37345554584986496,
+          "mean_tvd": 0.2666006468876748
+        },
+        {
+          "J": 0.4580920354754689,
+          "P": 1.5269880442408488,
+          "max_tvd": 0.48808939559158626,
+          "mean_tvd": 0.3980973152432341
+        },
+        {
+          "J": 0.45897912255031126,
+          "P": 1.5285953413465225,
+          "max_tvd": 0.49161197317136485,
+          "mean_tvd": 0.393713421308204
+        },
+        {
+          "J": 0.4586333745911287,
+          "P": 1.5000783971611114,
+          "max_tvd": 0.48953612334309315,
+          "mean_tvd": 0.39682787708719974
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/final/fits/31a39ce4a6b678d61e8dbe97023739c549d243b00504897774fce983e0d7088f",
+        "/work/results/campaign/final/fits/46cea5b2e796e86dd0fc964aefffe6ba4eb662e8e2e934e6c7d0ae695e76d993",
+        "/work/results/campaign/final/fits/2e4c6b2f965aa337e74330f131cf9c9c5448baf698b319842b65f50382b92180",
+        "/work/results/campaign/final/fits/f41571bc5c0a9f321f0333b2b4037db6a2041886d8815a9d759a5d5698386435",
+        "/work/results/campaign/final/fits/23cd3ef6ec707e4be38e8f333e81e0dfccd9663cc1b458958c5762fc116d3c7f",
+        "/work/results/campaign/final/fits/33161d0772442a982835a6cbe13bf8a3b0c1878e882dd58860e3f0bb282eb063",
+        "/work/results/campaign/final/fits/d1aa8b13a8f38539cdb75352f2a49ca85e342e48c37bcf7dadd2587293ec51d9",
+        "/work/results/campaign/final/fits/8f35e91c933ff0f902889df4fa0ace0d642ccd3f3239f13b80a7c279b94d19f1",
+        "/work/results/campaign/final/fits/d04e4771d8f146f8d562ad2ed1f43cc658876360f24c8ca4bb0e32d6ccf2353d",
+        "/work/results/campaign/final/fits/d460c03255776d591e9747c40fc7081d1070aa356db14737b398c853e91ead76",
+        "/work/results/campaign/final/fits/b2f028f282d684b76e1ed14249e040222cda960299b7f19646439856fc663bad",
+        "/work/results/campaign/final/fits/5f94179d2d14e7f4001c6a66cbad65b0a2341d009cc451815f6a43a28190432e",
+        "/work/results/campaign/final/fits/2475147e52374a8ffff2ead35f332a94e8d58b4ce0ebc4cb8da7ea032ec69475",
+        "/work/results/campaign/final/fits/b54c0a6cd28eb6bcb9af14fd714a7cacaa1f16d0b1fd130670b9ee8131b9f74d",
+        "/work/results/campaign/final/fits/6b1ca3567496b151f9aecf09b2750e09ef67a149f9068ce1c978b214bbde0e32",
+        "/work/results/campaign/final/fits/d5f80f0f7cb718a0fdfe5a311ffae8aa0cae007ab0a73e72ba886080186f09a8",
+        "/work/results/campaign/final/fits/fc05caa43b942c8cde4af1562842ca2b738d4966e91ef82c8c579f46cf8a7dcb",
+        "/work/results/campaign/final/fits/db37ffacbf3db796fc8a598b73130e119d7ed2501881d13cbfceebf1fa06056e",
+        "/work/results/campaign/final/fits/e2a0e09dcf690b322ed6b83d553fab2875c191ae65c6ba2313d1f35ea3382adc",
+        "/work/results/campaign/final/fits/75b74f62f225ac1d52d8ea18f24f18becd174e2da23cdbb878a121d455825353",
+        "/work/results/campaign/final/fits/a3abe3f518aea1a92d87463900e2dcf94c900dd663e49e3cce87168503fa423f",
+        "/work/results/campaign/final/fits/2c9ac533b078e5291bfc8f492827fc78196db891ad78436c52d10af3c0a58ce4",
+        "/work/results/campaign/final/fits/5a2b7bcbbff5bc926d40398cb85b35b37b08c30a4c850d04ac7be68645c72f3d",
+        "/work/results/campaign/final/fits/6ce3e28e622a70bdfc55b7816920a4da6fbdd514a59e687b88665d822fb7d658",
+        "/work/results/campaign/final/fits/41e42f32e56146a12fb09e8ff03b60c5c49cc560b4f20f13ddc7b9034a108d3c",
+        "/work/results/campaign/final/fits/ba30373872fc27bafc91805a9ab15785ed4915891252a7cc8ea07704da6d0d77",
+        "/work/results/campaign/final/fits/74fa2e80df27adf3417821122bddb984b74218b2220a5b99cba88c7aafabd12b",
+        "/work/results/campaign/final/fits/509205c5a197b7e869ddaf70509ce6419b40f29bf3e0e683ea8e8ba3f1c853b9",
+        "/work/results/campaign/final/fits/aa923edde1736debd0da8790d514ad1b187734d9c970098aa5a5d4091b222af1",
+        "/work/results/campaign/final/fits/f07e646ea66186fe82d0dcbe3f4708733a1d51fd466bea35f811450f1921611d"
+      ]
+    }
+  ]
+}

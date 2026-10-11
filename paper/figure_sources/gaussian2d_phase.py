@@ -86,7 +86,10 @@ def heatmaps(a, output):
     for i, (ax, title, points) in enumerate(
         zip(
             axes,
-            ("Separate variation", "Joint variation"),
+            (
+                "(a) Axis training:\ninterpolation and extrapolation",
+                "(b) Grid training:\ninterpolation",
+            ),
             ("fitting_axes", "fitting_rectangle"),
             strict=True,
         )
@@ -97,23 +100,27 @@ def heatmaps(a, output):
             extent=(4.925, 11.075, 1.59, 2.41),
             vmin=0,
             vmax=0.06,
-            cmap="Greys",
+            cmap="Blues",
             interpolation="nearest",
             aspect="auto",
         )
         ax.set_box_aspect(1)
         train = a[points]
         mu, sigma = 8 + 3 * train[:, 0], 2 * (1 + 0.2 * train[:, 1])
-        ax.scatter(mu, sigma, marker="+", color="#0072B2", s=35)
+        ax.scatter(mu, sigma, marker="+", color="#505050", s=35, linewidths=1.0)
         if i == 0:
             hull = np.array([[-1, 0], [0, 1], [1, 0], [0, -1], [-1, 0]])
         else:
             hull = np.array([[-1, -1], [1, -1], [1, 1], [-1, 1], [-1, -1]])
         ax.plot(
-            8 + 3 * hull[:, 0], 2 * (1 + 0.2 * hull[:, 1]), "#0072B2", lw=1, ls="--"
+            8 + 3 * hull[:, 0],
+            2 * (1 + 0.2 * hull[:, 1]),
+            color="#6B6B6B",
+            lw=1,
+            ls="--",
         )
         ax.set_title(title)
-        ax.set_xlabel(r"target center $\mu$")
+        ax.set_xlabel(r"Target mean parameter $\mu$")
     axes[0].set_ylabel(r"target width $\sigma_G$")
     axes[0].set_xlim(4.7, 11.3)
     axes[0].set_ylim(1.55, 2.45)
@@ -137,7 +144,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     a, summary, digest = load(args.results)
     args.output.mkdir(parents=True, exist_ok=True)
-    labels = ["separate variation", "joint variation"]
+    labels = ["axis training", "grid training"]
     xw, xm = a["v_axis"], a["u_axis"]
     model_mean = np.median(a["model_mean"], axis=1)
     model_mean_iqr = np.quantile(a["model_mean"], [0.25, 0.75], axis=1)
@@ -248,16 +255,23 @@ def main(argv=None):
         ).hexdigest(),
         "source_copy_hashes": source_hashes,
         "renderer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        "protocols": ["separate variation", "joint variation"],
+        "protocols": ["axis training", "grid training"],
         "response_aggregation": "median and IQR across five final fits per protocol",
         "heatmaps": {
-            "order": ["separate variation", "joint variation"],
+            "order": ["axis training", "grid training"],
             "axis_transform": "mu=8+3u; sigma_G=2(1+0.2v)",
             "aggregation": "arithmetic mean across five final fits per protocol",
             "pixel_edge_extent": {"mu": [4.925, 11.075], "sigma_G": [1.59, 2.41]},
             "vmin": 0,
             "vmax": 0.06,
             "smoothing": "none",
+            "cmap": "Blues",
+            "training_marker_color": "#505050",
+            "training_hull_color": "#6B6B6B",
+            "panel_titles": [
+                "(a) Axis training:\ninterpolation and extrapolation",
+                "(b) Grid training:\ninterpolation",
+            ],
         },
         "fixed_control": summary.get("fixed_control", {"theta": 3 * np.pi / 8}),
         "note": (

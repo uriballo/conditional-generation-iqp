@@ -1,0 +1,8 @@
+{
+  "input_sha256": "fa7b0e446903d2d1892049e567a500b6b4532cfbe741afcf7ab623c5ceeb3974",
+  "renderer_sha256": "afa8b65ae664d2456ad65eece4ba05bc14f207d1372dae535d0aa40aec2aa34d",
+  "stage": "final",
+  "repeats": 10,
+  "aggregation": "within-repeat metrics; means and sample SD ddof=1; all repeats retained",
+  "selection_changed": false
+}
