@@ -101,21 +101,18 @@
 \draw[outline,draw=condone,fill=condone!7] (4.35,.35) rectangle (7.85,2.8);
 \draw[outline,draw=modelblue,fill=modelblue!7] (8.4,.35) rectangle (12.95,2.8);
 \draw[outline,draw=ink!65,fill=ink!5] (13.5,.35) rectangle (15.8,2.8);
-\node[font=\fontsize{8}{9}\selectfont\bfseries,text=condone!70!black] at (6.1,2.52) {Encoder $E(c_i)$};
+\node[font=\fontsize{8}{9}\selectfont\bfseries,text=condone!70!black] at (6.1,2.52) {Encoder};
 \node[font=\fontsize{8}{9}\selectfont\bfseries,text=modelblue] at (10.675,2.52) {IQP unitary};
 \node[font=\fontsize{8}{9}\selectfont\bfseries] at (14.65,2.52) {Measure};
-\pgfmathsetmacro{\rotationOffset}{.65/(2*.78)+.4/2}
 \pgfmathsetmacro{\hadamardOffset}{.825+.4+.65/(2*.78)}
 \foreach \yy in {1.70,1.20,.70} {
   \draw[condone!65!black,line width=.65pt] (4.55,\yy) -- (8.125,\yy);
   \draw[modelblue!65!black,line width=.65pt] (8.125,\yy) -- (13.5,\yy);
   \draw[ink!65,line width=.65pt] (13.5,\yy) -- (15.6,\yy);
 }
+\draw[draw=condone!70!black,fill=white,line width=.6pt] (5.0,.43) rectangle (7.2,1.97);
+\node[font=\fontsize{12}{13}\selectfont,text=condone!70!black] at (6.1,1.20) {$V(c_i)$};
 \foreach \yy in {1.70,1.20,.70} {
-  \node[draw=condone!70!black,fill=white,minimum width=.65cm,minimum height=.36cm,
-    inner sep=0pt,font=\fontsize{10}{11}\selectfont] at (6.1-\rotationOffset,\yy) {$R_Y$};
-  \node[draw=condone!70!black,fill=white,minimum width=.65cm,minimum height=.36cm,
-    inner sep=0pt,font=\fontsize{10}{11}\selectfont] at (6.1+\rotationOffset,\yy) {$R_Z$};
   \node[draw=modelblue!70!black,fill=white,minimum width=.65cm,minimum height=.36cm,
     inner sep=0pt,font=\fontsize{10}{11}\selectfont] at (10.675-\hadamardOffset,\yy) {$H$};
   \node[draw=modelblue!70!black,fill=white,minimum width=.65cm,minimum height=.36cm,
