@@ -1,17 +1,17 @@
 {
-  "source_sha256": "b35168318f1b9c1d238b9e7d3e1885f9ea01a7b52eeee4becd4ae101a7c03ab6",
+  "source_sha256": "4ba9465d0536aa5ac8134836c6efcc8206b920dd50d44bb321b61b8852e5c659",
   "motif_operations": {
     "RX": 1,
     "CNOT": 2,
     "Hadamard": 3
   },
   "motif_outputs": [
-    "paper\\figures\\triangle_motif_draft.pdf",
-    "paper\\figures\\triangle_motif_draft.png"
+    "paper/figures/triangle_motif_draft.pdf",
+    "paper/figures/triangle_motif_draft.png"
   ],
   "motif_output_sha256": {
-    "pdf": "25ad52f0032f6a57c58ea342ed2ea65b254e6f853b90cc9862a3e5a3cf2cf288",
-    "png": "d8d99cdc1740cd4ac3f5713213e136258f62c57265532ecb6d3a43cb8e0fe827"
+    "pdf": "028c4c7eccd7b75956dd3d679eb61fb303df73cd0963ab5fa9bb60584cffee6d",
+    "png": "cb3aac5306b5ad76bec7e2484edd38c17d36d0e90f0469b9627d332edf9d7538"
   },
   "graph": {
     "vertices": [

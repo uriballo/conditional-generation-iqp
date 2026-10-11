@@ -55,9 +55,38 @@ def draw(tape, wires, filename, size, position, fontsize):
     fig.set_size_inches(size[0] * MM, size[1] * MM, forward=True)
     ax.set_position(position)
     for text in ax.texts:
+        if filename == "triangle_motif_draft" and text.get_text() in wires:
+            text.set_visible(False)
         if text.get_text() == "RX":
             text.set_text(r"$R_X$" + "\n" + r"$t_\beta$")
             text.set_fontsize(7)
+    if filename == "triangle_motif_draft":
+        for y, wire in zip((0.75, 0.5, 0.25), wires, strict=True):
+            ax.text(
+                0.015,
+                y,
+                rf"${wire}:\ |0\rangle$",
+                transform=ax.transAxes,
+                ha="left",
+                va="center",
+                fontsize=7,
+            )
+        fig.text(
+            0.27,
+            0.90,
+            "Reference-state preparation",
+            ha="center",
+            va="center",
+            fontsize=8,
+        )
+        fig.text(
+            0.79,
+            0.90,
+            "Final Hadamards",
+            ha="center",
+            va="center",
+            fontsize=8,
+        )
     for patch in ax.patches:
         patch.set_linewidth(0.8)
     pdf = OUT / f"{filename}.pdf"
@@ -205,8 +234,8 @@ def main() -> None:
         motif,
         ["0i", "0j", "ij"],
         "triangle_motif_draft",
-        (85, 48),
-        (0.08, 0.22, 0.84, 0.62),
+        (85, 60),
+        (0.08, 0.18, 0.84, 0.66),
         9,
     )
     graph_pdf, graph_png, graph_metadata = draw_signed_graph()

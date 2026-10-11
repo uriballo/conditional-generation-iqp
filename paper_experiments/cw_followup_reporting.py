@@ -22,10 +22,10 @@ FAMILIES = (
 )
 METRICS = ("tvd", "magnetization", "heat")
 NAMES = {
-    "shared_parity": "Shared parity",
-    "shared_product": "Shared product",
-    "independent_parity": "Independent parity",
-    "independent_unconditional": "Independent unconditional",
+    "shared_parity": "Conditional IQP",
+    "shared_product": "Shared product-input IQP",
+    "independent_parity": "Temperature-specific IQP",
+    "independent_unconditional": "Temperature-specific IQP, standard input",
 }
 
 
@@ -173,6 +173,12 @@ def _profile_tvd(row):
     return 0.5 * np.abs(shells - targets).sum(axis=-1)
 
 
+def _table_name(name):
+    if name == "independent_unconditional":
+        return r"\shortstack{Temperature-specific IQP,\\ standard input}"
+    return NAMES[name]
+
+
 def render(data_dir, output_dir):
     data = _validate(json.loads((Path(data_dir) / "figure_data.json").read_text()))
     output = Path(output_dir)
@@ -185,7 +191,7 @@ def render(data_dir, output_dir):
         "independent_unconditional": COLORS[2],
     }
     paths = []
-    fig, ax = plt.subplots(1, 3, figsize=(170 * MM, 65 * MM), layout="constrained")
+    fig, ax = plt.subplots(1, 3, figsize=(170 * MM, 75 * MM), layout="constrained")
     marker_families = (
         "shared_parity",
         "independent_parity",
@@ -216,12 +222,12 @@ def render(data_dir, output_dir):
                 m, mean - sd, mean + sd, color=colors[name], alpha=0.15
             )
         ax[index].set(
-            xlabel="Magnetization",
-            ylabel="Probability mass",
             title=rf"$\beta={beta}$",
         )
         ax[index].spines[["top", "right"]].set_visible(False)
         ax[index].set_ylim(bottom=0)
+    fig.supxlabel(r"Magnetization $m$", fontsize=10, y=0.11)
+    fig.supylabel("Probability mass", fontsize=10)
     handles, labels = ax[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="outside lower center", ncol=2, fontsize=8)
     paths += _save(fig, output, "curie_weiss_model_comparison")
@@ -272,6 +278,32 @@ def render(data_dir, output_dir):
             transform=a.get_xaxis_transform(),
             markersize=3,
         )
+    inset = ax[1].inset_axes([0.08, 0.46, 0.42, 0.42])
+    shared = families["shared_parity"]
+    beta = np.asarray(shared["beta"])
+    inset.plot(beta, shared["curves"]["target_heat"][0], "k--")
+    for name in marker_families:
+        if name.startswith("independent"):
+            mean, sd = _marker(families[name], "heat")
+            inset.errorbar(
+                families[name]["marker_beta"],
+                mean,
+                yerr=sd,
+                fmt="o",
+                color=colors[name],
+                capsize=1.5,
+                markersize=3,
+            )
+        else:
+            mean, sd = _mean_sd(families[name]["curves"]["heat"], 10)
+            inset.plot(beta, mean, color=colors[name])
+            inset.fill_between(
+                beta, mean - sd, mean + sd, color=colors[name], alpha=0.15
+            )
+    inset.set(xlim=(0, 2), ylim=(0, 1), xticks=(0, 1, 2), yticks=(0, 0.5, 1))
+    inset.set_title(r"Zoom: $0\leq c_{\mathrm{fluc}}\leq1$", fontsize=7)
+    inset.tick_params(labelsize=6)
+    inset.spines[["top", "right"]].set_visible(False)
     handles, labels = ax[0].get_legend_handles_labels()
     legend_ax = fig.add_subplot(grid[1, :])
     legend_ax.axis("off")
@@ -352,7 +384,10 @@ def export_tables(data, output):
     for kind, extractor in (("full", _full_tvd), ("profile", _profile_tvd)):
         path = output / f"curie_weiss_{kind}_tvd.tex"
         rows = [
-            [NAMES[name], *[_cell(extractor(families[name])[:, j]) for j in range(3)]]
+            [
+                _table_name(name),
+                *[_cell(extractor(families[name])[:, j]) for j in range(3)],
+            ]
             for name in main
         ]
         _table(
@@ -364,9 +399,11 @@ def export_tables(data, output):
                 + ("full-distribution" if kind == "full" else "Hamming-weight profile")
                 + " TVD at sixteen qubits. Values are means $\\pm$ sample standard "
                 "deviations over ten fresh final repeats, computed within each repeat "
-                "before aggregation. Lower is better. Shared parity excludes markers "
-                "from fitting and selection; independent models fit directly "
-                "at each marker."
+                "before aggregation. Lower is better. Conditional IQP uses the shared "
+                "parity encoder and excludes markers from fitting and selection; the "
+                "temperature-specific IQP models use the parity encoder or the "
+                "standard "
+                r"input $\ket{0}^{\otimes16}$ and fit directly at each marker."
             ),
             f"tab:curie_weiss_{kind}_tvd",
         )
@@ -378,7 +415,7 @@ def export_tables(data, output):
         scores = row["repeat_scores"]
         rows.append(
             [
-                NAMES[name],
+                _table_name(name),
                 *[_cell(_full_tvd(row)[:, j]) for j in range(3)],
                 _cell([s["J"] for s in scores]),
                 _cell([s["P"] for s in scores]),
@@ -389,12 +426,15 @@ def export_tables(data, output):
         [*header, "$J$", "$P$"],
         rows,
         (
-            "Matched shared-encoder comparison. Marker columns give exact "
-            "full-distribution TVD; $J$ and $P$ use the same 101-point reporting "
-            "grid for both encoders. Values are means $\\pm$ sample standard "
-            "deviations over ten fresh final repeats. Lower is better for all errors. "
-            "The comparison changes input correlations and encoder phase generators as "
-            "well as enforced spin-flip symmetry."
+            "Comparison of conditional IQP with the parity encoder and shared "
+            "product-input IQP. The three temperature columns report exact "
+            "full-distribution TVD. The aggregate scores $J=R_G(\\mathrm{TVD})$ "
+            "and $P=[R_G(e_m)+R_G(e_c)]/2$ use the same $101$-point reporting "
+            "grid $G$, with $R_G$ defined in the hyperparameter-optimization "
+            "protocol. Values are means $\\pm$ sample standard deviations over "
+            "ten fresh final repetitions. Lower values indicate smaller errors. "
+            "The comparison changes input correlations and encoder phase generators "
+            "as well as enforced spin-flip symmetry."
         ),
         "tab:cw_product_ablation",
     )
@@ -423,14 +463,20 @@ def export_tables(data, output):
         rows.append(cells)
     _table(
         path,
-        ["Parameter", *[NAMES[n] for n in FAMILIES]],
+        [
+            "Parameter",
+            r"\shortstack{Conditional IQP}",
+            NAMES["shared_product"],
+            r"\shortstack{Temperature-specific IQP}",
+            r"\shortstack{Temperature-specific IQP,\\ standard input}",
+        ],
         rows,
         (
-            "Configurations selected by fresh confirmation. Independent-family "
-            "settings apply jointly to three circuits with separately learned phases. "
-            "Optimizer and unlisted settings follow the frozen protocol. Displayed "
-            "continuous values are rounded; machine-readable settings retain "
-            "full precision."
+            "Hyperparameter configurations selected by confirmation. Each "
+            "temperature-specific family's settings apply jointly to three circuits "
+            "with separate learned phases. Other optimizer and training settings "
+            "follow the protocol described in this subsection. Displayed continuous "
+            "values are rounded; machine-readable settings retain full precision."
         ),
         "tab:cw_selected_settings",
     )
@@ -444,19 +490,32 @@ def export_tables(data, output):
         )
         heat = np.asarray(row["marker_curves"]["heat_error"], dtype=float) / C_STAR
         rows.append(
-            [NAMES[name], "$e_m$", *[_cell(magnetization[:, j]) for j in range(3)]]
+            [
+                _table_name(name),
+                "$e_m$",
+                *[_cell(magnetization[:, j]) for j in range(3)],
+            ]
         )
-        rows.append([NAMES[name], "$e_c$", *[_cell(heat[:, j]) for j in range(3)]])
+        rows.append(
+            [_table_name(name), "$e_c$", *[_cell(heat[:, j]) for j in range(3)]]
+        )
     _table(
         path,
         ["Model", "Error", *[rf"$\beta={b:g}$" for b in MARKERS]],
         rows,
         (
-            "Exact marker mean absolute magnetization errors and normalized "
-            "energy-fluctuation errors. Values are means $\\pm$ sample standard "
-            "deviations over ten fresh repeats; energy errors use "
-            "$c_\\star\\approx0.823110$. Lower is better. Shared markers are "
-            "excluded from fitting and selection; independent models fit directly."
+            "Physical-observable errors for sixteen-qubit Curie--Weiss models at "
+            "three common evaluation temperatures. The mean absolute magnetization "
+            "error is $e_m=|\\langle|m|\\rangle_q-\\langle|m|\\rangle_p|$, and the "
+            "normalized energy-fluctuation error is "
+            "$e_c=|c_{\\mathrm{fluc},q}-c_{\\mathrm{fluc},p}|/c_\\star$, with "
+            "$c_\\star\\approx0.823110$. Values are means $\\pm$ sample standard "
+            "deviations over ten fresh final repetitions, with errors computed "
+            "separately within each repetition before averaging. Lower values "
+            "indicate smaller errors. Both shared models exclude these temperatures "
+            "from training and selection. Temperature-specific models fit directly "
+            "at each listed temperature, using either the parity encoder or the "
+            r"standard input $\ket{0}^{\otimes16}$."
         ),
         "tab:cw_physics_errors",
     )

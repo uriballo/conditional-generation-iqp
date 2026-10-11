@@ -1,11 +1,11 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{Configurations selected by fresh confirmation. Independent-family settings apply jointly to three circuits with separately learned phases. Optimizer and unlisted settings follow the frozen protocol. Displayed continuous values are rounded; machine-readable settings retain full precision.}
+\caption{Hyperparameter configurations selected by confirmation. Each temperature-specific family's settings apply jointly to three circuits with separate learned phases. Other optimizer and training settings follow the protocol described in this subsection. Displayed continuous values are rounded; machine-readable settings retain full precision.}
 \label{tab:cw_selected_settings}
 \begin{tabular}{lrrrr}
 \toprule
-Parameter & Shared parity & Shared product & Independent parity & Independent unconditional \\
+Parameter & \shortstack{Conditional IQP} & Shared product-input IQP & \shortstack{Temperature-specific IQP} & \shortstack{Temperature-specific IQP,\\ standard input} \\
 \midrule
 Initial learning rate & 0.00341745 & 0.0300696 & 0.00430287 & 0.0898283 \\
 Width $s_\theta$ (radians) & 0.0221053 & 0.0454769 & 0.0300356 & 0.0326103 \\

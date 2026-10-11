@@ -116,7 +116,7 @@ def lattice_heatmaps(a, out):
     for i, (ax, title, points) in enumerate(
         zip(
             axes,
-            ("Axis training: new joint combinations", "Grid training: interpolation"),
+            ("Axis training", "Grid training"),
             ("fitting_axes", "fitting_grid"),
             strict=True,
         )
@@ -132,7 +132,8 @@ def lattice_heatmaps(a, out):
             aspect="auto",
         )
         ax.set_title(f"({chr(97 + i)}) {title}", fontsize=9)
-        ax.set_xlabel("Condition $u$")
+        ax.set_xticks([-1, -0.5, 0, 0.5, 1])
+        ax.set_yticks([-1, -0.5, 0, 0.5, 1])
         train = a[points]
         ax.scatter(
             train[:, 0], train[:, 1], marker="+", color="0.35", s=35, linewidths=1
@@ -152,9 +153,24 @@ def lattice_heatmaps(a, out):
             zorder=4,
             label="Fixed baseline" if i == 0 else None,
         )
-    axes[0].set_ylabel("Condition $v$")
-    fig.colorbar(image, ax=axes, label="Mean full TVD", shrink=0.85)
-    fig.legend(loc="upper center", bbox_to_anchor=(0.5, 0.02), ncol=1)
+    axes[0].set_ylabel("Width condition $v$")
+    axes[0].scatter([], [], marker="+", color="0.35", s=35, linewidths=1,
+                    label="Training points")
+    axes[0].plot([], [], "--", color="0.4", lw=1, label="Training convex hull")
+    fig.colorbar(image, ax=axes, label="Mean full TVD", shrink=0.85,
+                 ticks=np.linspace(0, vmax, 5))
+    fig.canvas.draw()
+    left = axes[0].get_position()
+    right = axes[1].get_position()
+    fig.text(
+        (left.x0 + right.x1) / 2,
+        min(left.y0, right.y0) - 0.08,
+        "Mean condition $u$",
+        ha="center",
+        va="top",
+    )
+    fig.legend(loc="upper center", bbox_to_anchor=(0.5, -0.08), ncol=2,
+               columnspacing=1.2, handletextpad=0.5)
     save(fig, out, "gaussian2d_lattice_heatmaps")
 
 
@@ -210,7 +226,9 @@ def lattice_response(a, out):
                     ax.set_ylabel(f"{label}\n{ylabel}")
                 if p == 1:
                     ax.set_xlabel(
-                        "Condition $u$" if name == "mean_response" else "Condition $v$"
+                        "Mean condition $u$"
+                        if name == "mean_response"
+                        else "Width condition $v$"
                     )
         fig.legend(
             *axes[0, 0].get_legend_handles_labels(),
@@ -320,14 +338,15 @@ def tables(summary, out):
     translation_tex = r"""\begin{table}[!htbp]
 \centering
 \small
-\caption{Exact full-distribution and profile TVDs for Gaussian-shaped translation.
-Entries report the median across five independent fits of the mean error over
-eighty reporting conditions; brackets give the 25th--75th percentiles across
-fits. Lower is better.}
-\label{tab:gaussian_tvd}
-\begin{tabular}{lcc}\toprule
-Model & Full TVD & Profile TVD\\\midrule
-"""
+""" + (
+        r"\caption{Exact full-distribution and profile TVDs for conditional generation "
+        r"of binomial distributions. Entries report the median across five independent "
+        r"fits of the mean error over eighty reporting conditions; "
+        r"brackets give the 25th--75th percentiles across fits. Lower is better.}" "\n"
+        r"\label{tab:gaussian_tvd}" "\n"
+        r"\begin{tabular}{lcc}\toprule" "\n"
+        r"Model & Full TVD & Profile TVD\\\midrule" "\n"
+    )
     translation_tex += (
         "Conditional IQP & "
         + quartile_value("translation", "full_tvd")
@@ -356,7 +375,7 @@ comparison. Lower is better.}
 \label{tab:gaussian-two-dimensional}
 \centering
 \begin{tabular}{lcc}\toprule
- & Axis fitting, sixteen pairs & Grid fitting, thirty-two pairs\\\midrule
+ & Axis training, sixteen pairs & Grid training, thirty-two pairs\\\midrule
 """
     controls = [
         results[d]["fits"][0]["encoder_mean_full_tvd"] for d in ("axes", "grid")

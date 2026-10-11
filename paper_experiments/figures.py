@@ -649,7 +649,7 @@ def _scaling(data, output):
         )
     ax.set_xlabel("Optimizer updates")
     ax.ticklabel_format(axis="y", style="sci", scilimits=(0, 0), useMathText=True)
-    ax.set_ylabel(r"Held-out sampled MMD$^2$")
+    ax.set_ylabel(r"Held-out MMD$^2$")
     ax.legend(ncol=2)
     ax.spines[["top", "right"]].set_visible(False)
     paths = _save(fig, output, "curie_weiss_lattice_scaling_mmd")

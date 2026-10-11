@@ -1,15 +1,15 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{Exact full-distribution TVD at sixteen qubits. Values are means $\pm$ sample standard deviations over ten fresh final repeats, computed within each repeat before aggregation. Lower is better. Shared parity excludes markers from fitting and selection; independent models fit directly at each marker.}
+\caption{Exact full-distribution TVD at sixteen qubits. Values are means $\pm$ sample standard deviations over ten fresh final repeats, computed within each repeat before aggregation. Lower is better. Conditional IQP uses the shared parity encoder and excludes markers from fitting and selection; the temperature-specific IQP models use the parity encoder or the standard input $\ket{0}^{\otimes16}$ and fit directly at each marker.}
 \label{tab:curie_weiss_full_tvd}
 \begin{tabular}{lrrr}
 \toprule
 Model & $\beta=0.4$ & $\beta=1$ & $\beta=2$ \\
 \midrule
-Shared parity & $0.1185\pm0.0107$ & $0.1396\pm0.0048$ & $0.0832\pm0.0103$ \\
-Independent parity & $0.0692\pm0.0059$ & $0.1477\pm0.0081$ & $0.1525\pm0.0021$ \\
-Independent unconditional & $0.3787\pm0.0034$ & $0.3400\pm0.0074$ & $0.4101\pm0.1629$ \\
+Conditional IQP & $0.1185\pm0.0107$ & $0.1396\pm0.0048$ & $0.0832\pm0.0103$ \\
+Temperature-specific IQP & $0.0692\pm0.0059$ & $0.1477\pm0.0081$ & $0.1525\pm0.0021$ \\
+\shortstack{Temperature-specific IQP,\\ standard input} & $0.3787\pm0.0034$ & $0.3400\pm0.0074$ & $0.4101\pm0.1629$ \\
 \bottomrule
 \end{tabular}
 \end{table*}

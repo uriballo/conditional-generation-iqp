@@ -39,7 +39,7 @@
   },
   "figure_data_sha256": "b73d273cc469cb9005ba945b06e02987c3345ffad1c0f1517bbb11c17393f81d",
   "renderer": "paper_experiments/figures.py",
-  "renderer_sha256": "ac1cec570bb5afaea956a6390466472babbe679634ec7e83dcd29f7637d240ff",
+  "renderer_sha256": "cefb4370ff215c83996bf63f528dce6fe5933d134a799dfa877d15353a6e1b82",
   "script": ".local_research/scaling-transfer-20261010/plot_scaling.py",
   "script_sha256": "b27d0d06cfcda415c55506a981dfa6650ad38c42fe807c58129af9cd09072a96",
   "sizes": [
@@ -181,7 +181,7 @@
   },
   "adopted_from": "results/scaling-transfer-20261010/figures",
   "artifacts_sha256": {
-    "pdf": "2d540aa8c41e1bc7b58a1f59e6c813041577c425cd24ab88572b614947e047fb",
-    "png": "3c5616cd430fa0484d398057f986e028b1d1c664431ed6b83b3af4c972777bc5"
+    "pdf": "a494f67024eaca7f032ae26e35f89c023df0d97d312548bb3b05976b87b9ffae",
+    "png": "e8a6388d4f7002c022099ad18e51256fbdb445ee69ebbd3dd6b4e0ad867de928"
   }
 }

@@ -1,20 +1,20 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{Exact marker mean absolute magnetization errors and normalized energy-fluctuation errors. Values are means $\pm$ sample standard deviations over ten fresh repeats; energy errors use $c_\star\approx0.823110$. Lower is better. Shared markers are excluded from fitting and selection; independent models fit directly.}
+\caption{Physical-observable errors for sixteen-qubit Curie--Weiss models at three common evaluation temperatures. The mean absolute magnetization error is $e_m=|\langle|m|\rangle_q-\langle|m|\rangle_p|$, and the normalized energy-fluctuation error is $e_c=|c_{\mathrm{fluc},q}-c_{\mathrm{fluc},p}|/c_\star$, with $c_\star\approx0.823110$. Values are means $\pm$ sample standard deviations over ten fresh final repetitions, with errors computed separately within each repetition before averaging. Lower values indicate smaller errors. Both shared models exclude these temperatures from training and selection. Temperature-specific models fit directly at each listed temperature, using either the parity encoder or the standard input $\ket{0}^{\otimes16}$.}
 \label{tab:cw_physics_errors}
 \begin{tabular}{lrrrr}
 \toprule
 Model & Error & $\beta=0.4$ & $\beta=1$ & $\beta=2$ \\
 \midrule
-Shared parity & $e_m$ & $0.0167\pm0.0017$ & $0.0581\pm0.0028$ & $0.0083\pm0.0043$ \\
-Shared parity & $e_c$ & $0.0009\pm0.0002$ & $0.0028\pm0.0015$ & $0.1712\pm0.0272$ \\
-Shared product & $e_m$ & $0.0174\pm0.0039$ & $0.0834\pm0.0103$ & $0.0130\pm0.0066$ \\
-Shared product & $e_c$ & $0.0005\pm0.0004$ & $0.0683\pm0.0034$ & $0.1851\pm0.0551$ \\
-Independent parity & $e_m$ & $0.0006\pm0.0004$ & $0.0023\pm0.0018$ & $0.0127\pm0.0013$ \\
-Independent parity & $e_c$ & $0.0013\pm0.0003$ & $0.0475\pm0.0042$ & $0.0705\pm0.0053$ \\
-Independent unconditional & $e_m$ & $0.0022\pm0.0028$ & $0.0030\pm0.0024$ & $0.2759\pm0.1435$ \\
-Independent unconditional & $e_c$ & $0.0003\pm0.0002$ & $0.0036\pm0.0023$ & $2.8935\pm1.4896$ \\
+Conditional IQP & $e_m$ & $0.0167\pm0.0017$ & $0.0581\pm0.0028$ & $0.0083\pm0.0043$ \\
+Conditional IQP & $e_c$ & $0.0009\pm0.0002$ & $0.0028\pm0.0015$ & $0.1712\pm0.0272$ \\
+Shared product-input IQP & $e_m$ & $0.0174\pm0.0039$ & $0.0834\pm0.0103$ & $0.0130\pm0.0066$ \\
+Shared product-input IQP & $e_c$ & $0.0005\pm0.0004$ & $0.0683\pm0.0034$ & $0.1851\pm0.0551$ \\
+Temperature-specific IQP & $e_m$ & $0.0006\pm0.0004$ & $0.0023\pm0.0018$ & $0.0127\pm0.0013$ \\
+Temperature-specific IQP & $e_c$ & $0.0013\pm0.0003$ & $0.0475\pm0.0042$ & $0.0705\pm0.0053$ \\
+\shortstack{Temperature-specific IQP,\\ standard input} & $e_m$ & $0.0022\pm0.0028$ & $0.0030\pm0.0024$ & $0.2759\pm0.1435$ \\
+\shortstack{Temperature-specific IQP,\\ standard input} & $e_c$ & $0.0003\pm0.0002$ & $0.0036\pm0.0023$ & $2.8935\pm1.4896$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
