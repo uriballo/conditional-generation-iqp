@@ -262,7 +262,7 @@ Similarly, we estimate the phase derivative by averaging the corresponding $Y'_{
 
 \section{Conditional IQP training}
 \label{sec:cond_training}
-Section~\ref{sec:cond_model} provides classical estimators of conditional Pauli-$Z$ moments and their phase gradients. We now combine these estimators with the moment formulation of Gaussian-kernel squared MMD to train one shared IQP unitary across conditions. Throughout this work, we use \emph{classically trainable} to mean that we can efficiently estimate the training objective and its phase gradients to a prescribed additive accuracy on a classical computer.
+Section~\ref{sec:cond_model} provides classical estimators for conditional Pauli-$Z$ moments and their gradients. We now combine these estimators with the moment-based formulation of the Gaussian-kernel MMD to train conditional IQP circuits. Throughout this work, we use \emph{classically trainable} to mean that the training objective and its gradients can be efficiently estimated to a prescribed additive accuracy on a classical computer.
 
 \subsection{Condition-balanced MMD objective}
 We optimize the shared parameter vector $\boldsymbol{\theta}$ by minimizing the squared maximum mean discrepancy (MMD) across the training conditions. For distributions $p$ and $q$ on $\{0,1\}^n$ and a positive-definite kernel $k$, the population squared MMD is \cite{grettonKernelTwoSample2012}
@@ -277,7 +277,7 @@ We optimize the shared parameter vector $\boldsymbol{\theta}$ by minimizing the 
 \end{equation}
 where we draw the two samples in each expectation independently.
 
-Throughout this work, we use the Gaussian kernel on binary strings,
+Throughout this work, we use the Gaussian kernel,
 \begin{equation}
     k_\sigma(x,y)
     =
@@ -286,7 +286,7 @@ Throughout this work, we use the Gaussian kernel on binary strings,
     \right],
     \label{eq:hamming-rbf-kernel}
 \end{equation}
-Here, $d_H(x,y)$ is the Hamming distance, which counts the positions at which $x$ and $y$ differ, and $\sigma>0$ is the kernel bandwidth. For binary strings, $d_H(x,y)=\|x-y\|_2^2$, so this is the standard Gaussian kernel on the binary domain. For any finite positive $\sigma$, its population squared MMD vanishes exactly when $p=q$ \cite{grettonKernelTwoSample2012}.
+Here, $d_H(x,y)$ denotes the Hamming distance, which counts the positions at which $x$ and $y$ differ, and $\sigma>0$ is the kernel bandwidth. For binary strings, $d_H(x,y)=\|x-y\|_2^2$, so the kernel corresponds to the standard Gaussian kernel restricted to the binary domain. For any finite $\sigma>0$, the MMD vanishes if and only if $p=q$ \cite{grettonKernelTwoSample2012}.
 
 Let $\mathcal C_{\mathrm{train}}$ denote the set of training conditions and $\tau$ the set of kernel bandwidths. We train the shared model by minimizing the condition-balanced objective
 \begin{equation}
@@ -303,11 +303,11 @@ Let $\mathcal C_{\mathrm{train}}$ denote the set of training conditions and $\ta
     \right).
     \label{eq:conditional-objective}
 \end{equation}
-Here, $\mmd_\sigma^2$ denotes the squared MMD computed with the kernel $k_\sigma$. We weight all training conditions and bandwidths equally. At each optimizer update, we independently draw one condition uniformly from $\mathcal C_{\mathrm{train}}$ and one bandwidth uniformly from $\tau$, giving a stochastic estimate of this average.
+Here, $\mmd_\sigma^2$ denotes the MMD computed with the kernel $k_\sigma$. We weight all training conditions and bandwidths equally. At each optimizer update, we independently draw one condition uniformly from $\mathcal C_{\mathrm{train}}$ and one bandwidth uniformly from $\tau$, giving a stochastic estimate of this average.
 
 \subsection{Character expansion}
 
-We use the Gaussian-kernel expansion into binary characters employed in earlier Born-machine and classical IQP training work \cite{rudolphTrainabilityBarriersOpportunities2024,recio-armengolTrainClassicalDeploy2026}. We apply this expansion separately at each condition to express the shared training objective through conditional Pauli-$Z$ moments. We sample a visible-bit mask $a\in\{0,1\}^n$ by drawing its coordinates independently according to
+We use the Gaussian-kernel expansion into binary characters employed in earlier QCBM and classical IQP training work \cite{rudolphTrainabilityBarriersOpportunities2024,recio-armengolTrainClassicalDeploy2026}. We apply this expansion separately at each condition to express the shared training objective through conditional Pauli-$Z$ moments. We sample a bit mask $a\in\{0,1\}^n$ by drawing its coordinates independently according to
 \begin{equation}
     a_i\sim\operatorname{Bernoulli}(p_\sigma),
     \qquad
@@ -361,7 +361,7 @@ Substituting Eq.~\eqref{eq:hamming-character-expansion} into Eq.~\eqref{eq:mmd-p
 \end{equation}
 Thus, the squared MMD averages the squared differences between target and model character moments over the mask distribution.
 
-For a Born machine, the visible Pauli operator
+For a Born machine, the Pauli operator
 \begin{equation}
     Z_a=\bigotimes_{i=1}^{n}Z_i^{a_i}
 \end{equation}
@@ -372,7 +372,7 @@ has eigenvalue $\chi_a(x)$ on the computational-basis state $|x\rangle$. Its mod
     \langle Z_a\rangle_{q_{\boldsymbol{\theta}}(\cdot\mid c)}.
     \label{eq:model-character-pauli}
 \end{equation}
-We can thus express the conditional squared MMD entirely in terms of visible Pauli-$Z$ moments. We estimate the model moments classically using the reference-state estimator in Sec.~\ref{sec:ratio-estimator}.
+We can thus express the conditional squared MMD entirely in terms of Pauli-$Z$ moments, which We estimate classically using the reference-state estimator in Sec.~\ref{sec:ratio-estimator}.
 
 The bandwidth $\sigma$ determines which correlation orders the objective emphasizes. The mask's Hamming weight $K=|a|$ counts the bits it selects, so it gives the correlation order of $Z_a$. Because we sample the mask coordinates independently,
 \begin{equation}
@@ -385,12 +385,12 @@ The bandwidth $\sigma$ determines which correlation orders the objective emphasi
 \end{equation}
 Each bandwidth therefore induces a distribution over correlation orders. Large bandwidths favor lower-order correlations, whereas decreasing $\sigma$ shifts weight toward higher-order correlations, with $\E[K]\rightarrow n/2$ as $\sigma\rightarrow0$.
 
-The bandwidth can also influence optimization behavior. Under suitable circuit and initialization assumptions, objectives dominated by global terms can exhibit barren plateaus, in which gradients vanish exponentially with system size \cite{mccleanBarrenPlateausQuantum2018,laroccaBarrenPlateausVariational2025,cerezoCostFunctionDependent2021}. These optimization difficulties are distinct from the efficient classical estimation of objectives and gradients that we call classical trainability. Emphasizing lower-order correlations can mitigate vanishing gradients in some settings, but it reduces sensitivity to higher-order differences between distributions \cite{rudolphTrainabilityBarriersOpportunities2024}. For every finite positive bandwidth, the Gaussian kernel retains all correlation orders with positive weight. Increasing the bandwidth therefore changes their relative emphasis rather than removing them. In contrast, restricting an objective to low-order moments can make distinct distributions indistinguishable. Proposed approaches to improving optimization include tailored generator sets, restricted initializations and adversarial kernel adaptation \cite{shenCharacterizingTrainability2026,lerchIQPInitialization2026,kurkinUniversalityKernelAdaptive2025}. Determining how these approaches extend to our conditional framework remains beyond the scope of this work.
+The bandwidth can also influence optimization behavior, as objectives dominated by global terms can exhibit barren plateaus \cite{mccleanBarrenPlateausQuantum2018,laroccaBarrenPlateausVariational2025,cerezoCostFunctionDependent2021}. Furthermore, if one tries to avoid them by emphasizing lower-order terms the loss reduces its sensitivity to higher-order differences between distributions \cite{rudolphTrainabilityBarriersOpportunities2024}, which may render the task unsolvable. Different strategies have been proposed to mitigate this issue, including tailored generator sets, restricted initializations and adversarial kernel adaptation \cite{shenCharacterizingTrainability2026,lerchIQPInitialization2026,kurkinUniversalityKernelAdaptive2025}. However, determining how these approaches extend to our conditional framework remains beyond the scope of this work.
 
 \subsection{Unbiased finite-sample MMD and gradients}
 \label{sec:unbiased-conditional-mmd}
 
-For a fixed condition $c$ and visible mask $a$, we draw $B\geq2$ independent target samples and compute
+For a fixed condition $c$ and mask $a$, we draw $B\geq2$ independent target samples and compute
 \begin{equation}
     T_b=\chi_a(x_b),
     \qquad
@@ -484,9 +484,9 @@ Since $|T_b|=1$, independence of distinct draws and the triangle inequality in $
 \]
 Averaging over conditions, bandwidths and sampled masks preserves these uniform bounds. Therefore, averaging $N$ independent repetitions of the complete estimator gives mean-square error at most $16/N$ for the objective and $64/N$ for a specified phase-gradient component. By Chebyshev's inequality, $O(\epsilon^{-2})$ repetitions suffice for additive error $\epsilon$ at fixed confidence.
 
-At a fixed parameter vector, the expectations above average over independent draws from the target distribution and the reference sampling law. During training, we sample target minibatches with replacement from fixed training pools; the stochastic gradient is therefore unbiased for the empirical objective associated with those pools.
+%For a fixed parameter vector, the expectations above average over independent draws from the target distribution and the reference sampling law. During training, we sample target minibatches with replacement from fixed training pools. %Therefore, the stochastic gradient is unbiased for the empirical objective associated with those pools.
 
-We exclude the diagonal terms $s=t$ because $Y_s$ and $Y'_s$ can be correlated when we compute them from the same reference draw. The fixed encoder makes the reference sampling law independent of $\boldsymbol{\theta}$. We therefore hold the sampled reference strings fixed during automatic differentiation to evaluate the phase gradients without differentiating through the sampler.
+%We exclude the diagonal terms $s=t$ because $Y_s$ and $Y'_s$ can be correlated when computed them from the same batch of data. Since the encoder makes the reference sampling law independent of $\boldsymbol{\theta}$, we therefore hold the sampled reference strings fixed during automatic differentiation to evaluate the phase gradients without differentiating through the sampler.
 
 \subsection{Stochastic mask estimator}
 
