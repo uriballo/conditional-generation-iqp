@@ -633,17 +633,16 @@ def _scaling(data, output):
             raise ValueError("scaling seed/step coverage differs")
         if not np.isfinite(matrix).all():
             raise ValueError("scaling curves contain non-finite values")
-        med = np.median(matrix, axis=0)
-        lo, hi = np.quantile(matrix, (0.25, 0.75), axis=0)
-        ax.plot(payload["steps"], med, lw=1.3, marker="o", ms=3, label=rf"$n={n}$")
-        ax.fill_between(payload["steps"], lo, hi, alpha=0.13)
+        mean = matrix.mean(axis=0)
+        sd = matrix.std(axis=0, ddof=1)
+        ax.plot(payload["steps"], mean, lw=1.3, marker="o", ms=3, label=rf"$n={n}$")
+        ax.fill_between(payload["steps"], mean - sd, mean + sd, alpha=0.13)
         rows.extend(
             dict(
                 qubits=n,
                 step=step,
-                median=float(med[i]),
-                q25=float(lo[i]),
-                q75=float(hi[i]),
+                mean=float(mean[i]),
+                sd=float(sd[i]),
             )
             for i, step in enumerate(payload["steps"])
         )
@@ -670,7 +669,7 @@ def _scaling(data, output):
                     (data / "figure_data.json").read_bytes()
                 ).hexdigest(),
                 "primary_metric": "held_out_sampled_mmd_squared",
-                "aggregation": "median and interquartile range across seeds",
+                "aggregation": "mean and sample standard deviation across seeds",
                 "encoder": payload.get("model_metadata", {}).get("encoder"),
                 "ansatz": payload.get("model_metadata", {}).get("ansatz_by_size"),
             },
@@ -923,10 +922,10 @@ def render_all(data_root=None, output_root=None, experiment="all"):
                     "gaussian_translation_profiles.png",
                     "gaussian2d_lattice_heatmaps.pdf",
                     "gaussian2d_lattice_heatmaps.png",
-                    "gaussian2d_lattice_mean_response.pdf",
-                    "gaussian2d_lattice_mean_response.png",
-                    "gaussian2d_lattice_width_response.pdf",
-                    "gaussian2d_lattice_width_response.png",
+                    "gaussian2d_lattice_axes_response.pdf",
+                    "gaussian2d_lattice_axes_response.png",
+                    "gaussian2d_lattice_grid_response.pdf",
+                    "gaussian2d_lattice_grid_response.png",
                 )
                 if (output_dir / name).exists()
             ]

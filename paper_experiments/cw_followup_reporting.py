@@ -398,12 +398,13 @@ def export_tables(data, output):
                 "Exact "
                 + ("full-distribution" if kind == "full" else "Hamming-weight profile")
                 + " TVD at sixteen qubits. Values are means $\\pm$ sample standard "
-                "deviations over ten fresh final repeats, computed within each repeat "
-                "before aggregation. Lower is better. Conditional IQP uses the shared "
-                "parity encoder and excludes markers from fitting and selection; the "
-                "temperature-specific IQP models use the parity encoder or the "
-                "standard "
-                r"input $\ket{0}^{\otimes16}$ and fit directly at each marker."
+                "deviations over ten independent fits, computed within each fit "
+                "before aggregation. Lower is better. Conditional IQP uses the "
+                "parity encoder and excludes these test temperatures from training "
+                "and selection. The temperature-specific IQP models use the parity "
+                "encoder or the standard "
+                r"input $\ket{0}^{\otimes16}$ and are trained directly at each "
+                "temperature."
             ),
             f"tab:curie_weiss_{kind}_tvd",
         )
@@ -423,18 +424,16 @@ def export_tables(data, output):
         )
     _table(
         path,
-        [*header, "$J$", "$P$"],
+        [*header, r"$E_{\mathrm{TVD}}$", r"$E_{\mathrm{phys}}$"],
         rows,
         (
             "Comparison of conditional IQP with the parity encoder and shared "
             "product-input IQP. The three temperature columns report exact "
-            "full-distribution TVD. The aggregate scores $J=R_G(\\mathrm{TVD})$ "
-            "and $P=[R_G(e_m)+R_G(e_c)]/2$ use the same $101$-point reporting "
-            "grid $G$, with $R_G$ defined in the hyperparameter-optimization "
-            "protocol. Values are means $\\pm$ sample standard deviations over "
-            "ten fresh final repetitions. Lower values indicate smaller errors. "
-            "The comparison changes input correlations and encoder phase generators "
-            "as well as enforced spin-flip symmetry."
+            "full-distribution TVD. The aggregate scores $E_{\\mathrm{TVD}}$ "
+            "and $E_{\\mathrm{phys}}$, defined in the hyperparameter-optimization "
+            "protocol, use the $101$-point test grid. Values are means $\\pm$ "
+            "sample standard deviations over ten independent fits. Lower values "
+            "indicate smaller errors."
         ),
         "tab:cw_product_ablation",
     )
@@ -447,7 +446,7 @@ def export_tables(data, output):
         (r"\texttt{Adam} $b_1$", "b1"),
         (r"\texttt{Adam} $b_2$", "b2"),
         ("Schedule", "schedule"),
-        ("Encoder scale $s$", "beta_scale"),
+        (r"Encoder scale $\lambda$", "beta_scale"),
         ("Expected kernel weights", "expected_weights"),
     ):
         cells = [label]
@@ -456,7 +455,7 @@ def export_tables(data, output):
             cells.append(
                 "--"
                 if value is None
-                else f"{value:.6g}"
+                else f"{value:#.3g}"
                 if isinstance(value, (int, float))
                 else str(value)
             )
@@ -475,8 +474,8 @@ def export_tables(data, output):
             "Hyperparameter configurations selected by confirmation. Each "
             "temperature-specific family's settings apply jointly to three circuits "
             "with separate learned phases. Other optimizer and training settings "
-            "follow the protocol described in this subsection. Displayed continuous "
-            "values are rounded; machine-readable settings retain full precision."
+            "follow the protocol described in this subsection. Continuous values "
+            "are rounded to three significant digits."
         ),
         "tab:cw_selected_settings",
     )
@@ -505,16 +504,17 @@ def export_tables(data, output):
         rows,
         (
             "Physical-observable errors for sixteen-qubit Curie--Weiss models at "
-            "three common evaluation temperatures. The mean absolute magnetization "
+            "three test temperatures. The mean absolute magnetization "
             "error is $e_m=|\\langle|m|\\rangle_q-\\langle|m|\\rangle_p|$, and the "
             "normalized energy-fluctuation error is "
             "$e_c=|c_{\\mathrm{fluc},q}-c_{\\mathrm{fluc},p}|/c_\\star$, with "
-            "$c_\\star\\approx0.823110$. Values are means $\\pm$ sample standard "
-            "deviations over ten fresh final repetitions, with errors computed "
-            "separately within each repetition before averaging. Lower values "
+            "$c_\\star\\approx0.823$ the maximum target value for "
+            "$0\\leq\\beta\\leq2$. Values are means $\\pm$ sample standard "
+            "deviations over ten independent fits, with errors computed "
+            "within each fit before averaging. Lower values "
             "indicate smaller errors. Both shared models exclude these temperatures "
-            "from training and selection. Temperature-specific models fit directly "
-            "at each listed temperature, using either the parity encoder or the "
+            "from training and selection. Temperature-specific models are trained "
+            "directly at each temperature, using either the parity encoder or the "
             r"standard input $\ket{0}^{\otimes16}$."
         ),
         "tab:cw_physics_errors",

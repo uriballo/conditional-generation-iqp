@@ -54,7 +54,9 @@ def test_scaling_export_records_model_identity_and_sampled_mmd_provenance(tmp_pa
         ).read_text()
     )
     assert provenance["primary_metric"] == "held_out_sampled_mmd_squared"
-    assert provenance["aggregation"] == "median and interquartile range across seeds"
+    assert (
+        provenance["aggregation"] == "mean and sample standard deviation across seeds"
+    )
     assert len(provenance["input_sha256"]) == 64
 
 

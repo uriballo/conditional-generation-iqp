@@ -9,57 +9,51 @@ We order the sixteen edges lexicographically as
 \begin{equation}
  (01,02,03,04,05,06,12,13,14,15,16,23,24,25,26,34).
 \end{equation}
-The six root edges $01,\ldots,06$ form a spanning tree. The remaining edges form the chord set $\mathcal C=\{12,13,14,15,16,23,24,25,26,34\}$. Each chord and its two root edges define a fundamental triangle.
+The six root edges $01,\ldots,06$ form a spanning tree. The remaining edges form the chord set $E_{\mathrm{ch}}=\{12,13,14,15,16,23,24,25,26,34\}$. Each chord and its two root edges define a fundamental triangle.
 
-We represent these ten triangles by a matrix $B\in\mathbb F_2^{10\times16}$. Each row contains ones on its triangle's three edges and zeros elsewhere. The chord columns form the identity matrix, so $B$ has rank ten. The connected graph has cycle rank $16-7+1=10$, and these rows therefore form a basis of its cycle space. The encoding matrix in Section~\ref{sec:input-symmetry} is $C=B^{\mathsf T}$.
+We represent these ten triangles by the columns of the encoding matrix $C\in\mathbb F_2^{16\times10}$. Each column contains ones on its triangle's three edges and zeros elsewhere. The chord rows form the identity matrix, so $C$ has rank ten. The connected graph has cycle rank $16-7+1=10$, and these columns therefore form a basis of its cycle space.
 
-The six independent vertex switches generate the group $G$ of $64$ switching masks. Each switch selects either zero or two edges of every triangle, so $Bg=0$ for every $g\in G$. Since $\ker B$ has dimension $16-10=6$, it also contains $64$ masks. Thus, $G=\ker B$.
+The six independent vertex switches generate the group $\mathcal S$ of $64$ switching masks. Each switch selects either zero or two edges of every triangle, so $C^{\mathsf T}h=0$ for every $h\in\mathcal S$. Since $\ker C^{\mathsf T}$ has dimension $16-10=6$, it also contains $64$ masks. Thus, $\mathcal S=\ker C^{\mathsf T}$.
 
-For a vector of chord bits $r\in\mathbb F_2^{10}$, the edge configuration is $B^{\mathsf T}r$. We define the reference state as
+For a vector of chord bits $y\in\mathbb F_2^{10}$, the edge configuration is $Cy$. We define the reference state as
 \begin{align}
  \ket{\psi_\beta}
- &=\sum_{r\in\mathbb F_2^{10}}a_\beta(r)\ket{B^{\mathsf T}r},\\
- a_\beta(r)&=c_\beta^{10-|r|}(-i s_\beta)^{|r|},
+ &=\sum_{y\in\mathbb F_2^{10}}\alpha_\beta(y)\ket{Cy},\\
+ \alpha_\beta(y)&=\cos(t_\beta/2)^{10-|y|}\,[-i\sin(t_\beta/2)]^{|y|},
 \end{align}
-where $|r|$ is the Hamming weight of $r$,
-\begin{equation}
- c_\beta=\cos(t_\beta/2),\qquad
- s_\beta=\sin(t_\beta/2),\qquad
- t_\beta=\frac{\pi}{2}\tanh(1.5\beta).
-\end{equation}
-The normalized rotation factors and injectivity of $B^{\mathsf T}$ ensure normalization, as established in Appendix~\ref{app:binary-linear-encoders}. Applying the Hadamard layer gives the encoded input $\ket{\phi_\beta}=H^{\otimes16}\ket{\psi_\beta}$.
+where $|y|$ is the Hamming weight of $y$ and $t_\beta=(\pi/2)\tanh(1.5\beta)$. The normalized rotation factors and injectivity of $C$ ensure normalization, as established in Appendix~\ref{app:binary-linear-encoders}. Applying the Hadamard layer gives the encoded input $\ket{\phi_\beta}=H^{\otimes16}\ket{\psi_\beta}$.
 
 \subsection{Classical sampling and amplitude ratios}
 
-We sample the reference distribution by drawing the ten chord bits independently, with probability $s_\beta^2$ of obtaining one, and returning $B^{\mathsf T}r$. The chord entries of this configuration equal $r$ because the chord columns of $B$ form the identity matrix. They therefore also allow us to recover the latent bits from any reference sample.
+We sample the reference distribution by drawing the ten chord bits independently, with probability $\sin^2(t_\beta/2)$ of obtaining one, and returning $Cy$. The chord entries of this configuration equal $y$ because the chord rows of $C$ form the identity matrix. They therefore also allow us to recover the latent bits from any reference sample.
 
-For a bit-flip mask $m$, we collect its ten chord entries into $u$ and test whether $B^{\mathsf T}u=m$. If the test fails, $m$ lies outside the cycle space, and flipping a supported reference configuration by $m$ gives zero amplitude. If the test succeeds, the flip maps $B^{\mathsf T}r$ to $B^{\mathsf T}(r\oplus u)$.
+For a bit-flip mask $a$, we collect its ten chord entries into $d$ and test whether $Cd=a$. If the test fails, $a$ lies outside the cycle space, and flipping a supported reference configuration by $a$ gives zero amplitude. If the test succeeds, the flip maps $Cy$ to $C(y\oplus d)$.
 
-For $\beta\neq0$, both $c_\beta$ and $s_\beta$ are nonzero, so every cycle-space configuration has nonzero reference amplitude. The ratio for a mask within the cycle space is
+For $\beta\neq0$, both $\cos(t_\beta/2)$ and $\sin(t_\beta/2)$ are nonzero, so every cycle-space configuration has nonzero reference amplitude. The ratio for a mask within the cycle space is
 \begin{equation}
- \frac{a_\beta(r\oplus u)}{a_\beta(r)}
+ \frac{\alpha_\beta(y\oplus d)}{\alpha_\beta(y)}
  =
- \left[-i\tan\!\left(\frac{t_\beta}{2}\right)\right]^{|r\oplus u|-|r|}.
+ \left[-i\tan\!\left(\frac{t_\beta}{2}\right)\right]^{|y\oplus d|-|y|}.
 \end{equation}
-Masks outside the cycle space give zero ratio. At $\beta=0$, the reference state is $\ket{0}^{\otimes16}$, so the ratio equals one for $m=0$ and zero otherwise. We evaluate ratios only at sampled configurations with nonzero reference amplitude. This procedure provides classical sampling and amplitude-ratio access without enumerating the full sixteen-qubit distribution.
+Masks outside the cycle space give zero ratio. At $\beta=0$, the reference state is $\ket{0}^{\otimes16}$, so the ratio equals one for $a=0$ and zero otherwise. We evaluate ratios only at sampled configurations with nonzero reference amplitude. This procedure provides classical sampling and amplitude-ratio access without enumerating the full sixteen-qubit distribution.
 
 \subsection{Switching symmetry}
 
-For every switching mask $g\in G$, the relation $Bg=0$ gives
+For every switching mask $h\in\mathcal S$, the relation $C^{\mathsf T}h=0$ gives
 \begin{equation}
- g^{\mathsf T}B^{\mathsf T}r=(Bg)^{\mathsf T}r=0.
+ h^{\mathsf T}Cy=(C^{\mathsf T}h)^{\mathsf T}y=0.
 \end{equation}
-Every reference configuration therefore has even parity on the edges selected by $g$. Consequently,
+Every reference configuration therefore has even parity on the edges selected by $h$. Consequently,
 \begin{equation}
- Z_g\ket{\psi_\beta}=\ket{\psi_\beta},
+ Z_h\ket{\psi_\beta}=\ket{\psi_\beta},
  \qquad
- X_g\ket{\phi_\beta}=\ket{\phi_\beta}.
+ X_h\ket{\phi_\beta}=\ket{\phi_\beta}.
 \end{equation}
-The IQP unitary commutes with $X_g$, so applying it preserves this eigenvalue. The output amplitudes at $x$ and $x\oplus g$ are therefore equal, giving
+The IQP unitary commutes with $X_h$, so applying it preserves this eigenvalue. The output amplitudes at $x$ and $x\oplus h$ are therefore equal, giving
 \begin{equation}
  q_{\boldsymbol\theta}(x\mid\beta)
  =
- q_{\boldsymbol\theta}(x\oplus g\mid\beta),
- \qquad g\in G.
+ q_{\boldsymbol\theta}(x\oplus h\mid\beta),
+ \qquad h\in\mathcal S.
 \end{equation}
 This equality holds for every condition and IQP parameter vector. The encoder thus enforces the six independent vertex-switching symmetries, independently of training accuracy.

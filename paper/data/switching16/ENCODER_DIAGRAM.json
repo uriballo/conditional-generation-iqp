@@ -1,13 +1,13 @@
 {
-  "source_sha256": "4ba9465d0536aa5ac8134836c6efcc8206b920dd50d44bb321b61b8852e5c659",
+  "source_sha256": "0fa45a2d0254273ff523c222190f26e0055e2809b51f4acf37241ebb625f0232",
   "motif_operations": {
     "RX": 1,
     "CNOT": 2,
     "Hadamard": 3
   },
   "motif_outputs": [
-    "paper/figures/triangle_motif_draft.pdf",
-    "paper/figures/triangle_motif_draft.png"
+    "paper/figures/triangle_motif.pdf",
+    "paper/figures/triangle_motif.png"
   ],
   "motif_output_sha256": {
     "pdf": "028c4c7eccd7b75956dd3d679eb61fb303df73cd0963ab5fa9bb60584cffee6d",

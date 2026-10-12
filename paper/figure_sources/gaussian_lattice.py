@@ -146,68 +146,52 @@ def lattice_heatmaps(a, out):
 
 
 def lattice_response(a, out):
-    labels = ["Axis training", "Grid training"]
-    for name, values, ylabel in (
-        ("mean_response", a["model_mean"], "Mean Hamming weight"),
-        ("width_response", a["model_sd"], "Standard deviation of $K$"),
-    ):
+    """Mean and width slices for one training design, mean +/- sample SD."""
+    for protocol, stem in ((1, "axes"), (0, "grid")):
         fig, axes = plt.subplots(
-            2,
-            3,
-            figsize=(170 * MM, 105 * MM),
-            layout="constrained",
-            sharex=True,
-            sharey=True,
+            2, 3, figsize=(170 * MM, 105 * MM), layout="constrained", sharey="row"
         )
-        for p, label in enumerate(labels):
+        rows = (
+            ("model_mean", "target_mean", "u_axis", 8, "Mean Hamming weight",
+             "Mean condition $u$", "v"),
+            ("model_sd", "target_sd", "v_axis", 2, "Standard deviation of $K$",
+             "Width condition $v$", "u"),
+        )
+        for r, (key, target_key, x_key, encoder, ylabel, xlabel, fixed_name) in (
+            enumerate(rows)
+        ):
             for j, fixed in enumerate([-1, 0, 1]):
-                ax = axes[p, j]
-                data = values[1 - p, :, j]
+                ax = axes[r, j]
+                data = a[key][protocol, :, j]
+                mean = data.mean(axis=0)
+                sd = data.std(axis=0, ddof=1)
+                first = r == j == 0
                 ax.plot(
-                    a["u_axis" if name == "mean_response" else "v_axis"],
-                    np.median(data, axis=0),
-                    color=OKABE[0],
-                    label="Five-fit median" if p == j == 0 else None,
+                    a[x_key], mean, color=OKABE[0],
+                    label="Model mean" if first else None,
                 )
                 ax.fill_between(
-                    a["u_axis" if name == "mean_response" else "v_axis"],
-                    np.quantile(data, 0.25, axis=0),
-                    np.quantile(data, 0.75, axis=0),
-                    color=OKABE[0],
-                    alpha=0.18,
-                    linewidth=0,
+                    a[x_key], mean - sd, mean + sd,
+                    color=OKABE[0], alpha=0.18, linewidth=0,
                 )
-                target = a["target_mean" if name == "mean_response" else "target_sd"][j]
                 ax.plot(
-                    a["u_axis" if name == "mean_response" else "v_axis"],
-                    target,
-                    "k--",
-                    label="Exact target" if p == j == 0 else None,
+                    a[x_key], a[target_key][j], "k--",
+                    label="Exact target" if first else None,
                 )
                 ax.axhline(
-                    8 if name == "mean_response" else 2,
-                    color="0.5",
-                    ls=":",
-                    label="Encoder-only" if p == j == 0 else None,
+                    encoder, color="0.5", ls=":",
+                    label="Encoder only" if first else None,
                 )
-                ax.set_title(
-                    rf"$v={fixed}$" if name == "mean_response" else rf"$u={fixed}$"
-                )
+                ax.set_title(rf"${fixed_name}={fixed}$")
+                ax.set_xlabel(xlabel)
                 if j == 0:
-                    ax.set_ylabel(f"{label}\n{ylabel}")
-                if p == 1:
-                    ax.set_xlabel(
-                        "Mean condition $u$"
-                        if name == "mean_response"
-                        else "Width condition $v$"
-                    )
+                    ax.set_ylabel(ylabel)
         fig.legend(
             *axes[0, 0].get_legend_handles_labels(),
-            loc="upper center",
-            bbox_to_anchor=(0.5, 0.02),
+            loc="outside lower center",
             ncol=3,
         )
-        save(fig, out, f"gaussian2d_lattice_{name}")
+        save(fig, out, f"gaussian2d_lattice_{stem}_response")
 
 
 def translation(a, out):
@@ -237,10 +221,11 @@ def translation(a, out):
     fig.legend(
         handles=condition_handles, loc="outside upper center", ncol=4, fontsize=9
     )
-    mean = np.median(a["translation_response"], axis=0)
-    lo, hi = np.quantile(a["translation_response"], [0.25, 0.75], axis=0)
+    mean = a["translation_response"].mean(axis=0)
+    sd = a["translation_response"].std(axis=0, ddof=1)
+    lo, hi = mean - sd, mean + sd
     axes[1].plot(
-        a["translation_reporting_c"], mean, color=OKABE[0], label="Five-fit median"
+        a["translation_reporting_c"], mean, color=OKABE[0], label="Five-fit mean"
     )
     axes[1].fill_between(
         a["translation_reporting_c"], lo, hi, color=OKABE[0], alpha=0.18
@@ -267,7 +252,7 @@ def translation(a, out):
         label="Fixed baseline",
     )
     axes[1].set(
-        xlabel="Translation condition $c$",
+        xlabel="Condition $c$",
         ylabel="Mean Hamming weight",
         title="(b) Mean response",
     )
@@ -275,7 +260,9 @@ def translation(a, out):
         plt.Line2D([], [], color="0.25", label="Model"),
         plt.Line2D([], [], color="0.25", ls="--", label="Target"),
         plt.Line2D([], [], color="0.5", ls=":", label="Encoder only"),
-        plt.Line2D([], [], color="0.35", marker="+", ls="", label="Fitting conditions"),
+        plt.Line2D(
+            [], [], color="0.35", marker="+", ls="", label="Training conditions"
+        ),
         plt.Line2D(
             [], [], color="0.2", marker="o", mfc="white", ls="", label="Fixed center"
         ),
@@ -290,39 +277,29 @@ def tables(summary, out):
     """Recompute manuscript errors from per-condition, per-fit evidence."""
     results = summary["results"]
 
-    def value(design, key, median=False):
+    def value(design, key):
         entries = np.asarray(
             [np.mean(row["selected"][key]) for row in results[design]["fits"]]
         )
-        if median:
-            return rf"${np.median(entries):.4f}$"
         return rf"${entries.mean():.4f}\pm{entries.std(ddof=1):.4f}$"
-
-    def quartile_value(design, key):
-        entries = np.asarray(
-            [np.mean(row["selected"][key]) for row in results[design]["fits"]]
-        )
-        median = np.median(entries)
-        lower, upper = np.quantile(entries, [0.25, 0.75])
-        return rf"\shortstack{{${median:.4f}$\\$[{lower:.4f},{upper:.4f}]$}}"
 
     translation_tex = r"""\begin{table}[!htbp]
 \centering
 \small
 """ + (
         r"\caption{Exact full-distribution and profile TVDs for conditional generation "
-        r"of binomial distributions. Entries report the median across five independent "
-        r"fits of the mean error over eighty reporting conditions; "
-        r"brackets give the 25th--75th percentiles across fits. Lower is better.}" "\n"
+        r"of binomial distributions. Entries report the mean error over eighty test "
+        r"conditions, given as the mean and sample standard deviation across five "
+        r"independent fits. Lower is better.}" "\n"
         r"\label{tab:gaussian_tvd}" "\n"
         r"\begin{tabular}{lcc}\toprule" "\n"
         r"Model & Full TVD & Profile TVD\\\midrule" "\n"
     )
     translation_tex += (
         "Conditional IQP & "
-        + quartile_value("translation", "full_tvd")
+        + value("translation", "full_tvd")
         + " & "
-        + quartile_value("translation", "profile_tvd")
+        + value("translation", "profile_tvd")
         + r"\\"
         + "\n"
     )
@@ -337,11 +314,10 @@ def tables(summary, out):
     )
     (out / "gaussian_tvd.tex").write_text(translation_tex)
     lattice_tex = r"""\begin{table*}[!t]
-\caption{Two-coordinate reporting errors.
+\caption{Two-coordinate test errors.
 Values are means and sample standard deviations of per-fit mean errors
-across five independent fits. Full TVD is the primary metric and selects
-checkpoints on separate development conditions. The two fitting geometries
-have different reporting sets, so columns do not form a paired accuracy
+across five independent fits. The two training designs
+have different test sets, so the columns do not form a paired accuracy
 comparison. Lower is better.}
 \label{tab:gaussian-two-dimensional}
 \centering
@@ -393,7 +369,7 @@ def main(argv=None):
         "diagnostics_sha256": digest,
         "renderer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "aggregation": (
-            "five final fits: median and IQR for responses; "
+            "five final fits: mean and sample SD for responses; "
             "mean across fits for heatmaps"
         ),
         "center_baseline": (
@@ -404,7 +380,7 @@ def main(argv=None):
         "heatmap_interpretation": (
             "single axis-training heatmap with fitting conditions and training hull"
         ),
-        "uncertainty": "IQR across five final fits only",
+        "uncertainty": "sample SD across five final fits only",
         "protocols": ["grid", "axes"],
         "translation_profile_indices": [0, 26, 53, 79],
         "translation_profile_conditions": a["translation_profile_c"].tolist(),
@@ -426,10 +402,10 @@ def main(argv=None):
             "gaussian_translation_profiles.png",
             "gaussian2d_lattice_heatmaps.pdf",
             "gaussian2d_lattice_heatmaps.png",
-            "gaussian2d_lattice_mean_response.pdf",
-            "gaussian2d_lattice_mean_response.png",
-            "gaussian2d_lattice_width_response.pdf",
-            "gaussian2d_lattice_width_response.png",
+            "gaussian2d_lattice_axes_response.pdf",
+            "gaussian2d_lattice_axes_response.png",
+            "gaussian2d_lattice_grid_response.pdf",
+            "gaussian2d_lattice_grid_response.png",
             "gaussian_tvd.tex",
             "gaussian2d_lattice_tvd.tex",
             "gaussian_lattice_provenance.json",
