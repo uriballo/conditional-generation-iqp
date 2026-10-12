@@ -620,30 +620,24 @@ The encoded amplitudes depend only on Hamming weight, and the reference state $H
 
 We retain the same IQP unitary architecture as in the binomial benchmark, with forty independent parameters on a $4\times4$ lattice. This unitary may not preserve the permutation symmetry of the target distribution, so we evaluate accuracy using full-distribution TVD as well as Hamming-weight profile TVD.
 
-We first train the model using conditions on the two coordinate axes, which we refer to as axis training. These conditions have the form $(u,0)$ or $(0,v)$, so only one coordinate varies at a time. We use nine distinct training conditions, including the origin. Their convex hull is the diamond-shaped region $|u|+|v|\leq1$.
+We train the model using conditions on the two coordinate axes, which we refer to as axis training. These conditions have the form $(u,0)$ or $(0,v)$, so only one coordinate varies at a time. We use nine distinct training conditions, including the origin. Their convex hull is the diamond-shaped region $|u|+|v|\leq1$.
 
-We select hyperparameters and checkpoints using additional conditions restricted to the same axes. Thus, neither training nor model selection uses mixed conditions, defined here as pairs with both $u\neq0$ and $v\neq0$. We evaluate the selected models at sixteen mixed pairs. Each individual coordinate value appears in the training set, but their combinations do not. Four evaluation pairs lie inside the training convex hull and twelve lie outside it, allowing us to test generalization beyond the joint training region while remaining within the observed range of each coordinate.
+We select hyperparameters and checkpoints using additional conditions restricted to the same axes. Thus, neither training nor model selection uses mixed conditions, defined here as pairs with both $u\neq0$ and $v\neq0$. We evaluate the selected models at sixteen mixed pairs. Each individual coordinate value appears in the training set, but their combinations do not. Four evaluation pairs lie inside the training convex hull and twelve lie outside it. This tests the learned joint response at combinations absent from training and model selection, while remaining within the observed range of each coordinate.
 
-As a complementary experiment, we train on the nine conditions in the grid $\{-1,0,1\}^2$, which we refer to as grid training. Unlike axis training, this design includes conditions where both coordinates are nonzero. We evaluate interpolation at thirty-two additional pairs within the grid's square convex hull.
+We perform five independent final fits. Selection uses exact full-distribution TVD at the axis-only development conditions. Appendix~\ref{sec:gaussian-two-dimensional-protocol} specifies the search and evaluation protocol and reports a complementary grid-training experiment.
 
-For each training design, we perform five independent final fits. We select hyperparameters and checkpoints using exact full-distribution TVD on the corresponding development conditions. Appendix~\ref{sec:gaussian-two-dimensional-protocol} specifies the condition sets, hyperparameter search and evaluation protocol.
-
-\begin{figure*}[!t]
+\begin{figure}[!t]
  \centering
  \includegraphics[width=\linewidth]{figures/gaussian2d_lattice_heatmaps.pdf}
- \caption{Two-coordinate conditional generation with (a) axis training and (b) grid training. Colors show the mean full-distribution TVD across five independent fits on a $41\times41$ grid. Gray crosses mark training conditions, and dashed lines show their convex hulls. The open circle marks the uniform target and model distribution fixed by construction at $(u,v)=(0,0)$. Both panels share the same color scale. The displayed grid includes training and development conditions; the quantitative evaluation uses separate held-out conditions.}
+ \caption{Joint conditional generation after axis-only training. Colors show the mean full-distribution TVD across five independent fits on a $41\times41$ diagnostic grid. Gray crosses mark training conditions, and the dashed diamond marks their convex hull. The open circle at $(u,v)=(0,0)$ marks the uniform target and model distribution fixed by construction. The diagnostic grid includes training and development conditions; quantitative reporting uses sixteen separate mixed conditions excluded from training and model selection.}
  \label{fig:gaussian-two-dimensional}
-\end{figure*}
+\end{figure}
 
-\input{tables/gaussian2d_lattice_tvd.tex}
-
-After axis training, the model approximates the target distributions at joint conditions excluded from both training and model selection. We first average full-distribution TVD over the evaluation conditions within each fit, then report the mean and sample standard deviation across five fits. The sixteen mixed pairs give a TVD of $0.0468\pm0.0143$. The four pairs inside the training convex hull give $0.0185\pm0.0060$, while the twelve outside give $0.0563\pm0.0171$. Thus, the model generates the joint conditional response beyond the training convex hull, although errors are larger outside it.
-
-Grid training gives a full-distribution TVD of $0.0397\pm0.0093$ over thirty-two held-out pairs. Table~\ref{tab:gaussian-two-dimensional} summarizes full-distribution and Hamming-weight profile errors for both training designs. Because the designs use different evaluation sets, these averages do not provide a direct comparison of their accuracy.
+After axis training, the model approximates the target distributions at joint conditions excluded from both training and model selection. We first average full-distribution TVD over the evaluation conditions within each fit, then report the mean and sample standard deviation across five fits. The sixteen mixed pairs give a TVD of $0.0468\pm0.0143$. The four pairs inside the training convex hull give $0.0185\pm0.0060$, while the twelve outside give $0.0563\pm0.0171$. The model therefore approximates joint target distributions beyond the training convex hull. The higher error outside the hull does not by itself isolate an extrapolation penalty, because the target conditions also differ between the two subsets.
 
 The mean and width responses clarify what the models learn. Figure~\ref{fig:gaussian-phase-mean} shows that the model mean closely follows the target across the tested widths. Figure~\ref{fig:gaussian-phase-width} shows that the model also captures the increase in width with $v$, although it tends to overestimate the narrowest target distributions. These results support joint conditional control of the mean and width, including at combinations absent from training.
 
-These experiments test a shared transformation across a task-informed family. They demonstrate responses at combinations absent from fitting and development selection, but do not establish that the lattice is necessary or that the selected encoder generalizes to unrelated families. The condition sets and phase features were explored during earlier design, and exact development targets contribute to selection. We therefore interpret the results as conditional capability within the studied domain.
+This experiment tests a shared transformation across a smooth, task-informed family. It demonstrates responses at combinations absent from fitting and development selection, but do not establish that the lattice is necessary or that the selected encoder generalizes to unrelated families. The condition sets and phase features were explored during earlier design, and exact development targets contribute to selection. We therefore interpret the results as conditional capability within the studied domain.
 
 \subsection{Curie--Weiss spin model}
 \label{sec:cw_main}
@@ -798,7 +792,7 @@ The Curie--Weiss encoder is a special case with $Cu=(u,\bigoplus_\ell u_\ell)$. 
 
 Our framework separates condition encoding from the shared unitary learned across a family of distributions. Classical estimation of the training objective and its gradients requires efficient sampling and amplitude-ratio evaluation for the reference state, rather than an encoder restricted to IQP form. This distinction allows us to use input-state design both to encode conditions and to impose exact output symmetries while retaining classical training.
 
-The binomial benchmark validates learning the dependence of a target distribution on a single condition, while its two-coordinate extension tests learning a joint conditional response. In particular, axis training exposes the model to each coordinate separately, yet the model approximates target distributions at combinations excluded from training and model selection, including outside the training convex hull. Errors are larger outside this hull. These results support conditional generation within the studied family, using a task-informed encoder and exact development distributions for model selection; they do not establish generalization to unrelated distribution families.
+The binomial benchmark validates learning the dependence of a target distribution on a single condition, while its two-coordinate extension tests learning a joint conditional response. In particular, axis training exposes the model to each coordinate separately, yet the model approximates target distributions at combinations excluded from training and model selection, including outside the training convex hull. Errors are larger outside this hull, although this comparison does not isolate the effect of extrapolation from variation in target difficulty. These results support conditional generation within the studied family, using a task-informed encoder and exact development distributions for model selection; they do not establish generalization to unrelated distribution families.
 
 The Curie--Weiss experiment distinguishes the conditional response learned by the model from the symmetry imposed by its encoder. The shared IQP unitary captures the temperature-dependent change from a central magnetization peak to two separated peaks, including at temperatures excluded from training and model selection. The parity encoder guarantees global spin-flip symmetry for every parameter vector, but this guarantee alone does not ensure accurate probabilities or physical observables. The parity encoder gives lower full-distribution errors than the product encoder under the tested protocol, although this comparison changes both input correlations and phase generators and does not isolate the effect of symmetry. Comparisons with temperature-specific IQP models depend on temperature and metric; neither approach is consistently more accurate. The temperature-specific models use separate parameter sets and a larger total optimizer-update budget in this comparison.
 
@@ -1169,7 +1163,13 @@ For each run, we report the selected initialization's trajectory at update $0$ a
 
 \subsection{Training, development and reporting conditions}
 
-We use the binomial-centered target family in Eq.~\eqref{eq:gaussian-two-dimensional-target} and the phase encoder in Eq.~\eqref{eq:gaussian-two-dimensional-input}. Training conditions determine the sampled MMD objective, development conditions select hyperparameters and checkpoints, and reporting conditions assess the selected models. Grid training tests generation at new conditions within the square training convex hull $[-1,1]^2$. Axis training tests new combinations of the two coordinates, both inside and outside the training convex hull $|u|+|v|\leq1$.
+We use the binomial-centered target family in Eq.~\eqref{eq:gaussian-two-dimensional-target} and the phase encoder in Eq.~\eqref{eq:gaussian-two-dimensional-input}. Training conditions determine the sampled MMD objective, development conditions select hyperparameters and checkpoints, and reporting conditions assess the selected models. Axis training, presented in the main text, tests new combinations of the two coordinates, both inside and outside the training convex hull $|u|+|v|\leq1$. As a complementary experiment, grid training tests generation at new conditions within the square training convex hull $[-1,1]^2$.
+
+Axis training uses $(u,0)$ at $u\in\{-1,-0.37,0,0.37,1\}$ and $(0,v)$ at $v\in\{-1,-0.31,0.31,1\}$. Development uses $(u,0)$ at $u\in\{-0.73,-0.17,0.17,0.73\}$ and $(0,v)$ at $v\in\{-0.69,-0.13,0.13,0.69\}$. Reporting uses sixteen mixed pairs,
+\[
+ \{-1,-0.37,0.37,1\}\times\{-1,-0.31,0.31,1\}.
+\]
+Four lie inside the training convex hull $|u|+|v|\leq1$, and twelve lie outside. Each individual coordinate value appears in training, but no mixed reporting pair appears in training or development. Earlier exploratory work examined these condition sets, so the benchmark assesses the fitted models within an already studied domain.
 
 Grid training uses $\{-1,0,1\}^2$, with development conditions
 \[
@@ -1181,12 +1181,6 @@ The reporting grid is
  v&\in\{-1,-0.79,-0.31,0.23,0.67,1\}.
 \end{align*}
 We exclude its four training corners, leaving thirty-two reporting pairs.
-
-Axis training uses $(u,0)$ at $u\in\{-1,-0.37,0,0.37,1\}$ and $(0,v)$ at $v\in\{-1,-0.31,0.31,1\}$. Development uses $(u,0)$ at $u\in\{-0.73,-0.17,0.17,0.73\}$ and $(0,v)$ at $v\in\{-0.69,-0.13,0.13,0.69\}$. Reporting uses sixteen mixed pairs,
-\[
- \{-1,-0.37,0.37,1\}\times\{-1,-0.31,0.31,1\}.
-\]
-Four lie inside the training convex hull $|u|+|v|\leq1$, and twelve lie outside. Each individual coordinate value appears in training, but no mixed reporting pair appears in training or development. Earlier exploratory work examined these condition sets, so the benchmark assesses the fitted models within an already studied domain.
 
 \subsection{Sampled training and exact development selection}
 
@@ -1237,6 +1231,10 @@ applying $\operatorname{IsingZZ}_{ij}(v/40)=e^{-ivZ_iZ_j/80}$ to every pair impl
 \subsection{Full-distribution evaluation and response diagnostics}
 
 The reference state is permutation symmetric, but the independently parameterized lattice generally breaks this symmetry. We therefore compute all $2^{16}$ output probabilities for evaluation and use full-distribution TVD as the primary accuracy metric. Hamming-weight profile TVD may hide errors within shells. These exact calculations provide small-system diagnostics alongside the sampled MMD used for training.
+
+\input{tables/gaussian2d_lattice_tvd.tex}
+
+Table~\ref{tab:gaussian-two-dimensional} reports the axis-training results and the complementary grid-training results. Grid training gives a selected full-distribution TVD of $0.0397\pm0.0093$ over thirty-two held-out pairs. The two designs have similar error patterns on the common $41\times41$ diagnostic grid. Their condition-averaged mean TVDs are $0.0337$ for axis training and $0.0318$ for grid training. These sweep averages include training and development conditions and are not held-out reporting scores. The small difference gives limited evidence of an additional benefit from joint training conditions in this family; we do not interpret it as evidence that extrapolation has no cost.
 
 We average reporting errors over conditions within each fit, then report means and sample standard deviations across five fits. The two training designs use different reporting sets, so their average errors do not provide a direct comparison of accuracy. At the final update, the mean full-distribution TVDs are $0.0489\pm0.0137$ for axis training and $0.0412\pm0.0087$ for grid training. We report these values separately from the development-selected results.
 

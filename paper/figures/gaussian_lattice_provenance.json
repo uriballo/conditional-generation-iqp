@@ -1,10 +1,12 @@
 {
   "summary_sha256": "beb40d6052c0fa8d94e2dafbb47eaacaf814143d7a96c65af5519e536bdd366e",
   "diagnostics_sha256": "a102dbed56531b305b1e096cd46343b1011352f6a1fedf908d6729481e651748",
-  "renderer_sha256": "653cf2998d34619312ff414aa436bf8172dfcc43dc1e8950e76a0d0bbbbab5ae",
+  "renderer_sha256": "3c4541b1552402a3671d478b78495c40d7d967ce3eff613f77c942e829396805",
   "aggregation": "five final fits: median and IQR for responses; mean across fits for heatmaps",
   "center_baseline": "fixed encoder-only baseline at central condition, marked as an open circle",
   "smoothing": "none",
+  "heatmap_protocol": "axes",
+  "heatmap_interpretation": "single axis-training heatmap with fitting conditions and training hull",
   "uncertainty": "IQR across five final fits only",
   "protocols": [
     "grid",

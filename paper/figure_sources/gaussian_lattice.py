@@ -102,75 +102,46 @@ def save(fig, out: Path, stem: str):
 
 
 def lattice_heatmaps(a, out):
-    values = a["grid_tvd"].mean(axis=1)
+    values = a["grid_tvd"][1].mean(axis=0)
     vmax = float(np.ceil(values.max() * 100) / 100)
     vmax = max(vmax, 1e-12)
-    fig, axes = plt.subplots(
-        1,
-        2,
-        figsize=(170 * MM, 72 * MM),
-        layout="constrained",
-        sharex=True,
-        sharey=True,
+    fig, ax = plt.subplots(figsize=(85 * MM, 90 * MM), layout="constrained")
+    image = ax.imshow(
+        values,
+        origin="lower",
+        extent=(-1.025, 1.025, -1.025, 1.025),
+        vmin=0,
+        vmax=vmax,
+        cmap=WHITE_BLUES,
+        interpolation="nearest",
+        aspect="equal",
     )
-    for i, (ax, title, points) in enumerate(
-        zip(
-            axes,
-            ("Axis training", "Grid training"),
-            ("fitting_axes", "fitting_grid"),
-            strict=True,
-        )
-    ):
-        image = ax.imshow(
-            values[1 - i],
-            origin="lower",
-            extent=(-1.025, 1.025, -1.025, 1.025),
-            vmin=0,
-            vmax=vmax,
-            cmap=WHITE_BLUES,
-            interpolation="nearest",
-            aspect="auto",
-        )
-        ax.set_title(f"({chr(97 + i)}) {title}", fontsize=9)
-        ax.set_xticks([-1, -0.5, 0, 0.5, 1])
-        ax.set_yticks([-1, -0.5, 0, 0.5, 1])
-        train = a[points]
-        ax.scatter(
-            train[:, 0], train[:, 1], marker="+", color="0.35", s=35, linewidths=1
-        )
-        hull = (
-            np.array([[-1, -1], [1, -1], [1, 1], [-1, 1], [-1, -1]])
-            if i
-            else np.array([[-1, 0], [0, 1], [1, 0], [0, -1], [-1, 0]])
-        )
-        ax.plot(hull[:, 0], hull[:, 1], "--", color="0.4", lw=1)
-        ax.scatter(
-            [0],
-            [0],
-            facecolors="white",
-            edgecolors="0.2",
-            s=34,
-            zorder=4,
-            label="Fixed baseline" if i == 0 else None,
-        )
-    axes[0].set_ylabel("Width condition $v$")
-    axes[0].scatter([], [], marker="+", color="0.35", s=35, linewidths=1,
-                    label="Training points")
-    axes[0].plot([], [], "--", color="0.4", lw=1, label="Training convex hull")
-    fig.colorbar(image, ax=axes, label="Mean full TVD", shrink=0.85,
-                 ticks=np.linspace(0, vmax, 5))
-    fig.canvas.draw()
-    left = axes[0].get_position()
-    right = axes[1].get_position()
-    fig.text(
-        (left.x0 + right.x1) / 2,
-        min(left.y0, right.y0) - 0.08,
-        "Mean condition $u$",
-        ha="center",
-        va="top",
+    ax.set_title("Axis training", fontsize=9)
+    ax.set_xlabel("Mean condition $u$")
+    ax.set_ylabel("Width condition $v$")
+    ax.set_xticks([-1, -0.5, 0, 0.5, 1])
+    ax.set_yticks([-1, -0.5, 0, 0.5, 1])
+    train = a["fitting_axes"]
+    ax.scatter(
+        train[:, 0], train[:, 1], marker="+", color="0.35", s=35,
+        linewidths=1, label="Training"
     )
-    fig.legend(loc="upper center", bbox_to_anchor=(0.5, -0.08), ncol=2,
-               columnspacing=1.2, handletextpad=0.5)
+    hull = np.array([[-1, 0], [0, 1], [1, 0], [0, -1], [-1, 0]])
+    ax.plot(
+        hull[:, 0], hull[:, 1], "--", color="0.4", lw=1,
+        label="Training hull",
+    )
+    ax.scatter(
+        [0], [0], facecolors="white", edgecolors="0.2", s=34, zorder=4,
+        label="Fixed origin"
+    )
+    fig.colorbar(
+        image, ax=ax, label="Mean full TVD", shrink=0.68, ticks=np.linspace(0, vmax, 5)
+    )
+    fig.legend(
+        loc="outside lower center", ncol=3, fontsize=8,
+        columnspacing=1.0, handletextpad=0.4
+    )
     save(fig, out, "gaussian2d_lattice_heatmaps")
 
 
@@ -429,6 +400,10 @@ def main(argv=None):
             "fixed encoder-only baseline at central condition, marked as an open circle"
         ),
         "smoothing": "none",
+        "heatmap_protocol": "axes",
+        "heatmap_interpretation": (
+            "single axis-training heatmap with fitting conditions and training hull"
+        ),
         "uncertainty": "IQR across five final fits only",
         "protocols": ["grid", "axes"],
         "translation_profile_indices": [0, 26, 53, 79],
