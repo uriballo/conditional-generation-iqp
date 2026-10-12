@@ -45,12 +45,12 @@ def test_historical_curie_data_retains_five_seed_results():
 def test_scaling_endpoint_metrics():
     p = json.loads((DATA / "scaling/figure_data.json").read_text())
     for n, initial, final in [
-        (64, 0.04192022992567725, 0.003793493720688655),
-        (2048, 0.04202849501756168, 0.00708035039603097),
+        (64, 0.04196081375980846, 0.0037961226994757263),
+        (2048, 0.04211275276693388, 0.007095791018538678),
     ]:
         values = np.asarray(p["curves"][str(n)]["held_out"]["overall_per_seed"])
         np.testing.assert_allclose(
-            np.median(values, axis=0)[[0, -1]], [initial, final], atol=5e-5
+            values.mean(axis=0)[[0, -1]], [initial, final], atol=5e-5
         )
 
 
@@ -60,8 +60,8 @@ def test_all_numerical_figures_render(tmp_path):
         "gaussian_translation_profiles.pdf",
         "curie_weiss_lattice_scaling_mmd.pdf",
         "gaussian2d_lattice_heatmaps.pdf",
-        "gaussian2d_lattice_mean_response.pdf",
-        "gaussian2d_lattice_width_response.pdf",
+        "gaussian2d_lattice_axes_response.pdf",
+        "gaussian2d_lattice_grid_response.pdf",
         "curie_weiss_model_comparison.pdf",
         "curie_weiss_physical_response.pdf",
         "curie_weiss_product_ablation.pdf",

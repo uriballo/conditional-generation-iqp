@@ -1,11 +1,11 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{Comparison of conditional IQP with the parity encoder and shared product-input IQP. The three temperature columns report exact full-distribution TVD. The aggregate scores $J=R_G(\mathrm{TVD})$ and $P=[R_G(e_m)+R_G(e_c)]/2$ use the same $101$-point reporting grid $G$, with $R_G$ defined in the hyperparameter-optimization protocol. Values are means $\pm$ sample standard deviations over ten fresh final repetitions. Lower values indicate smaller errors. The comparison changes input correlations and encoder phase generators as well as enforced spin-flip symmetry.}
+\caption{Comparison of conditional IQP with the parity encoder and shared product-input IQP. The three temperature columns report exact full-distribution TVD. The aggregate scores $E_{\mathrm{TVD}}$ and $E_{\mathrm{phys}}$, defined in the hyperparameter-optimization protocol, use the $101$-point test grid. Values are means $\pm$ sample standard deviations over ten independent fits. Lower values indicate smaller errors.}
 \label{tab:cw_product_ablation}
 \begin{tabular}{lrrrrr}
 \toprule
-Model & $\beta=0.4$ & $\beta=1$ & $\beta=2$ & $J$ & $P$ \\
+Model & $\beta=0.4$ & $\beta=1$ & $\beta=2$ & $E_{\mathrm{TVD}}$ & $E_{\mathrm{phys}}$ \\
 \midrule
 Conditional IQP & $0.1185\pm0.0107$ & $0.1396\pm0.0048$ & $0.0832\pm0.0103$ & $0.1281\pm0.0027$ & $0.0865\pm0.0088$ \\
 Shared product-input IQP & $0.1576\pm0.0079$ & $0.2242\pm0.0113$ & $0.1104\pm0.0169$ & $0.2051\pm0.0088$ & $0.1393\pm0.0107$ \\

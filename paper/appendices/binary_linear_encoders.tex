@@ -1,23 +1,23 @@
 \section{Binary-linear conditional encoders}
 \label{app:binary-linear-encoders}
 
-We use the construction in Section~\ref{sec:input-symmetry}, with a full-column-rank matrix $C\in\mathbb F_2^{n\times k}$ and normalized factor amplitudes $f_\ell(0;c)$ and $f_\ell(1;c)$. All matrix operations below are over $\mathbb F_2$. Since $C$ is injective, distinct latent strings $u$ give orthogonal computational-basis states $\ket{Cu}$. The reference-state norm therefore satisfies
+We use the binary-linear construction in Section~\ref{sec:input-symmetry}, with a full-column-rank matrix $C\in\mathbb F_2^{n\times k}$ and normalized factor amplitudes $f_\ell(0;c)$ and $f_\ell(1;c)$. All matrix operations below are over $\mathbb F_2$. Since $C$ is injective, distinct latent strings $y$ give orthogonal computational-basis states $\ket{Cy}$. The reference-state norm therefore satisfies
 \begin{equation}
 \begin{aligned}
  \langle\psi_c|\psi_c\rangle
- &=\sum_{u\in\mathbb F_2^k}
-   \prod_{\ell=1}^{k}|f_\ell(u_\ell;c)|^2\\
+ &=\sum_{y\in\mathbb F_2^k}
+   \prod_{\ell=1}^{k}|f_\ell(y_\ell;c)|^2\\
  &=\prod_{\ell=1}^{k}
    \left(|f_\ell(0;c)|^2+|f_\ell(1;c)|^2\right)=1.
 \end{aligned}
 \end{equation}
-The probability of a reference configuration $Cu$ is $\prod_\ell|f_\ell(u_\ell;c)|^2$. We can therefore sample the reference state by drawing the latent bits independently and returning $Cu$.
+The probability of a reference configuration $Cy$ is $\prod_\ell|f_\ell(y_\ell;c)|^2$. We can therefore sample the reference state by drawing the latent bits independently and returning $Cy$.
 
-For amplitude-ratio evaluation, we precompute a left inverse $L\in\mathbb F_2^{k\times n}$ satisfying $LC=I_k$. Given a reference sample $z$, we recover its latent coordinates as $u=Lz$. For a mask $a$, we compute $d=La$ and test whether $Cd=a$. If the test fails, $a\notin\operatorname{im}C$, so $z\oplus a$ lies outside the reference support and the amplitude ratio is zero. If the test succeeds, $z\oplus a=C(u\oplus d)$, and Eq.~\eqref{eq:binary-linear-ratio} gives the ratio as a product of factor ratios. Sampled configurations have nonzero amplitude, so the denominators are nonzero. Binary matrix-vector products require $O(nk)$ operations, while latent sampling and factor-ratio evaluation require $O(k)$ operations. Including the output bitstrings, both reference sampling and ratio evaluation require at most $O(nk+n)$ elementary operations after polynomial preprocessing, assuming bounded arithmetic cost for evaluating the factors and their ratios.
+For amplitude-ratio evaluation, we precompute a left inverse $L\in\mathbb F_2^{k\times n}$ satisfying $LC=I_k$. Given a reference sample $z$, we recover its latent coordinates as $y=Lz$. For a mask $a$, we compute $d=La$ and test whether $Cd=a$. If the test fails, $a\notin\operatorname{im}C$, so $z\oplus a$ lies outside the reference support and the amplitude ratio is zero. If the test succeeds, $z\oplus a=C(y\oplus d)$, and Eq.~\eqref{eq:binary-linear-ratio} gives the ratio as a product of factor ratios. Sampled configurations have nonzero amplitude, so the denominators are nonzero. Binary matrix-vector products require $O(nk)$ operations, while latent sampling and factor-ratio evaluation require $O(k)$ operations. Including the output bitstrings, both reference sampling and ratio evaluation require at most $O(nk+n)$ elementary operations after polynomial preprocessing, assuming bounded arithmetic cost for evaluating the factors and their ratios.
 
 To prepare the reference state, we extend the columns of $C$ to an invertible matrix $M\in\mathbb F_2^{n\times n}$. We prepare the first $k$ qubits in the factor states
 \begin{equation}
  \ket{\alpha_\ell(c)}
  =f_\ell(0;c)\ket0+f_\ell(1;c)\ket1,
 \end{equation}
-and initialize the remaining $n-k$ visible qubits in $\ket0$. A reversible linear circuit implementing $M$ maps each basis state $\ket{u,0^{n-k}}$ to $\ket{Cu}$ and therefore maps the product of the factor states and zero states to $\ket{\psi_c}$. Standard binary elimination implements this map using $O(n^2)$ CNOT gates with unrestricted connectivity and no additional ancillary qubits \cite{patelOptimalSynthesisLinear2008}. We then apply $H^{\otimes n}$ to prepare $\ket{\phi(c)}$. Efficient quantum deployment also requires efficient preparation of the single-qubit factor states.
+and initialize the remaining $n-k$ visible qubits in $\ket0$. A reversible linear circuit implementing $M$ maps each basis state $\ket{y,0^{n-k}}$ to $\ket{Cy}$ and therefore maps the product of the factor states and zero states to $\ket{\psi_c}$. Standard binary elimination implements this map using $O(n^2)$ CNOT gates with unrestricted connectivity and no additional ancillary qubits \cite{patelOptimalSynthesisLinear2008}. We then apply $H^{\otimes n}$ to prepare $\ket{\phi(c)}$. Efficient quantum deployment also requires efficient preparation of the single-qubit factor states.

@@ -55,12 +55,12 @@ def draw(tape, wires, filename, size, position, fontsize):
     fig.set_size_inches(size[0] * MM, size[1] * MM, forward=True)
     ax.set_position(position)
     for text in ax.texts:
-        if filename == "triangle_motif_draft" and text.get_text() in wires:
+        if filename == "triangle_motif" and text.get_text() in wires:
             text.set_visible(False)
         if text.get_text() == "RX":
             text.set_text(r"$R_X$" + "\n" + r"$t_\beta$")
             text.set_fontsize(7)
-    if filename == "triangle_motif_draft":
+    if filename == "triangle_motif":
         for y, wire in zip((0.75, 0.5, 0.25), wires, strict=True):
             ax.text(
                 0.015,
@@ -233,7 +233,7 @@ def main() -> None:
     motif_pdf, motif_png = draw(
         motif,
         ["0i", "0j", "ij"],
-        "triangle_motif_draft",
+        "triangle_motif",
         (85, 60),
         (0.08, 0.18, 0.84, 0.66),
         9,

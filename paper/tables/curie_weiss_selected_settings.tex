@@ -1,18 +1,18 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{Hyperparameter configurations selected by confirmation. Each temperature-specific family's settings apply jointly to three circuits with separate learned phases. Other optimizer and training settings follow the protocol described in this subsection. Displayed continuous values are rounded; machine-readable settings retain full precision.}
+\caption{Hyperparameter configurations selected by confirmation. Each temperature-specific family's settings apply jointly to three circuits with separate learned phases. Other optimizer and training settings follow the protocol described in this subsection. Continuous values are rounded to three significant digits.}
 \label{tab:cw_selected_settings}
 \begin{tabular}{lrrrr}
 \toprule
 Parameter & \shortstack{Conditional IQP} & Shared product-input IQP & \shortstack{Temperature-specific IQP} & \shortstack{Temperature-specific IQP,\\ standard input} \\
 \midrule
-Initial learning rate & 0.00341745 & 0.0300696 & 0.00430287 & 0.0898283 \\
-Width $s_\theta$ (radians) & 0.0221053 & 0.0454769 & 0.0300356 & 0.0326103 \\
-\texttt{Adam} $b_1$ & 0.801879 & 0.826492 & 0.899094 & 0.946166 \\
-\texttt{Adam} $b_2$ & 0.991964 & 0.998983 & 0.96613 & 0.998814 \\
+Initial learning rate & 0.00342 & 0.0301 & 0.00430 & 0.0898 \\
+Width $s_\theta$ (radians) & 0.0221 & 0.0455 & 0.0300 & 0.0326 \\
+\texttt{Adam} $b_1$ & 0.802 & 0.826 & 0.899 & 0.946 \\
+\texttt{Adam} $b_2$ & 0.992 & 0.999 & 0.966 & 0.999 \\
 Schedule & cosine & constant & constant & cosine \\
-Encoder scale $s$ & 0.683987 & 0.657269 & 0.582332 & -- \\
+Encoder scale $\lambda$ & 0.684 & 0.657 & 0.582 & -- \\
 Expected kernel weights & [2, 4, 7.5] & [2, 4, 5] & [2, 7.5, 7.99] & [2, 5, 5.5] \\
 \bottomrule
 \end{tabular}

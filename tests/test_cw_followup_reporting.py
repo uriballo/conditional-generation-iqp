@@ -142,7 +142,7 @@ def test_errors_are_computed_before_repeat_averaging_and_use_markers(tmp_path):
         raw_heat / reporting.C_STAR,
     )
     assert (
-        "ten fresh final repeats" in (tmp_path / "curie_weiss_full_tvd.tex").read_text()
+        "ten independent fits" in (tmp_path / "curie_weiss_full_tvd.tex").read_text()
     )
     assert "0.4" in (tmp_path / "curie_weiss_full_tvd.tex").read_text()
     assert (
