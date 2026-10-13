@@ -25,6 +25,8 @@ from .cw_followup_config import (
 from .cw_followup_metrics import curve_scores, select_checkpoint
 from .parity_encoder import ParityEncoder
 from .phase_encoder import BroadcastPhaseEncoder
+from .reuploaded_parity_encoder import ReuploadedParityEncoder
+from .squeezed_parity_encoder import SqueezedParityEncoder
 from .target import curie_weiss_target
 from .training import make_trainer
 
@@ -59,7 +61,18 @@ def limits(smoke=False):
     return spec["runtime"] if smoke else followup_limits(spec)
 
 
-def encoder(family, betas, scale=0.75, n=16):
+ENCODER_OPTIONS = ("turn", "kappa")
+
+
+def encoder(family, betas, scale=0.75, n=16, **options):
+    if family == "shared_reuploaded_parity":
+        return ReuploadedParityEncoder.from_betas(
+            betas, n, scale=scale, turn=options["turn"]
+        )
+    if family in {"shared_squeezed_parity", "independent_squeezed_parity"}:
+        return SqueezedParityEncoder.from_betas(
+            betas, n, scale=scale, kappa=options["kappa"]
+        )
     if family in {"shared_parity", "independent_parity"}:
         return ParityEncoder.from_betas(betas, n, scale=scale)
     if family == "independent_unconditional":
@@ -102,10 +115,10 @@ def reference_amplitudes(enc):
     return enc.post_hadamard_amplitudes()
 
 
-def exact_probabilities(family, betas, params, scale=0.75, n=16):
+def exact_probabilities(family, betas, params, scale=0.75, n=16, **options):
     rows = []
     for start in range(0, len(betas), 4):
-        enc = encoder(family, betas[start : start + 4], scale, n)
+        enc = encoder(family, betas[start : start + 4], scale, n, **options)
         value = np.asarray(
             _exact_kernel(n)(jnp.asarray(params), reference_amplitudes(enc))
         )
@@ -128,9 +141,9 @@ def _target_arrays(betas, n=16):
     return p, k, np.stack([law.probabilities for law in laws])
 
 
-def evaluate(family, betas, params, scale=0.75, n=16):
+def evaluate(family, betas, params, scale=0.75, n=16, **options):
     betas = tuple(float(b) for b in betas)
-    q = exact_probabilities(family, betas, params, scale, n)
+    q = exact_probabilities(family, betas, params, scale, n, **options)
     p, k, target_shells = _target_arrays(betas, n)
     tvd = np.abs(q - p).sum(1) / 2
     shells = np.stack([np.bincount(k, weights=row, minlength=n + 1) for row in q])
@@ -211,6 +224,7 @@ def run_fit(job, root):
     rng_stage = job.get("seed_stage", stage)
     candidate = job["candidate"]
     scale = candidate.get("beta_scale", 0.75)
+    options = {key: candidate[key] for key in ENCODER_OPTIONS if key in candidate}
     direct = family.startswith("independent_")
     case_beta = float(job["beta"]) if direct else None
     betas = [case_beta] if direct else spec["training"]["shared_anchors"]
@@ -246,9 +260,16 @@ def run_fit(job, root):
         raise ValueError("unknown learning-rate schedule")
     config = RunConfig(
         study="cw_followup",
-        encoder="parity"
-        if "parity" in family
-        else ("unconditional" if direct else "broadcast"),
+        encoder={
+            "shared_reuploaded_parity": "reuploaded_parity",
+            "shared_squeezed_parity": "squeezed_parity",
+            "independent_squeezed_parity": "squeezed_parity",
+        }.get(family)
+        or (
+            "parity"
+            if "parity" in family
+            else ("unconditional" if direct else "broadcast")
+        ),
         n_visible=16,
         n_train=budget["n_train"],
         n_validation=budget["n_train"],
@@ -269,7 +290,7 @@ def run_fit(job, root):
         restarts=budget["starts"][stage],
     )
     model = ciqp.ConditionalModel(
-        ciqp.Ansatz.complete(16), encoder(family, betas, scale)
+        ciqp.Ansatz.complete(16), encoder(family, betas, scale, **options)
     )
     checkpoints, parameters, stream_records, durations = [], [], [], []
     started = time.perf_counter()
@@ -315,7 +336,7 @@ def run_fit(job, root):
             local_records, local_params = [], []
 
             def score(theta, cache=cache):
-                report = evaluate(family, selecting_betas, theta, scale)
+                report = evaluate(family, selecting_betas, theta, scale, **options)
                 metrics = curve_scores(
                     report["tvd"],
                     report["magnetization_error"],
@@ -404,7 +425,9 @@ def run_fit(job, root):
         selected = select_checkpoint(checkpoints)
         index = next(i for i, r in enumerate(checkpoints) if r is selected)
         params = parameters[index]
-        report = evaluate(family, stage_betas(spec, stage, case_beta), params, scale)
+        report = evaluate(
+            family, stage_betas(spec, stage, case_beta), params, scale, **options
+        )
         scores = curve_scores(
             report["tvd"],
             report["magnetization_error"],
@@ -415,7 +438,7 @@ def run_fit(job, root):
         if stage == "final" and not direct:
             write_npz(
                 directory / "markers.npz",
-                **evaluate(family, (0.4, 1.0, 2.0), params, scale),
+                **evaluate(family, (0.4, 1.0, 2.0), params, scale, **options),
             )
         write_npz(
             directory / "parameters.npz",

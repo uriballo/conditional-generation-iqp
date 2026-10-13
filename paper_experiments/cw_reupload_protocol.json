@@ -1,0 +1,32 @@
+{
+  "version": "cw-reupload-hpo-20261013-v1",
+  "status": "design_accepted_by_author_2026-10-13",
+  "campaign_id": "cw-reupload-hpo-20261013",
+  "parent_protocol": {
+    "path": "paper_experiments/cw_followup_protocol.json",
+    "protocol_sha256": "135330d93182535afa2eb8cfc933340e3e86f64ea57f9e28d366cdde9127f02d",
+    "inherited": "training, kernel, optimizer, initialization, temperature sets, objectives, fit selection, search, confirmation, final fitting, failures; all unchanged"
+  },
+  "family": {
+    "name": "shared_reuploaded_parity",
+    "encoder": "P(beta) RX(turn*beta)^16 P(beta)|+>^16, P(beta)=exp[-i (s beta/4) sum_{i<16} Z_i Z_16]; turn=0 equals the audited parity encoder at scale s",
+    "turn": 0.1,
+    "turn_policy": "fixed design constant, not searched (author decision 2026-10-13)",
+    "search_space": "identical to shared_parity: learning_rate, init_scale, b1, one_minus_beta2, schedule, kernel_pair, beta_scale with the parent ranges and priors",
+    "ansatz": "complete one- and two-body, 136 phases, no ancillas"
+  },
+  "randomness": {
+    "fit_streams": "parent namespace cw-parity-hpo-followup-20261009 and keys; target pools and fit streams pair with the audited shared_parity fits at every stage, repeat and start",
+    "sampler_keys": "(sampler, shared_reuploaded_parity, random|tpe) in the parent namespace; independent of the audited samplers"
+  },
+  "development_history": [
+    "correlated-latent parity pilot (kappa): null; parked",
+    "all-to-all twist-turn encoder: exact-capacity failure at high beta",
+    "re-uploaded parity pilot, audited config, turn {0,0.1,0.2,0.3}, 5 confirmation repeats: turn 0.1 J +0.004, P doubled",
+    "joint grid scale {0.5,0.684,0.9} x turn {0.05,0.1}, 3 repeats: scale off 0.684 failed; turn 0.05 J +0.001, P +35%",
+    "pilots evaluated development and confirmation grids only; no test temperatures"
+  ],
+  "stages": "random 60 -> author review -> TPE 60 -> author review -> confirmation (3-4 candidates, 5 repeats x 3 starts) -> author review -> final (10 repeats x 3 starts)",
+  "execution": "fits may be sharded across machines with identical source identity; recording, Optuna ask/tell and selection run once on the primary workspace",
+  "protocol_sha256": "a26790e1e917182f5668e25b1d8c9180d41fe90c109f6dc85b96ca02d8e9aa80"
+}

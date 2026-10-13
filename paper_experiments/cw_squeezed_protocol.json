@@ -1,0 +1,37 @@
+{
+  "version": "cw-squeezed-hpo-20261013-v1",
+  "status": "design_accepted_by_author_2026-10-13",
+  "campaign_id": "cw-squeezed-hpo-20261013",
+  "parent_protocol": {
+    "path": "paper_experiments/cw_followup_protocol.json",
+    "protocol_sha256": "135330d93182535afa2eb8cfc933340e3e86f64ea57f9e28d366cdde9127f02d",
+    "inherited": "training, kernel, optimizer, initialization, temperature sets, objectives, fit selection, search, confirmation, final fitting, failures; all unchanged"
+  },
+  "family": {
+    "name": "shared_squeezed_parity",
+    "encoder": "P(t) [S(r)|+>^15 (x) |+>], P(t)=exp[-i (t/2) sum_{i<16} Z_i Z_16], S(r)=exp[i r (JyJz+JzJy)/15] on the 15 leaves; sin t = tanh(a beta^2), r = -kappa beta cos t; r=0 and t=a beta give the audited parity encoder at scale a",
+    "kappa": 0.4,
+    "kappa_policy": "fixed design constant from the development-only design pass, not searched (author decision 2026-10-13)",
+    "beta_scale_range": [
+      0.3,
+      0.7
+    ],
+    "beta_scale_policy": "beta_scale is the schedule constant a, searched log-uniformly on [0.3, 0.7]; it is not in the parity encoder's units, so the parent range does not apply",
+    "search_space": "shared_parity learning_rate, init_scale, b1, one_minus_beta2, schedule and kernel_pair with the parent ranges and priors; beta_scale on beta_scale_range",
+    "ansatz": "complete one- and two-body, 136 phases, no ancillas"
+  },
+  "randomness": {
+    "fit_streams": "parent namespace cw-parity-hpo-followup-20261009 and keys; target pools and fit streams pair with the audited shared_parity fits at every stage, repeat and start",
+    "sampler_keys": "(sampler, shared_squeezed_parity, random|tpe) in the parent namespace; independent of the audited samplers"
+  },
+  "development_history": [
+    "designed after the re-uploaded parity campaign (cw-reupload-hpo-20261013), whose final tied parity on J and doubled P",
+    "design pass used development temperatures only: exact capacity on (0.29, 0.65, 0.89, 1.25, 1.61, 1.975) and A-grid scoring; no F grid or marker temperatures",
+    "exact capacity, A grid: parity J 0.120 P 0.073; re-upload J 0.118 P 0.163; squeezed a=0.5 kappa=0.4 J 0.058 P 0.027",
+    "sampled run_fit, screen stage, audited shared_parity hyperparameters, 5 repeats: parity J 0.128 P 0.076; re-upload J 0.131 P 0.151; squeezed a=0.475 kappa=0.4 J 0.050 P 0.023",
+    "rejected alternatives: all-qubit squeezing, Gibbs qsample input, mean-field schedule, linear leaf squeeze"
+  ],
+  "stages": "random 60 -> author review -> TPE 60 -> author review -> confirmation (3-4 candidates, 5 repeats x 3 starts) -> author review -> final (10 repeats x 3 starts)",
+  "execution": "fits may be sharded across machines with identical source identity; recording, Optuna ask/tell and selection run once on the primary workspace",
+  "protocol_sha256": "81fe49d2619367fd5cf49060269fccafaf147abd5f134529307b04cae52b7c50"
+}
