@@ -141,22 +141,21 @@ def test_errors_are_computed_before_repeat_averaging_and_use_markers(tmp_path):
         summary["families"]["shared_parity"]["marker_physics_errors"]["e_c"],
         raw_heat / reporting.C_STAR,
     )
-    assert (
-        "ten independent fits" in (tmp_path / "curie_weiss_full_tvd.tex").read_text()
-    )
+    assert "ten independent fits" in (tmp_path / "curie_weiss_full_tvd.tex").read_text()
     assert "0.4" in (tmp_path / "curie_weiss_full_tvd.tex").read_text()
     assert (
-        "tab:cw_product_ablation"
-        in (tmp_path / "curie_weiss_product_ablation.tex").read_text()
+        "tab:cw_encoder_comparison"
+        in (tmp_path / "curie_weiss_encoder_comparison.tex").read_text()
     )
     physics_table = (tmp_path / "curie_weiss_physics_errors.tex").read_text()
     assert "tab:cw_physics_errors" in physics_table
     assert "$e_m$" in physics_table and "$e_c$" in physics_table
     expected_cell = reporting._cell(raw_heat[:, 0] / reporting.C_STAR)
     assert expected_cell in physics_table
-    assert summary["families"]["independent_parity"]["marker_repeat_scores"] == data[
-        "families"
-    ]["independent_parity"]["repeat_scores"]
+    assert (
+        summary["families"]["independent_parity"]["marker_repeat_scores"]
+        == data["families"]["independent_parity"]["repeat_scores"]
+    )
     shared = summary["families"]["shared_parity"]
     assert shared["marker_repeat_scores"][0]["J"] != shared["repeat_scores"][0]["J"]
 
@@ -178,3 +177,45 @@ def test_current_figure_alias_dispatches_final_data_without_historical_substitut
         tmp_path, tmp_path / "out", experiment="curie-weiss-followup"
     ) == ["final"]
     assert calls[0][0] == folder
+
+
+def _squeezed_payload():
+    published = _payload()["families"]
+    families = {}
+    for name, source in (
+        ("shared_squeezed_parity", "shared_parity"),
+        ("independent_squeezed_parity", "independent_parity"),
+    ):
+        row = copy.deepcopy(published[source])
+        row["config"]["kappa"] = 0.4
+        families[name] = row
+    return dict(
+        kind="cw_squeezed_final",
+        stage="final",
+        smoke=False,
+        repeats=10,
+        starts=3,
+        families=families,
+    )
+
+
+def test_squeezed_bundle_merges_and_renders(tmp_path):
+    followup = tmp_path / "curie-weiss-followup"
+    squeezed = tmp_path / "curie-weiss-squeezed"
+    followup.mkdir()
+    squeezed.mkdir()
+    (followup / "figure_data.json").write_text(json.dumps(_payload()))
+    (squeezed / "figure_data.json").write_text(json.dumps(_squeezed_payload()))
+    data = reporting.load(followup)
+    assert set(data["families"]) == set(reporting.ORDER)
+    paths = reporting.render(followup, tmp_path / "out")
+    names = {p.name for p in paths}
+    assert "curie_weiss_encoder_comparison.pdf" in names
+    table = (tmp_path / "out" / "curie_weiss_full_tvd.tex").read_text()
+    assert "squeezed parity encoder" in table
+    assert reporting.NAMES["independent_squeezed_parity"] in table
+    bad = _squeezed_payload()
+    bad["families"]["shared_parity"] = bad["families"].pop("shared_squeezed_parity")
+    (squeezed / "figure_data.json").write_text(json.dumps(bad))
+    with pytest.raises(ValueError):
+        reporting.load(followup)

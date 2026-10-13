@@ -64,7 +64,7 @@ def test_all_numerical_figures_render(tmp_path):
         "gaussian2d_lattice_grid_response.pdf",
         "curie_weiss_model_comparison.pdf",
         "curie_weiss_physical_response.pdf",
-        "curie_weiss_product_ablation.pdf",
+        "curie_weiss_encoder_comparison.pdf",
     }
     assert len([p for p in paths if p.suffix == ".png"]) == 8
     assert all(p.is_file() and p.stat().st_size > 100 for p in paths)

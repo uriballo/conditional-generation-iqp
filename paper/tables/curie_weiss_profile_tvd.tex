@@ -1,15 +1,16 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{Exact Hamming-weight profile TVD at sixteen qubits. Values are means $\pm$ sample standard deviations over ten independent fits, computed within each fit before aggregation. Lower is better. Conditional IQP uses the parity encoder and excludes these test temperatures from training and selection. The temperature-specific IQP models use the parity encoder or the standard input $\ket{0}^{\otimes16}$ and are trained directly at each temperature.}
+\caption{Exact Hamming-weight profile TVD at sixteen qubits. Values are means $\pm$ sample standard deviations over ten independent fits, computed within each fit before aggregation. Lower is better. Conditional and temperature-specific IQP use the squeezed parity encoder; the parity-input models use the parity encoder, and the standard-input model uses $\ket{0}^{\otimes16}$. Conditional models exclude these test temperatures from training and selection, whereas temperature-specific models are trained directly at each temperature.}
 \label{tab:curie_weiss_profile_tvd}
 \begin{tabular}{lrrr}
 \toprule
 Model & $\beta=0.4$ & $\beta=1$ & $\beta=2$ \\
 \midrule
-Conditional IQP & $0.0438\pm0.0040$ & $0.1203\pm0.0046$ & $0.0646\pm0.0124$ \\
-Temperature-specific IQP & $0.0149\pm0.0065$ & $0.0642\pm0.0028$ & $0.1298\pm0.0065$ \\
-\shortstack{Temperature-specific IQP,\\ standard input} & $0.0281\pm0.0247$ & $0.0833\pm0.0158$ & $0.4003\pm0.1736$ \\
+Conditional IQP & $0.0347\pm0.0018$ & $0.0232\pm0.0018$ & $0.0388\pm0.0102$ \\
+Conditional IQP, parity input & $0.0438\pm0.0040$ & $0.1203\pm0.0046$ & $0.0646\pm0.0124$ \\
+Temperature-specific IQP, parity input & $0.0149\pm0.0065$ & $0.0642\pm0.0028$ & $0.1298\pm0.0065$ \\
+Temperature-specific IQP, standard input & $0.0281\pm0.0247$ & $0.0833\pm0.0158$ & $0.4003\pm0.1736$ \\
 \bottomrule
 \end{tabular}
 \end{table*}

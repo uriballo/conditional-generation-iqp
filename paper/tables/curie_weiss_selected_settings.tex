@@ -1,19 +1,17 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{Hyperparameter configurations selected by confirmation. Each temperature-specific family's settings apply jointly to three circuits with separate learned phases. Other optimizer and training settings follow the protocol described in this subsection. Continuous values are rounded to three significant digits.}
+\caption{Hyperparameter configurations selected by confirmation. The encoder scale is $a$ for the squeezed parity encoder, whose squeezing strength is fixed at $\kappa=0.4$, and $\lambda$ for the parity and product encoders. Each temperature-specific family's settings apply jointly to three circuits with separate learned phases. Widths are in radians, and $b_1$ and $b_2$ are the \texttt{Adam} moment parameters. Continuous values are rounded to three significant digits.}
 \label{tab:cw_selected_settings}
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
-Parameter & \shortstack{Conditional IQP} & Shared product-input IQP & \shortstack{Temperature-specific IQP} & \shortstack{Temperature-specific IQP,\\ standard input} \\
+Model & Learning rate & Width $s_\theta$ & $b_1$ & $b_2$ & Schedule & Encoder scale & Kernel weights \\
 \midrule
-Initial learning rate & 0.00342 & 0.0301 & 0.00430 & 0.0898 \\
-Width $s_\theta$ (radians) & 0.0221 & 0.0455 & 0.0300 & 0.0326 \\
-\texttt{Adam} $b_1$ & 0.802 & 0.826 & 0.899 & 0.946 \\
-\texttt{Adam} $b_2$ & 0.992 & 0.999 & 0.966 & 0.999 \\
-Schedule & cosine & constant & constant & cosine \\
-Encoder scale $\lambda$ & 0.684 & 0.657 & 0.582 & -- \\
-Expected kernel weights & [2, 4, 7.5] & [2, 4, 5] & [2, 7.5, 7.99] & [2, 5, 5.5] \\
+Conditional IQP & 0.00354 & 0.0341 & 0.829 & 0.998 & constant & 0.492 & [2, 4, 7.5] \\
+Conditional IQP, parity input & 0.00342 & 0.0221 & 0.802 & 0.992 & cosine & 0.684 & [2, 4, 7.5] \\
+Conditional IQP, product input & 0.0301 & 0.0455 & 0.826 & 0.999 & constant & 0.657 & [2, 4, 5] \\
+Temperature-specific IQP, parity input & 0.00430 & 0.0300 & 0.899 & 0.966 & constant & 0.582 & [2, 7.5, 7.99] \\
+Temperature-specific IQP, standard input & 0.0898 & 0.0326 & 0.946 & 0.999 & cosine & -- & [2, 5, 5.5] \\
 \bottomrule
 \end{tabular}
 \end{table*}

@@ -7,7 +7,11 @@ one reproduction entry point backed by `paper_experiments/`.
 - Retain only experiments and diagnostics described by the current manuscript.
 - Current Curie--Weiss HPO is `cw_followup_*`: parity/product inputs and independent
   parity/unconditional baselines. Audited final comparisons are bundled in
-  `paper/data/curie-weiss-followup/`. Older product evidence remains explicitly
+  `paper/data/curie-weiss-followup/`. The main Curie--Weiss models use the squeezed
+  parity encoder (`squeezed_parity_encoder.py`), run by `cw_encoder_hpo.py --campaign
+  squeezed|squeezed_independent` under the same protocol, and bundled by
+  `cw_squeezed_bundle.py` in `paper/data/curie-weiss-squeezed/`. The re-uploaded parity
+  campaign (`--campaign reupload`) is development history, not paper evidence. Older product evidence remains explicitly
   replayable and is excluded from current manuscript comparisons.
 - Current reported Gaussian evidence is the self-contained binomial-centred
   Gaussian-shaped family, covering translation and two-coordinate conditioning
