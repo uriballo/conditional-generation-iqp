@@ -76,7 +76,7 @@ In the standard classically trainable formulation, the IQP unitary acts on the f
 
 In this work, we instead encode the condition in the input state of a classically trainable IQP Born machine. An encoder prepares a condition-dependent state $\ket{\phi(c)}$, and a single IQP unitary $U_{\boldsymbol\theta}$, shared across conditions, defines $q_{\boldsymbol\theta}(x\mid c)=|\langle x|U_{\boldsymbol\theta}|\phi(c)\rangle|^2$. Training this unitary jointly across the family allows the model to learn the dependence on the condition as a function, rather than fitting it separately at each condition. Input conditioning itself has precedent in QCBMs \cite{kissConditionalBornMachine2022}. Our setting differs in two respects: training remains classical, and the encoder need not have IQP form. Figure~\ref{fig:pipeline_workflow} summarizes the framework.
 
-We extend the framework of Recio-Armengol \textit{et al.} from a fixed input state to condition-dependent input states \cite{recio-armengolTrainClassicalDeploy2026}. Classical training requires only efficient sampling and amplitude-ratio evaluation for the reference state $H^{\otimes n}\ket{\phi(c)}$. Under this access, we adapt established sparse-observable estimators \cite{nestSimulatingQuantumComputers2011,havlicekAmplitudeRatiosNeural2023} to obtain unbiased estimates of a conditional MMD objective and its gradients. Because this requirement constrains classical access rather than gate structure, the encoder need not have IQP form and may prepare correlated input states. We use this freedom in two ways. First, we encode conditions in correlated input states, including one outside the class of IQP states. We show that encoders which only apply condition-dependent phases cannot be absorbed into the learned parameters, yet their reference states are themselves IQP states. Second, we construct condition-dependent input states whose correlations enforce prescribed output bit-flip symmetries for every condition and parameter vector. That work used GHZ input states to impose global bit-flip symmetry on an unconditional model and outlined extensions to other symmetries \cite{recio-armengolTrainClassicalDeploy2026}. Our constructions carry such symmetries over to conditional models, including an example with six independent switching symmetries.
+We extend the framework of Recio-Armengol \textit{et al.} from a fixed input state to condition-dependent input states \cite{recio-armengolTrainClassicalDeploy2026}. Classical training requires only efficient sampling and amplitude-ratio evaluation for the reference state $H^{\otimes n}\ket{\phi(c)}$. Under this access, we adapt established sparse-observable estimators \cite{nestSimulatingQuantumComputers2011,havlicekAmplitudeRatiosNeural2023} to obtain unbiased estimates of a conditional MMD objective and its gradients. Because this requirement constrains classical access rather than gate structure, the encoder need not have IQP form and may prepare correlated input states. We use this freedom in two ways. First, we encode conditions in correlated input states, including one outside the class of IQP states. We show that encoders which only apply condition-dependent phases cannot be absorbed into the learned parameters, yet their reference states are themselves IQP states. Second, we construct condition-dependent input states whose correlations enforce prescribed output bit-flip symmetries for every condition and parameter vector. That work used GHZ input states to impose global bit-flip symmetry on an unconditional model and outlined extensions to other symmetries \cite{recio-armengolTrainClassicalDeploy2026}. Our constructions carry such symmetries over to conditional models, and Appendix~\ref{app:switching16} gives an example with six independent switching symmetries.
 
 We test the framework numerically at sixteen qubits, where exact output probabilities are available. We first train a conditional IQP model to shift the mean of binomial Hamming-weight distributions across a continuous condition interval. In a two-coordinate extension, we train the model to control the mean and width of Hamming-weight distributions jointly. We train it only on conditions that vary one coordinate at a time and evaluate it at sixteen held-out combinations of both coordinates, twelve of which lie outside the convex hull of the training conditions. At these combinations, the mean full-distribution total variation distance (TVD) is $0.047$. For the Curie--Weiss model, we condition a single model on inverse temperature $\beta$ and find that it captures the transition from a unimodal magnetization profile in the hot regime to a bimodal profile in the cold regime at held-out temperatures. A squeezed parity encoder, whose input lies outside the IQP-state class, reduces the temperature-averaged full-distribution TVD from $0.103$ with a phase encoder to $0.047$ under the same protocol, and it brings the energy-fluctuation response close to the target. \pending{Comparison with temperature-specific circuits using the same encoder.} Finally, we classically train conditional models with up to $2048$ qubits and observe decreasing estimated MMD at held-out conditions, which establishes computational feasibility rather than full-distribution accuracy at this scale.
 
@@ -571,60 +571,7 @@ The space $\ker C^\top$ is the span of the prescribed symmetry masks. For every 
 \end{equation}
 The construction therefore guarantees a group of $2^r$ bit-flip symmetry transformations for every condition and parameter vector. Particular factor amplitudes or parameter values may produce additional symmetries. Reference sampling and amplitude-ratio evaluation have polynomial cost, provided that the factor amplitudes admit efficient evaluation with sufficient precision. Appendix~\ref{app:binary-linear-encoders} establishes normalization, access costs and state preparation.
 
-The simplest instance enforces global bit-flip symmetry, $h=1^n$. Taking $Cy=(y,\bigoplus_\ell y_\ell)$, with $k=n-1$, restricts the reference state to even-parity configurations, so that $q_{\boldsymbol\theta}(x\mid c)=q_{\boldsymbol\theta}(\bar x\mid c)$, where $\bar x$ flips all bits. We call this construction the parity encoder. Section~\ref{sec:cw_main} uses it to encode inverse temperature and extends it beyond phase encoding. The following example enforces several independent symmetries at once.
-
-\subsubsection{Signed-graph encoding with exact switching symmetry}
-\label{sec:conditional-switching16}
-
-We illustrate how to design an encoder for a prescribed symmetry group with a sixteen-qubit example that enforces six independent bit-flip symmetries. We consider a temperature-dependent family of signed-graph distributions whose triangle interactions remain invariant under vertex switches. The resulting symmetry holds for every condition and parameter vector, so verifying it requires no training. The example therefore concerns encoder design and classical access rather than learning accuracy.
-
-Sixteen qubits represent the edge signs of a seven-vertex graph. We connect every pair among vertices $0,\ldots,4$, and connect each of vertices $5$ and $6$ to vertices $0,1,2$, as shown in Figure~\ref{fig:switching16-encoder}(a). Each edge bit $x_{ij}$ specifies a sign $s_{ij}=(-1)^{x_{ij}}$. We define the Gibbs family
-\begin{equation}
- p_\beta(x)=Z_\beta^{-1}e^{\beta S(x)},\qquad
- S(x)=\sum_{\{i,j,k\}\in\mathcal T}s_{ij}s_{ik}s_{jk},
-\end{equation}
-where $\beta$ is the inverse temperature, $Z_\beta$ normalizes the distribution, and $\mathcal T$ contains the graph's sixteen triangles. The triangle-balance score $S(x)$ assigns a contribution of $+1$ to each balanced triangle, whose edge signs have positive product, and $-1$ otherwise. Increasing $\beta$ therefore favors configurations with more balanced triangles.
-
-A vertex switch reverses the signs of all edges incident on that vertex. Every triangle contains either zero or two of these edges, so the switch preserves its edge-sign product and hence $p_\beta$. To describe combinations of switches, let $\eta_i\in\{-1,+1\}$ indicate whether vertex $i$ is switched. The combined action replaces $s_{ij}$ by $\eta_i s_{ij}\eta_j$. Switching all seven vertices leaves every edge unchanged, so we fix $\eta_0=1$ to remove duplicate representations. The remaining six choices generate $64$ distinct transformations, including the identity. We denote the set of their edge-bit masks by $\mathcal S$, so a switch acts as $x\mapsto x\oplus h$ for $h\in\mathcal S$.
-
-To construct the encoder, we use the six root edges $0i$, with $i=1,\ldots,6$, as a spanning tree. We call the remaining ten edges chords and denote their set by $E_{\mathrm{ch}}$. Each chord $ij$ forms a triangle with root edges $0i$ and $0j$. These ten triangles form a cycle basis. In the binary-linear construction, each column of $C$ is the edge-bit mask of one such triangle, and each latent bit determines whether to include that triangle in the reference configuration. Combining the selected triangles modulo two gives even incidence parity at every vertex.
-
-\begin{figure*}[t]
-\centering
-\begin{minipage}[c]{0.48\textwidth}
-\centering
-\textbf{(a)}\par
-\includegraphics[width=\linewidth]{figures/switching16_graph.pdf}
-\end{minipage}\hfill
-\begin{minipage}[c]{0.48\textwidth}
-\centering
-\textbf{(b)}\par
-\includegraphics[width=\linewidth]{figures/triangle_motif.pdf}
-\end{minipage}
-\caption{Signed-graph encoder with six independent switching symmetries. (a) The seven-vertex graph has sixteen edges. Six root edges form a spanning tree, and each of the ten remaining edges forms a fundamental triangle with two root edges. (b) Reference-state preparation on an isolated triangle. A chord rotation $R_X(t_\beta)$ and two CNOTs prepare $\cos(t_\beta/2)\ket{000}-i\sin(t_\beta/2)\ket{111}$ before the displayed Hadamards. For the full encoder, we repeat the rotation--CNOT construction over all ten chords, combining contributions to shared root edges modulo two, then apply one global Hadamard layer. All rotations use $t_\beta=(\pi/2)\tanh(1.5\beta)$.}
-\label{fig:switching16-encoder}
-\end{figure*}
-
-The encoded input has the form
-\begin{align}
- \ket{\phi_\beta}&=\exp\!\left[-\frac{i t_\beta}{2}
- \sum_{(i,j)\in E_{\mathrm{ch}}}Z_{0i}Z_{0j}Z_{ij}\right]\ket{+}^{\otimes16},\\
- t_\beta&=\frac{\pi}{2}\tanh(1.5\beta).
-\end{align}
-We choose this temperature map as a concrete example, but the symmetry guarantee does not depend on its form. The diagonal operators leave the computational-basis probabilities uniform, so temperature enters through correlated phases. The shared IQP unitary can convert these phases into condition-dependent output probabilities. The encoder uses ten rotations, twenty CNOTs and sixteen Hadamards, without ancillary qubits, as illustrated in Figure~\ref{fig:switching16-encoder}(b). Appendix~\ref{app:switching16} gives the preparation circuit, classical sampling and amplitude ratios.
-
-Even incidence parity implies that every supported reference configuration has even parity on the edges incident on each vertex, and hence on every mask in $\mathcal S$. The Hadamard layer therefore gives
-\begin{equation}
- X_h\ket{\phi_\beta}=\ket{\phi_\beta},
- \qquad h\in\mathcal S,
-\end{equation}
-where $X_h$ flips the edge bits selected by $h$. Since the IQP unitary commutes with these operators, the model satisfies
-\begin{equation}
- q_{\boldsymbol\theta}(x\mid\beta)
- =q_{\boldsymbol\theta}(x\oplus h\mid\beta),
- \qquad h\in\mathcal S,
-\end{equation}
-for every condition and parameter vector. Thus, the encoder enforces all six independent switching symmetries while retaining classical sampling and amplitude-ratio access, without restricting the learned IQP phases.
+The simplest instance enforces global bit-flip symmetry, $h=1^n$. Taking $Cy=(y,\bigoplus_\ell y_\ell)$, with $k=n-1$, restricts the reference state to even-parity configurations, so that $q_{\boldsymbol\theta}(x\mid c)=q_{\boldsymbol\theta}(\bar x\mid c)$, where $\bar x$ flips all bits. We call this construction the parity encoder. Section~\ref{sec:cw_main} uses it to encode inverse temperature and extends it beyond phase encoding. Appendix~\ref{app:switching16} gives a sixteen-qubit example that enforces six independent switching symmetries of signed graphs at once.
 
 \section{Numerical experiments}
 \label{sec:numerical-experiments}
@@ -864,7 +811,7 @@ The binomial benchmark validates learning the dependence of a target distributio
 
 The Curie--Weiss experiment shows that the choice of input state can matter as much as the learned unitary. With the same IQP ansatz, training temperatures and budgets, the squeezed parity encoder roughly halves the full-distribution error of the parity input and reduces the physical-observable score about fivefold, at temperatures excluded from training and model selection. Both encoders guarantee global spin-flip symmetry for every parameter vector, so this guarantee alone does not explain the difference, and it does not ensure accurate probabilities or physical observables. Moving the input beyond the IQP-state class therefore provides a practical route to more accurate conditional models while keeping training classical. A single shared model with this encoder also has lower full-distribution TVD than parity-input circuits trained directly at each test temperature. \pending{Statement on the comparison with temperature-specific circuits using the squeezed parity encoder.}
 
-The signed-graph construction shows that condition encoding and efficient classical reference access can coexist with several prescribed output symmetries. In this example, the encoder enforces six independent vertex-switching symmetries for every condition and parameter vector while leaving the learned IQP phases unrestricted. Because the guarantee holds for every parameter vector, it follows from input-state design alone and requires no training to verify.
+The same construction can enforce several prescribed output symmetries at once while retaining efficient classical reference access. The signed-graph example in Appendix~\ref{app:switching16} enforces six independent vertex-switching symmetries for every condition and parameter vector, without restricting the learned IQP phases.
 
 Future work should examine how encoder design affects conditional accuracy and the costs of reference-state estimation and quantum state preparation. Our results suggest that collective operations which preserve a small symmetric description of the reference state, such as the squeezing used here, are a promising class to explore. Broader families of correlated reference states and multidimensional encodings could extend the tasks addressed by this framework, including targets without permutation symmetry. Matched comparisons with condition-specific adaptation would clarify when joint input conditioning is preferable. More broadly, many generative architectures reduce to sequences of condition-dependent sampling tasks. Quantum denoising diffusion models already rely on such conditioning \cite{cacioppoQuantumDiffusionModels2023,quinnConditioningGenerativeQuantum2026,chenOvercomingDimensionalFactorization2026}. Autoregressive models similarly condition each variable on those generated before it, and generation conditioned on class labels or physical parameters shares the same structure. Conditional IQP Born machines could provide classically trainable components for such models, provided that each conditioning state admits sampling-and-ratio access. Optimization also requires further study, particularly whether gradients from different conditions reinforce or oppose one another. Generator selection, initialization and adaptive kernels provide directions for investigating these questions \cite{shenCharacterizingTrainability2026,lerchIQPInitialization2026,kurkinUniversalityKernelAdaptive2025}.
 
@@ -875,7 +822,7 @@ Quantum deployment raises additional questions. Deploying conditional IQP circui
 
 We introduced a conditional formulation of IQP Born machines that jointly trains a shared IQP unitary across a family of distributions. Efficient sampling and amplitude-ratio evaluation for condition-dependent reference states yield unbiased classical estimates of the conditional MMD objective and its gradients. The encoder need not have IQP form, and input-state design can enforce prescribed output bit-flip symmetries for every condition and learned parameter vector. Encoders that only apply condition-dependent phases cannot be absorbed into the learned parameters, but their reference states are IQP states.
 
-At sixteen qubits, the binomial benchmark and its two-coordinate extension demonstrate conditional generation, including at joint conditions outside the training convex hull after training along each coordinate axis only. The Curie--Weiss experiment shows that a shared model can capture the temperature-dependent change from unimodal to bimodal magnetization profiles at held-out temperatures. An encoder outside the IQP-state class, the squeezed parity encoder, roughly halves the full-distribution error of a phase encoder under the same protocol. The signed-graph construction illustrates how to impose several independent output symmetries while retaining efficient classical reference access. Training up to 2048 qubits demonstrates computational feasibility and reductions in classically estimated MMD$^2$ at test conditions.
+At sixteen qubits, the binomial benchmark and its two-coordinate extension demonstrate conditional generation, including at joint conditions outside the training convex hull after training along each coordinate axis only. The Curie--Weiss experiment shows that a shared model can capture the temperature-dependent change from unimodal to bimodal magnetization profiles at held-out temperatures. An encoder outside the IQP-state class, the squeezed parity encoder, roughly halves the full-distribution error of a phase encoder under the same protocol. Training up to 2048 qubits demonstrates computational feasibility and reductions in classically estimated MMD$^2$ at test conditions.
 
 These results extend IQP Born machines to conditional generation while retaining classical trainability. Full-distribution accuracy at larger scales and practical quantum sampling advantage remain open.
 
@@ -1263,14 +1210,43 @@ We extend the columns of $C$ to an invertible matrix $M\in\mathbb F_2^{n\times n
 \end{equation}
 and initialize the remaining $n-k$ qubits in $\ket0$. A reversible linear circuit implementing $M$ maps each basis state $\ket{y,0^{n-k}}$ to $\ket{Cy}$ and therefore maps the product of the factor states and zero states to $\ket{\psi_c}$. Standard binary elimination implements this map using $O(n^2)$ CNOT gates with unrestricted connectivity and no ancillary qubits \cite{patelOptimalSynthesisLinear2008}. We then apply $H^{\otimes n}$ to prepare $\ket{\phi(c)}$. The construction is efficient provided that the rotation angles of the factor states can be computed efficiently from $c$.
 
-\section{Sixteen-qubit conditional switching construction}
+\section{Signed-graph encoder with exact switching symmetry}
 \label{app:switching16}
 
-This appendix gives the matrices, amplitudes and access procedures for the encoder of Sec.~\ref{sec:conditional-switching16}.
+This appendix shows how the binary-linear construction of Sec.~\ref{sec:input-symmetry} enforces several independent bit-flip symmetries at once. Sixteen qubits represent the edge signs $s_{ij}=(-1)^{x_{ij}}$ of a seven-vertex graph in which every pair among vertices $0,\ldots,4$ is connected and each of vertices $5$ and $6$ is connected to vertices $0,1,2$ [Fig.~\ref{fig:switching16-encoder}(a)]. We consider the Gibbs family
+\begin{equation}
+ p_\beta(x)=Z_\beta^{-1}e^{\beta S(x)},\qquad
+ S(x)=\sum_{\{i,j,k\}\in\mathcal T}s_{ij}s_{ik}s_{jk},
+\end{equation}
+where $\mathcal T$ contains the graph's sixteen triangles, so increasing $\beta$ favors balanced triangles. A vertex switch reverses the signs of all edges incident on a vertex. Every triangle contains zero or two of these edges, so switches preserve $p_\beta$. Fixing vertex $0$ removes the redundant global switch, and the six remaining switches generate a group of $64$ edge-bit masks, which we denote by $\mathcal S$.
+
+The six root edges $0i$ form a spanning tree, and each of the ten remaining edges, the chords $E_{\mathrm{ch}}$, closes a triangle with two root edges. These ten triangles form a cycle basis and supply the columns of $C$. The encoded input is
+\begin{align}
+ \ket{\phi_\beta}&=\exp\!\left[-\frac{i t_\beta}{2}
+ \sum_{(i,j)\in E_{\mathrm{ch}}}Z_{0i}Z_{0j}Z_{ij}\right]\ket{+}^{\otimes16},\\
+ t_\beta&=\frac{\pi}{2}\tanh(1.5\beta),
+\end{align}
+which is a phase encoder. Every supported reference configuration has even parity on the edges incident on each vertex, so $X_h\ket{\phi_\beta}=\ket{\phi_\beta}$ for every $h\in\mathcal S$. Equation~\eqref{eq:binary-linear-symmetry} then gives $q_{\boldsymbol\theta}(x\mid\beta)=q_{\boldsymbol\theta}(x\oplus h\mid\beta)$ for every condition and parameter vector. This guarantee does not depend on the temperature map and requires no training to verify, so the example concerns encoder design and classical access rather than learning accuracy.
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}[c]{0.48\textwidth}
+\centering
+\textbf{(a)}\par
+\includegraphics[width=\linewidth]{figures/switching16_graph.pdf}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.48\textwidth}
+\centering
+\textbf{(b)}\par
+\includegraphics[width=\linewidth]{figures/triangle_motif.pdf}
+\end{minipage}
+\caption{Signed-graph encoder with six independent switching symmetries. (a) The seven-vertex graph has sixteen edges. Six root edges form a spanning tree, and each of the ten remaining edges forms a fundamental triangle with two root edges. (b) Reference-state preparation on an isolated triangle. A chord rotation $R_X(t_\beta)$ and two CNOTs prepare $\cos(t_\beta/2)\ket{000}-i\sin(t_\beta/2)\ket{111}$ before the displayed Hadamards. For the full encoder, we repeat the rotation--CNOT construction over all ten chords, combining contributions to shared root edges modulo two, then apply one global Hadamard layer.}
+\label{fig:switching16-encoder}
+\end{figure*}
 
 \subsection{Cycle basis and reference state}
 
-We specialize the binary-linear construction to the graph in Sec.~\ref{sec:conditional-switching16}, using column vectors over $\mathbb F_2$. We order the sixteen edges lexicographically as
+We now give the matrices and access procedures, using column vectors over $\mathbb F_2$. We order the sixteen edges lexicographically as
 \begin{equation}
  (01,02,03,04,05,06,12,13,14,15,16,23,24,25,26,34).
 \end{equation}
