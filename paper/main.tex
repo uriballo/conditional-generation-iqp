@@ -8,6 +8,7 @@
 \usepackage{quantikz}
 \usepackage{bm}
 \usepackage{braket}
+\newtheorem{lemma}{Lemma}
 \usepackage{tikz}
 \usepackage{booktabs}
 \usepackage{multirow}
@@ -140,6 +141,24 @@ R_c(z,a)=
 When the local amplitudes can be evaluated at constant arithmetic cost, both operations require at most $O(n)$ local operations. Beyond this product-state example, Sec.~\ref{sec:input-symmetry} introduces correlated reference states that satisfy the same access requirements while enforcing exact output symmetries.
 
 However, efficient sampling-and-ratio access alone does not guarantee that the model can solve a given task, as the encoder also constrains how the output probabilities depend on the condition $c$. For rotation encodings with angles linear in $c$, the encoding generators determine the accessible Fourier frequencies, while the learned parameters control their coefficients within the constraints imposed by the circuit architecture \cite{schuldEffectDataEncoding2021}. Multidimensional Fourier analyses further characterize how the encoding and circuit architecture constrain the model's expressive capacity \cite{casasMultidimensionalFourier2023}. Moreover, Caro \textit{et al.} derived encoding-dependent generalization bounds for parameterized quantum circuits \cite{caroEncodingdependentGeneralizationBounds2021}. These results indicate that the encoder is a central modelling choice, alongside the circuit architecture.
+
+\subsection{Encoders equivalent to diagonal conditioning}
+\label{sec:gauge}
+
+Not every encoder adds conditioning beyond the diagonal layer. Let $\mathcal G$ denote the set of Pauli-$Z$ generators of $D_G$, so that $D_G(\boldsymbol\theta)=\exp(i\sum_{g\in\mathcal G}\theta_g g)$.
+
+\begin{lemma}
+\label{lem:gauge}
+Let two encoders $\phi$ and $\phi'$ have reference states related by $\ket{\psi'_c}=\Lambda_c\ket{\psi_c}$, where $\Lambda_c=\exp[i\sum_{g\in\mathcal G}\lambda_g(c)\,g]$. Then $U_{\boldsymbol\theta}\ket{\phi'(c)}=U_{\boldsymbol\theta+\boldsymbol\lambda(c)}\ket{\phi(c)}$ for every condition and parameter vector.
+\end{lemma}
+
+\textit{Proof.} Diagonal operators commute, so $D_G(\boldsymbol\theta)\Lambda_c=D_G(\boldsymbol\theta+\boldsymbol\lambda(c))$. Hence $U_{\boldsymbol\theta}\ket{\phi'(c)}=H^{\otimes n}D_G(\boldsymbol\theta)\Lambda_c\ket{\psi_c}=U_{\boldsymbol\theta+\boldsymbol\lambda(c)}\ket{\phi(c)}$. $\square$
+
+If $\boldsymbol\lambda$ does not depend on $c$, the two encoders define the same model family up to a fixed shift of the parameters, and training cannot distinguish them. If $\boldsymbol\lambda$ depends on $c$, input conditioning reduces to condition-dependent diagonal parameters $\boldsymbol\theta+\boldsymbol\lambda(c)$. For example, the product encoder $\bigotimes_i R_X(t_i(c))\ket{0}$ gives $\ket{\psi_c}=\bigotimes_i R_Z(t_i(c))\ket{+}$, so it only shifts the one-body parameters.
+
+The lemma also identifies what a diagonal operator cannot change. Every diagonal unitary preserves the reference magnitudes $|\psi_c(z)|$. Conversely, a reference state with uniform magnitudes $|\psi_c(z)|=2^{-n/2}$ has the form $\Lambda_c\ket{+}^{\otimes n}$ for some diagonal $\Lambda_c$, possibly with generators outside $\mathcal G$. The conditional circuit then equals a standard IQP circuit with an additional condition-dependent diagonal layer. Therefore, an encoder conditions the model beyond diagonal phases only if its reference magnitudes are non-uniform. In that case, $U_{\boldsymbol\theta}\ket{\phi(c)}$ is not of the form $H^{\otimes n}D\ket{+}^{\otimes n}$ for any diagonal $D$, so no IQP circuit acting on $\ket{0}^{\otimes n}$ prepares it. The phase encoders in Sec.~\ref{sec:numerical-experiments} prepare inputs with uniform computational-basis probabilities, and their reference states have non-uniform magnitudes at every condition we consider. Their conditional circuits therefore apply two diagonal layers in different bases, and no choice of condition-dependent diagonal parameters reproduces their output states. Because these inputs have uniform probabilities, each takes the form $D_c\ket{+}^{\otimes n}$ for a diagonal $D_c$, so the corresponding reference state is itself an IQP state. Encoders with non-uniform input probabilities fall outside this class and remain compatible with the same training procedure.
+
+We nevertheless use phase encoders in our experiments, for two reasons. First, they are simple to prepare and analyze. Second, they provide a controlled test of input conditioning. A phase encoder alone gives the same uniform output distribution at every condition, yet the lemma shows that the learned parameters cannot absorb its condition dependence. Any condition dependence of the output therefore arises because the shared IQP unitary learns to convert input phases into probabilities. We expect encoders beyond IQP form to increase the expressivity of the model, and we leave their empirical study to future work.
 
 
 \subsection{Conditional MMD objective}
