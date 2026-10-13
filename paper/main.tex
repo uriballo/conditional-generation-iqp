@@ -801,7 +801,7 @@ We optimize hyperparameters separately for each model family. For checkpoint and
 
 \input{tables/curie_weiss_full_tvd.tex}
 
-Figure~\ref{fig:curie_weiss_phase_flip} shows that conditional IQP captures the change from a central magnetization peak in the hot regime ($\beta=0.4$) to two peaks at large absolute magnetization in the cold regime ($\beta=2$). Near the crossover at $\beta=1$, it follows the broad target profile, whereas the parity-input model overestimates the separation of the two peaks. The test temperatures $\beta=0.4$ and $1$ require interpolation, while $\beta=2$ requires slight extrapolation beyond the largest training inverse temperature, $1.95$.
+Figure~\ref{fig:curie_weiss_phase_flip} shows that conditional IQP captures the change from a central magnetization peak in the hot regime ($\beta=0.4$) to two peaks at large absolute magnetization in the cold regime ($\beta=2$). Near the crossover at $\beta=1$, it follows the broad target profile, whereas the parity-input model places too much probability at large $|m|$ and too little near $m=0$. The test temperatures $\beta=0.4$ and $1$ require interpolation, while $\beta=2$ requires slight extrapolation beyond the largest training inverse temperature, $1.95$.
 
 On the separate $101$-point test grid in $[0,2]$, we compute each fit's inverse-temperature-averaged full-distribution TVD and maximum TVD. Across ten fits, these are $0.0474\pm0.0028$ and $0.0677\pm0.0070$ for conditional IQP, compared with $0.1033\pm0.0036$ and $0.1406\pm0.0037$ for the parity-input model. The mean error of conditional IQP grows slowly with $\beta$ and is largest at the extrapolated endpoint $\beta=2$, whereas the parity-input model has its largest errors near the crossover.
 
