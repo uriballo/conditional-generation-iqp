@@ -16,3 +16,9 @@ Fit streams pair with the audited parity fits at every stage, repeat and start.
 `cw_followup_reporting.render` merges this bundle with
 `../curie-weiss-followup/figure_data.json`. Both families are final
 (shared: trial 99; temperature-specific: trial 84, completed 2026-10-14).
+
+`kappa0_control.json` holds the squeezing ablation: the selected shared configuration
+refit with `kappa=0` at `a` = selected, 0.3 and 0.7, ten paired final-stage fits each,
+with optimizer settings unchanged. It is written by
+`python -m paper_experiments.cw_kappa0_control bundle ROOT --output FILE` after
+`... run ROOT --winner <shared final campaign.json>`.
