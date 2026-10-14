@@ -14,5 +14,5 @@ schedule constant `a` is searched on [0.3, 0.7] and `kappa` is fixed at 0.4.
 Fit streams pair with the audited parity fits at every stage, repeat and start.
 
 `cw_followup_reporting.render` merges this bundle with
-`../curie-weiss-followup/figure_data.json`. Status 2026-10-13: the shared family
-is final; the temperature-specific family is still running.
+`../curie-weiss-followup/figure_data.json`. Both families are final
+(shared: trial 99; temperature-specific: trial 84, completed 2026-10-14).

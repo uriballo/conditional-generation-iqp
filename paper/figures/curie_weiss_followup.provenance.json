@@ -1,7 +1,7 @@
 {
   "input_sha256": {
     "curie-weiss-followup": "fa7b0e446903d2d1892049e567a500b6b4532cfbe741afcf7ab623c5ceeb3974",
-    "curie-weiss-squeezed": "8604c6e973b67a503a3db31f6b0d4b3a9d1eb6d0240821f6ccb10088c2ff1822"
+    "curie-weiss-squeezed": "951ffa43932e0c443c2b61adf903033f15ea4da146d7b7363473bf52c5e5fe9c"
   },
   "renderer_sha256": "f7f1f148bb3196484a7c4af1860b0758d7595cad0b114965d7496d4178bb800d",
   "stage": "final",
