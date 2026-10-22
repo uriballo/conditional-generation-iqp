@@ -1,0 +1,401 @@
+{
+  "identity": {
+    "protocol_sha256": "91363ccb9cc89fba1f8c39e068bce97f1fe3addd39414b8af9caeca48ee75da1",
+    "paper_sources": {
+      "paper_experiments/__init__.py": "6878e1fab9a9411f80dcf219f947da424ec7b0926a8026ba801c03cbea6b90b9",
+      "paper_experiments/ansatz.py": "aa3621288bbc56c2e250222695ae8cf6c11252ce393e27ee834f935425e4490a",
+      "paper_experiments/campaign.py": "c6ee64cbbc5d376c89d3ed9745aa60b477669e5843f8d426bc82ef9183eb7996",
+      "paper_experiments/config.py": "d3908a9d23bcf612a1d89f3e8729ebb4e99017d2676338843ddcf846704790cf",
+      "paper_experiments/cw_followup_config.py": "379f3ecf3212de5c7147a7c52147a59506d397cd019af70aa06c0e52ac0ad2a1",
+      "paper_experiments/cw_followup_fit.py": "975721977808815aa6d127b2d398fe4715bef9616fbd7f092ee49c2c0040734e",
+      "paper_experiments/cw_followup_hpo.py": "f28e72e62d3fdf492c56dfb0c894e2cd647a4b773679e89ee702e0c1f2b5f00e",
+      "paper_experiments/cw_followup_metrics.py": "ff755696692c2ae1192207c2f463071e1843d750164b41a2447116b61d8d2265",
+      "paper_experiments/cw_followup_stages.py": "55f3f1fd8d0763dc30e1617f4cdff9a0aaa6a9f62e58c99fd408e8b873e38f41",
+      "paper_experiments/cw_followup_tpe.py": "b7b4036e2ef48ecbffd202ed837b5d143742c00c48b5cb614af8cbcdfc81dee2",
+      "paper_experiments/cw_redesign_config.py": "1f3704dda18a1baaffaf62c9931164aa48a66c32b620f8ec84e6f323718a8129",
+      "paper_experiments/cw_redesign_fit.py": "84d6995f72043cf7e80927576bd60a22f7e96d5be58384a00db3db405fa9983c",
+      "paper_experiments/cw_redesign_hpo.py": "e99d788a51320919cb5fcec962c8c06407053fbfe26c53394992738c293ae0eb",
+      "paper_experiments/engine.py": "478cb0724e6e550a05521985ebb7dd5935ca924a8af8abf251444cfdc4f9aed8",
+      "paper_experiments/figures.py": "4f4383f876f2b893e260a0ba920064522feda1174b1b9dfa398c39b248e2724d",
+      "paper_experiments/full_tvd_hpo.py": "ef7043c21cbe4d546cc7bed85b0bd91544e4a6f77b33c9af4de23107fd926d68",
+      "paper_experiments/full_tvd_reporting.py": "d092b1c717c9fe75e9859689301a41e432c5dfbc0533aabcff3099b3819f6985",
+      "paper_experiments/gaussian.py": "5cae60e4acf1e2fc53be3bdf74596364a357d1599f348a9fb556213affda215e",
+      "paper_experiments/hpo.py": "9920f15e4beb76954b0841d5102f75f00d1abf659e26584d62e32caaf27ba20f",
+      "paper_experiments/metrics.py": "6573a810aee9e7b2abf7109ea206875c2ece3d78ed5f8e0033e94801606bc42b",
+      "paper_experiments/parity_encoder.py": "2653a33e65fb3ad8fe29305cfbffc508d10d44f84de22ee2d9de6fdedcc63504",
+      "paper_experiments/phase_encoder.py": "10c3db825d95b1bbf6e3478ed12052b7d4b0866194dd0c4d560b63621aa77411",
+      "paper_experiments/physical_response.py": "8afa89f6fd118acf063d2fcbc492d5a07eea96690e8fbc34e4e7d97aebfbce8f",
+      "paper_experiments/runtime.py": "97faaaa287e21914f818ea919cc4e471b7835fd48e44341bc6091a62b5c7d389",
+      "paper_experiments/scaling.py": "1d2d8fd5eacb57953cf62ffc754302350511ceec1b47869ec72671bcbb913c1c",
+      "paper_experiments/spin_flip_encoder.py": "def676a5c094abf0e95d4c260aec186dc440374196b60c814d14be3e222557fe",
+      "paper_experiments/studies.py": "cce79532846a4cf7d0560af865bf28fa5c762ac1fed001a433a07cd818a33d46",
+      "paper_experiments/symmetry_campaign.py": "795f122e9fd91762edb180b9b7d00f10498cb9c35a5a2058fccbf0f9856359fc",
+      "paper_experiments/symmetry_figures.py": "9440ae548d301dd6afaabf0e6f51dcb12c67c2b69ea9f5d6d3e29c50de80bcae",
+      "paper_experiments/symmetry_tables.py": "2084155adacdd873974d87a27a94585be7029358b1f490569aa665cc1076bc46",
+      "paper_experiments/target.py": "b2e9c6f76ab9f8bef2274add3bae0ecf63735e3074e668cf56163a1db4683d72",
+      "paper_experiments/training.py": "437a81289d1edf37c3db3cb77135c8c56f9250a5386b8dd49b44d201d959e247",
+      "paper_experiments/cw_redesign_protocol.json": "9aa79edb5ecd1cb26fc1a246201bd296eaaae0bcced20b1c3183dd37a5562731",
+      "run_experiments.py": "a205b51da543e320c4af061bc36f30d949bbb1cb855fcfd288e79d3a22af1e47",
+      "paper_experiments/cw_followup_protocol.json": "e2c1e553261ece97162ea2f6bdc9242406eaacefd1f94e923e9e6c7fab8bc281"
+    },
+    "library_sources": {
+      "__init__.py": "65effe05eb2003e8efa227f45f1cdb4b9b8ba5ddbaceea4c0c2052c9ea653622",
+      "encoders.py": "905fc43acc061aa8956918c668c0aaae3c8f66097afe8947f74b12d98f615596",
+      "estimator.py": "c92f82010fd016c349fd67e060488374c039b312c093d7ebea89a57319289227",
+      "initialization.py": "e4c6093e579167041d060ed6070165f49d54701bacba08c8b0e765abcbba8b78",
+      "loss.py": "c6f97a84be8accbe595fd4fde1af7de623a3f3e2785f42873af229611ece7bbf",
+      "model.py": "3760bfa3406ed30a55d6d5485580e4d86ab9b50f660628347e6ea0a4f4c8c8f5",
+      "operators.py": "4dad3c8499ec03213dc41ddef3b0fad9da1945404e988f0d5ebcc77e738093a6",
+      "simulation.py": "557907d01516975053a98c209b1ca79628eb8582f22c9b8eda99388d92358520",
+      "training.py": "922aa687eecf636b3544cda0d4b14f2ba236a53d512604e5fc7ec5db53225f55",
+      "verification.py": "ddcd6fe847578abdc51f3675077d644e0a46c51848f20e243cecdf7f7ca7b6af"
+    },
+    "dependencies": {
+      "jax": "0.11.0",
+      "jaxlib": "0.11.0",
+      "optax": "0.2.8",
+      "numpy": "2.5.1",
+      "optuna": "5.0.0"
+    },
+    "numerical_environment": {
+      "JAX_ENABLE_X64": "1",
+      "JAX_PLATFORMS": null,
+      "XLA_FLAGS": null,
+      "JAX_DEFAULT_MATMUL_PRECISION": null,
+      "HIP_VISIBLE_DEVICES": null,
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "JAX_COMPILATION_CACHE_DIR": "/work/results/jax-cache"
+    },
+    "platform": "Linux-7.2.5-200.fc44.x86_64-x86_64-with-glibc2.39",
+    "backend": "gpu",
+    "devices": [
+      "rocm:0"
+    ],
+    "dependency_lock_sha256": "aea6715dd67736530b62a9fb4f8a0d7ef9420557f772948f7681d6f687ab3bae",
+    "deployment": {
+      "paper_revision": "c72a7f5204406e3b0a3746da4b779d46828130ad",
+      "library_revision": "f90875da72b3379c1ea38b844a0a908a20eacf24",
+      "library_source": "clean pinned library copied from isolated completed deployment; local dirty library excluded",
+      "snapshot_sources": {
+        "paper_experiments/__init__.py": "6878e1fab9a9411f80dcf219f947da424ec7b0926a8026ba801c03cbea6b90b9",
+        "paper_experiments/ansatz.py": "aa3621288bbc56c2e250222695ae8cf6c11252ce393e27ee834f935425e4490a",
+        "paper_experiments/campaign.py": "c6ee64cbbc5d376c89d3ed9745aa60b477669e5843f8d426bc82ef9183eb7996",
+        "paper_experiments/config.py": "d3908a9d23bcf612a1d89f3e8729ebb4e99017d2676338843ddcf846704790cf",
+        "paper_experiments/cw_followup_config.py": "379f3ecf3212de5c7147a7c52147a59506d397cd019af70aa06c0e52ac0ad2a1",
+        "paper_experiments/cw_followup_fit.py": "975721977808815aa6d127b2d398fe4715bef9616fbd7f092ee49c2c0040734e",
+        "paper_experiments/cw_followup_hpo.py": "f28e72e62d3fdf492c56dfb0c894e2cd647a4b773679e89ee702e0c1f2b5f00e",
+        "paper_experiments/cw_followup_metrics.py": "ff755696692c2ae1192207c2f463071e1843d750164b41a2447116b61d8d2265",
+        "paper_experiments/cw_redesign_config.py": "1f3704dda18a1baaffaf62c9931164aa48a66c32b620f8ec84e6f323718a8129",
+        "paper_experiments/cw_redesign_fit.py": "84d6995f72043cf7e80927576bd60a22f7e96d5be58384a00db3db405fa9983c",
+        "paper_experiments/cw_redesign_hpo.py": "e99d788a51320919cb5fcec962c8c06407053fbfe26c53394992738c293ae0eb",
+        "paper_experiments/engine.py": "478cb0724e6e550a05521985ebb7dd5935ca924a8af8abf251444cfdc4f9aed8",
+        "paper_experiments/figures.py": "4f4383f876f2b893e260a0ba920064522feda1174b1b9dfa398c39b248e2724d",
+        "paper_experiments/full_tvd_hpo.py": "ef7043c21cbe4d546cc7bed85b0bd91544e4a6f77b33c9af4de23107fd926d68",
+        "paper_experiments/full_tvd_reporting.py": "d092b1c717c9fe75e9859689301a41e432c5dfbc0533aabcff3099b3819f6985",
+        "paper_experiments/gaussian.py": "5cae60e4acf1e2fc53be3bdf74596364a357d1599f348a9fb556213affda215e",
+        "paper_experiments/hpo.py": "9920f15e4beb76954b0841d5102f75f00d1abf659e26584d62e32caaf27ba20f",
+        "paper_experiments/metrics.py": "6573a810aee9e7b2abf7109ea206875c2ece3d78ed5f8e0033e94801606bc42b",
+        "paper_experiments/parity_encoder.py": "2653a33e65fb3ad8fe29305cfbffc508d10d44f84de22ee2d9de6fdedcc63504",
+        "paper_experiments/phase_encoder.py": "10c3db825d95b1bbf6e3478ed12052b7d4b0866194dd0c4d560b63621aa77411",
+        "paper_experiments/physical_response.py": "8afa89f6fd118acf063d2fcbc492d5a07eea96690e8fbc34e4e7d97aebfbce8f",
+        "paper_experiments/runtime.py": "97faaaa287e21914f818ea919cc4e471b7835fd48e44341bc6091a62b5c7d389",
+        "paper_experiments/scaling.py": "1d2d8fd5eacb57953cf62ffc754302350511ceec1b47869ec72671bcbb913c1c",
+        "paper_experiments/spin_flip_encoder.py": "def676a5c094abf0e95d4c260aec186dc440374196b60c814d14be3e222557fe",
+        "paper_experiments/studies.py": "cce79532846a4cf7d0560af865bf28fa5c762ac1fed001a433a07cd818a33d46",
+        "paper_experiments/symmetry_campaign.py": "795f122e9fd91762edb180b9b7d00f10498cb9c35a5a2058fccbf0f9856359fc",
+        "paper_experiments/symmetry_figures.py": "9440ae548d301dd6afaabf0e6f51dcb12c67c2b69ea9f5d6d3e29c50de80bcae",
+        "paper_experiments/symmetry_tables.py": "2084155adacdd873974d87a27a94585be7029358b1f490569aa665cc1076bc46",
+        "paper_experiments/target.py": "b2e9c6f76ab9f8bef2274add3bae0ecf63735e3074e668cf56163a1db4683d72",
+        "paper_experiments/training.py": "437a81289d1edf37c3db3cb77135c8c56f9250a5386b8dd49b44d201d959e247",
+        "paper_experiments/cw_followup_protocol.json": "e2c1e553261ece97162ea2f6bdc9242406eaacefd1f94e923e9e6c7fab8bc281",
+        "paper_experiments/cw_redesign_protocol.json": "9aa79edb5ecd1cb26fc1a246201bd296eaaae0bcced20b1c3183dd37a5562731",
+        "tests/test_cw_followup_config.py": "221bcd8fe77e594bb26291e1156d977d34c521a815dc2e4e1bee48f69f733eee",
+        "tests/test_cw_followup_fit.py": "963b438f7923ece40968547531fa536862a0033e3354aed872b445c371122107",
+        "tests/test_cw_followup_hpo.py": "fe2533ec28bbdb90984d2f6f6114e8c96e80f77df8319262d25adae57296767c",
+        "tests/test_cw_followup_metrics.py": "3edb6d484b5a65b9aeba72c602b35b8a562799227bd5452df799c02942379a8c",
+        "tests/test_cw_redesign_campaign_lock.py": "74f595995518f8b3d90c727b2943cb0b388ffe3332f140a19c904b89fe24a6a6",
+        "tests/test_cw_redesign_config.py": "847994e916d0e03fe79ed2971ff3e43b89e573a8c10de641d36f1d6034396c0f",
+        "tests/test_cw_redesign_fit.py": "32883ff0b986314d9ed52a537457d12fe984b1fda4f1d2d2aed0b832653c2139",
+        "tests/test_cw_redesign_hpo.py": "bdee8d30250f83e738c1cf95fef3d76fe8997de8e6f2fabebbb0f0dd3ddf4f75",
+        "tests/test_cw_redesign_reporting.py": "984ea25214375147441bb533e6c045161d0f60e6c946d8ad2dd03ddb7c8856bc",
+        "tests/test_cw_redesign_trainer.py": "517d764ccc845cbdd96862d53586d33c7de515d63fc177ba76d9735a72392ff9",
+        "tests/test_full_tvd_hpo.py": "c6d55c1b6c977fe5c21a468b41840eca5cd1fe7d8f02510c9009f08f0fbb0623",
+        "tests/test_full_tvd_reporting.py": "aee5938740dfc3f36aea6cee8c254e40f8f4517f0c8f7ea7a8de91795e70b318",
+        "tests/test_full_tvd_reporting_campaign.py": "1d14c37275550f2c057b347cdf496f974378f3ed736ca324944589418a8c47c4",
+        "tests/test_full_tvd_training.py": "a6324905e153b54828169f097db9761c21ea50026558c90663122ed6df4587c9",
+        "tests/test_paper_campaign.py": "0a5a22904e0438cb592cb1af5644a8925064acdfde296a264255c6c105e46ea4",
+        "tests/test_paper_figures.py": "dd6a9392d0d048747e59db78b07fa34b3e7d3ba02ddf6f8d386e66fe23533479",
+        "tests/test_paper_runtime.py": "52c2aea62c2a8eccf94c8afa853ad4a7aa6f1b333291a79dc418c2caea4ef980",
+        "tests/test_parity_encoder.py": "5a808b31163202b66b536952bf040c3cbbc48f0013a7a93d3196323c0e40a83e",
+        "tests/test_physical_response.py": "d2b10c796a7e307e70906846aed4fa564d98a842605404c1b6c754f6813896c0",
+        "tests/test_reproduction_boundary.py": "7a32fd3474cd6a4dc5b88dba3bf58ae9794b86323e3216588e21b9569549da20",
+        "tests/test_spin_flip_encoder.py": "5092e09a9a195e4d865eec16f46edf8dd7942377ae787b8c83460b347484d60a",
+        "tests/test_symmetry_campaign.py": "0c426ea93d59b0058daa9bd615a27ad119e33f096cfc396f13a2758620b4f58a",
+        "tests/test_symmetry_figures.py": "0f116ab7290b426e5e3a79098ac92fa9cd14400ef9fd3b855c80e5d131c18f34",
+        "tests/test_symmetry_tables.py": "5ba0ad03be235a5c2724abde84ec83daab3f2ac20df70f0876cab92ee990cbc8",
+        "run_experiments.py": "49d016ea3bee47b4e45adc3a65135f4f218964878b6219cafc9e016f57fd0c2b",
+        "README.md": "a68b088ee5b5a02d36e3e7abd6823cdb9bc45ab803973d614c30c333f04fa99a",
+        "pyproject.toml": "5c3dfa823d52c7375802316d78bf8155a3fd929b5d588ce86db32c969ed22e72",
+        "uv.lock": "aea6715dd67736530b62a9fb4f8a0d7ef9420557f772948f7681d6f687ab3bae",
+        "backend_probe.py": "e02f285f747d5bca0ee2ff6a5bdfb33d2d808947c12e6caa909bb21e14c290ca"
+      }
+    }
+  },
+  "winners": {
+    "shared_parity": {
+      "trial_id": 103,
+      "config": {
+        "learning_rate": 0.003417450659093187,
+        "init_scale": 0.022105341315296574,
+        "b1": 0.8018785446110164,
+        "b2": 0.9919640457804435,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          4,
+          7.5
+        ],
+        "beta_scale": 0.6839867061196403
+      },
+      "J": 0.12806135007136304,
+      "P": 0.07448960899344201,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.12569577531273585,
+          "P": 0.07458286988953518,
+          "max_tvd": 0.13843210453709753,
+          "mean_tvd": 0.10022311686401249
+        },
+        {
+          "J": 0.13001679354123408,
+          "P": 0.0727509369481897,
+          "max_tvd": 0.1430070211394978,
+          "mean_tvd": 0.10403633834470667
+        },
+        {
+          "J": 0.1239042926307794,
+          "P": 0.07803676841026055,
+          "max_tvd": 0.13354432564641916,
+          "mean_tvd": 0.10462422659949985
+        },
+        {
+          "J": 0.1307235686137682,
+          "P": 0.07721761069501837,
+          "max_tvd": 0.14165304933705103,
+          "mean_tvd": 0.10886460716720253
+        },
+        {
+          "J": 0.12996632025829766,
+          "P": 0.0698598590242062,
+          "max_tvd": 0.14477809175021805,
+          "mean_tvd": 0.10034277727445691
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/109f4b929443cb70f591c550232f2df2ba77dccb9fe1cf7bb03b87a9391b2594",
+        "/work/results/campaign/confirmation/fits/f972ba0c5cec3fd43dfadd455ccbe7837e07cb5e79758388635c15ebf9f63ee3",
+        "/work/results/campaign/confirmation/fits/2ebf61ec443ec9f960a0c2fa8117d7f40eadf645fd15caa9c6ff8447ba02445d",
+        "/work/results/campaign/confirmation/fits/ba57b5f3379404eab1e10b01db1383d3b36c66bd46c60fc42bcae7bebcbf7aaf",
+        "/work/results/campaign/confirmation/fits/b5ef1fe0a95ea898615cdffb464c4887f484c7e70e440ef8b3483faba05a1d06"
+      ]
+    },
+    "shared_product": {
+      "trial_id": 87,
+      "config": {
+        "learning_rate": 0.030069581844167872,
+        "init_scale": 0.045476913658824,
+        "b1": 0.8264919223569808,
+        "b2": 0.9989832057002374,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          4,
+          5
+        ],
+        "beta_scale": 0.6572686512368282
+      },
+      "J": 0.1948012414331159,
+      "P": 0.13750486124979244,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.19068252730071933,
+          "P": 0.12968986636515198,
+          "max_tvd": 0.20706254311111597,
+          "mean_tvd": 0.157922495679926
+        },
+        {
+          "J": 0.2090704857278558,
+          "P": 0.16310104447530896,
+          "max_tvd": 0.23435120175755605,
+          "mean_tvd": 0.15850905366845536
+        },
+        {
+          "J": 0.18264107548842434,
+          "P": 0.12570994899798374,
+          "max_tvd": 0.19644138139770284,
+          "mean_tvd": 0.15504046366986735
+        },
+        {
+          "J": 0.19129945217504385,
+          "P": 0.12790528446382504,
+          "max_tvd": 0.20881369574001524,
+          "mean_tvd": 0.15627096504510105
+        },
+        {
+          "J": 0.2003126664735361,
+          "P": 0.14111816194669263,
+          "max_tvd": 0.21100943242119063,
+          "mean_tvd": 0.178919134578227
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/676b5b825a465caa7958890178e0f79bfe1a14d5a610dc34e1026726efb435d0",
+        "/work/results/campaign/confirmation/fits/27276a825bfa484646c0e2c1a78fcf15053cffd9a13f1783a029cee861fe7191",
+        "/work/results/campaign/confirmation/fits/f5a88f3953c83256c1c85feeb02ce56855e1aabef249c44fb46a8078abc9ebc9",
+        "/work/results/campaign/confirmation/fits/3f52b79b1fabea9edef0f4034e31eb9f9e0378fbbfe0b86f3f4f88e3d5b1360f",
+        "/work/results/campaign/confirmation/fits/75402005c8dacaf0c7ce099fd5289d17be533588aaf80aaeef1f9cd601d26d07"
+      ]
+    },
+    "independent_parity": {
+      "trial_id": 105,
+      "config": {
+        "learning_rate": 0.0043028682430981706,
+        "init_scale": 0.0300355949382362,
+        "b1": 0.8990943669881644,
+        "b2": 0.9661303855974087,
+        "schedule": "constant",
+        "expected_weights": [
+          2,
+          7.5,
+          7.99
+        ],
+        "beta_scale": 0.5823317471765032
+      },
+      "J": 0.14673859576219148,
+      "P": 0.03731390421401349,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.145457626089587,
+          "P": 0.03705896040218506,
+          "max_tvd": 0.15242759359716218,
+          "mean_tvd": 0.13151769107443664
+        },
+        {
+          "J": 0.14376921857571945,
+          "P": 0.036381652088276,
+          "max_tvd": 0.1511825793440812,
+          "mean_tvd": 0.128942497038996
+        },
+        {
+          "J": 0.14653929911162564,
+          "P": 0.03771129641876756,
+          "max_tvd": 0.15190323187647278,
+          "mean_tvd": 0.13581143358193135
+        },
+        {
+          "J": 0.14641685437055862,
+          "P": 0.037130514932773036,
+          "max_tvd": 0.15178597627538204,
+          "mean_tvd": 0.13567861056091177
+        },
+        {
+          "J": 0.15150998066346663,
+          "P": 0.038287097228065815,
+          "max_tvd": 0.1587060126845491,
+          "mean_tvd": 0.13711791662130166
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/7783eaabaab6dbee412e911abc85f3092699bc9763bc1b2e5301ec16f6cfc625",
+        "/work/results/campaign/confirmation/fits/8c3c69ae6e5c7482576bade408125b08fd451f49318669a0220fbce15ac51f37",
+        "/work/results/campaign/confirmation/fits/95ba6c5aa67cf731dbf7f42a37682c6a96331a43a0e8623ee71dc710fd198bfd",
+        "/work/results/campaign/confirmation/fits/6b246ce4fd3d22f0f2ae1fbd792d258f31616e55647b56a929e645ecbf8746fb",
+        "/work/results/campaign/confirmation/fits/8af94d88e2b764567011df1f5f3ecaa39c9e7118dd502c7ad74f5aa4f2470045",
+        "/work/results/campaign/confirmation/fits/d776438ee4dea4b3fc895faf8b0aaae16bfa298bde2618accecf0485e683794c",
+        "/work/results/campaign/confirmation/fits/025ff5806d828d1d81b9eeb01e8654a8ec6129bc9d651fe25f2eb9879e3f237b",
+        "/work/results/campaign/confirmation/fits/8189ee0a59d092128bd27b7c34f7191abf8ac746eba38dc413f089eeb6dc3fad",
+        "/work/results/campaign/confirmation/fits/5e03f575697409ee5c1a0aa31d620119fe4d757c20d57964989393d681e4d58a",
+        "/work/results/campaign/confirmation/fits/24c5fca4d710a507ff168d829a3ae29b9ccc38291b81e87ff956306526f1d8b9",
+        "/work/results/campaign/confirmation/fits/296f06b525330f34eb483ab16ac11cf3fac5de723e0c644c35acf8a99c56719a",
+        "/work/results/campaign/confirmation/fits/0eb47129d543e75a35d3099d41770bda6514c0614e48893ee5d3dd26d1926f05",
+        "/work/results/campaign/confirmation/fits/efc98658e7580a7663251da295a7fbba07ec32b43ba733dd9d1a63d94983de0d",
+        "/work/results/campaign/confirmation/fits/ce40061a7531192c0cd0455e1d8a76a1d148983be3cb7c8ea5904462ffce41ec",
+        "/work/results/campaign/confirmation/fits/88bb25e139ea513e162fc8f43fec7edc9cf974b5bcbd55673029a40b5c01c87f"
+      ]
+    },
+    "independent_unconditional": {
+      "trial_id": 117,
+      "config": {
+        "learning_rate": 0.0898282783014765,
+        "init_scale": 0.03261026907014013,
+        "b1": 0.9461663714952426,
+        "b2": 0.9988144798843216,
+        "schedule": "cosine",
+        "expected_weights": [
+          2,
+          5,
+          5.5
+        ]
+      },
+      "J": 0.4097528706792861,
+      "P": 0.9238214956764411,
+      "valid": true,
+      "repeats": [
+        {
+          "J": 0.45184128364805193,
+          "P": 1.4687235004293793,
+          "max_tvd": 0.48329139786924397,
+          "mean_tvd": 0.38894105520566796
+        },
+        {
+          "J": 0.33431640505420845,
+          "P": 0.03579753263773757,
+          "max_tvd": 0.37442111251251214,
+          "mean_tvd": 0.254106990137601
+        },
+        {
+          "J": 0.34696070151249386,
+          "P": 0.02440720560636618,
+          "max_tvd": 0.38013259002178956,
+          "mean_tvd": 0.28061692449390263
+        },
+        {
+          "J": 0.45690406552126434,
+          "P": 1.5313992405483163,
+          "max_tvd": 0.48877697347200033,
+          "mean_tvd": 0.3931582496197922
+        },
+        {
+          "J": 0.4587418976604119,
+          "P": 1.558779999160406,
+          "max_tvd": 0.4860328382332162,
+          "mean_tvd": 0.4041600165148035
+        }
+      ],
+      "fits": [
+        "/work/results/campaign/confirmation/fits/bf0a04f600d962820574215844924f5c8f9429b9442d8e2041a8fefbbd962add",
+        "/work/results/campaign/confirmation/fits/50a8c69cc1a38302e8dad0d507fa8b6dcceb138564a2b9cdd0b72c42c08602a0",
+        "/work/results/campaign/confirmation/fits/65bd410ee55a95ff5fbd9379d246b56e8d899df32b2eaf51243eb550b8efaf0f",
+        "/work/results/campaign/confirmation/fits/fac63fb9e66b6b58f0f0d7fdbe8c19bf6d27064d7ec1d03c7457c3e9851705ac",
+        "/work/results/campaign/confirmation/fits/8f34c571d1c138202f750f26898a17ee2047e97d512b91ee6a7dbeab68938a92",
+        "/work/results/campaign/confirmation/fits/c06e190a1a5e3dcfdeac34e678d153da05bf93629d952dac7fe3e1fae79f2c9d",
+        "/work/results/campaign/confirmation/fits/57e6126a4f01b590438933facb16e9424e611c74996374c3bb6d3d8f46367f47",
+        "/work/results/campaign/confirmation/fits/fd206562dbd12a41032dd6410694ba08469f8ee37c33c89e3297e4c29e4eff7e",
+        "/work/results/campaign/confirmation/fits/a4927711b6625f23256d23a30debd0636c0f85a39ce75b602c329536985c9002",
+        "/work/results/campaign/confirmation/fits/377b54c773045dfd60f87e28938b1258883eb5e4b4758863b4ad040625b5666d",
+        "/work/results/campaign/confirmation/fits/a3f298586d2e17e8bc0bbe1d426c53cf73fe039df5f8b9c7c02b8bbe1127b0e5",
+        "/work/results/campaign/confirmation/fits/c185313891bacd53a0f91ac56cc5549d3c66a22d6b8e97606904b1e1b72bcbf4",
+        "/work/results/campaign/confirmation/fits/41d0dd91bfa4e5ba419fa05be1a86f9f41aef6cb3fc530dd3ff2af7efe43f648",
+        "/work/results/campaign/confirmation/fits/0b1725e7e16e00132b33e8b75128cb06959c404e8b34c0ccf8b4584427693c46",
+        "/work/results/campaign/confirmation/fits/298b86349e76c3cc0f29f2a1604d9d55cdd4b2c2a1c15fcd7b14cfefac4d2222"
+      ]
+    }
+  },
+  "confirmation_manifest_sha256": "6279d52d96560e43562473bb75dc3cb2a256aae6f638e12cf63da25cb610c5b6",
+  "smoke": false
+}

@@ -1,0 +1,32 @@
+{
+  "version": "cw-diagonal-k4-hpo-20261017-v1",
+  "status": "design_fixed_2026-10-17",
+  "campaign_id": "cw-diagonal-k4-hpo-20261017",
+  "parent_protocol": {
+    "path": "paper_experiments/cw_followup_protocol.json",
+    "protocol_sha256": "91363ccb9cc89fba1f8c39e068bce97f1fe3addd39414b8af9caeca48ee75da1",
+    "inherited": "training, kernel, optimizer, initialization prior, temperature sets, objectives, fit selection, search, confirmation, final fitting, failures; all unchanged"
+  },
+  "family": {
+    "name": "diagonal_ghz_k4",
+    "model": "one IQP circuit with diagonal-layer conditioning: theta(beta) = sum_{k<K} T_k(beta - 1) w_k, T_k Chebyshev polynomials of the first kind, w_k in R^136; beta in [0, 2] maps to x in [-1, 1]",
+    "chebyshev_terms": 4,
+    "role": "secondary: cubic in beta, 544 parameters; with four training anchors equivalent to fitting each anchor and interpolating, the closest analogue of diagonal-layer conditioning in Liu et al.",
+    "n_parameters": 544,
+    "input": "parity encoder at fixed t=pi/2, condition independent; reference uniform on even-parity strings, so global spin-flip symmetry holds for every parameter value",
+    "initialization": "w_0 ~ N(0, init_scale^2) elementwise from the paired parent initialization stream; w_k = 0 for k >= 1, so the initial law equals the constant-theta IQP of the other families",
+    "search_family": "independent_unconditional",
+    "search_space": "parent learning_rate, init_scale, b1, one_minus_beta2, schedule and kernel_pair with the parent ranges and priors; no encoder hyperparameter",
+    "fixed_config": {
+      "chebyshev_terms": 4
+    },
+    "ansatz": "complete one- and two-body, 136 phases, no ancillas"
+  },
+  "randomness": {
+    "fit_streams": "parent namespace cw-parity-hpo-followup-20261009 and keys; target pools and fit streams pair with the shared_parity fits at every stage, repeat and start",
+    "sampler_keys": "(sampler, diagonal_ghz_k4, random|tpe) in the parent namespace; independent of the samplers"
+  },
+  "stages": "random 60 -> TPE 60 -> confirmation (3-4 candidates, 5 repeats x 3 starts) -> final (10 repeats x 3 starts)",
+  "execution": "fits may be sharded across machines with identical source identity; recording, Optuna ask/tell and selection run once on the primary workspace",
+  "protocol_sha256": "9472c9d11b7187d9a897272d1b8f81f76898d0706126efa03a93033238f8310f"
+}

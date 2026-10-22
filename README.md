@@ -1,0 +1,136 @@
+# Classical training of conditional IQP Born machines
+
+Code and data for *Classical training of conditional instantaneous quantum
+polynomial-time Born machines* by Oriol Balló-Gimbernat, Emiliano Tolotti, Laia
+Domingo and Fernando Vilariño.
+
+A conditional IQP Born machine encodes the condition in the input state and
+shares one IQP unitary across conditions. The models are trained classically
+with an unbiased estimator of a conditional maximum mean discrepancy. This
+repository contains the experiment code, the protocol of every experiment, and
+the result bundles behind every numerical figure and table of the paper.
+
+## Layout
+
+```
+run_experiments.py      figure replay and Curie–Weiss searches
+paper_experiments/      experiment code and *_protocol.json files
+data/                   result bundles behind the paper's figures and tables
+tests/                  test suite
+iqp-cond/               iqp-cond library (git submodule)
+```
+
+## Installation
+
+Python 3.13 and [uv](https://docs.astral.sh/uv/):
+
+```sh
+git clone --recurse-submodules https://github.com/uriballo/conditional-generation-iqp.git
+cd conditional-generation-iqp
+uv sync --locked --extra hpo
+```
+
+## Figures and tables
+
+These commands read `data/` and write to `results/`:
+
+```sh
+uv run python run_experiments.py --mode figures
+uv run python run_experiments.py --mode figures --experiment gaussian-lattice
+uv run python run_experiments.py --mode figures --experiment curie-weiss
+uv run python run_experiments.py --mode figures --experiment scaling
+uv run python -m paper_experiments.hardware_report --output results/hardware
+uv run python -m paper_experiments.target_families --output results/figures
+```
+
+## Experiments
+
+| Experiment | Code | Protocol | Data |
+| --- | --- | --- | --- |
+| Gaussian-shaped family, conditional IQP | `gaussian2d_lattice*.py` | `gaussian2d_lattice_protocol.json` | `data/gaussian_lattice/` |
+| Gaussian-shaped family, diagonal conditioning | `gaussian2d_diagonal*.py` | `gaussian2d_diagonal*_protocol.json` | `data/gaussian2d-diagonal/`, `data/gaussian2d-diagonal-variants/` |
+| Curie–Weiss, C-IQP (P) and per-temperature IQP | `cw_followup_*.py` | `cw_followup_protocol.json` | `data/curie-weiss-followup/` |
+| Curie–Weiss, C-IQP (TP) and κ = 0 ablation | `twisted_parity_encoder.py`, `cw_encoder_hpo.py`, `cw_kappa0_control.py` | `cw_twisted*_protocol.json` | `data/curie-weiss-twisted/` |
+| Curie–Weiss, D-IQP | `cw_diagonal_fit.py`, `cw_encoder_hpo.py` | `cw_diagonal_k4_protocol.json` | `data/curie-weiss-diagonal/` |
+| Curie–Weiss, classical baselines | `cw_classical_*.py` | `cw_classical_protocol.json` | `data/curie-weiss-classical/` |
+| Lattice scaling, 64–2048 qubits | `scaling_hpo.py`, `scaling_observables.py` | `scaling_hpo_protocol.json` | `data/scaling/` |
+| IQM Emerald, 16 and 30 qubits | `hardware_report.py`, `hardware_noiseless.py` | — | `data/hardware/` |
+
+## Training
+
+Each stage writes to the given output root and resumes only with the same
+configuration and source. Search stages stop after each phase. `--smoke` (or
+`--stage smoke`) runs a reduced pipeline check.
+
+**Gaussian-shaped family.**
+
+```sh
+uv run python -m paper_experiments.gaussian2d_lattice_run --output results/gaussian --stage campaign
+uv run python -m paper_experiments.gaussian2d_lattice_report --campaign results/gaussian --output results/gaussian/replay
+uv run python -m paper_experiments.gaussian2d_diagonal_run --output results/gaussian-diagonal --stage campaign
+uv run python -m paper_experiments.gaussian2d_diagonal_report --campaign results/gaussian-diagonal --output results/gaussian-diagonal/replay
+```
+
+The diagonal variants use `--basis {affine,quadratic}` and
+`--ansatz {lattice,complete}`.
+
+**Curie–Weiss, parity and per-temperature models.** 60 random and 60 TPE
+proposals per family, then confirmation (five repeats) and final fits (ten
+repeats), each with three starts:
+
+```sh
+uv run python run_experiments.py --mode hpo --experiment curie-weiss --hpo-phase random --workers 2 --output results/cw
+uv run python run_experiments.py --mode hpo --experiment curie-weiss --hpo-phase tpe --workers 2 --output results/cw
+uv run python run_experiments.py --mode hpo --experiment curie-weiss --hpo-phase reporting --workers 2 --output results/cw
+```
+
+**Curie–Weiss, twisted parity encoder and D-IQP.** Single-family campaigns under
+the same protocol, with fit streams paired to the parity fits:
+
+```sh
+for phase in random tpe confirmation final; do
+  uv run python -m paper_experiments.cw_encoder_hpo --campaign twisted --root results/cw-twisted --phase $phase
+done
+```
+
+`--campaign twisted_independent` gives the per-temperature twisted model and
+`--campaign diagonal_k4` gives D-IQP. Bundle and ablation:
+
+```sh
+uv run python -m paper_experiments.cw_twisted_bundle results/cw-twisted results/cw-twisted-independent --output results/cw-twisted-bundle
+uv run python -m paper_experiments.cw_kappa0_control run results/cw-kappa0 --winner results/cw-twisted/final/campaign.json
+uv run python -m paper_experiments.cw_kappa0_control bundle results/cw-kappa0 --output results/cw-twisted-bundle/kappa0_control.json
+```
+
+**Curie–Weiss, classical baselines.** For each capacity (`small`, `large`):
+
+```sh
+for phase in random tpe confirmation final; do
+  uv run python run_experiments.py --mode hpo --experiment curie-weiss-classical \
+    --classical-capacity small --hpo-phase $phase --output results/cw-classical
+done
+uv run python run_experiments.py --mode figures --experiment curie-weiss-classical \
+  --data-root results/cw-classical/hpo/small --output results/cw-classical-replay
+```
+
+**Lattice scaling.** Search at 64 and 256 qubits, confirmation, final fits,
+observables and bundle:
+
+```sh
+uv run python -m paper_experiments.scaling_hpo run results/scaling/search
+uv run python -m paper_experiments.scaling_hpo report results/scaling/search
+uv run python -m paper_experiments.scaling_hpo confirm results/scaling/confirm --search results/scaling/search
+uv run python -m paper_experiments.scaling_hpo report-confirm results/scaling/confirm
+uv run python -m paper_experiments.scaling_hpo final results/scaling/final --search results/scaling/search --confirmation results/scaling/confirm --sizes 64 128 256 512 1024 2048
+uv run python -m paper_experiments.scaling_hpo evaluate results/scaling/evaluations --fits results/scaling/final
+uv run python -m paper_experiments.scaling_hpo bundle results/scaling/bundle --fits results/scaling/final --evaluations results/scaling/evaluations
+```
+
+The 64-qubit all-to-all comparison uses `--ansatz complete --sizes 64`.
+
+## Tests
+
+```sh
+uv run pytest
+uv run ruff check paper_experiments tests run_experiments.py
+```

@@ -1,0 +1,29 @@
+{
+  "source_files_match_frozen_campaign": {
+    "small": {
+      "paper_experiments/cw_classical_rbm.py": true,
+      "paper_experiments/cw_classical_transformer.py": true,
+      "paper_experiments/cw_classical_vae.py": true,
+      "paper_experiments/cw_classical_report.py": true,
+      "paper_experiments/cw_classical_fit.py": true,
+      "paper_experiments/cw_classical_config.py": true,
+      "paper_experiments/cw_classical_evaluation.py": true,
+      "paper_experiments/cw_classical_campaign.py": true
+    },
+    "large": {
+      "paper_experiments/cw_classical_rbm.py": true,
+      "paper_experiments/cw_classical_transformer.py": true,
+      "paper_experiments/cw_classical_vae.py": true,
+      "paper_experiments/cw_classical_report.py": true,
+      "paper_experiments/cw_classical_fit.py": true,
+      "paper_experiments/cw_classical_config.py": true,
+      "paper_experiments/cw_classical_evaluation.py": true,
+      "paper_experiments/cw_classical_campaign.py": true
+    }
+  },
+  "bundle_validation": "cw_classical_report.render passed for both capacities: complete repeats, exact grids, score recomputation, target pool hashes, symmetry, quadrature diagnostics",
+  "artifacts": {
+    "large/figure_data.json": "6d70e488e37dd6a615c94d2c51720440fba16be7fa94eb35aa79b2f0c4055ee2",
+    "small/figure_data.json": "86fb9fdcee7ff272b4ddf30796209bac528fef419d6ef7c73154d6bea0819642"
+  }
+}

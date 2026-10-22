@@ -1,0 +1,12 @@
+# Local environments and caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.cache/
+.DS_Store
+.env
+
+# Run outputs
+results/

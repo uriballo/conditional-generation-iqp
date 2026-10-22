@@ -1,0 +1,131 @@
+{
+  "version": "cw-classical-20261014-v1",
+  "status": "design_fixed_2026-10-14",
+  "parent_protocol_sha256": "91363ccb9cc89fba1f8c39e068bce97f1fe3addd39414b8af9caeca48ee75da1",
+  "scope": "16-spin zero-field Curie-Weiss shared conditional generators; new evidence only after final fitting",
+  "families": {
+    "rbm": {
+      "small": {
+        "hidden": 6,
+        "parameters": 140
+      },
+      "large": {
+        "hidden": 53,
+        "parameters": 986
+      },
+      "loss": "symmetrized exact negative log-likelihood"
+    },
+    "transformer": {
+      "small": {
+        "d": 3,
+        "ff": 7,
+        "parameters": 137
+      },
+      "large": {
+        "d": 8,
+        "ff": 34,
+        "parameters": 971
+      },
+      "loss": "symmetrized exact negative log-likelihood"
+    },
+    "vae": {
+      "small": {
+        "latent": 1,
+        "encoder_width": 2,
+        "decoder_width": 4,
+        "training_parameters": 134,
+        "generation_parameters": 92
+      },
+      "large": {
+        "latent": 1,
+        "encoder_width": 20,
+        "decoder_width": 28,
+        "training_parameters": 950,
+        "generation_parameters": 548
+      },
+      "loss": "standard ELBO of symmetrized Bernoulli decoder; fixed N(0,1) prior; one reparameterized latent draw per observation; log variance clipped [-12,12]"
+    }
+  },
+  "conditioning": "raw scalar beta; affine bias conditioning for RBM, affine embedding for Transformer, concatenation for VAE",
+  "symmetry": "q_sym(x|beta)=(q(x|beta)+q(complement(x)|beta))/2; trained and sampled consistently; no permutation projection",
+  "training": {
+    "shared_anchors": [
+      0.1,
+      0.7,
+      1.3,
+      1.95
+    ],
+    "target_pool": "same parent seed streams, target generator, draw counts and per-repeat pool reuse; pair across capacities and families",
+    "updates": 2000,
+    "target_minibatch": 256,
+    "target_draws_per_anchor": 1024,
+    "anchor_allocation": "uniform independent per update",
+    "optimizer": "Adam, no weight decay or gradient clipping",
+    "objectives": "native likelihood/ELBO; target exact probabilities excluded from training"
+  },
+  "search": {
+    "random_trials": 60,
+    "tpe_trials": 60,
+    "screen_repeats": 5,
+    "screen_starts": 1,
+    "sampler": "locked Optuna5.0.0; sequential ask/tell per study; multivariate TPE, 24 EI candidates, 60 startup trials, constant_liar=True, NopPruner",
+    "ranges": {
+      "learning_rate": [
+        0.0003,
+        0.1
+      ],
+      "init_scale_multiplier": [
+        0.1,
+        3.0
+      ],
+      "b1": [
+        0.8,
+        0.95
+      ],
+      "one_minus_beta2": [
+        0.001,
+        0.05
+      ],
+      "schedule": [
+        "constant",
+        "cosine"
+      ]
+    },
+    "initialization": "architecture-appropriate Xavier weight initialization scaled by multiplier; zero biases and unit LayerNorm gains",
+    "cosine_final_ratio": 0.1,
+    "phase_execution": "each CLI stage explicit; random and TPE finish at review barriers",
+    "sampler_seed_policy": "random sampler per family/capacity; TPE sampler reconstructed per proposal with seed derived from family/capacity/proposal index, giving deterministic resume without serializing executable sampler state"
+  },
+  "selection": "inherit parent J/P, tolerance0.01 and global checkpoint/start selection on A; shortlist3-4; confirmation on A union B; no B checkpoint selection; no further HPO after confirmation; final ten fresh repeats and three starts",
+  "evaluation": {
+    "bit_order": "little endian",
+    "grid": "parent exact A/B/F grids and common markers",
+    "metrics": [
+      "full_tvd",
+      "profile_tvd",
+      "mean_tvd",
+      "max_tvd",
+      "J",
+      "P",
+      "absolute_magnetization_error",
+      "energy_fluctuation_error"
+    ],
+    "aggregation": "per-fit metrics first; all repeats retained; mean and sample standard deviation; no fitted-model ensembles",
+    "probability_tolerance": 1e-08,
+    "vae_quadrature": {
+      "initial_nodes": 32,
+      "max_nodes": 512,
+      "tvd_tolerance": 1e-05,
+      "consecutive_refinements": 2,
+      "error_label": "numerical integration, successive-refinement diagnostic; not a certified error bound"
+    },
+    "sampling_draws": 4096,
+    "sampling_timing": "one warmup batch then timed batch of same shape; compilation retained separately"
+  },
+  "failures": "numerical failures count as screening proposals with J=1 flagged as penalty, not measured TVD; no replacement seeds; confirmation/final numerical failures block stage completion; infrastructure interruptions propagate and resume identical jobs",
+  "reproducibility": "immutable source/environment/protocol identity; hash all fit artifacts and target pools; complete checkpoint parameters, loss trajectories and fit receipts; incomplete starts may rerun with same identity and seeds",
+  "reporting": "write ignored results only; final curves and summaries do not replace paper artifacts; smoke uses n4 and reduced budgets, labelled non-evidence",
+  "claim_scope": "small-system conditional accuracy and learned parameter efficiency; not a classical sampling advantage; record designed IQP encoder priors and training versus generation parameter counts",
+  "development_history": "classical design accepted after existing IQP final results; freeze before inspecting classical final-grid results",
+  "protocol_sha256": "3f9be3feb422ed054bb008a72a95c41602224689885919aad9287d211d750bc8"
+}

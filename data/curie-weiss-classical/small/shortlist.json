@@ -1,0 +1,161 @@
+{
+  "rbm": [
+    {
+      "trial_id": 115,
+      "config": {
+        "learning_rate": 0.07343314363313326,
+        "init_scale": 1.1707572001123978,
+        "b1": 0.8213808345522357,
+        "b2": 0.9521950889820676,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.07343314363313326,
+        "init_scale": 1.1707572001123978,
+        "b1": 0.8213808345522357,
+        "one_minus_beta2": 0.047804911017932376,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 76,
+      "config": {
+        "learning_rate": 0.09846339877619077,
+        "init_scale": 2.1525047064103635,
+        "b1": 0.8211162651504694,
+        "b2": 0.9590829763559404,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.09846339877619077,
+        "init_scale": 2.1525047064103635,
+        "b1": 0.8211162651504694,
+        "one_minus_beta2": 0.04091702364405959,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 68,
+      "config": {
+        "learning_rate": 0.07098134939988646,
+        "init_scale": 1.056854620909077,
+        "b1": 0.8190189212547672,
+        "b2": 0.9585440078340067,
+        "schedule": "constant"
+      },
+      "optuna_params": {
+        "learning_rate": 0.07098134939988646,
+        "init_scale": 1.056854620909077,
+        "b1": 0.8190189212547672,
+        "one_minus_beta2": 0.04145599216599327,
+        "schedule": "constant"
+      }
+    }
+  ],
+  "transformer": [
+    {
+      "trial_id": 100,
+      "config": {
+        "learning_rate": 0.06811816446179922,
+        "init_scale": 0.1684126017595322,
+        "b1": 0.9324303986906175,
+        "b2": 0.9508459758379686,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.06811816446179922,
+        "init_scale": 0.1684126017595322,
+        "b1": 0.9324303986906175,
+        "one_minus_beta2": 0.049154024162031455,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 62,
+      "config": {
+        "learning_rate": 0.040432183335579366,
+        "init_scale": 0.3942716571828441,
+        "b1": 0.9494576284056513,
+        "b2": 0.9898034197290735,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.040432183335579366,
+        "init_scale": 0.3942716571828441,
+        "b1": 0.9494576284056513,
+        "one_minus_beta2": 0.010196580270926498,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 1,
+      "config": {
+        "learning_rate": 0.03029337259814379,
+        "init_scale": 0.11811259617879559,
+        "b1": 0.8904727354062896,
+        "b2": 0.9534898820736568,
+        "schedule": "constant"
+      },
+      "optuna_params": {
+        "learning_rate": 0.03029337259814379,
+        "init_scale": 0.11811259617879559,
+        "b1": 0.8904727354062896,
+        "one_minus_beta2": 0.04651011792634316,
+        "schedule": "constant"
+      }
+    }
+  ],
+  "vae": [
+    {
+      "trial_id": 8,
+      "config": {
+        "learning_rate": 0.04122937383746991,
+        "init_scale": 0.13397566861833213,
+        "b1": 0.8273253240754134,
+        "b2": 0.9978318046127671,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.04122937383746991,
+        "init_scale": 0.13397566861833213,
+        "b1": 0.8273253240754134,
+        "one_minus_beta2": 0.002168195387232928,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 94,
+      "config": {
+        "learning_rate": 0.04860039000612155,
+        "init_scale": 0.12835087853747734,
+        "b1": 0.8374269629304771,
+        "b2": 0.9989548511991067,
+        "schedule": "constant"
+      },
+      "optuna_params": {
+        "learning_rate": 0.04860039000612155,
+        "init_scale": 0.12835087853747734,
+        "b1": 0.8374269629304771,
+        "one_minus_beta2": 0.0010451488008933882,
+        "schedule": "constant"
+      }
+    },
+    {
+      "trial_id": 83,
+      "config": {
+        "learning_rate": 0.051698935789306226,
+        "init_scale": 0.11416917273975971,
+        "b1": 0.8503270145964746,
+        "b2": 0.9988737308599546,
+        "schedule": "constant"
+      },
+      "optuna_params": {
+        "learning_rate": 0.051698935789306226,
+        "init_scale": 0.11416917273975971,
+        "b1": 0.8503270145964746,
+        "one_minus_beta2": 0.0011262691400454124,
+        "schedule": "constant"
+      }
+    }
+  ]
+}

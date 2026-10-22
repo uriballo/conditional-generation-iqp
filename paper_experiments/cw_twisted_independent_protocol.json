@@ -1,0 +1,42 @@
+{
+  "version": "cw-twisted-independent-hpo-20261018-v1",
+  "status": "twisted parity encoder HPO, 2026-10-18",
+  "campaign_id": "cw-twisted-independent-hpo-20261018",
+  "parent_protocol": {
+    "path": "paper_experiments/cw_followup_protocol.json",
+    "protocol_sha256": "91363ccb9cc89fba1f8c39e068bce97f1fe3addd39414b8af9caeca48ee75da1",
+    "inherited": "training, kernel, optimizer, initialization, temperature sets, objectives, fit selection, search, confirmation, final fitting, failures; all unchanged",
+    "file_sha256": "e2c1e553261ece97162ea2f6bdc9242406eaacefd1f94e923e9e6c7fab8bc281"
+  },
+  "family": {
+    "name": "independent_twisted_parity",
+    "encoder": "R_x(-pi/4)^{(x)15} T(mu) on the 15 leaves, T(mu)=exp[-i (mu/15) sum_{i<j<=15} Z_i Z_j] (one-axis twist followed by a fixed collective pi/4 turn); phi(beta) = P(t) [R_x(-pi/4)^{(x)15} T(mu)|+>^15] (x) |+>, P(t)=exp[-i (t/2) sum_{i<16} Z_i Z_16]; sin t = tanh(a beta^2), mu = kappa beta cos t; gates: H on every qubit, IsingZZ(2mu/15) on every leaf pair, RX(-pi/4) on every leaf, IsingZZ(t) from each leaf to the root; mu=0 gives the parity encoder with star angle t (the kappa=0 control state); implementation paper_experiments/twisted_parity_encoder.py",
+    "kappa": 0.4,
+    "kappa_policy": "fixed design constant, not searched; kappa = 0.4 and the fixed pi/4 turn were set in a preliminary comparison of encoder variants on development temperatures only (2026-10-18); the test temperatures 0.4, 1.0, 2.0 and the 101-point grid were never used",
+    "beta_scale_range": [
+      0.3,
+      0.7
+    ],
+    "beta_scale_policy": "beta_scale is the schedule constant a, searched log-uniformly on [0.3, 0.7]; it is not in the parity encoder's units, so the parent range does not apply",
+    "search_space": "shared_parity learning_rate, init_scale, b1, one_minus_beta2, schedule and kernel_pair with the parent ranges and priors; beta_scale on beta_scale_range",
+    "ansatz": "complete one- and two-body, 136 phases, no ancillas",
+    "role": "temperature-specific baseline for shared_twisted_parity: one circuit fitted directly at each marker temperature 0.4, 1.0, 2.0, as independent_parity is for shared_parity"
+  },
+  "randomness": {
+    "fit_streams": "parent namespace cw-parity-hpo-followup-20261009 and keys; fit streams pair with the independent_parity fits at every stage, repeat, marker and start; the same streams as the squeezed parity campaign",
+    "sampler_keys": "(sampler, independent_twisted_parity, random|tpe) in the parent namespace; independent of the samplers"
+  },
+  "development_history": [
+    "kappa = 0.4 and the fixed pi/4 turn were set in a preliminary comparison of encoder variants on development temperatures only (2026-10-18); the test temperatures 0.4, 1.0, 2.0 and the 101-point grid were never used",
+    "design notes (exact capacity and sampled screen on the DEV temperatures and A grid)"
+  ],
+  "stages": "random 60 -> TPE 60 -> confirmation (3-4 candidates, 5 repeats x 3 starts) -> final (10 repeats x 3 starts)",
+  "execution": "fits may be sharded across machines with identical source identity; recording, Optuna ask/tell and selection run once on the primary workspace",
+  "derived_from": {
+    "path": "paper_experiments/cw_squeezed_independent_protocol.json",
+    "protocol_sha256": "8c9a94e0654000a3add12c75ae06a69c99a13543995bbc82338277fa4bd6ec26",
+    "file_sha256": "bd8f0e3fc7be27d8b544174139d3347d7f038dd21129b0490adde2b944bfa8e8",
+    "changed": "encoder identity only (family name, encoder, kappa_policy wording, role, sampler keys named by the family); kappa, beta_scale range, search space, priors, seeds, pools, budgets, stages, workers and selection unchanged"
+  },
+  "protocol_sha256": "40e968b98ec6d2aa1e108d36099ac804919b4631d341d287fbb4f151c9cec4f2"
+}

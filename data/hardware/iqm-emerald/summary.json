@@ -1,0 +1,242 @@
+{
+  "calibration": "calibration-2026-10-16T05-21-31Z.json",
+  "calibration_created": "2026-10-16T05:21:33.312919Z",
+  "calibration_sha256": "a62e2a8ec44c3f7dc590a85eccbb6c0fd5012e22c9184ca65ed62331189836e9",
+  "runs": [
+    {
+      "n": 16,
+      "seed": 100,
+      "jobs": [
+        "01a14369-e495-76b8-bea5-5c0c919faf15",
+        "01a14391-b8ad-73f7-8c52-50d6aecae0bf"
+      ],
+      "layout_qubits": [
+        "QB33",
+        "QB25",
+        "QB17",
+        "QB9",
+        "QB34",
+        "QB26",
+        "QB18",
+        "QB10",
+        "QB35",
+        "QB27",
+        "QB19",
+        "QB11",
+        "QB36",
+        "QB28",
+        "QB20",
+        "QB12"
+      ],
+      "isa_cz": 74,
+      "isa_depth": 62,
+      "encoder_angles": {
+        "0.6": 0.22512773998179367,
+        "1.0": 0.5423239330207584,
+        "1.4": 0.9411130313426017,
+        "2.0": 1.376432591515689
+      }
+    },
+    {
+      "n": 30,
+      "seed": 100,
+      "jobs": [
+        "01a1437f-c814-71a8-a5e5-87dfd0d34700",
+        "01a14392-06be-71df-ad15-4ee1e39fe53b"
+      ],
+      "layout_qubits": [
+        "QB46",
+        "QB45",
+        "QB44",
+        "QB43",
+        "QB42",
+        "QB41",
+        "QB38",
+        "QB37",
+        "QB36",
+        "QB35",
+        "QB34",
+        "QB33",
+        "QB30",
+        "QB29",
+        "QB28",
+        "QB27",
+        "QB26",
+        "QB25",
+        "QB22",
+        "QB21",
+        "QB20",
+        "QB19",
+        "QB18",
+        "QB17",
+        "QB14",
+        "QB13",
+        "QB12",
+        "QB11",
+        "QB10",
+        "QB9"
+      ],
+      "isa_cz": 152,
+      "isa_depth": 92,
+      "encoder_angles": {
+        "0.6": 0.22061755851327097,
+        "1.0": 0.5409623192066421,
+        "1.4": 0.9481250478856381,
+        "2.0": 1.3863128403440337
+      }
+    }
+  ],
+  "rows": [
+    {
+      "n": 16,
+      "seed": 100,
+      "beta": 0.6,
+      "shots": 3000,
+      "jobs": [
+        "01a14369-e495-76b8-bea5-5c0c919faf15",
+        "01a14391-b8ad-73f7-8c52-50d6aecae0bf"
+      ],
+      "m2_hardware": 0.10530208333333334,
+      "m2_hardware_se": 0.0024978877195410854,
+      "m2_model": 0.11554724423581078,
+      "m2_model_se": 0.0006159608640803598,
+      "m2_target": 0.131400808069402,
+      "profile_tvd_hardware_target": 0.1390393198136982,
+      "profile_tvd_hardware_model": 0.13576494636657868,
+      "profile_tvd_model_target": 0.03756040021705616
+    },
+    {
+      "n": 16,
+      "seed": 100,
+      "beta": 1.0,
+      "shots": 3000,
+      "jobs": [
+        "01a14369-e495-76b8-bea5-5c0c919faf15",
+        "01a14391-b8ad-73f7-8c52-50d6aecae0bf"
+      ],
+      "m2_hardware": 0.21699479166666666,
+      "m2_hardware_se": 0.003818771665027958,
+      "m2_model": 0.30580514688647165,
+      "m2_model_se": 0.0026148311346946155,
+      "m2_target": 0.2776498118698437,
+      "profile_tvd_hardware_target": 0.13916009264221557,
+      "profile_tvd_hardware_model": 0.2087636165758313,
+      "profile_tvd_model_target": 0.19993041362459354
+    },
+    {
+      "n": 16,
+      "seed": 100,
+      "beta": 1.4,
+      "shots": 3000,
+      "jobs": [
+        "01a14369-e495-76b8-bea5-5c0c919faf15",
+        "01a14391-b8ad-73f7-8c52-50d6aecae0bf"
+      ],
+      "m2_hardware": 0.4059010416666667,
+      "m2_hardware_se": 0.005019928702071059,
+      "m2_model": 0.6150510397391399,
+      "m2_model_se": 0.0011649385810896817,
+      "m2_target": 0.5742632166936702,
+      "profile_tvd_hardware_target": 0.26946760460747454,
+      "profile_tvd_hardware_model": 0.3279921952654917,
+      "profile_tvd_model_target": 0.170401378253757
+    },
+    {
+      "n": 16,
+      "seed": 100,
+      "beta": 2.0,
+      "shots": 3000,
+      "jobs": [
+        "01a14369-e495-76b8-bea5-5c0c919faf15",
+        "01a14391-b8ad-73f7-8c52-50d6aecae0bf"
+      ],
+      "m2_hardware": 0.5326822916666667,
+      "m2_hardware_se": 0.0054431191405761225,
+      "m2_model": 0.8339407475421658,
+      "m2_model_se": 0.0017287104391360921,
+      "m2_target": 0.8875906631225958,
+      "profile_tvd_hardware_target": 0.5505887033654719,
+      "profile_tvd_hardware_model": 0.418821075578681,
+      "profile_tvd_model_target": 0.13692497877821042
+    },
+    {
+      "n": 30,
+      "seed": 100,
+      "beta": 0.6,
+      "shots": 3000,
+      "jobs": [
+        "01a1437f-c814-71a8-a5e5-87dfd0d34700",
+        "01a14392-06be-71df-ad15-4ee1e39fe53b"
+      ],
+      "m2_hardware": 0.057539259259259255,
+      "m2_hardware_se": 0.0013563055958426206,
+      "m2_model": 0.07122310353768854,
+      "m2_model_se": 0.0003148053499814265,
+      "m2_target": 0.07511934037369424,
+      "profile_tvd_hardware_target": 0.1392360899674741,
+      "profile_tvd_hardware_model": 0.1439677370514209,
+      "profile_tvd_model_target": 0.04474987048113224
+    },
+    {
+      "n": 30,
+      "seed": 100,
+      "beta": 1.0,
+      "shots": 3000,
+      "jobs": [
+        "01a1437f-c814-71a8-a5e5-87dfd0d34700",
+        "01a14392-06be-71df-ad15-4ee1e39fe53b"
+      ],
+      "m2_hardware": 0.1350637037037037,
+      "m2_hardware_se": 0.0024122108127608123,
+      "m2_model": 0.24741588352974295,
+      "m2_model_se": 0.0012583427038900924,
+      "m2_target": 0.2054522166781075,
+      "profile_tvd_hardware_target": 0.19525055698700355,
+      "profile_tvd_hardware_model": 0.34017584008073104,
+      "profile_tvd_model_target": 0.26921311058875963
+    },
+    {
+      "n": 30,
+      "seed": 100,
+      "beta": 1.4,
+      "shots": 3000,
+      "jobs": [
+        "01a1437f-c814-71a8-a5e5-87dfd0d34700",
+        "01a14392-06be-71df-ad15-4ee1e39fe53b"
+      ],
+      "m2_hardware": 0.2964162962962963,
+      "m2_hardware_se": 0.003846056048992093,
+      "m2_model": 0.5877541270648006,
+      "m2_model_se": 0.0010096411621110623,
+      "m2_target": 0.5929007757700988,
+      "profile_tvd_hardware_target": 0.4968575121495968,
+      "profile_tvd_hardware_model": 0.5268628162101394,
+      "profile_tvd_model_target": 0.16575329045526635
+    },
+    {
+      "n": 30,
+      "seed": 100,
+      "beta": 2.0,
+      "shots": 3000,
+      "jobs": [
+        "01a1437f-c814-71a8-a5e5-87dfd0d34700",
+        "01a14392-06be-71df-ad15-4ee1e39fe53b"
+      ],
+      "m2_hardware": 0.4238755555555555,
+      "m2_hardware_se": 0.004781095038770788,
+      "m2_model": 0.8794613804992102,
+      "m2_model_se": 0.0009661023969452023,
+      "m2_target": 0.9037576329600584,
+      "profile_tvd_hardware_target": 0.7645177517479861,
+      "profile_tvd_hardware_model": 0.7093931507295717,
+      "profile_tvd_model_target": 0.1442111436391072
+    }
+  ],
+  "median_used": {
+    "cz": 0.9965220773905684,
+    "readout": 0.988775,
+    "prx": 0.9996779480778142,
+    "t1_us": 50.896672166510356,
+    "t2_us": 14.371371985575882
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "version": "cw-squeezed-independent-hpo-20261013-v1",
+  "status": "baseline_fixed_2026-10-13",
+  "campaign_id": "cw-squeezed-independent-hpo-20261013",
+  "parent_protocol": {
+    "path": "paper_experiments/cw_followup_protocol.json",
+    "protocol_sha256": "91363ccb9cc89fba1f8c39e068bce97f1fe3addd39414b8af9caeca48ee75da1",
+    "inherited": "training, kernel, optimizer, initialization, temperature sets, objectives, fit selection, search, confirmation, final fitting, failures; all unchanged"
+  },
+  "family": {
+    "name": "independent_squeezed_parity",
+    "encoder": "P(t) [S(r)|+>^15 (x) |+>], P(t)=exp[-i (t/2) sum_{i<16} Z_i Z_16], S(r)=exp[i r (JyJz+JzJy)/15] on the 15 leaves; sin t = tanh(a beta^2), r = -kappa beta cos t; r=0 and t=a beta give the parity encoder at scale a",
+    "kappa": 0.4,
+    "kappa_policy": "fixed design constant from the development-only design pass, not searched",
+    "beta_scale_range": [
+      0.3,
+      0.7
+    ],
+    "beta_scale_policy": "beta_scale is the schedule constant a, searched log-uniformly on [0.3, 0.7]; it is not in the parity encoder's units, so the parent range does not apply",
+    "search_space": "shared_parity learning_rate, init_scale, b1, one_minus_beta2, schedule and kernel_pair with the parent ranges and priors; beta_scale on beta_scale_range",
+    "ansatz": "complete one- and two-body, 136 phases, no ancillas",
+    "role": "temperature-specific baseline for shared_squeezed_parity: one circuit fitted directly at each marker temperature 0.4, 1.0, 2.0, as independent_parity is for shared_parity"
+  },
+  "randomness": {
+    "fit_streams": "parent namespace cw-parity-hpo-followup-20261009 and keys; fit streams pair with the independent_parity fits at every stage, repeat, marker and start",
+    "sampler_keys": "(sampler, independent_squeezed_parity, random|tpe) in the parent namespace; independent of the samplers"
+  },
+  "development_history": [
+    "encoder, kappa and beta_scale range identical to cw_squeezed_protocol.json; no separate design pass"
+  ],
+  "stages": "random 60 -> TPE 60 -> confirmation (3-4 candidates, 5 repeats x 3 starts) -> final (10 repeats x 3 starts)",
+  "execution": "fits may be sharded across machines with identical source identity; recording, Optuna ask/tell and selection run once on the primary workspace",
+  "protocol_sha256": "8c9a94e0654000a3add12c75ae06a69c99a13543995bbc82338277fa4bd6ec26"
+}

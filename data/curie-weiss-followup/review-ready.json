@@ -1,0 +1,11 @@
+{
+  "status": "final_complete",
+  "repeats": 10,
+  "winners": {
+    "shared_parity": 103,
+    "shared_product": 87,
+    "independent_parity": 105,
+    "independent_unconditional": 117
+  },
+  "figure_data_sha256": "57f937390a087dbd7b8f1c3c4ed8d3e93b7c0c11dfabe2d60e171530696c191d"
+}

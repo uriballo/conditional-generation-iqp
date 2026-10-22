@@ -1,0 +1,178 @@
+{
+  "rbm": [
+    {
+      "trial_id": 101,
+      "config": {
+        "learning_rate": 0.02033041868492468,
+        "init_scale": 0.10864963378742666,
+        "b1": 0.9338314249150514,
+        "b2": 0.9986982402800914,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.02033041868492468,
+        "init_scale": 0.10864963378742666,
+        "b1": 0.9338314249150514,
+        "one_minus_beta2": 0.0013017597199086147,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 57,
+      "config": {
+        "learning_rate": 0.045480618080081255,
+        "init_scale": 0.11694758882453758,
+        "b1": 0.8643861713376805,
+        "b2": 0.9973671942220346,
+        "schedule": "constant"
+      },
+      "optuna_params": {
+        "learning_rate": 0.045480618080081255,
+        "init_scale": 0.11694758882453758,
+        "b1": 0.8643861713376805,
+        "one_minus_beta2": 0.00263280577796547,
+        "schedule": "constant"
+      }
+    },
+    {
+      "trial_id": 112,
+      "config": {
+        "learning_rate": 0.02127997088522135,
+        "init_scale": 0.10815131479518927,
+        "b1": 0.94039754919817,
+        "b2": 0.9989497121149411,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.02127997088522135,
+        "init_scale": 0.10815131479518927,
+        "b1": 0.94039754919817,
+        "one_minus_beta2": 0.0010502878850588808,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 40,
+      "config": {
+        "learning_rate": 0.07034596209051884,
+        "init_scale": 2.492383631962425,
+        "b1": 0.8746486884111129,
+        "b2": 0.9576899487201337,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.07034596209051884,
+        "init_scale": 2.492383631962425,
+        "b1": 0.8746486884111129,
+        "one_minus_beta2": 0.04231005127986636,
+        "schedule": "cosine"
+      }
+    }
+  ],
+  "transformer": [
+    {
+      "trial_id": 82,
+      "config": {
+        "learning_rate": 0.002573356777845067,
+        "init_scale": 0.21385637144701636,
+        "b1": 0.9184896239796769,
+        "b2": 0.9665153632355808,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.002573356777845067,
+        "init_scale": 0.21385637144701636,
+        "b1": 0.9184896239796769,
+        "one_minus_beta2": 0.03348463676441919,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 106,
+      "config": {
+        "learning_rate": 0.0030499456634894132,
+        "init_scale": 0.21738528447855138,
+        "b1": 0.9412142495435499,
+        "b2": 0.9597025188174401,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.0030499456634894132,
+        "init_scale": 0.21738528447855138,
+        "b1": 0.9412142495435499,
+        "one_minus_beta2": 0.04029748118255997,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 84,
+      "config": {
+        "learning_rate": 0.0030923395768047736,
+        "init_scale": 0.21567134900136561,
+        "b1": 0.9352424802044744,
+        "b2": 0.9635305256091261,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.0030923395768047736,
+        "init_scale": 0.21567134900136561,
+        "b1": 0.9352424802044744,
+        "one_minus_beta2": 0.03646947439087384,
+        "schedule": "cosine"
+      }
+    }
+  ],
+  "vae": [
+    {
+      "trial_id": 117,
+      "config": {
+        "learning_rate": 0.039172768473849186,
+        "init_scale": 1.7683427314819753,
+        "b1": 0.8809029343878892,
+        "b2": 0.9947395360166732,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.039172768473849186,
+        "init_scale": 1.7683427314819753,
+        "b1": 0.8809029343878892,
+        "one_minus_beta2": 0.00526046398332677,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 116,
+      "config": {
+        "learning_rate": 0.05376392727839099,
+        "init_scale": 1.5965403502198106,
+        "b1": 0.8895944332309814,
+        "b2": 0.9938177235820337,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.05376392727839099,
+        "init_scale": 1.5965403502198106,
+        "b1": 0.8895944332309814,
+        "one_minus_beta2": 0.006182276417966269,
+        "schedule": "cosine"
+      }
+    },
+    {
+      "trial_id": 115,
+      "config": {
+        "learning_rate": 0.0377246650331749,
+        "init_scale": 1.8265001183326606,
+        "b1": 0.8944885562077292,
+        "b2": 0.9896829714574543,
+        "schedule": "cosine"
+      },
+      "optuna_params": {
+        "learning_rate": 0.0377246650331749,
+        "init_scale": 1.8265001183326606,
+        "b1": 0.8944885562077292,
+        "one_minus_beta2": 0.010317028542545634,
+        "schedule": "cosine"
+      }
+    }
+  ]
+}
