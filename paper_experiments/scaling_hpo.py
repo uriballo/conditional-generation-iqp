@@ -329,10 +329,13 @@ def trial_score(per_size):
     )
 
 
-def run_trial(ctxs, family, index, out, smoke=False):
+def run_trial(ctxs, family, index, out, smoke=False, fixed_budget=None):
     import jax
 
     hp = sample_trial(family, index)
+    if fixed_budget:
+        # Fixed after sampling so the other hyperparameters keep their draws.
+        hp.update(n_ops=fixed_budget[0], mc_samples=fixed_budget[1])
     sizes, statuses, arrays = {}, [], []
     for ctx in ctxs:
         status, seconds, a, budget = run_size(ctx, family, hp, smoke)
@@ -812,6 +815,13 @@ def main(argv=None):
     parser.add_argument("--trials", type=int, default=PROTOCOL["trials_per_family"])
     parser.add_argument("--sizes", type=int, nargs="+", default=PROTOCOL["sizes"])
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument(
+        "--budget",
+        type=int,
+        nargs=2,
+        metavar=("N_OPS", "MC_SAMPLES"),
+        help="fix the training budget instead of searching it",
+    )
     args = parser.parse_args(argv)
     if args.command == "report":
         return report(args.out)
@@ -846,7 +856,7 @@ def main(argv=None):
         for family in args.family:
             if (args.out / f"{family}-{index:03d}.json").exists():
                 continue
-            meta = run_trial(ctxs, family, index, args.out, args.smoke)
+            meta = run_trial(ctxs, family, index, args.out, args.smoke, args.budget)
             secs = sum(s["seconds"] for s in meta["sizes"].values())
             print(
                 family, index, meta["status"], meta["score"], f"{secs:.1f}s", flush=True
