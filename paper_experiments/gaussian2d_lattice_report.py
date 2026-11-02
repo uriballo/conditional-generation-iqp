@@ -282,11 +282,11 @@ def extract(campaign: Path, output: Path):
     return summary
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--campaign", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     extract(args.campaign, args.output)
 
 

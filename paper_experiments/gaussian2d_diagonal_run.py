@@ -491,7 +491,7 @@ def freeze(output):
     return snapshot
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--stage", choices=("smoke", "campaign"), required=True)
@@ -501,7 +501,7 @@ def main():
         "--ansatz", choices=tuple(ANSATZ_PROTOCOL_NAMES), default="lattice"
     )
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     output = args.output.resolve()
     use_protocol(args.basis, args.ansatz)
     if args.worker:

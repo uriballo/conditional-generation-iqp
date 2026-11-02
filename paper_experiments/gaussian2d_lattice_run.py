@@ -394,12 +394,12 @@ def freeze(output):
     return snapshot
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--stage", choices=("smoke", "campaign"), required=True)
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     output = args.output.resolve()
     if args.worker:
         run_campaign(output, smoke=args.stage == "smoke")
