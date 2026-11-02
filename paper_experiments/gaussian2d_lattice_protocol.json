@@ -1,10 +1,9 @@
 {
-  "version": 1,
+  "version": 2,
   "family": "binomial-centered Gaussian-shaped exponential tilts",
   "target_formula": "rho(k|u,v) proportional binom(16,k) exp[-(k-8-3u)^2/(8*(1+0.2*v)^2)+(k-8)^2/8]",
   "encoder_formula": "exp[-i(u/2)Jz] exp[-i(v/40)Jz^2] |+>^16",
   "central_baseline": "u=v=0 produces exact uniform bitstrings for every parameter vector; K is Binomial(16,1/2)",
-  "translation_mapping": "u=2c-1,v=0; central c=0.5",
   "parameterization": {
     "n_visible": 16,
     "one_body": 16,
@@ -13,258 +12,6 @@
     "ancillas": 0
   },
   "protocols": {
-    "grid": {
-      "fitting": [
-        [
-          -1.0,
-          -1.0
-        ],
-        [
-          -1.0,
-          0.0
-        ],
-        [
-          -1.0,
-          1.0
-        ],
-        [
-          0.0,
-          -1.0
-        ],
-        [
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          1.0
-        ],
-        [
-          1.0,
-          -1.0
-        ],
-        [
-          1.0,
-          0.0
-        ],
-        [
-          1.0,
-          1.0
-        ]
-      ],
-      "development": [
-        [
-          -1.0,
-          -0.75
-        ],
-        [
-          -1.0,
-          -0.25
-        ],
-        [
-          -1.0,
-          0.25
-        ],
-        [
-          -1.0,
-          0.75
-        ],
-        [
-          -0.5,
-          -0.75
-        ],
-        [
-          -0.5,
-          -0.25
-        ],
-        [
-          -0.5,
-          0.25
-        ],
-        [
-          -0.5,
-          0.75
-        ],
-        [
-          0.0,
-          -0.75
-        ],
-        [
-          0.0,
-          -0.25
-        ],
-        [
-          0.0,
-          0.25
-        ],
-        [
-          0.0,
-          0.75
-        ],
-        [
-          0.5,
-          -0.75
-        ],
-        [
-          0.5,
-          -0.25
-        ],
-        [
-          0.5,
-          0.25
-        ],
-        [
-          0.5,
-          0.75
-        ],
-        [
-          1.0,
-          -0.75
-        ],
-        [
-          1.0,
-          -0.25
-        ],
-        [
-          1.0,
-          0.25
-        ],
-        [
-          1.0,
-          0.75
-        ]
-      ],
-      "reporting": [
-        [
-          -1.0,
-          -0.79
-        ],
-        [
-          -1.0,
-          -0.31
-        ],
-        [
-          -1.0,
-          0.23
-        ],
-        [
-          -1.0,
-          0.67
-        ],
-        [
-          -0.83,
-          -1.0
-        ],
-        [
-          -0.83,
-          -0.79
-        ],
-        [
-          -0.83,
-          -0.31
-        ],
-        [
-          -0.83,
-          0.23
-        ],
-        [
-          -0.83,
-          0.67
-        ],
-        [
-          -0.83,
-          1.0
-        ],
-        [
-          -0.37,
-          -1.0
-        ],
-        [
-          -0.37,
-          -0.79
-        ],
-        [
-          -0.37,
-          -0.31
-        ],
-        [
-          -0.37,
-          0.23
-        ],
-        [
-          -0.37,
-          0.67
-        ],
-        [
-          -0.37,
-          1.0
-        ],
-        [
-          0.19,
-          -1.0
-        ],
-        [
-          0.19,
-          -0.79
-        ],
-        [
-          0.19,
-          -0.31
-        ],
-        [
-          0.19,
-          0.23
-        ],
-        [
-          0.19,
-          0.67
-        ],
-        [
-          0.19,
-          1.0
-        ],
-        [
-          0.61,
-          -1.0
-        ],
-        [
-          0.61,
-          -0.79
-        ],
-        [
-          0.61,
-          -0.31
-        ],
-        [
-          0.61,
-          0.23
-        ],
-        [
-          0.61,
-          0.67
-        ],
-        [
-          0.61,
-          1.0
-        ],
-        [
-          1.0,
-          -0.79
-        ],
-        [
-          1.0,
-          -0.31
-        ],
-        [
-          1.0,
-          0.23
-        ],
-        [
-          1.0,
-          0.67
-        ]
-      ]
-    },
     "axes": {
       "fitting": [
         [
@@ -404,370 +151,6 @@
           1.0
         ]
       ]
-    },
-    "translation": {
-      "fitting": [
-        [
-          -1,
-          0
-        ],
-        [
-          -0.5,
-          0
-        ],
-        [
-          0.0,
-          0
-        ],
-        [
-          0.5,
-          0
-        ],
-        [
-          1,
-          0
-        ]
-      ],
-      "development": [
-        [
-          -0.75,
-          0
-        ],
-        [
-          -0.25,
-          0
-        ],
-        [
-          0.25,
-          0
-        ],
-        [
-          0.75,
-          0
-        ]
-      ],
-      "reporting": [
-        [
-          -0.9916666666666667,
-          0
-        ],
-        [
-          -0.9666666666666667,
-          0
-        ],
-        [
-          -0.9416666666666667,
-          0
-        ],
-        [
-          -0.9166666666666666,
-          0
-        ],
-        [
-          -0.8916666666666667,
-          0
-        ],
-        [
-          -0.8666666666666667,
-          0
-        ],
-        [
-          -0.8416666666666667,
-          0
-        ],
-        [
-          -0.8166666666666667,
-          0
-        ],
-        [
-          -0.7916666666666666,
-          0
-        ],
-        [
-          -0.7666666666666666,
-          0
-        ],
-        [
-          -0.7416666666666667,
-          0
-        ],
-        [
-          -0.7166666666666667,
-          0
-        ],
-        [
-          -0.6916666666666667,
-          0
-        ],
-        [
-          -0.6666666666666666,
-          0
-        ],
-        [
-          -0.6416666666666666,
-          0
-        ],
-        [
-          -0.6166666666666667,
-          0
-        ],
-        [
-          -0.5916666666666667,
-          0
-        ],
-        [
-          -0.5666666666666667,
-          0
-        ],
-        [
-          -0.5416666666666667,
-          0
-        ],
-        [
-          -0.5166666666666667,
-          0
-        ],
-        [
-          -0.4916666666666667,
-          0
-        ],
-        [
-          -0.4666666666666667,
-          0
-        ],
-        [
-          -0.44166666666666665,
-          0
-        ],
-        [
-          -0.41666666666666674,
-          0
-        ],
-        [
-          -0.3916666666666667,
-          0
-        ],
-        [
-          -0.3666666666666667,
-          0
-        ],
-        [
-          -0.3416666666666667,
-          0
-        ],
-        [
-          -0.31666666666666665,
-          0
-        ],
-        [
-          -0.29166666666666674,
-          0
-        ],
-        [
-          -0.2666666666666667,
-          0
-        ],
-        [
-          -0.2416666666666667,
-          0
-        ],
-        [
-          -0.21666666666666667,
-          0
-        ],
-        [
-          -0.19166666666666665,
-          0
-        ],
-        [
-          -0.16666666666666663,
-          0
-        ],
-        [
-          -0.1416666666666666,
-          0
-        ],
-        [
-          -0.11666666666666659,
-          0
-        ],
-        [
-          -0.09166666666666656,
-          0
-        ],
-        [
-          -0.06666666666666665,
-          0
-        ],
-        [
-          -0.04166666666666663,
-          0
-        ],
-        [
-          -0.016666666666666607,
-          0
-        ],
-        [
-          0.008333333333333304,
-          0
-        ],
-        [
-          0.03333333333333344,
-          0
-        ],
-        [
-          0.05833333333333335,
-          0
-        ],
-        [
-          0.08333333333333348,
-          0
-        ],
-        [
-          0.10833333333333339,
-          0
-        ],
-        [
-          0.1333333333333333,
-          0
-        ],
-        [
-          0.15833333333333344,
-          0
-        ],
-        [
-          0.18333333333333335,
-          0
-        ],
-        [
-          0.20833333333333348,
-          0
-        ],
-        [
-          0.2333333333333334,
-          0
-        ],
-        [
-          0.2583333333333333,
-          0
-        ],
-        [
-          0.28333333333333344,
-          0
-        ],
-        [
-          0.30833333333333335,
-          0
-        ],
-        [
-          0.3333333333333335,
-          0
-        ],
-        [
-          0.3583333333333334,
-          0
-        ],
-        [
-          0.3833333333333333,
-          0
-        ],
-        [
-          0.40833333333333344,
-          0
-        ],
-        [
-          0.43333333333333335,
-          0
-        ],
-        [
-          0.4583333333333335,
-          0
-        ],
-        [
-          0.4833333333333334,
-          0
-        ],
-        [
-          0.5083333333333333,
-          0
-        ],
-        [
-          0.5333333333333334,
-          0
-        ],
-        [
-          0.5583333333333333,
-          0
-        ],
-        [
-          0.5833333333333335,
-          0
-        ],
-        [
-          0.6083333333333332,
-          0
-        ],
-        [
-          0.6333333333333333,
-          0
-        ],
-        [
-          0.6583333333333332,
-          0
-        ],
-        [
-          0.6833333333333331,
-          0
-        ],
-        [
-          0.7083333333333333,
-          0
-        ],
-        [
-          0.7333333333333332,
-          0
-        ],
-        [
-          0.7583333333333333,
-          0
-        ],
-        [
-          0.7833333333333332,
-          0
-        ],
-        [
-          0.8083333333333331,
-          0
-        ],
-        [
-          0.8333333333333333,
-          0
-        ],
-        [
-          0.8583333333333332,
-          0
-        ],
-        [
-          0.8833333333333333,
-          0
-        ],
-        [
-          0.9083333333333332,
-          0
-        ],
-        [
-          0.9333333333333331,
-          0
-        ],
-        [
-          0.9583333333333333,
-          0
-        ],
-        [
-          0.9833333333333332,
-          0
-        ]
-      ]
     }
   },
   "condition_origin": {
@@ -775,99 +158,216 @@
     "sha256": "525f7cb36c04038b3c36acd57bdc03a851f223d265c75d378a6456bcf8d40a6f",
     "previously_explored": true
   },
-  "selection": "mean exact full TVD at development conditions; reporting excluded",
-  "candidates": {
-    "m0_lr0.01": {
-      "local_mean": 0,
-      "init_scale": 0.1,
-      "learning_rate": 0.01
+  "campaigns": {
+    "input": "conditional IQP Born machine: Hamming-weight encoder of encoder_formula, shared 4x4 lattice layer (this file)",
+    "diagonal": "gaussian2d_diagonal_protocol.json",
+    "diagonal_quadratic": "gaussian2d_diagonal_quadratic_protocol.json",
+    "diagonal_complete": "gaussian2d_diagonal_complete_protocol.json",
+    "diagonal_complete_quadratic": "gaussian2d_diagonal_complete_quadratic_protocol.json"
+  },
+  "selection": "mean exact full TVD over the eight development conditions (score J); reporting conditions excluded from training, checkpoint, start and configuration selection",
+  "training": {
+    "loss": "sampled squared conditional MMD with step mask refresh; kernel slot fixed per update",
+    "updates_per_start": 2000,
+    "checkpoint_steps": [
+      0,
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900,
+      1000,
+      1100,
+      1200,
+      1300,
+      1400,
+      1500,
+      1600,
+      1700,
+      1800,
+      1900,
+      2000
+    ],
+    "condition_allocation": "independent uniform draw over the nine fitting conditions per update",
+    "target_pool_draws_per_fitting_condition": 1024,
+    "target_minibatch": 256,
+    "reference_draws_per_update": 1024,
+    "operator_masks_per_update": 1024,
+    "sample_chunk": 256,
+    "gemm_dtype": "float32",
+    "target_pool_policy": "one pool per (stage, repeat), shared by every trial, start and campaign at that stage and repeat; independent between stages and repeats"
+  },
+  "search_space": {
+    "source": "Curie-Weiss follow-up search space (cw_followup_config.candidate, independent_unconditional family) plus the one-body initialization mean",
+    "learning_rate": {
+      "range": [
+        0.0003,
+        0.1
+      ],
+      "prior": "log_uniform"
     },
-    "m0_lr0.03": {
-      "local_mean": 0,
-      "init_scale": 0.1,
-      "learning_rate": 0.03
+    "schedule": {
+      "choices": [
+        "constant",
+        "cosine"
+      ],
+      "prior": [
+        0.5,
+        0.5
+      ],
+      "cosine_final_learning_rate_ratio": 0.1,
+      "warmup_updates": 0
     },
-    "mpi3_lr0.01": {
-      "local_mean": 1.0471975511965976,
-      "init_scale": 0.1,
-      "learning_rate": 0.01
+    "adam": {
+      "b1": {
+        "range": [
+          0.8,
+          0.95
+        ],
+        "prior": "uniform"
+      },
+      "one_minus_b2": {
+        "range": [
+          0.001,
+          0.05
+        ],
+        "prior": "log_uniform"
+      },
+      "eps": 1e-08,
+      "weight_decay": 0
     },
-    "mpi3_lr0.03": {
-      "local_mean": 1.0471975511965976,
-      "init_scale": 0.1,
-      "learning_rate": 0.03
+    "init_scale": {
+      "range": [
+        0.01,
+        1.0
+      ],
+      "prior": "log_uniform",
+      "meaning": "standard deviation of the zero-mean Gaussian on every initial phase (input conditioning) or every entry of w_0 (diagonal conditioning)"
+    },
+    "one_body_mean": {
+      "range": [
+        0,
+        1.5707963267948966
+      ],
+      "prior": "uniform",
+      "meaning": "added to the 16 one-body initial phases (input conditioning) or the 16 one-body entries of w_0 (diagonal conditioning); all condition-dependent rows start at zero"
+    },
+    "kernel": {
+      "expected_weight_slots": [
+        "2",
+        "w2",
+        "w3"
+      ],
+      "tunable_grid": [
+        4,
+        4.5,
+        5,
+        5.5,
+        6,
+        6.5,
+        7,
+        7.5,
+        7.99
+      ],
+      "ordered_pair": "w2<=w3; repetitions allowed; single categorical over the 45 ordered pairs",
+      "slot_probabilities": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "bandwidth_mapping": "sigma=[-2*log(1-2*w/16)]^(-1/2), w counts the identity mask"
     }
   },
-  "budgets": {
-    "screen_steps": 512,
-    "confirmation_steps": 2000,
-    "final_steps": 2000,
-    "n_train": 1024,
-    "batch_size": 256,
-    "n_ops": 1024,
-    "mc_samples": 1024,
-    "sample_chunk": 256,
-    "expected_weights": [
-      2,
-      4
+  "search": {
+    "random_trials": 60,
+    "random_sampler": "Optuna 5.0.0 RandomSampler seeded by the structured seed ('sampler', campaign, 'random'); all 60 proposals frozen before any fit",
+    "tpe_trials": 60,
+    "tpe_condition": "the TPE phase runs only if timing measured on the random phase shows that all five campaigns, including confirmation, final fits and reporting, finish within the compute window; the decision uses wall-clock timing only, not scores",
+    "tpe_sampler": {
+      "n_startup_trials": 60,
+      "n_ei_candidates": 24,
+      "multivariate": true,
+      "group": false,
+      "constant_liar": true,
+      "seed": "structured seed ('sampler', campaign, 'tpe')",
+      "proposal_batch_size": 1
+    },
+    "screening": {
+      "repeats": 5,
+      "starts_per_repeat": 1
+    },
+    "trial_score": "mean over repeats of the selected development score J; a numerical failure in any repeat gives J=1"
+  },
+  "confirmation": {
+    "candidates": 3,
+    "shortlist": "three lowest screening J over all screening trials, ties by trial id; exact duplicate configurations count once",
+    "repeats_per_candidate": 5,
+    "starts_per_repeat": 3,
+    "winner": "lowest mean confirmation J, ties by trial id"
+  },
+  "final_fitting": {
+    "repeats": 10,
+    "starts_per_repeat": 3,
+    "retention": "all ten selected repeats; no best-repeat selection"
+  },
+  "fit_selection": {
+    "procedure": "per repeat, the minimum J over all checkpoint steps of all starts",
+    "ties": "earliest checkpoint step, then lowest start index",
+    "checkpoint_steps": [
+      0,
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900,
+      1000,
+      1100,
+      1200,
+      1300,
+      1400,
+      1500,
+      1600,
+      1700,
+      1800,
+      1900,
+      2000
     ]
   },
-  "seeds": {
-    "screen": [
-      2026103901
+  "randomness": {
+    "master_seed": 2026110201,
+    "namespace": "gaussian2d-hpo-20261102",
+    "seed": "first four bytes of sha256(canonical JSON [master_seed, namespace, *keys])",
+    "target_pool_keys": [
+      "stage",
+      "repeat",
+      "target_pool"
     ],
-    "confirm": [
-      2026103911,
-      2026103912
+    "fit_stream_keys": [
+      "stage",
+      "repeat",
+      "start",
+      "purpose"
     ],
-    "final": [
-      2026103921,
-      2026103922,
-      2026103923,
-      2026103924,
-      2026103925
-    ]
-  },
-  "translation": {
-    "steps": 1024,
-    "n_train": 512,
-    "batch_size": 128,
-    "n_ops": 1024,
-    "mc_samples": 1024,
-    "sample_chunk": 256,
-    "expected_weights": [
-      1
+    "purposes": [
+      "initialization",
+      "batches",
+      "bands",
+      "conditions",
+      "masks",
+      "reference"
     ],
-    "learning_rate": 0.005,
-    "init_scale": 0.25,
-    "local_mean": 0,
-    "seeds": [
-      17100,
-      17101,
-      17102,
-      17103,
-      17104
-    ],
-    "validation_interval": 32
-  },
-  "optimizer": {
-    "name": "adam",
-    "b1": 0.9,
-    "b2": 0.999,
-    "eps": 1e-08,
-    "final_learning_rate_ratio": 0.1
-  },
-  "rng_offsets": {
-    "pool": 101,
-    "batches": 1,
-    "bands": 2,
-    "conditions": 3,
-    "masks": 4,
-    "reference": 5
+    "pairing": "streams and pools are independent of trial and campaign, so the five campaigns and all trials share pools and fit streams at the same stage, repeat and start; stages are independent"
   },
   "limitations": [
-    "Target and encoder revised after previous diagnostics; this is an exploratory capability benchmark, not prospective encoder selection.",
-    "Development selection uses exact target probabilities.",
+    "Exploratory task-informed family and encoder; development selection uses exact target probabilities.",
     "No necessity or advantage claim for the forty-parameter layer."
   ]
 }

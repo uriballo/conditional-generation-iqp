@@ -1,23 +1,24 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "two-coordinate diagonal-conditioning baseline, all-to-all diagonal layer (axes design)",
+  "basis": "affine",
+  "ansatz": "complete",
   "parent_protocol": {
     "path": "paper_experiments/gaussian2d_lattice_protocol.json",
-    "sha256": "f7544cdd85110dca1f5d050ad8f7457974258b78c41db2d748ce73e5ca1b1fa7",
-    "design": "axes",
+    "sha256": "a682d053b6caed2a1c9e1a7afad2cf09d52cef55cceedd82ef8c9909c3bc51fb",
     "inherited": [
       "target_formula",
       "protocols.axes",
       "selection",
-      "budgets",
-      "seeds",
-      "optimizer",
-      "rng_offsets",
-      "candidates.init_scale",
-      "candidates.learning_rate"
+      "training",
+      "search_space",
+      "search",
+      "confirmation",
+      "final_fitting",
+      "fit_selection",
+      "randomness"
     ]
   },
-  "target_formula": "rho(k|u,v) proportional binom(16,k) exp[-(k-8-3u)^2/(8*(1+0.2*v)^2)+(k-8)^2/8]",
   "model": {
     "ansatz": "iqp_cond.Ansatz.complete(16): 16 one-body Z_i followed by all 120 Z_iZ_j pairs in numpy triu order (136 phases), the generator set of the Curie-Weiss models",
     "input_state": "fixed |0>^16 for every condition (standard IQP Born machine); AngleEncoder with zero RY angles",
@@ -25,240 +26,16 @@
     "diagonal_map": "theta(u,v) = w_0 + u w_u + v w_v",
     "weights_layout": "flattened (3,136) array with rows w_0, w_u, w_v",
     "n_parameters": 408,
-    "initialization": "w_0 = numpy default_rng(seed).normal(0, init_scale, 136) plus local_mean on the 16 one-body entries (the first 40 draws coincide with the lattice stream but are assigned to different generators beyond the one-body block); all other rows zero. init_scale was kept at 0.1 on every entry although there are now 120 pairs rather than 24, and no init_scale candidates were added, so the search size stays matched to the conditional IQP campaign.",
+    "initialization": "w_0 = init_scale * numpy default_rng(initialization stream).normal(0, 1, 136) plus one_body_mean on the 16 one-body entries; every other row zero. The initialization stream is shared with the input-conditioning fit of the same stage, repeat and start (its first 40 draws coincide with the lattice draws but sit on different generators beyond the one-body block).",
     "rationale": "Under axis-only training a bilinear u*v term is unidentifiable, so the affine map is the natural diagonal-conditioning counterpart; mixed pairs are additive extrapolation in parameter space. The |+>^16 input is excluded because H D(theta) H |+> is proportional to |+> and gives the uniform law for every theta.",
     "connectivity_rationale": "Tests whether the gap to conditional IQP is a connectivity effect: the C-IQP encoder imposes the width through J_z^2, which places phases on all 120 qubit pairs, whereas the lattice baseline's diagonal layer has only 24 couplings."
   },
   "deviations": [
-    "Candidate local_mean grid is {0, pi/4} instead of the parent {0, pi/3}: for the |0> input a one-body phase of pi/4 on every qubit (all other phases zero) gives the uniform distribution, the target at the origin.",
-    "The fixed |0> input does not pin the origin: the model at (0,0) is theta = w_0 and is learned, not architecturally uniform."
+    "The fixed |0> input does not pin the origin: the model at (0,0) is theta = w_0 and is learned, not architecturally uniform. A one-body phase of pi/4 on every qubit (all other phases zero) gives the uniform distribution; the one-body mean range [0, pi/2] contains it."
   ],
-  "protocols": {
-    "axes": {
-      "fitting": [
-        [
-          -1.0,
-          0.0
-        ],
-        [
-          -0.37,
-          0.0
-        ],
-        [
-          0.0,
-          0.0
-        ],
-        [
-          0.37,
-          0.0
-        ],
-        [
-          1.0,
-          0.0
-        ],
-        [
-          0.0,
-          -1.0
-        ],
-        [
-          0.0,
-          -0.31
-        ],
-        [
-          0.0,
-          0.31
-        ],
-        [
-          0.0,
-          1.0
-        ]
-      ],
-      "development": [
-        [
-          -0.73,
-          0.0
-        ],
-        [
-          -0.17,
-          0.0
-        ],
-        [
-          0.17,
-          0.0
-        ],
-        [
-          0.73,
-          0.0
-        ],
-        [
-          0.0,
-          -0.69
-        ],
-        [
-          0.0,
-          -0.13
-        ],
-        [
-          0.0,
-          0.13
-        ],
-        [
-          0.0,
-          0.69
-        ]
-      ],
-      "reporting": [
-        [
-          -1.0,
-          -1.0
-        ],
-        [
-          -1.0,
-          -0.31
-        ],
-        [
-          -1.0,
-          0.31
-        ],
-        [
-          -1.0,
-          1.0
-        ],
-        [
-          -0.37,
-          -1.0
-        ],
-        [
-          -0.37,
-          -0.31
-        ],
-        [
-          -0.37,
-          0.31
-        ],
-        [
-          -0.37,
-          1.0
-        ],
-        [
-          0.37,
-          -1.0
-        ],
-        [
-          0.37,
-          -0.31
-        ],
-        [
-          0.37,
-          0.31
-        ],
-        [
-          0.37,
-          1.0
-        ],
-        [
-          1.0,
-          -1.0
-        ],
-        [
-          1.0,
-          -0.31
-        ],
-        [
-          1.0,
-          0.31
-        ],
-        [
-          1.0,
-          1.0
-        ]
-      ]
-    }
-  },
-  "condition_origin": {
-    "source": "gaussian2d-phase-sampled conditions (2026-10-09)",
-    "sha256": "525f7cb36c04038b3c36acd57bdc03a851f223d265c75d378a6456bcf8d40a6f",
-    "previously_explored": true
-  },
-  "selection": "mean exact full TVD at development conditions; reporting excluded",
-  "stages": "screen all 4 candidates (1 seed) -> shortlist 2 by best development score -> confirmation (2 seeds) -> winner by mean confirmation development score -> frozen winner -> final (5 seeds); reporting conditions evaluated only for final fits",
-  "candidates": {
-    "m0_lr0.01": {
-      "local_mean": 0,
-      "init_scale": 0.1,
-      "learning_rate": 0.01
-    },
-    "m0_lr0.03": {
-      "local_mean": 0,
-      "init_scale": 0.1,
-      "learning_rate": 0.03
-    },
-    "mpi4_lr0.01": {
-      "local_mean": 0.7853981633974483,
-      "init_scale": 0.1,
-      "learning_rate": 0.01
-    },
-    "mpi4_lr0.03": {
-      "local_mean": 0.7853981633974483,
-      "init_scale": 0.1,
-      "learning_rate": 0.03
-    }
-  },
-  "budgets": {
-    "screen_steps": 512,
-    "confirmation_steps": 2000,
-    "final_steps": 2000,
-    "n_train": 1024,
-    "batch_size": 256,
-    "n_ops": 1024,
-    "mc_samples": 1024,
-    "sample_chunk": 256,
-    "expected_weights": [
-      2,
-      4
-    ]
-  },
-  "seeds": {
-    "screen": [
-      2026103901
-    ],
-    "confirm": [
-      2026103911,
-      2026103912
-    ],
-    "final": [
-      2026103921,
-      2026103922,
-      2026103923,
-      2026103924,
-      2026103925
-    ]
-  },
-  "optimizer": {
-    "name": "adam",
-    "b1": 0.9,
-    "b2": 0.999,
-    "eps": 1e-08,
-    "final_learning_rate_ratio": 0.1
-  },
-  "rng_offsets": {
-    "pool": 101,
-    "batches": 1,
-    "bands": 2,
-    "conditions": 3,
-    "masks": 4,
-    "reference": 5
-  },
   "limitations": [
-    "Baseline for the axes design only; no grid or translation fits.",
+    "Baseline for the axes design only.",
     "Development selection uses exact target probabilities, as in the parent protocol.",
-    "Affine theta map fixed; no search over richer condition maps.",
-    "init_scale kept at 0.1 with 120 pair phases; the larger initial pair-phase variance is not re-tuned."
-  ],
-  "ansatz": "complete",
-  "diagonal_parent_protocol": {
-    "path": "paper_experiments/gaussian2d_diagonal_protocol.json",
-    "sha256": "4f7fb004f0c55166889c24714ba1eb9745dcef455c17e5bf6d5b6ed3464307c3",
-    "differences": "Only the diagonal-layer ansatz differs from this lattice parent (complete one- and two-body layer instead of the open 4x4 lattice); fields changed accordingly: name, ansatz, model.ansatz, model.weights_layout, model.n_parameters, model.initialization, model.connectivity_rationale, limitations. The basis, conditions, candidates, budgets, seeds, rng offsets, selection and stages are unchanged."
-  }
+    "Affine theta map fixed; no search over richer condition maps."
+  ]
 }
