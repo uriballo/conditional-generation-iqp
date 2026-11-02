@@ -5,7 +5,7 @@ at every checkpoint, the dev-grid MMD that defines the objective together with
 the old training-temperature validation MMD and a sampled dev-grid estimate of
 the squared magnetization. The protocol is frozen in
 ``scaling_hpo_protocol.json``; the sixteen-qubit study that chose the objective
-is unpublished development history.
+is ``scaling_score_study.py``.
 
 Run:   python -m paper_experiments.scaling_hpo run OUT [--family S1 S0]
        python -m paper_experiments.scaling_hpo report OUT
