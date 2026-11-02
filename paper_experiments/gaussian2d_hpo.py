@@ -49,7 +49,6 @@ CAMPAIGNS = {
     ),
 }
 PHASES = ("random", "tpe", "confirmation", "final")
-STAGE_OF = {"random": "screen", "tpe": "screen"}
 SMOKE = dict(
     steps=2,
     validation_interval=1,
@@ -134,7 +133,7 @@ def source_identity(campaign):
 
 
 def _model(campaign):
-    """(n_params, initial(config, rng), train(config, start_seeds, ...), metrics)."""
+    """Initialization, trainer and exact metrics of one campaign model."""
     pairs = conditions()
     if campaign == "input":
         ansatz = square_lattice_ansatz(16)
