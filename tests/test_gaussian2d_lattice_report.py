@@ -20,51 +20,22 @@ def test_compact_parameters_reproduce_reported_full_distributions():
         ("protocol.json", "protocol_sha256"),
     ]:
         assert hashlib.sha256((DATA / name).read_bytes()).hexdigest() == summary[key]
-    params = np.load(DATA / "PARAMETERS.npz")
-    for design in ("grid", "axes", "translation"):
-        row = summary["results"][design]
-        pairs = np.asarray(row["reporting_conditions"])[:3]
-        for theta, fit in zip(params[design], row["fits"], strict=True):
-            value = metrics(theta, pairs)
-            fast = evaluator(theta)(pairs)
-            for key in ("full_tvd", "profile_tvd", "generated_mean", "generated_sd"):
-                np.testing.assert_allclose(
-                    value[key], fit["selected"][key][:3], atol=1e-10, rtol=0
-                )
-                np.testing.assert_allclose(value[key], fast[key], atol=1e-10, rtol=0)
+    row = summary["results"]["axes"]
+    pairs = np.asarray(row["reporting_conditions"])[:3]
+    thetas = np.load(DATA / "PARAMETERS.npz")["axes"]
+    assert len(thetas) == len(row["fits"]) == summary["n_fits"] == 10
+    for theta, fit in zip(thetas, row["fits"], strict=True):
+        value = metrics(theta, pairs)
+        fast = evaluator(theta)(pairs)
+        for key in ("full_tvd", "profile_tvd", "generated_mean", "generated_sd"):
+            np.testing.assert_allclose(
+                value[key], fit["selected"][key][:3], atol=1e-10, rtol=0
+            )
+            np.testing.assert_allclose(value[key], fast[key], atol=1e-10, rtol=0)
 
 
-def test_diagnostics_distinguish_fixed_center_from_learned_width():
+def test_diagnostics_pin_the_uniform_center():
     a = np.load(DATA / "DIAGNOSTICS.npz")
-    np.testing.assert_allclose(a["grid_tvd"][:, :, 20, 20], 0, atol=1e-12)
+    np.testing.assert_allclose(a["grid_tvd"][:, 20, 20], 0, atol=1e-12)
     assert np.all(a["grid_tvd"] >= a["grid_profile_tvd"] - 1e-12)
-    assert np.all(np.diff(a["model_sd"], axis=-1) > 0)
-    assert a["translation_profiles"].shape == (5, 4, 17)
-    assert a["translation_response"].shape == (5, 80)
-    np.testing.assert_array_equal(
-        a["translation_profile_c"], a["translation_reporting_c"][[0, 26, 53, 79]]
-    )
-    np.testing.assert_allclose(
-        a["translation_profiles"].sum(axis=-1), 1, atol=1e-12, rtol=0
-    )
-    np.testing.assert_allclose(
-        a["translation_profiles"] @ np.arange(17),
-        a["translation_response"][:, [0, 26, 53, 79]],
-        atol=1e-10,
-        rtol=0,
-    )
-    assert not np.intersect1d(
-        a["translation_profile_c"], a["translation_fitting_c"]
-    ).size
-    assert not np.intersect1d(
-        a["translation_profile_c"], a["translation_development_c"]
-    ).size
-    np.testing.assert_allclose(
-        a["translation_target_profiles"] @ np.arange(17),
-        np.asarray(
-            [5.15495467017703, 6.980572218744717, 8.99482401417277, 10.823182933575673]
-        ),
-        atol=1e-10,
-        rtol=0,
-    )
-    assert not np.any(a["translation_reporting_c"] == 0.5)
+    np.testing.assert_allclose(a["model_mean"][:, 1, 10], 8, atol=1e-10)

@@ -62,17 +62,23 @@ Each stage writes to the given output root and resumes only with the same
 configuration and source. Search stages stop after each phase. `--smoke` (or
 `--stage smoke`) runs a reduced pipeline check.
 
-**Gaussian-shaped family.**
+**Gaussian-shaped family.** Five campaigns under the Curie–Weiss search
+protocol (60 random and 60 TPE proposals, confirmation with five repeats and
+final fits with ten repeats, each with three starts), with fit streams and
+target pools paired across campaigns: input conditioning (`input`), the affine
+diagonal baseline (`diagonal`) and its variants (`diagonal_quadratic`,
+`diagonal_complete`, `diagonal_complete_quadratic`):
 
 ```sh
-uv run python -m paper_experiments.gaussian2d_lattice_run --output results/gaussian --stage campaign
-uv run python -m paper_experiments.gaussian2d_lattice_report --campaign results/gaussian --output results/gaussian/replay
-uv run python -m paper_experiments.gaussian2d_diagonal_run --output results/gaussian-diagonal --stage campaign
-uv run python -m paper_experiments.gaussian2d_diagonal_report --campaign results/gaussian-diagonal --output results/gaussian-diagonal/replay
+for phase in random tpe confirmation final; do
+  uv run python -m paper_experiments.gaussian2d_hpo --campaign input --root results/gaussian/input --phase $phase --workers 6
+done
+uv run python -m paper_experiments.gaussian2d_lattice_report --campaign results/gaussian/input --output data/gaussian_lattice
+uv run python -m paper_experiments.gaussian2d_diagonal_report --campaign results/gaussian/diagonal --output data/gaussian2d-diagonal
+uv run python -m paper_experiments.gaussian2d_diagonal_report --five-way --output data/gaussian2d-diagonal-variants/five_way.json
 ```
 
-The diagonal variants use `--basis {affine,quadratic}` and
-`--ansatz {lattice,complete}`.
+The variant bundles go to `data/gaussian2d-diagonal-variants/{lattice-quadratic,complete-affine,complete-quadratic}`.
 
 **Curie–Weiss, parity and per-temperature models.** 60 random and 60 TPE
 proposals per family, then confirmation (five repeats) and final fits (ten

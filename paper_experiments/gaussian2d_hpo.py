@@ -574,6 +574,53 @@ def _final(root, campaign, smoke, workers, identity):
     return status
 
 
+def load_campaign(root):
+    """Search record and verified final fits of a completed campaign.
+
+    Fits are located by job digest, so campaigns can be copied between machines.
+    Returns the search summary and a list of (receipt, best parameters).
+    """
+    root = Path(root)
+    manifest = json.loads((root / "campaign.json").read_text())
+    winner = json.loads((root / "final" / "campaign.json").read_text())["winner"]
+    if not (root / "final" / "complete.json").is_file():
+        raise ValueError("completed final phase required")
+    fits = []
+    for job in jobs(
+        manifest["campaign"], winner, "final", manifest["smoke"], manifest["identity"]
+    ):
+        directory = root / "final" / "fits" / digest(job)
+        record = json.loads((directory / "metrics.json").read_text())
+        if record["job"] != job or record["status"] != "ok":
+            raise ValueError(f"final fit identity or status differs: {directory}")
+        _verify_artifacts(directory, record["artifact_sha256"])
+        with np.load(directory / "parameters.npz") as data:
+            fits.append((record, data["best_params"]))
+    screening = [
+        json.loads(path.read_text())
+        for path in sorted((root / "study" / "proposals").glob("*.json"))
+    ]
+    search = dict(
+        campaign=manifest["campaign"],
+        protocol=manifest["protocol"],
+        identity=manifest["identity"],
+        screening_trials=len(screening),
+        tpe_trials=len(screening) - limits(manifest["smoke"])["trials"],
+        screening_top=[
+            {k: r[k] for k in ("trial_id", "J", "config")}
+            for r in shortlist(screening, 10)
+        ],
+        confirmation=[
+            {k: r[k] for k in ("trial_id", "J", "repeat_J", "screening_J", "config")}
+            for r in json.loads((root / "confirmation" / "results.json").read_text())
+        ],
+        winner={k: winner[k] for k in ("trial_id", "J", "config")},
+        final_J=[r["J"] for r, _ in fits],
+        final_seconds=[r["wall_seconds"] for r, _ in fits],
+    )
+    return search, fits
+
+
 def run(root, campaign, phase, *, smoke=False, workers=1):
     if campaign not in CAMPAIGNS or phase not in PHASES or workers < 1:
         raise ValueError("invalid campaign, phase or workers")
