@@ -5,7 +5,7 @@ figures` reads them and writes to `results/`.
 
 | Bundle | Contents |
 | --- | --- |
-| `gaussian_lattice/` | Gaussian-shaped family, conditional IQP: five final fits per design, 40 lattice phases each |
+| `gaussian_lattice/` | Gaussian-shaped family, conditional IQP: ten final fits on the axis design, 40 lattice phases each |
 | `gaussian2d-diagonal/` | Gaussian-shaped family, diagonal conditioning with an affine map (120 parameters) |
 | `gaussian2d-diagonal-variants/` | Quadratic and all-to-all diagonal-conditioning variants |
 | `curie-weiss-followup/` | Curie–Weiss C-IQP (P), per-temperature IQP and the remaining families of the parity protocol |

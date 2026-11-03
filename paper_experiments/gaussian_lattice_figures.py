@@ -257,7 +257,7 @@ def lattice_response(a, out):
 
 def uncertain(mean, sd):
     """Uncertainty to one significant figure (two if it starts with 1)."""
-    leading = f"{sd:.0e}"
+    leading = f"{sd:.1e}"
     places = max(-int(leading.split("e")[1]) + (leading[0] == "1"), 0)
     return rf"${mean:.{places}f}\pm{sd:.{places}f}$"
 

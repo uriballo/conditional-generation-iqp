@@ -1,20 +1,26 @@
 # Gaussian-shaped family, conditional IQP
 
-Binomial-centred Gaussian-shaped targets with translation and two-coordinate
-centre/width conditioning, on a 4x4 lattice with 40 independent phases.
+Binomial-centred Gaussian-shaped targets with two-coordinate centre/width
+conditioning, encoded by exp[-i(u/2)Jz] exp[-i(v/40)Jz^2] |+>^16 and a shared
+4x4 lattice layer with 40 independent phases. Training uses the nine axis
+conditions; selection uses eight development conditions on the axes; the
+sixteen mixed pairs are reported only.
 
-- `protocol.json`: targets, encoders, condition sets, budgets, candidates and random streams.
-- `PARAMETERS.npz`: the five selected parameter vectors for grid fitting, axis fitting and translation.
-- `DIAGNOSTICS.npz`: full and profile TVD sweeps, target moments and per-fit responses.
-- `SUMMARY.json`: per-condition errors, fit identities, source hashes, software versions and aggregation.
+- `protocol.json`: targets, encoder, condition sets, budgets, search space, stages and random streams.
+- `PARAMETERS.npz`: `axes`, the ten selected (40,) parameter vectors of the final fits.
+- `DIAGNOSTICS.npz`: 41x41 full and profile TVD grids (`grid_tvd[fit, v, u]`), target moments and per-fit axis responses.
+- `SUMMARY.json`: search record (screening, confirmation, winner), per-condition errors per fit and aggregation.
 
-The campaign comprises eight screening, eight confirmation, ten final
-two-coordinate and five translation fits. Full TVD on development conditions
-selects checkpoints and configurations. At the central condition the target is
-uniform, as is every model, so that condition is excluded from the averages.
+Search: 60 random and 60 TPE proposals with five repeats each, three
+configurations confirmed with five repeats of three starts, and the winner
+refitted with ten repeats of three starts. Full TVD on the development
+conditions selects checkpoints, starts and configurations. At the central
+condition the target is uniform, as is every model.
 
 ```sh
 uv run python run_experiments.py --mode figures --experiment gaussian-lattice
-uv run python -m paper_experiments.gaussian2d_lattice_run --output results/gaussian --stage campaign
-uv run python -m paper_experiments.gaussian2d_lattice_report --campaign results/gaussian --output results/gaussian/replay
+for phase in random tpe confirmation final; do
+  uv run python -m paper_experiments.gaussian2d_hpo --campaign input --root results/gaussian/input --phase $phase --workers 6
+done
+uv run python -m paper_experiments.gaussian2d_lattice_report --campaign results/gaussian/input --output data/gaussian_lattice
 ```
