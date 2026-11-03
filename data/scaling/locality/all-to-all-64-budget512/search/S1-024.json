@@ -1,0 +1,44 @@
+{
+  "family": "S1",
+  "index": 24,
+  "hyperparameters": {
+    "learning_rate": 0.0044341584816847916,
+    "init_scale": 0.2618779373679602,
+    "b1": 0.8223490742001306,
+    "b2": 0.9640890368453106,
+    "final_ratio": 0.43971227724976464,
+    "n_ops": 512,
+    "mc_samples": 1024,
+    "alpha": 0.5,
+    "tmax": 2.7490471513782655,
+    "k": 11.52726564070428,
+    "b0": 1.2770194001336734,
+    "gamma": 0.208648020401211
+  },
+  "ansatz": "complete",
+  "status": "ok",
+  "score": -1.7759351177564713,
+  "sizes": {
+    "64": {
+      "status": "ok",
+      "seconds": 438.4352596659446,
+      "budget": {
+        "train_n_ops": 512,
+        "train_mc_samples": 1024,
+        "n_ops": 1024,
+        "n_samples": 2048,
+        "draws": 2000,
+        "banks": 2,
+        "pair_samples": 4096
+      },
+      "best_objective": 0.1693250365953185,
+      "best_step": 1600
+    }
+  },
+  "smoke": false,
+  "protocol_sha256": "066e26d135b67a62f17cd3fa9f2a31434cc0e9b1ad6250c1efd05f440d28b65b",
+  "script_sha256": "319b1d0aae7910b923698159ba53002e589d9ac519736ea135eaee58aea66d5c",
+  "devices": [
+    "cpu:0"
+  ]
+}
