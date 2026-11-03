@@ -1,15 +1,20 @@
 """Reproduce every experiment of the paper in a row, then its figures and tables.
 
-Each experiment writes to its own folder under the output root and resumes from
-completed stages. The hardware counts come from data/hardware/iqm-emerald;
-resubmitting the circuits needs an IQM access token and is not part of this
-script. ``--check`` compares a finished full run with the bundles in data/.
+By default each experiment trains its final fits from the configurations
+selected in data/ and builds every evaluation, bundle, figure and table from
+them. ``--full`` also reruns the hyperparameter searches and confirmations that
+selected those configurations. Each experiment writes to its own folder under
+the output root and resumes from completed stages. The hardware counts come from
+data/hardware/iqm-emerald; resubmitting the circuits needs an IQM access token
+and is not part of this script. ``--check`` compares a finished run with the
+bundles in data/.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import shutil
 from pathlib import Path
 
 import numpy as np
@@ -23,6 +28,7 @@ EXPERIMENTS = (
     "curie-weiss-diagonal",
     "curie-weiss-classical",
     "scaling",
+    "score-study",
     "hardware",
     "figures",
 )
@@ -31,37 +37,34 @@ HARDWARE_NOTE = (
     "Rerunning the circuits on the device requires an IQM access token and is "
     "not part of this script."
 )
+# Hamming-weight campaign of gaussian2d_hpo and its bundle under data/; the
+# input campaign comes first because the diagonal bundles compare against it.
+GAUSSIAN = {
+    "input": "gaussian_lattice",
+    "diagonal": "gaussian2d-diagonal",
+    "diagonal_quadratic": "gaussian2d-diagonal-variants/lattice-quadratic",
+    "diagonal_complete": "gaussian2d-diagonal-variants/complete-affine",
+    "diagonal_complete_quadratic": "gaussian2d-diagonal-variants/complete-quadratic",
+}
+ALL_TO_ALL = "scaling/locality/all-to-all-64-budget512"
 # Bundle name in data/ and the run folder that produces it, for the figures.
 BUNDLES = {
-    "gaussian_lattice": "gaussian/replay",
-    "gaussian2d-diagonal": "gaussian-diagonal/replay",
+    "gaussian_lattice": "gaussian/bundles/gaussian_lattice",
+    "gaussian2d-diagonal": "gaussian/bundles/gaussian2d-diagonal",
+    "gaussian2d-diagonal-variants": "gaussian/bundles/gaussian2d-diagonal-variants",
     "curie-weiss-followup": "cw/final",
     "curie-weiss-twisted": "cw-twisted-bundle",
     "curie-weiss-diagonal": "cw-diagonal-k4/final",
     "curie-weiss-classical": "cw-classical/hpo",
     "scaling": "scaling/bundle",
 }
-DIAGONAL_VARIANTS = {
-    "gaussian-diagonal": ("affine", "lattice"),
-    "gaussian-diagonal-quadratic": ("quadratic", "lattice"),
-    "gaussian-diagonal-complete": ("affine", "complete"),
-    "gaussian-diagonal-complete-quadratic": ("quadratic", "complete"),
-}
+SEEDS = (100, 101, 102)
 # Run output and stored bundle compared by --check.
 CHECKS = [
-    ("gaussian/replay", "gaussian_lattice"),
-    ("gaussian-diagonal/replay", "gaussian2d-diagonal"),
+    *((f"gaussian/bundles/{name}", name) for name in GAUSSIAN.values()),
     (
-        "gaussian-diagonal-quadratic/replay",
-        "gaussian2d-diagonal-variants/lattice-quadratic",
-    ),
-    (
-        "gaussian-diagonal-complete/replay",
-        "gaussian2d-diagonal-variants/complete-affine",
-    ),
-    (
-        "gaussian-diagonal-complete-quadratic/replay",
-        "gaussian2d-diagonal-variants/complete-quadratic",
+        "gaussian/bundles/gaussian2d-diagonal-variants/five_way.json",
+        "gaussian2d-diagonal-variants/five_way.json",
     ),
     ("cw/final/figure_data.json", "curie-weiss-followup/figure_data.json"),
     ("cw-twisted-bundle/figure_data.json", "curie-weiss-twisted/figure_data.json"),
@@ -70,29 +73,22 @@ CHECKS = [
         "curie-weiss-twisted/kappa0_control.json",
     ),
     ("cw-diagonal-k4/final/figure_data.json", "curie-weiss-diagonal/figure_data.json"),
-    ("cw-classical/hpo/small", "curie-weiss-classical/small"),
-    ("cw-classical/hpo/large", "curie-weiss-classical/large"),
+    *(
+        (
+            f"cw-classical/hpo/{capacity}/figure_data.json",
+            f"curie-weiss-classical/{capacity}/figure_data.json",
+        )
+        for capacity in ("small", "large")
+    ),
     ("scaling/bundle/figure_data.json", "scaling/figure_data.json"),
     ("scaling/bundle/physics", "scaling/physics"),
-    ("scaling-all-to-all-64/search", "scaling/locality/all-to-all-64/search"),
-    *(
-        pair
-        for seed in (100, 101, 102)
-        for pair in (
-            (
-                f"scaling-all-to-all-64/final/n64-s{seed}.json",
-                f"scaling/locality/all-to-all-64/fits/n64-s{seed}.json",
-            ),
-            (
-                f"scaling-all-to-all-64/evaluations/n64-s{seed}.json",
-                f"scaling/locality/all-to-all-64/fits/n64-s{seed}-evaluation.json",
-            ),
-        )
-    ),
+    ("scaling-all-to-all-64-budget512/fits", f"{ALL_TO_ALL}/fits"),
+    ("scaling-all-to-all-64-budget512/table.json", f"{ALL_TO_ALL}/table.json"),
+    ("score-study/spearman.json", "scaling/score_study/spearman.json"),
     *(
         pair
         for n in (16, 30)
-        for seed in (100, 101, 102)
+        for seed in SEEDS
         for pair in (
             (
                 f"hardware/fits/n{n}-s{seed}.json",
@@ -109,55 +105,94 @@ CHECKS = [
         "hardware/iqm-emerald/models/n30-s100-noiseless-profiles.json",
     ),
 ]
+# Search and confirmation records, produced only by --full.
+FULL_CHECKS = [
+    *(
+        (
+            f"cw-classical/hpo/{capacity}/{name}",
+            f"curie-weiss-classical/{capacity}/{name}",
+        )
+        for capacity in ("small", "large")
+        for name in ("shortlist.json", "confirmation.json")
+    ),
+    ("scaling-all-to-all-64-budget512/search", f"{ALL_TO_ALL}/search"),
+    ("score-study/checkpoints.json", "scaling/score_study/checkpoints.json"),
+]
 
 
-def gaussian(root, smoke, workers):
+def _stored(path):
+    return json.loads((DATA / path).read_text())
+
+
+def gaussian(root, smoke, full, workers):
     from paper_experiments import (
         gaussian2d_diagonal_report,
-        gaussian2d_diagonal_run,
+        gaussian2d_hpo,
         gaussian2d_lattice_report,
-        gaussian2d_lattice_run,
     )
 
-    stage = "smoke" if smoke else "campaign"
-    gaussian2d_lattice_run.main(["--output", str(root / "gaussian"), "--stage", stage])
-    # The report accepts only the completed 31-fit campaign.
-    if not smoke and not (root / "gaussian/replay/SUMMARY.json").exists():
-        gaussian2d_lattice_report.main(
-            [
-                "--campaign",
-                str(root / "gaussian"),
-                "--output",
-                str(root / "gaussian/replay"),
-            ]
-        )
-    for name, (basis, ansatz) in DIAGONAL_VARIANTS.items():
-        run = ["--output", str(root / name), "--stage", stage]
-        gaussian2d_diagonal_run.main([*run, "--basis", basis, "--ansatz", ansatz])
-        if not (root / name / "replay/SUMMARY.json").exists():
-            gaussian2d_diagonal_report.main(
-                [
-                    "--campaign",
-                    str(root / name),
-                    "--output",
-                    str(root / name / "replay"),
-                ]
-            )
+    bundles = root / "gaussian" / "bundles"
+    markers = {
+        "random": "random-complete.json",
+        "tpe": "tpe-complete.json",
+        "confirmation": "confirmation/winner.json",
+        "final": "final/complete.json",
+    }
+    for campaign, name in GAUSSIAN.items():
+        directory = root / "gaussian" / campaign
+        summary = DATA / name / "SUMMARY.json"
+        winner = None if full else json.loads(summary.read_text())["search"]["winner"]
+        for phase, marker in markers.items():
+            if (full or phase == "final") and not (directory / marker).exists():
+                gaussian2d_hpo.run(
+                    directory,
+                    campaign,
+                    phase,
+                    smoke=smoke,
+                    workers=workers,
+                    winner=winner,
+                )
+        if (bundles / name / "SUMMARY.json").exists():
+            continue
+        report = ["--campaign", str(directory), "--output", str(bundles / name)]
+        if not full:
+            report += ["--search-from", str(summary)]
+        if campaign == "input":
+            gaussian2d_lattice_report.main(report)
+        else:
+            gaussian2d_diagonal_report.main([*report, "--data", str(bundles)])
+    gaussian2d_diagonal_report.main(
+        [
+            "--five-way",
+            "--data",
+            str(bundles),
+            "--output",
+            str(bundles / "gaussian2d-diagonal-variants/five_way.json"),
+        ]
+    )
 
 
-def curie_weiss(root, smoke, workers):
+def curie_weiss(root, smoke, full, workers):
     from paper_experiments import cw_followup_hpo, cw_followup_stages, cw_followup_tpe
 
+    if (root / "cw" / "final" / "review-ready.json").exists():
+        return
+    if not full:
+        winners = _stored("curie-weiss-followup/provenance/confirmation-winners.json")
+        cw_followup_stages.run_final(
+            root / "cw" / "final", winners, smoke=smoke, workers=workers
+        )
+        return
     hpo = root / "cw" / "hpo"
     if not (hpo / "random-review-ready.json").exists():
         cw_followup_hpo.run_all(hpo, smoke=smoke, workers=workers)
     if not (hpo / "tpe-review-ready.json").exists():
         cw_followup_tpe.run_all(hpo, smoke=smoke, workers=workers)
-    if not (root / "cw" / "final" / "review-ready.json").exists():
-        cw_followup_stages.run_all(hpo, phase="reporting", smoke=smoke, workers=workers)
+    cw_followup_stages.run_all(hpo, phase="reporting", smoke=smoke, workers=workers)
 
 
-def encoder_campaign(campaign, directory, smoke, workers):
+def encoder_campaign(campaign, directory, winner, smoke, full, workers):
+    """cw_encoder_hpo phases; without --full only the final fits of ``winner``."""
     from paper_experiments import cw_encoder_hpo
 
     markers = {
@@ -167,19 +202,27 @@ def encoder_campaign(campaign, directory, smoke, workers):
         "final": "final/review-ready.json",
     }
     for phase, marker in markers.items():
-        if not (directory / marker).exists():
+        if (full or phase == "final") and not (directory / marker).exists():
             cw_encoder_hpo.run(
-                directory, phase, smoke=smoke, workers=workers, campaign=campaign
+                directory,
+                phase,
+                smoke=smoke,
+                workers=workers,
+                campaign=campaign,
+                winner=None if full else winner,
             )
 
 
-def curie_weiss_twisted(root, smoke, workers):
+def curie_weiss_twisted(root, smoke, full, workers):
     from paper_experiments import cw_kappa0_control, cw_twisted_bundle
 
-    encoder_campaign("twisted", root / "cw-twisted", smoke, workers)
-    encoder_campaign(
-        "twisted_independent", root / "cw-twisted-independent", smoke, workers
-    )
+    families = _stored("curie-weiss-twisted/figure_data.json")["families"]
+    for campaign, directory, family in (
+        ("twisted", "cw-twisted", "shared_twisted_parity"),
+        ("twisted_independent", "cw-twisted-independent", "independent_twisted_parity"),
+    ):
+        winner = {k: families[family][k] for k in ("trial_id", "config")}
+        encoder_campaign(campaign, root / directory, winner, smoke, full, workers)
     # The bundle accepts only final stages with ten repeats.
     if not smoke:
         cw_twisted_bundle.build(
@@ -195,11 +238,15 @@ def curie_weiss_twisted(root, smoke, workers):
     )
 
 
-def curie_weiss_diagonal(root, smoke, workers):
-    encoder_campaign("diagonal_k4", root / "cw-diagonal-k4", smoke, workers)
+def curie_weiss_diagonal(root, smoke, full, workers):
+    stored = _stored("curie-weiss-diagonal/figure_data.json")
+    winner = {k: stored[k] for k in ("trial_id", "config")}
+    encoder_campaign(
+        "diagonal_k4", root / "cw-diagonal-k4", winner, smoke, full, workers
+    )
 
 
-def curie_weiss_classical(root, smoke, workers):
+def curie_weiss_classical(root, smoke, full, workers):
     from paper_experiments import cw_classical_campaign
 
     markers = {
@@ -210,48 +257,49 @@ def curie_weiss_classical(root, smoke, workers):
     }
     for capacity in ("small", "large"):
         directory = root / "cw-classical" / "hpo" / capacity
+        stored = DATA / "curie-weiss-classical" / capacity / "confirmation.json"
         for phase, marker in markers.items():
-            if not (directory / marker).exists():
+            if (full or phase == "final") and not (directory / marker).exists():
                 cw_classical_campaign.run_all(
                     directory,
                     phase=phase,
                     capacity=capacity,
                     smoke=smoke,
                     workers=workers,
+                    confirmation=None if full else stored,
                 )
 
 
-def scaling(root, smoke, workers):
-    from paper_experiments import scaling_hpo
+def scaling(root, smoke, full, workers):
+    from paper_experiments import scaling_hpo, scaling_locality_table
 
     out = root / "scaling"
     flag = ["--smoke"] if smoke else []
-    # Smoke runs one trial at 16 and 36 qubits; the smoke confirmation reads
-    # protocol candidates that a one-trial search does not produce, and the
-    # smoke final trains a fixed protocol trial.
-    search = ["--trials", "1", "--sizes", "16", "36"] if smoke else []
-    scaling_hpo.main(["run", str(out / "search"), *search, *flag])
-    if not smoke:
-        scaling_hpo.main(
-            ["confirm", str(out / "confirm"), "--search", str(out / "search")]
-        )
+    if full:
+        # Smoke runs one trial at 16 and 36 qubits; the smoke confirmation reads
+        # protocol candidates that a one-trial search does not produce, and the
+        # smoke final trains a fixed protocol trial.
+        search = ["--trials", "1", "--sizes", "16", "36"] if smoke else []
+        scaling_hpo.main(["run", str(out / "search"), *search, *flag])
+        if not smoke:
+            scaling_hpo.main(
+                ["confirm", str(out / "confirm"), "--search", str(out / "search")]
+            )
+        selection = [
+            "--search",
+            str(out / "search"),
+            "--confirmation",
+            str(out / "confirm"),
+        ]
+    else:
+        selection = ["--selection", str(DATA / "scaling/physics/fits/n64-s100.json")]
     sizes = (
         ["16", "36"]
         if smoke
         else [str(n) for n in scaling_hpo.PROTOCOL["final"]["sizes"]]
     )
     scaling_hpo.main(
-        [
-            "final",
-            str(out / "final"),
-            "--search",
-            str(out / "search"),
-            "--confirmation",
-            str(out / "confirm"),
-            "--sizes",
-            *sizes,
-            *flag,
-        ]
+        ["final", str(out / "final"), *selection, "--sizes", *sizes, *flag]
     )
     scaling_hpo.main(
         ["evaluate", str(out / "evaluations"), "--fits", str(out / "final"), *flag]
@@ -268,47 +316,83 @@ def scaling(root, smoke, workers):
         ]
     )
 
-    # 64-qubit all-to-all comparison: its own S1 search at 64 qubits, then the
-    # final fits of the best search trial.
-    local = root / "scaling-all-to-all-64"
+    # 64-qubit all-to-all comparison at the training budget of the lattice fits:
+    # its own S1 search at 64 qubits, then the final fits of the best trial.
+    local = root / "scaling-all-to-all-64-budget512"
     size = "16" if smoke else "64"
     common = ["--ansatz", "complete", "--sizes", size, *flag]
-    trials = ["--trials", "1"] if smoke else []
-    scaling_hpo.main(["run", str(local / "search"), "--family", "S1", *trials, *common])
-    rows = [json.loads(p.read_text()) for p in (local / "search").glob("S1-*.json")]
-    best = min((r for r in rows if r["status"] == "ok"), key=lambda r: r["score"])
-    trial = f"S1-{best['index']:03d}"
-    print(f"all-to-all 64: best search trial {trial}", flush=True)
-    scaling_hpo.main(
-        [
-            "final",
-            str(local / "final"),
-            "--search",
-            str(local / "search"),
-            "--trial",
-            trial,
-            *common,
-        ]
-    )
+    if full:
+        trials = ["--trials", "1"] if smoke else []
+        budget = ["--budget", "512", "1024"]
+        scaling_hpo.main(
+            ["run", str(local / "search"), "--family", "S1", *budget, *trials, *common]
+        )
+        rows = [json.loads(p.read_text()) for p in (local / "search").glob("S1-*.json")]
+        best = min((r for r in rows if r["status"] == "ok"), key=lambda r: r["score"])
+        trial = f"S1-{best['index']:03d}"
+        print(f"all-to-all 64: best search trial {trial}", flush=True)
+        selection = ["--search", str(local / "search"), "--trial", trial]
+    else:
+        selection = ["--selection", str(DATA / ALL_TO_ALL / "fits/n64-s100.json")]
+    scaling_hpo.main(["final", str(local / "final"), *selection, *common])
     scaling_hpo.main(
         ["evaluate", str(local / "evaluations"), "--fits", str(local / "final"), *flag]
     )
+    # Receipts and evaluations side by side, as in data/.
+    (local / "fits").mkdir(exist_ok=True)
+    for seed in SEEDS:
+        name = f"n{size}-s{seed}"
+        shutil.copyfile(
+            local / "final" / f"{name}.json", local / "fits" / f"{name}.json"
+        )
+        shutil.copyfile(
+            local / "evaluations" / f"{name}.json",
+            local / "fits" / f"{name}-evaluation.json",
+        )
+    # The table reads 64-qubit fits.
+    if not smoke:
+        table = scaling_locality_table.table(local / "fits")
+        (local / "table.json").write_text(json.dumps(table, indent=2) + "\n")
 
 
-def hardware(root, smoke, workers):
+def score_study(root, smoke, full, workers):
+    """Sixteen-qubit selection-score study. Without --full, and in smoke runs,
+    the correlations are computed from the stored checkpoints."""
+    from paper_experiments import scaling_score_study
+
+    out = root / "score-study"
+    out.mkdir(parents=True, exist_ok=True)
+    checkpoints = DATA / "scaling/score_study/checkpoints.json"
+    if full and not smoke:
+        scaling_score_study.main(["run", str(out / "runs")])
+        checkpoints = out / "checkpoints.json"
+        trials = scaling_score_study.collect(out / "runs")
+        checkpoints.write_text(json.dumps(trials) + "\n")
+    result = scaling_score_study.analyze(json.loads(checkpoints.read_text()))
+    (out / "spearman.json").write_text(json.dumps(result, indent=2) + "\n")
+
+
+def hardware(root, smoke, full, workers):
     """Classical training of the deployed 16- and 30-qubit lattice fits."""
     from paper_experiments import hardware_noiseless, scaling_hpo
 
     out, search = root / "hardware", root / "scaling"
     flag = ["--smoke"] if smoke else []
-    scaling_hpo.main(
-        [
-            "final",
-            str(out / "fits"),
+    if full:
+        selection = [
             "--search",
             str(search / "search"),
             "--confirmation",
             str(search / "confirm"),
+        ]
+    else:
+        receipt = DATA / "hardware/iqm-emerald/models/n16-s100.json"
+        selection = ["--selection", str(receipt)]
+    scaling_hpo.main(
+        [
+            "final",
+            str(out / "fits"),
+            *selection,
             "--sizes",
             *(["16"] if smoke else ["16", "30"]),
             *flag,
@@ -327,12 +411,12 @@ def hardware(root, smoke, workers):
     print(HARDWARE_NOTE, flush=True)
 
 
-def figures(root, smoke, workers):
+def figures(root, smoke, full, workers):
     from paper_experiments import hardware_report, target_families
     from paper_experiments.cw_classical_report import render as render_classical
     from paper_experiments.figures import render_all
 
-    # Full runs render from their own bundles, linked under the names of data/.
+    # Runs render from their own bundles, linked under the names of data/.
     # The reporting code rejects smoke bundles, so smoke runs render data/.
     data = DATA
     if not smoke:
@@ -365,6 +449,7 @@ STAGES = {
     "curie-weiss-diagonal": curie_weiss_diagonal,
     "curie-weiss-classical": curie_weiss_classical,
     "scaling": scaling,
+    "score-study": score_study,
     "hardware": hardware,
     "figures": figures,
 }
@@ -411,10 +496,10 @@ def _load(path):
     return json.loads(path.read_text())
 
 
-def check(root, data=DATA):
-    """Compare a finished full run with the stored bundles; return the failures."""
+def check(root, data=DATA, full=False):
+    """Compare a finished run with the stored bundles; return the failures."""
     pairs = []
-    for fresh, stored in CHECKS:
+    for fresh, stored in CHECKS + (FULL_CHECKS if full else []):
         fresh, stored = root / fresh, data / stored
         if stored.is_dir():
             pairs += [
@@ -448,11 +533,18 @@ def main(argv=None):
         default=ROOT / "results" / "reproduce",
         help="output root under results/ (smoke runs use OUTPUT/smoke)",
     )
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        help="also rerun the hyperparameter searches and confirmations",
+    )
     parser.add_argument("--smoke", action="store_true", help="reduced pipeline check")
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--only", choices=EXPERIMENTS, action="append")
     parser.add_argument(
-        "--check", action="store_true", help="compare a finished full run with data/"
+        "--check",
+        action="store_true",
+        help="compare a finished run with data/ (with --full, also the searches)",
     )
     args = parser.parse_args(argv)
     if args.workers < 1:
@@ -462,10 +554,10 @@ def main(argv=None):
     if not root.is_relative_to(ROOT / "results"):
         parser.error("--output must lie under results/")
     if args.check:
-        return int(check(root) > 0)
+        return int(check(root, full=args.full) > 0)
     for name in args.only or EXPERIMENTS:
         print(f"== {name}", flush=True)
-        STAGES[name](root, args.smoke, args.workers)
+        STAGES[name](root, args.smoke, args.full, args.workers)
     return 0
 
 

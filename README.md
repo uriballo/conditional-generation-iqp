@@ -33,31 +33,41 @@ uv sync --locked --extra hpo
 
 ## Reproducing the paper
 
-One command trains every model of the paper, in order, and then renders every
-figure and table:
+One command trains every model of the paper and then renders every figure and
+table:
 
 ```sh
 uv run python reproduce.py --output results/reproduce --workers 2
 ```
 
-It runs the Gaussian-shaped family (conditional IQP and the four diagonal
-conditioning variants), the Curie–Weiss parity protocol, the twisted parity
-encoder with its per-temperature model and κ = 0 ablation, D-IQP, the classical
-baselines at both capacities, lattice scaling at 64–2048 qubits with the
-64-qubit all-to-all comparison, and the classical training of the 16- and
-30-qubit models deployed on IQM Emerald. The figures and tables are then
-rendered from the new bundles into `results/reproduce/figures/`.
+By default the script trains the final fits of every experiment from the
+configurations selected in `data/`, then recomputes every evaluation, bundle,
+figure and table from them, which reproduces every reported number. With
+`--full` it also reruns the hyperparameter searches and confirmations that
+selected those configurations, and the final fits then use the new selections.
+
+| Experiment (`--only`) | Default | Added by `--full` |
+| --- | --- | --- |
+| `gaussian` | final fits of the five campaigns (input conditioning and four diagonal-conditioning baselines) from the winners in the bundle summaries; bundles, with the stored search records, and the five-way table | random, TPE and confirmation phases |
+| `curie-weiss` | final fits of the four parity and per-temperature families from `curie-weiss-followup/provenance/confirmation-winners.json` | random and TPE screening, confirmation |
+| `curie-weiss-twisted` | final fits of C-IQP (TP) and its per-temperature model from the stored winners, bundle, κ = 0 ablation | search and confirmation of both campaigns |
+| `curie-weiss-diagonal` | final fits of D-IQP from the stored winner | search and confirmation |
+| `curie-weiss-classical` | final fits of both capacities from the stored `confirmation.json` | search and confirmation |
+| `scaling` | lattice fits at 64–2048 qubits with the stored candidate (S1-005), evaluations and bundle; 64-qubit all-to-all fits with the stored candidate (S1-017) at the lattice estimator budget, evaluations and `table.json` | lattice search and confirmation; all-to-all search with `--budget 512 1024` |
+| `score-study` | Spearman correlations from the stored checkpoints | the 120 sixteen-qubit training runs behind the checkpoints |
+| `hardware` | 16- and 30-qubit fits of the deployed candidate, observables, exact noiseless profile at 30 qubits | selection from the new scaling search |
+| `figures` | figures and tables from the new bundles | — |
 
 Each experiment writes to its own folder under the output root, and an
 interrupted run resumes from its completed stages when restarted with the same
-command. Campaigns record the hash of the source tree, so do not edit
-`paper_experiments/` while a run is in progress. `--only EXPERIMENT` runs one
-experiment (`gaussian`, `curie-weiss`, `curie-weiss-twisted`,
-`curie-weiss-diagonal`, `curie-weiss-classical`, `scaling`, `hardware` or
-`figures`); the hardware fits reuse the scaling search and confirmation.
-`--smoke` runs every stage with reduced budgets under `OUTPUT/smoke` and renders
-the figures from `data/`, because the reporting code accepts only full
-campaigns. The output root must lie under `results/`.
+command. Use different output roots for default and `--full` runs. Campaigns
+record the hash of the source tree, so do not edit `paper_experiments/` while a
+run is in progress. `--only EXPERIMENT` runs one experiment; with `--full`, the
+hardware fits reuse the scaling search and confirmation. `--smoke` runs every
+stage with reduced budgets under `OUTPUT/smoke` and renders the figures from
+`data/`, because the reporting code accepts only full campaigns; the smoke run
+of the score study analyzes the stored checkpoints. The output root must lie
+under `results/`.
 
 **Hardware.** The device counts are read from `data/hardware/iqm-emerald`, and
 the hardware figures and tables come from those runs and the stored deployed
@@ -65,30 +75,40 @@ fits. Rerunning the circuits on the device requires an IQM access token and is
 not part of the script.
 
 **Runtime.** The original campaigns ran on an AMD Ryzen AI Max+ 395 machine
-(Radeon 8060S GPU through ROCm JAX, 128 GB memory). Recorded wall-clock times
-were about 16 h for the Curie–Weiss parity protocol (GPU, two workers), 17 h
-for the twisted campaigns and ablation (CPU), 14 h for the
-classical baselines (GPU, both capacities concurrently), 17 h for lattice
-scaling including 7 h for the 2048-qubit fits (GPU), under 1 h for the
-Gaussian-shaped family (CPU) and about 20 min for the hardware fits and the
-30-qubit noiseless profile. No timing was recorded for D-IQP. Run in sequence,
-the full pipeline takes three to four days on comparable hardware. Scaling at
-1024 and 2048 qubits needs a GPU in practice, and the exact 30-qubit noiseless
-profile needs about 40 GB of memory. A smoke run takes about seven minutes on an Apple M-series laptop CPU. When
-`latex` is on the path the figures are typeset with LaTeX, and the classical
-replay figures also need the `cm-super` fonts; without `latex` the figures fall
-back to Matplotlib's mathtext.
+(Radeon 8060S GPU through ROCm JAX, 128 GB memory); the all-to-all fits ran on
+an Apple M3 Max CPU. The default run takes about one day on
+comparable hardware. Its recorded or estimated parts are about 8 h of training
+for the lattice scaling fits (GPU, 6 h of it at 2048 qubits, 1.6 h at 1024),
+3.5 h of fit time for the 50 Hamming-weight final fits (CPU, 25–60 min per
+campaign, divided among the workers), about 2 h for the twisted finals and the
+κ = 0 ablation (CPU), about 1 h for the Curie–Weiss parity finals (GPU), 25 min
+for the classical finals (GPU), 5 min for the all-to-all fits and 20 min for the
+hardware fits and the 30-qubit noiseless profile (CPU). The Curie–Weiss and
+twisted figures are estimated from the share of final fits in the recorded
+campaign times; no timing was recorded for D-IQP. A `--full` run takes four
+to five days: the searches add about 15 h for the Curie–Weiss parity protocol (GPU,
+two workers), 15 h for the twisted campaigns (CPU), 14 h for the classical
+baselines (GPU), 9 h for the lattice scaling search and confirmation (GPU),
+about 80 h of single-worker fit time for the Hamming-weight searches (CPU, run
+with six workers originally), 40 min for the all-to-all search (CPU), and 14 h
+on CPU or 1.5 h on GPU for the score study. Scaling at 1024 and 2048 qubits needs
+a GPU in practice, and the exact 30-qubit noiseless profile needs about 40 GB of
+memory. A smoke run takes about ten minutes on an Apple M-series laptop CPU.
+When `latex` is on the path the figures are typeset with LaTeX, and the
+classical replay figures also need the `cm-super` and `type1cm` packages;
+without `latex` the figures fall back to Matplotlib's mathtext.
 
-**Comparison with `data/`.** After a full run,
+**Comparison with `data/`.** After a run,
 
 ```sh
 uv run python reproduce.py --output results/reproduce --check
 ```
 
 compares every numeric value of the new bundles with the stored ones (relative
-tolerance 1e-5) and lists the files that differ. Timings, hashes, paths and
-other strings are provenance and are skipped. The seeds and random streams are
-fixed, but floating-point reductions can differ across devices and library
+tolerance 1e-5) and lists the files that differ; `--check --full` also compares
+the search and confirmation records of a `--full` run. Timings, hashes, paths
+and other strings are provenance and are skipped. The seeds and random streams
+are fixed, but floating-point reductions can differ across devices and library
 versions, so agreement is expected on the original software stack rather than
 bit for bit everywhere.
 
