@@ -26,11 +26,9 @@ def test_scaling_endpoint_metrics():
 def test_all_numerical_figures_render(tmp_path):
     paths = render_all(DATA, tmp_path)
     assert {p.name for p in paths if p.suffix == ".pdf"} == {
-        "gaussian_translation_profiles.pdf",
         "curie_weiss_lattice_scaling_mmd.pdf",
         "gaussian2d_lattice_heatmaps.pdf",
         "gaussian2d_lattice_axes_response.pdf",
-        "gaussian2d_lattice_grid_response.pdf",
         "curie_weiss_model_comparison.pdf",
         "curie_weiss_physical_response.pdf",
         "curie_weiss_encoder_comparison.pdf",
@@ -38,7 +36,7 @@ def test_all_numerical_figures_render(tmp_path):
         "curie_weiss_classical_tvd.pdf",
         "curie_weiss_lattice_scaling_observables.pdf",
     }
-    assert len([p for p in paths if p.suffix == ".png"]) == 11
+    assert len([p for p in paths if p.suffix == ".png"]) == 9
     assert all(p.is_file() and p.stat().st_size > 100 for p in paths)
 
 

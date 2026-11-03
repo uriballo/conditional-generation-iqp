@@ -1,10 +1,10 @@
 """Compact evidence for the diagonal-conditioning baseline, with a C-IQP comparison.
 
-Reads a completed :mod:`gaussian2d_diagonal_run` campaign and writes, to a new
-directory under ``results/``, the final-fit reporting metrics, the 41x41 full
-and profile TVD sweeps (layout of ``DIAGNOSTICS.npz`` ``grid_tvd``: index
-``[fit, v, u]``), axis responses and a side-by-side comparison with the bundled
-conditional-IQP "axes" fits. It never writes to ``data/``.
+Reads a completed diagonal campaign of :mod:`gaussian2d_hpo` and writes the
+final-fit reporting metrics, the 41x41 full and profile TVD sweeps (layout of
+``DIAGNOSTICS.npz`` ``grid_tvd``: index ``[fit, v, u]``), axis responses and a
+side-by-side comparison with the bundled conditional-IQP "axes" fits.
+:func:`five_way` compares the four diagonal bundles with input conditioning.
 """
 
 from __future__ import annotations
@@ -18,6 +18,8 @@ import numpy as np
 
 from . import gaussian2d_lattice
 from .gaussian2d_diagonal import BASES, metrics, n_phases
+from .gaussian2d_hpo import conditions as load_conditions
+from .gaussian2d_hpo import load_campaign
 
 ROOT = Path(__file__).resolve().parents[1]
 CIQP_BUNDLE = ROOT / "data/gaussian_lattice"
@@ -82,7 +84,7 @@ def ciqp_reference(bundle=CIQP_BUNDLE):
     return dict(
         source=str(bundle / "SUMMARY.json"),
         source_sha256=sha(bundle / "SUMMARY.json"),
-        selected_candidate=summary["results"]["axes"]["selected_candidate"],
+        selected_config=summary["results"]["axes"]["selected_config"],
         n_parameters=40,
         mixed_full_tvd=_stats([np.mean(f["selected"]["full_tvd"]) for f in fits]),
         inside_full_tvd=_stats([f["inside_mean_full_tvd"] for f in fits]),
@@ -123,67 +125,46 @@ def _stats_rows(rows):
     )
 
 
-def extract(campaign: Path, output: Path, *, grid_points=41, axis_points=21):
+def extract(
+    campaign: Path, output: Path, *, ciqp=CIQP_BUNDLE, grid_points=41, axis_points=21
+):
     campaign, output = Path(campaign), Path(output)
-    if output.resolve().is_relative_to((ROOT / "data").resolve()):
-        raise ValueError("refusing to write under data/")
-    receipt = json.loads((campaign / "campaign_receipt.json").read_text())
-    if receipt["status"] != "complete":
-        raise ValueError("requires a completed campaign")
-    source = json.loads((campaign / "source-manifest.json").read_text())
-    for name, digest in source["sha256"].items():
-        if sha(campaign / "source-workspace" / name) != digest:
-            raise ValueError(f"frozen source integrity failure: {name}")
-    protocol_name = receipt.get("protocol", "gaussian2d_diagonal_protocol.json")
-    protocol = json.loads(
-        (campaign / "source-workspace/paper_experiments" / protocol_name).read_text()
-    )
-    basis = protocol.get("basis", "affine")
+    search, fits = load_campaign(campaign)
+    protocol = search["protocol"]
+    conditions = load_conditions()
+    basis, ansatz = protocol["basis"], protocol["ansatz"]
     terms = BASES[basis]
-    ansatz = protocol.get("ansatz", "lattice")
     phases = n_phases(ansatz)
     n_weights = len(terms) * phases
-    finals = [r for r in receipt["records"] if r["stage"] == "final"]
-    if len(finals) != len(protocol["seeds"]["final"]):
-        raise ValueError("expected one final fit per final seed")
     grid = np.linspace(-1, 1, grid_points)
     axis = np.linspace(-1, 1, axis_points)
     mesh = np.asarray([(u, v) for v in grid for u in grid])
     mean_pairs = np.asarray([(u, v) for v in (-1, 0, 1) for u in axis])
     sd_pairs = np.asarray([(u, v) for u in (-1, 0, 1) for v in axis])
-    fits, params, grid_full, grid_profile, means, sds = [], [], [], [], [], []
-    for row in finals:
-        path = campaign / "axes" / "final" / row["candidate"] / str(row["seed"])
-        meta = json.loads((path / "fit.json").read_text())
-        if sha(path / "fit.npz") != row["checkpoint_sha256"]:
-            raise ValueError(f"fit integrity failure: {path}")
-        data = np.load(path / "fit.npz")
-        weights = data["best_params"]
+    pairs = conditions["reporting"]
+    inside = _inside(pairs)
+    rows, params, grid_full, grid_profile, means, sds = [], [], [], [], [], []
+    for record, weights in fits:
         if weights.shape != (n_weights,):
             raise ValueError("unexpected weight shape")
-        pairs = data["reporting_conditions"]
         report = metrics(weights, pairs)
-        for key, value in meta["reporting_metrics"].items():
+        for key, value in record["reporting_metrics"].items():
             if not np.allclose(report[key], value, atol=1e-10, rtol=0):
                 raise ValueError(f"replay mismatch: {key}")
-        inside = _inside(pairs)
         full = np.asarray(report["full_tvd"])
         unconditioned = weights.copy()
         unconditioned[phases:] = 0
         info = dict(
-            seed=row["seed"],
-            candidate=row["candidate"],
-            best_step=meta["best_step"],
-            seconds=meta["seconds"],
-            development_mean_full_tvd=meta["best_score"],
+            repeat=record["job"]["repeat"],
+            selected_start=record["selected_start"],
+            best_step=record["selected_step"],
+            seconds=record["wall_seconds"],
+            development_mean_full_tvd=record["J"],
             selected=report,
             mixed_mean_full_tvd=float(full.mean()),
             inside_mean_full_tvd=float(full[inside].mean()),
             outside_mean_full_tvd=float(full[~inside].mean()),
             mixed_mean_profile_tvd=float(np.mean(report["profile_tvd"])),
-            terminal_mixed_mean_full_tvd=float(
-                np.mean(metrics(data["final_params"], pairs)["full_tvd"])
-            ),
             w0_only_mixed_mean_full_tvd=float(
                 np.mean(metrics(unconditioned, pairs)["full_tvd"])
             ),
@@ -191,10 +172,7 @@ def extract(campaign: Path, output: Path, *, grid_points=41, axis_points=21):
                 f"w_{term}": float(np.linalg.norm(row))
                 for term, row in zip(terms, weights.reshape(-1, phases), strict=True)
             },
-            **axis_diagnostics(
-                lambda pairs, w=weights: metrics(w, pairs),
-                protocol["protocols"]["axes"],
-            ),
+            **axis_diagnostics(lambda p, w=weights: metrics(w, p), conditions),
         )
         sweep = metrics(weights, mesh)
         grid_full.append(np.reshape(sweep["full_tvd"], (grid_points, grid_points)))
@@ -214,9 +192,9 @@ def extract(campaign: Path, output: Path, *, grid_points=41, axis_points=21):
         info["width_endpoint_ratios"] = (
             (sds[-1][:, -1] - sds[-1][:, 0]) / (target_sd[:, -1] - target_sd[:, 0])
         ).tolist()
-        fits.append(info)
+        rows.append(info)
         params.append(weights)
-        print(f"evaluated diagonal axes {row['seed']}", flush=True)
+        print(f"evaluated {search['campaign']} repeat {info['repeat']}", flush=True)
     arrays = dict(
         grid_u=grid,
         grid_v=grid,
@@ -224,8 +202,8 @@ def extract(campaign: Path, output: Path, *, grid_points=41, axis_points=21):
         v_axis=axis,
         target_mean=target_mean,
         target_sd=target_sd,
-        fitting_axes=np.asarray(protocol["protocols"]["axes"]["fitting"]),
-        reporting_axes=np.asarray(protocol["protocols"]["axes"]["reporting"]),
+        fitting_axes=conditions["fitting"],
+        reporting_axes=pairs,
         grid_tvd=np.asarray(grid_full),
         grid_profile_tvd=np.asarray(grid_profile),
         model_mean=np.asarray(means),
@@ -234,50 +212,43 @@ def extract(campaign: Path, output: Path, *, grid_points=41, axis_points=21):
     output.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(output / "DIAGNOSTICS.npz", **arrays)
     np.savez_compressed(output / "PARAMETERS.npz", axes=np.asarray(params))
+    (output / "protocol.json").write_text(json.dumps(protocol, indent=2) + "\n")
     diagonal = dict(
-        selected_candidate=receipt["winner"],
+        selected_config=search["winner"]["config"],
         basis=basis,
-        **({} if ansatz == "lattice" else {"ansatz": ansatz}),
+        ansatz=ansatz,
         n_parameters=n_weights,
-        mixed_full_tvd=_stats([f["mixed_mean_full_tvd"] for f in fits]),
-        inside_full_tvd=_stats([f["inside_mean_full_tvd"] for f in fits]),
-        outside_full_tvd=_stats([f["outside_mean_full_tvd"] for f in fits]),
-        mixed_profile_tvd=_stats([f["mixed_mean_profile_tvd"] for f in fits]),
-        w0_only_full_tvd=_stats([f["w0_only_mixed_mean_full_tvd"] for f in fits]),
-        seconds=_stats([f["seconds"] for f in fits]),
-        mean_endpoint_ratios=_stats_rows([f["mean_endpoint_ratios"] for f in fits]),
-        width_endpoint_ratios=_stats_rows([f["width_endpoint_ratios"] for f in fits]),
-        **{key: _stats([f[key] for f in fits]) for key in AXIS_KEYS},
+        development_selection_score=_stats(
+            [f["development_mean_full_tvd"] for f in rows]
+        ),
+        mixed_full_tvd=_stats([f["mixed_mean_full_tvd"] for f in rows]),
+        inside_full_tvd=_stats([f["inside_mean_full_tvd"] for f in rows]),
+        outside_full_tvd=_stats([f["outside_mean_full_tvd"] for f in rows]),
+        mixed_profile_tvd=_stats([f["mixed_mean_profile_tvd"] for f in rows]),
+        w0_only_full_tvd=_stats([f["w0_only_mixed_mean_full_tvd"] for f in rows]),
+        seconds=_stats([f["seconds"] for f in rows]),
+        mean_endpoint_ratios=_stats_rows([f["mean_endpoint_ratios"] for f in rows]),
+        width_endpoint_ratios=_stats_rows([f["width_endpoint_ratios"] for f in rows]),
+        **{key: _stats([f[key] for f in rows]) for key in AXIS_KEYS},
     )
     summary = dict(
         status="complete",
-        smoke=receipt["smoke"],
         basis=basis,
-        **({} if ansatz == "lattice" else {"ansatz": ansatz}),
-        campaign=str(campaign),
-        campaign_receipt_sha256=sha(campaign / "campaign_receipt.json"),
-        protocol_sha256=receipt["protocol_sha256"],
+        ansatz=ansatz,
+        protocol_sha256=sha(output / "protocol.json"),
         diagnostic_npz_sha256=sha(output / "DIAGNOSTICS.npz"),
         parameters_sha256=sha(output / "PARAMETERS.npz"),
-        shortlist=receipt["shortlist"],
-        confirmation_scores=receipt.get("confirmation_scores"),
-        screen_scores={
-            r["candidate"]: r["best_score"]
-            for r in receipt["records"]
-            if r["stage"] == "screen"
-        },
-        campaign_fit_seconds_total=receipt.get("fit_seconds_total"),
-        campaign_session_seconds=receipt.get("session_seconds"),
+        search={k: v for k, v in search.items() if k != "protocol"},
         diagonal=diagonal,
-        ciqp=ciqp_reference(),
-        fits=fits,
+        ciqp=ciqp_reference(ciqp),
+        fits=rows,
         grid_layout="grid_tvd[fit, v_index, u_index], u and v on linspace(-1,1,41)",
         axis_response_layout=(
             "model_mean[fit, v in (-1,0,1), u_axis]; "
             "model_sd[fit, u in (-1,0,1), v_axis]"
         ),
         aggregation=(
-            "condition mean per fit, then mean and sample SD across five fits; "
+            "condition mean per fit, then mean and sample SD across the final fits; "
             "inside means |u|+|v|<=1"
         ),
     )
@@ -287,12 +258,79 @@ def extract(campaign: Path, output: Path, *, grid_points=41, axis_points=21):
     return summary
 
 
-def main():
+FIVE_WAY_COLUMNS = {
+    "complete_quadratic": "gaussian2d-diagonal-variants/complete-quadratic",
+    "complete_affine": "gaussian2d-diagonal-variants/complete-affine",
+    "lattice_quadratic": "gaussian2d-diagonal-variants/lattice-quadratic",
+    "lattice_affine": "gaussian2d-diagonal",
+}
+FIVE_WAY_ROWS = (
+    *AXIS_KEYS[:5],
+    "mixed_full_tvd",
+    "inside_full_tvd",
+    "outside_full_tvd",
+    "mixed_profile_tvd",
+    "corners",
+    "origin",
+)
+
+
+def five_way(data=ROOT / "data"):
+    """Compare the four diagonal bundles with input conditioning."""
+    data = Path(data)
+    rows = {
+        name: json.loads((data / path / "SUMMARY.json").read_text())
+        for name, path in FIVE_WAY_COLUMNS.items()
+    }
+    ciqp = rows["lattice_affine"]["ciqp"]
+    if any(
+        row["ciqp"]["source_sha256"] != ciqp["source_sha256"] for row in rows.values()
+    ):
+        raise ValueError("diagonal bundles compare against different C-IQP bundles")
+    entries = {name: row["diagonal"] for name, row in rows.items()}
+    entries["ciqp"] = ciqp
+
+    def pair(stats):
+        return [round(stats["mean"], 4), round(stats["sd"], 4)]
+
+    return dict(
+        columns=list(entries),
+        sources={
+            name: f"data/{path}/SUMMARY.json" for name, path in FIVE_WAY_COLUMNS.items()
+        },
+        table={
+            key: {name: pair(entry[key]) for name, entry in entries.items()}
+            for key in FIVE_WAY_ROWS
+        },
+        development_selection_score={
+            stat: {
+                name: entries[name]["development_selection_score"][stat]
+                for name in FIVE_WAY_COLUMNS
+            }
+            for stat in ("mean", "sd")
+        },
+        n_parameters={name: entry["n_parameters"] for name, entry in entries.items()},
+        ratios={
+            key: {name: entry[key] for name, entry in entries.items()}
+            for key in ("mean_endpoint_ratios", "width_endpoint_ratios")
+        },
+        ratio_layout="mean ratios over v in (-1,0,1); width ratios over u in (-1,0,1)",
+    )
+
+
+def main(argv=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument("--campaign", type=Path, required=True)
+    parser.add_argument("--campaign", type=Path)
     parser.add_argument("--output", type=Path, required=True)
-    args = parser.parse_args()
-    summary = extract(args.campaign, args.output)
+    parser.add_argument("--data", type=Path, default=ROOT / "data")
+    parser.add_argument(
+        "--five-way", action="store_true", help="write five_way.json from --data"
+    )
+    args = parser.parse_args(argv)
+    if args.five_way:
+        args.output.write_text(json.dumps(five_way(args.data), indent=2) + "\n")
+        return
+    summary = extract(args.campaign, args.output, ciqp=args.data / "gaussian_lattice")
     for label in ("diagonal", "ciqp"):
         row = summary[label]
         print(

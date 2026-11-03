@@ -264,12 +264,13 @@ def _gaussian_lattice(data, output):
     from .gaussian_lattice_figures import main as render_lattice
 
     diagonal = data.parent / "gaussian2d-diagonal"
-    diagonal_args = (
-        ["--diagonal", str(diagonal)] if (diagonal / "SUMMARY.json").exists() else []
-    )
-    return render_lattice(
-        ["--results", str(data), "--output", str(output), *diagonal_args]
-    )
+    variants = data.parent / "gaussian2d-diagonal-variants"
+    extra = []
+    if (diagonal / "SUMMARY.json").exists():
+        extra += ["--diagonal", str(diagonal)]
+    if variants.is_dir():
+        extra += ["--variants", str(variants)]
+    return render_lattice(["--results", str(data), "--output", str(output), *extra])
 
 
 def _curie_weiss(data, output):

@@ -97,18 +97,6 @@ def thetas(weights, conditions):
     return theta
 
 
-def initial_weights(seed, candidate, basis_name="affine", ansatz_name="lattice"):
-    """w_0 from the lattice initialization stream; all other rows zero.
-
-    The one-body generators come first in both ansatzes, so local_mean always
-    lands on the 16 one-body entries.
-    """
-    phases = n_phases(ansatz_name)
-    w0 = np.random.default_rng(seed).normal(0, candidate["init_scale"], phases)
-    w0[:N_QUBITS] += candidate["local_mean"]
-    return np.concatenate([w0, np.zeros((n_terms(basis_name) - 1) * phases)])
-
-
 def zero_encoder(n_conditions):
     """The fixed |0>^16 input as a condition batch of zero RY angles."""
     return ciqp.AngleEncoder(
