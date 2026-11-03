@@ -128,7 +128,7 @@ def lattice_heatmaps(a, out, diagonal=None):
         # One logarithmic TVD scale for both models, so that the smaller errors of
         # input conditioning remain visible next to the baseline. Values below
         # vmin (near the origin, where input conditioning is exact) are clipped.
-        vmax = 0.3
+        vmax = 0.125
         panels = [
             (values, "(a) Input conditioning"),
             (diagonal["grid_tvd"].mean(axis=0), "(b) Diagonal conditioning"),
@@ -140,8 +140,8 @@ def lattice_heatmaps(a, out, diagonal=None):
         norm = mpl.colors.Normalize(vmin=0, vmax=vmax)
         ticks = np.linspace(0, vmax, 6)
     else:
-        norm = mpl.colors.LogNorm(vmin=0.005, vmax=vmax)
-        ticks = [0.005, 0.01, 0.02, 0.05, 0.1, 0.2]
+        norm = mpl.colors.LogNorm(vmin=0.002, vmax=vmax)
+        ticks = [0.002, 0.005, 0.01, 0.02, 0.05, 0.1]
     fig, axes = plt.subplots(
         1, len(panels), figsize=figsize, layout="constrained", squeeze=False
     )
