@@ -2,13 +2,7 @@
 
 Code and data for *Classical training of conditional instantaneous quantum
 polynomial-time Born machines* by Oriol Balló-Gimbernat, Emiliano Tolotti, Laia
-Domingo and Fernando Vilariño.
-
-A conditional IQP Born machine encodes the condition in the input state and
-shares one IQP unitary across conditions. The models are trained classically
-with an unbiased estimator of a conditional maximum mean discrepancy. This
-repository contains the experiment code, the protocol of every experiment, and
-the result bundles behind every numerical figure and table of the paper.
+Domingo, Fernando Vilariño and Adan Garriga.
 
 ## Layout
 
