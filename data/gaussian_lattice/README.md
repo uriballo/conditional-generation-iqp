@@ -1,6 +1,6 @@
-# Gaussian-shaped family, conditional IQP
+# Hamming-weight family, conditional IQP
 
-Binomial-centred Gaussian-shaped targets with two-coordinate centre/width
+Hamming-weight targets with two-coordinate centre/width
 conditioning, encoded by exp[-i(u/2)Jz] exp[-i(v/40)Jz^2] |+>^16 and a shared
 4x4 lattice layer with 40 independent phases. Training uses the nine axis
 conditions; selection uses eight development conditions on the axes; the

@@ -126,8 +126,8 @@ uv run python -m paper_experiments.target_families --output results/figures
 
 | Experiment | Code | Protocol | Data |
 | --- | --- | --- | --- |
-| Gaussian-shaped family, conditional IQP | `gaussian2d_lattice*.py`, `gaussian2d_hpo.py` | `gaussian2d_lattice_protocol.json` | `data/gaussian_lattice/` |
-| Gaussian-shaped family, diagonal conditioning | `gaussian2d_diagonal*.py`, `gaussian2d_hpo.py` | `gaussian2d_diagonal*_protocol.json` | `data/gaussian2d-diagonal/`, `data/gaussian2d-diagonal-variants/` |
+| Hamming-weight family, conditional IQP | `gaussian2d_lattice*.py`, `gaussian2d_hpo.py` | `gaussian2d_lattice_protocol.json` | `data/gaussian_lattice/` |
+| Hamming-weight family, diagonal conditioning | `gaussian2d_diagonal*.py`, `gaussian2d_hpo.py` | `gaussian2d_diagonal*_protocol.json` | `data/gaussian2d-diagonal/`, `data/gaussian2d-diagonal-variants/` |
 | Curie–Weiss, C-IQP (P) and per-temperature IQP | `cw_followup_*.py` | `cw_followup_protocol.json` | `data/curie-weiss-followup/` |
 | Curie–Weiss, C-IQP (TP) and κ = 0 ablation | `twisted_parity_encoder.py`, `cw_encoder_hpo.py`, `cw_kappa0_control.py` | `cw_twisted*_protocol.json` | `data/curie-weiss-twisted/` |
 | Curie–Weiss, D-IQP | `cw_diagonal_fit.py`, `cw_encoder_hpo.py` | `cw_diagonal_k4_protocol.json` | `data/curie-weiss-diagonal/` |
@@ -141,7 +141,7 @@ Each stage writes to the given output root and resumes only with the same
 configuration and source. Search stages stop after each phase. `--smoke` (or
 `--stage smoke`) runs a reduced pipeline check.
 
-**Gaussian-shaped family.** Five campaigns under the Curie–Weiss search
+**Hamming-weight family** (stage, module and folder names use `gaussian`). Five campaigns under the Curie–Weiss search
 protocol (60 random and 60 TPE proposals, confirmation with five repeats and
 final fits with ten repeats, each with three starts), with fit streams and
 target pools paired across campaigns: input conditioning (`input`), the affine

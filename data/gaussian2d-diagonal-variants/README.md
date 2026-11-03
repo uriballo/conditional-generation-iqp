@@ -1,4 +1,4 @@
-# Gaussian-shaped family, diagonal-conditioning variants
+# Hamming-weight family, diagonal-conditioning variants
 
 Three variants of `../gaussian2d-diagonal/` under the same protocol.
 

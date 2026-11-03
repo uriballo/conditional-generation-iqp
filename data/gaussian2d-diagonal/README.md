@@ -1,4 +1,4 @@
-# Gaussian-shaped family, diagonal conditioning
+# Hamming-weight family, diagonal conditioning
 
 Fixed input |0>^16 with the 4x4 lattice diagonal layer, whose 40 phases depend
 on the condition through theta(u, v) = w0 + u w_u + v w_v (120 parameters).
