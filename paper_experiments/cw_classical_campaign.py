@@ -346,19 +346,24 @@ def _confirmation(root, manifest, executor):
     return result
 
 
-def _final(root, manifest, executor):
-    confirmation = json.loads((root / "confirmation.json").read_text())
+def _final(root, manifest, executor, confirmation_path=None):
+    """Final fits of the confirmed winners; ``confirmation_path`` names a stored
+    confirmation record whose winners are trained without the search."""
+    stored = confirmation_path is not None
+    confirmation_path = confirmation_path or root / "confirmation.json"
+    confirmation = json.loads(confirmation_path.read_text())
     if confirmation["status"] != "confirmation_complete":
         raise ValueError("completed confirmation required")
-    frozen = json.loads((root / "shortlist.json").read_text())
-    _audit_screen(root, manifest, complete=True)
-    for family, rows in confirmation["candidates"].items():
-        if [r["config"] for r in rows] != [r["config"] for r in frozen[family]]:
-            raise ValueError("confirmed candidate shortlist differs")
-        for row in rows:
-            _audit_result(root, manifest, family, row, "confirmation")
-        if choose_confirmed(rows) != confirmation["winners"][family]:
-            raise ValueError("confirmed winner differs")
+    if not stored:
+        frozen = json.loads((root / "shortlist.json").read_text())
+        _audit_screen(root, manifest, complete=True)
+        for family, rows in confirmation["candidates"].items():
+            if [r["config"] for r in rows] != [r["config"] for r in frozen[family]]:
+                raise ValueError("confirmed candidate shortlist differs")
+            for row in rows:
+                _audit_result(root, manifest, family, row, "confirmation")
+            if choose_confirmed(rows) != confirmation["winners"][family]:
+                raise ValueError("confirmed winner differs")
     families = {}
     for family in FAMILIES:
         winner = confirmation["winners"][family]
@@ -413,7 +418,7 @@ def _final(root, manifest, executor):
         families=families,
         provenance=dict(
             manifest=manifest,
-            confirmation_sha256=_hash(root / "confirmation.json"),
+            confirmation_sha256=_hash(confirmation_path),
             pairing="parent target-pool namespace and final repeat IDs",
         ),
     )
@@ -421,7 +426,17 @@ def _final(root, manifest, executor):
     return dict(status="final_complete", bundle=str(root / "figure_data.json"))
 
 
-def run_all(root, *, phase="random", capacity="small", smoke=False, workers=1):
+def run_all(
+    root,
+    *,
+    phase="random",
+    capacity="small",
+    smoke=False,
+    workers=1,
+    confirmation=None,
+):
+    """Run one phase; ``confirmation`` (a stored confirmation record) makes the
+    final phase train its winners without the search stages."""
     if capacity not in CAPACITIES or workers < 1:
         raise ValueError("invalid capacity or worker count")
     if phase not in ("random", "tpe", "confirmation", "final", "reporting"):
@@ -447,7 +462,7 @@ def run_all(root, *, phase="random", capacity="small", smoke=False, workers=1):
             "tpe": "random-review-ready.json",
             "confirmation": "tpe-review-ready.json",
             "reporting": "tpe-review-ready.json",
-            "final": "confirmation.json",
+            "final": None if confirmation else "confirmation.json",
         }.get(phase)
         if prerequisite and not (root / prerequisite).is_file():
             raise ValueError(f"classical {phase} requires completed {prerequisite}")
@@ -466,6 +481,6 @@ def run_all(root, *, phase="random", capacity="small", smoke=False, workers=1):
             if phase == "confirmation":
                 return _confirmation(root, manifest, executor)
             if phase == "final":
-                return _final(root, manifest, executor)
+                return _final(root, manifest, executor, confirmation)
             _confirmation(root, manifest, executor)
             return _final(root, manifest, executor)

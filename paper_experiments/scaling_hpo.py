@@ -453,8 +453,12 @@ def final(
     smoke=False,
     ansatz="lattice",
     trial=None,
+    selection=None,
 ):
     """Train the selected configuration at every requested size.
+
+    ``selection`` is a stored final-fit receipt whose candidate and
+    hyperparameters are trained without the search and confirmation stages.
 
     Sizes run in ascending order with seeds inside sizes, so an interrupted
     queue leaves complete smaller sizes. Restarts share data and optimizer
@@ -466,6 +470,13 @@ def final(
     spec = PROTOCOL["final"]
     if smoke:
         family, hp = "S1", sample_trial("S1", 5)
+    elif selection:
+        source = json.loads(Path(selection).read_text())
+        name, family, hp = (
+            source["candidate"],
+            source["family"],
+            source["hyperparameters"],
+        )
     else:
         # The all-to-all ablation takes its configuration directly from its
         # own single-size search instead of the lattice confirmation stage.
@@ -809,6 +820,9 @@ def main(argv=None):
         "--ansatz", default="lattice", help="lattice, complete or a device graph JSON"
     )
     parser.add_argument("--trial")
+    parser.add_argument(
+        "--selection", type=Path, help="final: train a stored fit receipt's candidate"
+    )
     parser.add_argument("--evaluations", type=Path)
     parser.add_argument("out", type=Path)
     parser.add_argument("--family", nargs="+", default=PROTOCOL["families"])
@@ -843,6 +857,7 @@ def main(argv=None):
             args.smoke,
             args.ansatz,
             args.trial,
+            args.selection,
         )
     if args.command == "confirm":
         args.out.mkdir(parents=True, exist_ok=True)

@@ -385,23 +385,27 @@ def _confirmation(root, smoke, workers, shard, prepare=False):
     return status
 
 
-def _final(root, smoke, workers, shard, prepare=False):
+def _final(root, smoke, workers, shard, prepare=False, winner=None):
+    """Final fits of the confirmed winner, or of a stored ``winner`` without
+    the search and confirmation stages."""
     confirmation = root / "confirmation"
-    if not (confirmation / "review-ready.json").is_file():
-        raise ValueError("completed confirmation required")
     identity = source_identity()
     if shard is not None:
         _shard_identity(root)
-    winner = json.loads((confirmation / "winner.json").read_text())
-    directory = root / "final"
-    _freeze(
-        directory / "campaign.json",
-        dict(
+    if winner is None:
+        if not (confirmation / "review-ready.json").is_file():
+            raise ValueError("completed confirmation required")
+        winner = json.loads((confirmation / "winner.json").read_text())
+        manifest = dict(
             identity=identity,
             winner=winner,
             confirmation_campaign_sha256=_hash(confirmation / "campaign.json"),
-        ),
-    )
+        )
+    else:
+        _campaign(root, smoke, identity)
+        manifest = dict(identity=identity, winner=winner, stored_winner=True)
+    directory = root / "final"
+    _freeze(directory / "campaign.json", manifest)
     jobs = list(audited.jobs(_context(smoke, identity), winner, stage="final"))
     if prepare:
         return dict(status="prepared", fits=len(jobs))
@@ -541,8 +545,13 @@ def run(
     shard=None,
     prepare=False,
     campaign="twisted",
+    winner=None,
 ):
-    """Run one phase; ``prepare`` freezes its manifest for shards and stops."""
+    """Run one phase; ``prepare`` freezes its manifest for shards and stops.
+
+    ``winner`` (trial_id and config) makes the final phase train a stored
+    selection instead of the confirmation winner.
+    """
     configure(campaign)
     if phase not in PHASES or workers < 1:
         raise ValueError("invalid phase or workers")
@@ -567,7 +576,7 @@ def run(
             return _tpe(root, smoke, workers)
         if phase == "confirmation":
             return _confirmation(root, smoke, workers, shard, prepare)
-        return _final(root, smoke, workers, shard, prepare)
+        return _final(root, smoke, workers, shard, prepare, winner)
     finally:
         os.close(descriptor)
 

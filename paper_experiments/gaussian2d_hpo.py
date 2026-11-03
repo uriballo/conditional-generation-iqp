@@ -404,7 +404,7 @@ def _tell(study, row, phase):
     study.tell(live, row["J"])
 
 
-def _random(root, campaign, smoke, workers, identity):
+def _manifest(root, campaign, smoke, identity):
     _freeze(
         root / "campaign.json",
         dict(
@@ -414,6 +414,10 @@ def _random(root, campaign, smoke, workers, identity):
             smoke=smoke,
         ),
     )
+
+
+def _random(root, campaign, smoke, workers, identity):
+    _manifest(root, campaign, smoke, identity)
     path = root / "random-proposals.json"
     if not path.exists():
         if (root / "study" / "trials.sqlite3").exists():
@@ -554,8 +558,11 @@ def _confirmation(root, campaign, smoke, workers, identity):
     )
 
 
-def _final(root, campaign, smoke, workers, identity):
-    winner = json.loads((root / "confirmation" / "winner.json").read_text())
+def _final(root, campaign, smoke, workers, identity, winner=None):
+    if winner is None:
+        winner = json.loads((root / "confirmation" / "winner.json").read_text())
+    else:
+        _manifest(root, campaign, smoke, identity)
     directory = root / "final"
     _freeze(directory / "campaign.json", dict(identity=identity, winner=winner))
     records = _run_fits(
@@ -573,11 +580,13 @@ def _final(root, campaign, smoke, workers, identity):
     return status
 
 
-def load_campaign(root):
+def load_campaign(root, search=None):
     """Search record and verified final fits of a completed campaign.
 
     Fits are located by job digest, so campaigns can be copied between machines.
-    Returns the search summary and a list of (receipt, best parameters).
+    Returns the search summary and a list of (receipt, best parameters). A
+    stored ``search`` record (the ``search`` field of a bundle summary) stands
+    in for the search stages of a campaign that ran only the final phase.
     """
     root = Path(root)
     manifest = json.loads((root / "campaign.json").read_text())
@@ -595,6 +604,18 @@ def load_campaign(root):
         _verify_artifacts(directory, record["artifact_sha256"])
         with np.load(directory / "parameters.npz") as data:
             fits.append((record, data["best_params"]))
+    final = dict(
+        final_J=[r["J"] for r, _ in fits],
+        final_seconds=[r["wall_seconds"] for r, _ in fits],
+    )
+    if search is not None:
+        return dict(
+            search,
+            campaign=manifest["campaign"],
+            protocol=manifest["protocol"],
+            identity=manifest["identity"],
+            **final,
+        ), fits
     screening = [
         json.loads(path.read_text())
         for path in sorted((root / "study" / "proposals").glob("*.json"))
@@ -614,13 +635,14 @@ def load_campaign(root):
             for r in json.loads((root / "confirmation" / "results.json").read_text())
         ],
         winner={k: winner[k] for k in ("trial_id", "J", "config")},
-        final_J=[r["J"] for r, _ in fits],
-        final_seconds=[r["wall_seconds"] for r, _ in fits],
+        **final,
     )
     return search, fits
 
 
-def run(root, campaign, phase, *, smoke=False, workers=1):
+def run(root, campaign, phase, *, smoke=False, workers=1, winner=None):
+    """Run one phase; ``winner`` (trial_id and config) makes the final phase
+    train a stored selection instead of the confirmation winner."""
     if campaign not in CAMPAIGNS or phase not in PHASES or workers < 1:
         raise ValueError("invalid campaign, phase or workers")
     root = Path(root).resolve()
@@ -636,9 +658,9 @@ def run(root, campaign, phase, *, smoke=False, workers=1):
             fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as error:
             raise RuntimeError("another process holds this campaign lock") from error
-        phase_runner = dict(
-            random=_random, tpe=_tpe, confirmation=_confirmation, final=_final
-        )[phase]
+        if phase == "final":
+            return _final(root, campaign, smoke, workers, identity, winner)
+        phase_runner = dict(random=_random, tpe=_tpe, confirmation=_confirmation)[phase]
         return phase_runner(root, campaign, smoke, workers, identity)
     finally:
         os.close(descriptor)

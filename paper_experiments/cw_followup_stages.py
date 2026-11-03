@@ -239,6 +239,65 @@ def _export_final(directory, winners, identity, smoke):
     return data
 
 
+def _run_stage(stage, selections, destination, identity, smoke, workers):
+    planned = _jobs(selections, stage, identity, smoke)
+    done = []
+
+    def progress(record):
+        done.append(record)
+        counts = {f: sum(r["job"]["family"] == f for r in done) for f in FAMILIES}
+        write_json(
+            destination.parent / "reporting-progress.json",
+            dict(
+                stage=stage,
+                fits_completed=len(done),
+                fits_total=len(planned),
+                counts=counts,
+            ),
+        )
+        print(f"{stage}: {len(done)}/{len(planned)} fits; {counts}", flush=True)
+
+    if workers == 1:
+        for job in planned:
+            progress(_worker((job, destination)))
+    else:
+        with ProcessPoolExecutor(
+            max_workers=workers, mp_context=multiprocessing.get_context("spawn")
+        ) as pool:
+            futures = [pool.submit(_worker, (job, destination)) for job in planned]
+            for future in as_completed(futures):
+                progress(future.result())
+    rows = _collect(destination, selections, stage, identity, smoke)
+    write_json(destination / "results.json", rows)
+    return rows
+
+
+def _final(final, winners, identity, smoke, workers):
+    _run_stage(
+        "final", {f: [winners[f]] for f in FAMILIES}, final, identity, smoke, workers
+    )
+    data = _export_final(final, winners, identity, smoke)
+    status = dict(
+        status="final_complete",
+        repeats=data["repeats"],
+        winners={f: winners[f]["trial_id"] for f in FAMILIES},
+        figure_data_sha256=_hash(final / "figure_data.json"),
+    )
+    write_json(final / "review-ready.json", status)
+    return status
+
+
+def run_final(final, winners, *, smoke=False, workers=1):
+    """Final fits and figure data of stored winners, without the search stages."""
+    final = Path(final).resolve()
+    identity = parent.source_identity()
+    _freeze(
+        final / "campaign.json",
+        dict(identity=identity, winners=winners, smoke=smoke, stored_winners=True),
+    )
+    return _final(final, winners, identity, smoke, workers)
+
+
 def _run_locked(root, phase, smoke, workers):
     continuation, shortlists, hashes = _screening(root, smoke)
     identity = parent.source_identity()
@@ -258,40 +317,10 @@ def _run_locked(root, phase, smoke, workers):
     # Freeze all shortlists before the first confirmation evaluation of B.
     _freeze(confirmation / "campaign.json", manifest)
 
-    def run_stage(stage, selections, destination):
-        planned = _jobs(selections, stage, identity, smoke)
-        done = []
-
-        def progress(record):
-            done.append(record)
-            counts = {f: sum(r["job"]["family"] == f for r in done) for f in FAMILIES}
-            write_json(
-                root.parent / "reporting-progress.json",
-                dict(
-                    stage=stage,
-                    fits_completed=len(done),
-                    fits_total=len(planned),
-                    counts=counts,
-                ),
-            )
-            print(f"{stage}: {len(done)}/{len(planned)} fits; {counts}", flush=True)
-
-        if workers == 1:
-            for job in planned:
-                progress(_worker((job, destination)))
-        else:
-            with ProcessPoolExecutor(
-                max_workers=workers, mp_context=multiprocessing.get_context("spawn")
-            ) as pool:
-                futures = [pool.submit(_worker, (job, destination)) for job in planned]
-                for future in as_completed(futures):
-                    progress(future.result())
-        rows = _collect(destination, selections, stage, identity, smoke)
-        write_json(destination / "results.json", rows)
-        return rows
-
     if phase in ("confirmation", "reporting"):
-        results = run_stage("confirmation", shortlists, confirmation)
+        results = _run_stage(
+            "confirmation", shortlists, confirmation, identity, smoke, workers
+        )
         winners = {f: choose_confirmed(results[f]) for f in FAMILIES}
         _freeze(confirmation / "winners.json", winners)
         write_json(
@@ -307,7 +336,6 @@ def _run_locked(root, phase, smoke, workers):
         winners = {f: choose_confirmed(results[f]) for f in FAMILIES}
         _freeze(confirmation / "winners.json", winners)
     # Winner configurations are fixed before any final-grid evaluation.
-    selections = {f: [winners[f]] for f in FAMILIES}
     _freeze(
         final / "campaign.json",
         dict(
@@ -317,16 +345,7 @@ def _run_locked(root, phase, smoke, workers):
             smoke=smoke,
         ),
     )
-    run_stage("final", selections, final)
-    data = _export_final(final, winners, identity, smoke)
-    status = dict(
-        status="final_complete",
-        repeats=data["repeats"],
-        winners={f: winners[f]["trial_id"] for f in FAMILIES},
-        figure_data_sha256=_hash(final / "figure_data.json"),
-    )
-    write_json(final / "review-ready.json", status)
-    return status
+    return _final(final, winners, identity, smoke, workers)
 
 
 def run_all(root, *, phase="reporting", smoke=False, workers=1):

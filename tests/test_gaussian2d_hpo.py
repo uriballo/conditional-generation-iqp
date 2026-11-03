@@ -77,3 +77,20 @@ def test_smoke_campaigns_pair_streams_and_bundle(tmp_path):
     assert summary["diagonal"]["n_parameters"] == 120
     assert set(diagonal_report.AXIS_KEYS) <= set(summary["ciqp"])
     json.dumps(summary, allow_nan=False)
+
+
+def test_final_from_stored_winner_matches_the_campaign_final(tmp_path):
+    root = tmp_path / "campaign"
+    for phase in ("random", "confirmation", "final"):
+        hpo.run(root, "input", phase, smoke=True)
+    search, fits = hpo.load_campaign(root)
+    stored = {k: v for k, v in search.items() if k != "protocol"}
+
+    final_only = tmp_path / "final-only"
+    hpo.run(final_only, "input", "final", smoke=True, winner=search["winner"])
+    replay, refits = hpo.load_campaign(final_only, stored)
+    del replay["final_seconds"], search["final_seconds"]
+    assert replay == search
+    for (first, theta), (second, retheta) in zip(fits, refits, strict=True):
+        assert first["J"] == second["J"]
+        np.testing.assert_array_equal(theta, retheta)

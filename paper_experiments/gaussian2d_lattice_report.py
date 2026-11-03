@@ -86,8 +86,8 @@ def _endpoint_ratio(model, target):
     return ((model[:, -1] - model[:, 0]) / (target[:, -1] - target[:, 0])).tolist()
 
 
-def extract(campaign: Path, output: Path):
-    search, fits = load_campaign(campaign)
+def extract(campaign: Path, output: Path, search=None):
+    search, fits = load_campaign(campaign, search)
     if search["campaign"] != "input":
         raise ValueError("requires the input-conditioning campaign")
     protocol = search["protocol"]
@@ -195,8 +195,17 @@ def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--campaign", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--search-from",
+        type=Path,
+        help="bundle SUMMARY.json whose search record replaces the campaign's "
+        "(campaigns that ran only the final phase)",
+    )
     args = parser.parse_args(argv)
-    extract(args.campaign, args.output)
+    search = (
+        json.loads(args.search_from.read_text())["search"] if args.search_from else None
+    )
+    extract(args.campaign, args.output, search)
 
 
 if __name__ == "__main__":

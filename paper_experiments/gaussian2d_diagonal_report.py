@@ -126,10 +126,16 @@ def _stats_rows(rows):
 
 
 def extract(
-    campaign: Path, output: Path, *, ciqp=CIQP_BUNDLE, grid_points=41, axis_points=21
+    campaign: Path,
+    output: Path,
+    *,
+    ciqp=CIQP_BUNDLE,
+    search=None,
+    grid_points=41,
+    axis_points=21,
 ):
     campaign, output = Path(campaign), Path(output)
-    search, fits = load_campaign(campaign)
+    search, fits = load_campaign(campaign, search)
     protocol = search["protocol"]
     conditions = load_conditions()
     basis, ansatz = protocol["basis"], protocol["ansatz"]
@@ -326,11 +332,22 @@ def main(argv=None):
     parser.add_argument(
         "--five-way", action="store_true", help="write five_way.json from --data"
     )
+    parser.add_argument(
+        "--search-from",
+        type=Path,
+        help="bundle SUMMARY.json whose search record replaces the campaign's "
+        "(campaigns that ran only the final phase)",
+    )
     args = parser.parse_args(argv)
     if args.five_way:
         args.output.write_text(json.dumps(five_way(args.data), indent=2) + "\n")
         return
-    summary = extract(args.campaign, args.output, ciqp=args.data / "gaussian_lattice")
+    search = (
+        json.loads(args.search_from.read_text())["search"] if args.search_from else None
+    )
+    summary = extract(
+        args.campaign, args.output, ciqp=args.data / "gaussian_lattice", search=search
+    )
     for label in ("diagonal", "ciqp"):
         row = summary[label]
         print(
