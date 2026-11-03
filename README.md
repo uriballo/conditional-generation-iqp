@@ -53,7 +53,7 @@ uv run python -m paper_experiments.target_families --output results/figures
 | Curie–Weiss, C-IQP (TP) and κ = 0 ablation | `twisted_parity_encoder.py`, `cw_encoder_hpo.py`, `cw_kappa0_control.py` | `cw_twisted*_protocol.json` | `data/curie-weiss-twisted/` |
 | Curie–Weiss, D-IQP | `cw_diagonal_fit.py`, `cw_encoder_hpo.py` | `cw_diagonal_k4_protocol.json` | `data/curie-weiss-diagonal/` |
 | Curie–Weiss, classical baselines | `cw_classical_*.py` | `cw_classical_protocol.json` | `data/curie-weiss-classical/` |
-| Lattice scaling, 64–2048 qubits | `scaling_hpo.py`, `scaling_observables.py` | `scaling_hpo_protocol.json` | `data/scaling/` |
+| Lattice scaling, 64–2048 qubits | `scaling_hpo.py`, `scaling_observables.py`, `scaling_score_study.py` | `scaling_hpo_protocol.json` | `data/scaling/` |
 | IQM Emerald, 16 and 30 qubits | `hardware_report.py`, `hardware_noiseless.py` | — | `data/hardware/` |
 
 ## Training
@@ -126,7 +126,8 @@ uv run python -m paper_experiments.scaling_hpo evaluate results/scaling/evaluati
 uv run python -m paper_experiments.scaling_hpo bundle results/scaling/bundle --fits results/scaling/final --evaluations results/scaling/evaluations
 ```
 
-The 64-qubit all-to-all comparison uses `--ansatz complete --sizes 64`.
+The 64-qubit all-to-all comparison uses `--ansatz complete --sizes 64`. The
+sixteen-qubit selection-score study is described in `data/scaling/score_study/`.
 
 ## Tests
 

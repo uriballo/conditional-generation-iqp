@@ -1,0 +1,34 @@
+{
+  "all": {
+    "configurations": 120,
+    "checkpoints": 2520,
+    "dev_score_vs_tvd": 0.9672252974820578,
+    "train_mmd_vs_tvd": 0.8273717731676987,
+    "dev_score_vs_mean_tvd": 0.9535473650290844,
+    "train_mmd_vs_mean_tvd": 0.8682665646378319
+  },
+  "S0": {
+    "configurations": 60,
+    "checkpoints": 1260,
+    "dev_score_vs_tvd": 0.9559667325133288,
+    "train_mmd_vs_tvd": 0.7267353435986699,
+    "dev_score_vs_mean_tvd": 0.9616080395016384,
+    "train_mmd_vs_mean_tvd": 0.7845765418933452
+  },
+  "S1": {
+    "configurations": 60,
+    "checkpoints": 1260,
+    "dev_score_vs_tvd": 0.9862956397859731,
+    "train_mmd_vs_tvd": 0.9030049479629,
+    "dev_score_vs_mean_tvd": 0.9509226316265119,
+    "train_mmd_vs_mean_tvd": 0.9354442058191555
+  },
+  "every_200_steps": {
+    "configurations": 120,
+    "checkpoints": 1320,
+    "dev_score_vs_tvd": 0.9671021286273592,
+    "train_mmd_vs_tvd": 0.839004133746842,
+    "dev_score_vs_mean_tvd": 0.9533878708190677,
+    "train_mmd_vs_mean_tvd": 0.875236211682858
+  }
+}
