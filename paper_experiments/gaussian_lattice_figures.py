@@ -284,8 +284,8 @@ def tables(summary, out, diagonal=None, variants=None):
 
     count = {10: "ten"}.get(len(fits), str(len(fits)))
     caption = (
-        r"\caption{Two-coordinate errors after axis training, evaluated on sixteen "
-        r"mixed condition pairs. Input conditioning is the conditional IQP Born "
+        r"\caption{Two-coordinate errors after axis training, evaluated on the "
+        r"sixteen mixed conditions. Input conditioning is the conditional IQP Born "
         r"machine; diagonal conditioning makes the phases of the same lattice "
         r"circuit, acting on $\ket{0}^{\otimes16}$, an affine function of the "
         r"condition"
@@ -295,8 +295,8 @@ def tables(summary, out, diagonal=None, variants=None):
             if variants
             else ""
         )
-        + rf". Values are means and standard deviations of per-fit mean errors "
-        rf"across {count} independent fits; the deterministic encoder-only row has "
+        + r". Values are means and standard deviations of the per-seed mean "
+        rf"full-distribution TVD across {count} seeds; the deterministic encoder-only row has "
         r"no spread. Lower is better.}"
     )
     lines = [
@@ -305,28 +305,21 @@ def tables(summary, out, diagonal=None, variants=None):
         r"\label{tab:gaussian-two-dimensional}",
         r"\centering",
         r"\begin{tabular}{lc}\toprule",
-        r"Quantity & TVD\\\midrule",
-        rf"Encoder only, full and profile & {exact(fits[0]['encoder_mean_full_tvd'])}\\",
+        r"Model & TVD\\\midrule",
+        rf"Encoder only & {exact(fits[0]['encoder_mean_full_tvd'])}\\",
+        f"Input conditioning (40 parameters) & {value('full_tvd')}" + r"\\",
     ]
-    for key, label in [("full_tvd", "full"), ("profile_tvd", "profile")]:
-        lines.append(
-            f"Input conditioning (40 parameters), {label} & {value(key)}" + r"\\"
-        )
     if diagonal is not None:
         row = diagonal["diagonal"]
-        for key, label in [
-            ("mixed_full_tvd", "full"),
-            ("mixed_profile_tvd", "profile"),
-        ]:
-            lines.append(
-                f"Diagonal conditioning ({row['n_parameters']} parameters), {label} & "
-                + uncertain(row[key]["mean"], row[key]["sd"])
-                + r"\\"
-            )
+        lines.append(
+            f"Diagonal conditioning ({row['n_parameters']} parameters) & "
+            + uncertain(row["mixed_full_tvd"]["mean"], row["mixed_full_tvd"]["sd"])
+            + r"\\"
+        )
     for name, label in VARIANTS if variants else ():
         row = json.loads((variants / name / "SUMMARY.json").read_text())["diagonal"]
         lines.append(
-            f"Diagonal, {label} ({row['n_parameters']} parameters), full & "
+            f"Diagonal, {label} ({row['n_parameters']} parameters) & "
             + uncertain(row["mixed_full_tvd"]["mean"], row["mixed_full_tvd"]["sd"])
             + r"\\"
         )
