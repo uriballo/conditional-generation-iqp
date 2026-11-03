@@ -80,6 +80,7 @@ CHECKS = [
         )
         for capacity in ("small", "large")
     ),
+    ("cw-classical/hpo/comparison.json", "curie-weiss-classical/comparison.json"),
     ("scaling/bundle/figure_data.json", "scaling/figure_data.json"),
     ("scaling/bundle/physics", "scaling/physics"),
     ("scaling-all-to-all-64-budget512/fits", f"{ALL_TO_ALL}/fits"),
@@ -413,6 +414,7 @@ def hardware(root, smoke, full, workers):
 
 def figures(root, smoke, full, workers):
     from paper_experiments import hardware_report, target_families
+    from paper_experiments.cw_classical_report import comparison
     from paper_experiments.cw_classical_report import render as render_classical
     from paper_experiments.figures import render_all
 
@@ -430,6 +432,11 @@ def figures(root, smoke, full, workers):
     render_all(data, output)
     target_families.render(output)
     hardware_report.main(["--output", str(output / "hardware")])
+    comparison(
+        data / "curie-weiss-classical",
+        data / "curie-weiss-followup",
+        root / "cw-classical" / "hpo",
+    )
     for capacity in ("small", "large"):
         source = root / "cw-classical" / "hpo" / capacity / "figure_data.json"
         render_classical(
@@ -459,7 +466,7 @@ def _compare(fresh, stored, where, problems, rtol=1e-5, atol=1e-8):
     """Numeric leaves of ``stored`` against ``fresh``; strings and timings skipped."""
     if isinstance(stored, dict):
         for key, value in stored.items():
-            if "seconds" in key:
+            if "second" in key:
                 continue
             if not isinstance(fresh, dict) or key not in fresh:
                 problems.append(f"{where}/{key}: missing")

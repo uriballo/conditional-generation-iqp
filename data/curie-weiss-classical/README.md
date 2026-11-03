@@ -14,5 +14,5 @@ numerically over the latent prior.
 
 - `{small,large}/figure_data.json`: selected configurations, architectures, curves and per-repeat scores.
 - `{small,large}/confirmation.json`, `{small,large}/shortlist.json`: confirmation stage and shortlist.
-- `comparison.{csv,json}`: both capacities with the C-IQP references and paired bootstrap intervals.
+- `comparison.{csv,json}`: both capacities with the C-IQP (TP) and C-IQP (P) references and paired bootstrap intervals against C-IQP (TP), written by `cw_classical_report.comparison` (the figures stage of `reproduce.py`).
 - `validation.json`: bundle checks.

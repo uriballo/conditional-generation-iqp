@@ -71,24 +71,24 @@
     },
     {
       "capacity": "reference",
-      "model": "C-IQP (SP)",
+      "model": "C-IQP (TP)",
       "parameter_count": 136,
       "generation_parameter_count": 136,
       "probability_kind": "exact",
-      "J_mean": 0.060920607999100304,
-      "J_sd": 0.005533470255464283,
-      "P_mean": 0.0181233125443082,
-      "P_sd": 0.0030101558817269974,
-      "mean_tvd_mean": 0.0474284236530413,
-      "mean_tvd_sd": 0.002798576907055149,
-      "max_tvd_mean": 0.0676667001721298,
-      "max_tvd_sd": 0.007012767843674635,
-      "tvd_beta_0.4_mean": 0.03660588457652761,
-      "tvd_beta_0.4_sd": 0.0016420407380524965,
-      "tvd_beta_1_mean": 0.05549207272753394,
-      "tvd_beta_1_sd": 0.004292181777049011,
-      "tvd_beta_2_mean": 0.06708876198977362,
-      "tvd_beta_2_sd": 0.007479951793884791,
+      "J_mean": 0.060251803961298846,
+      "J_sd": 0.0037596786976872155,
+      "P_mean": 0.023686480171921157,
+      "P_sd": 0.001097273911947558,
+      "mean_tvd_mean": 0.04608601543396048,
+      "mean_tvd_sd": 0.003955329527490454,
+      "max_tvd_mean": 0.06733469822496801,
+      "max_tvd_sd": 0.003918485851211586,
+      "tvd_beta_0.4_mean": 0.02599816463309083,
+      "tvd_beta_0.4_sd": 0.0015793532655440949,
+      "tvd_beta_1_mean": 0.06093481149977603,
+      "tvd_beta_1_sd": 0.008839724534471,
+      "tvd_beta_2_mean": 0.049706380208437255,
+      "tvd_beta_2_sd": 0.007682659734739382,
       "training_seconds_including_compile_mean": null,
       "warm_samples_per_second_mean": null
     },
@@ -185,23 +185,23 @@
       "warm_samples_per_second_mean": 3962077.299339766
     }
   ],
-  "paired_against_squeezed_iqp": {
+  "paired_against_twisted_iqp": {
     "small": {
       "rbm": {
         "J": {
-          "mean_difference": 0.10098059137296264,
+          "mean_difference": 0.10164939541076415,
           "ci95": [
-            0.06828038894214773,
-            0.13341191189510626
+            0.06765713715432299,
+            0.13552611142152224
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
         },
         "mean_tvd": {
-          "mean_difference": 0.08064162183971595,
+          "mean_difference": 0.08198403005879677,
           "ci95": [
-            0.05252186161172249,
-            0.10888281398723258
+            0.05390643708231116,
+            0.11013536333188133
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
@@ -209,19 +209,19 @@
       },
       "transformer": {
         "J": {
-          "mean_difference": 0.03563066381308053,
+          "mean_difference": 0.036299467850882006,
           "ci95": [
-            0.026150240595445275,
-            0.048836206036736975
+            0.025597943968910557,
+            0.05130320731815351
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
         },
         "mean_tvd": {
-          "mean_difference": 0.020634224756629106,
+          "mean_difference": 0.021976632975709925,
           "ci95": [
-            0.014456481734818942,
-            0.02944870286624607
+            0.014660376514312064,
+            0.03177666336070121
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
@@ -229,19 +229,19 @@
       },
       "vae": {
         "J": {
-          "mean_difference": 0.1347422032231067,
+          "mean_difference": 0.13541100726090818,
           "ci95": [
-            0.11813299490788721,
-            0.14650744099461094
+            0.12053459999884189,
+            0.1458403230151411
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
         },
         "mean_tvd": {
-          "mean_difference": 0.09049717528372878,
+          "mean_difference": 0.0918395835028096,
           "ci95": [
-            0.08146205846189669,
-            0.09681348026289567
+            0.08329042342391083,
+            0.09719870133595067
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
@@ -251,19 +251,19 @@
     "large": {
       "rbm": {
         "J": {
-          "mean_difference": 0.015172689958311416,
+          "mean_difference": 0.01584149399611289,
           "ci95": [
-            0.008498744249979966,
-            0.021956255520867652
+            0.010509462640281022,
+            0.021585358762028786
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
         },
         "mean_tvd": {
-          "mean_difference": 0.014049806518439085,
+          "mean_difference": 0.015392214737519902,
           "ci95": [
-            0.009572764352685677,
-            0.019061315928447113
+            0.010812848482340223,
+            0.02052201769490138
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
@@ -271,19 +271,19 @@
       },
       "transformer": {
         "J": {
-          "mean_difference": 0.008784738691118597,
+          "mean_difference": 0.009453542728920067,
           "ci95": [
-            0.0032686626265384018,
-            0.01474812554743222
+            0.00452881759713926,
+            0.014606788893682162
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
         },
         "mean_tvd": {
-          "mean_difference": 0.004088319861328257,
+          "mean_difference": 0.005430728080409076,
           "ci95": [
-            0.0005998710608061588,
-            0.007962586256276471
+            0.0015742941867115925,
+            0.009844267999305548
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
@@ -291,19 +291,19 @@
       },
       "vae": {
         "J": {
-          "mean_difference": 0.07627608385398359,
+          "mean_difference": 0.07694488789178507,
           "ci95": [
-            0.054998909778008476,
-            0.09859605395065056
+            0.055390025413408095,
+            0.09961798183345935
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
         },
         "mean_tvd": {
-          "mean_difference": 0.056637583410348934,
+          "mean_difference": 0.05797999162942975,
           "ci95": [
-            0.04156730467997776,
-            0.07232833606991206
+            0.04279288903426058,
+            0.0737665155470401
           ],
           "repeats": 10,
           "bootstrap_draws": 10000
@@ -311,6 +311,7 @@
       }
     }
   },
+  "paired_difference_direction": "classical minus C-IQP (TP); positive means larger classical error",
   "architectures": {
     "small": {
       "rbm": {
@@ -366,8 +367,10 @@
     }
   },
   "uncertainty": "mean and sample SD across ten final repeats, three starts per repeat",
-  "sources": {
-    "small": "results/cw-classical-comparison-20261015/small/report/summary.json",
-    "large": "results/cw-classical-comparison-20261015/large/report/summary.json"
-  }
+  "sources": [
+    "small/figure_data.json",
+    "large/figure_data.json",
+    "curie-weiss-followup/figure_data.json",
+    "curie-weiss-twisted/figure_data.json"
+  ]
 }

@@ -33,7 +33,6 @@ RESULTS_ROOT = Path(__file__).parents[1] / "results"
 MM = 1 / 25.4
 STYLE = {
     "C-IQP (TP)": ("#0072B2", "-"),
-    "C-IQP (SP)": ("#0072B2", "-"),
     "C-IQP (P)": ("#56B4E9", "--"),
     "rbm": ("#D55E00", "-."),
     "transformer": ("#009E73", ":"),
@@ -497,7 +496,6 @@ def render(data_path, output, iqp_data_root=None, allow_smoke=False):
 PAPER_NAMES = {"rbm": "RBM", "transformer": "Transformer", "vae": "VAE"}
 PAPER_STYLE = {
     "C-IQP (TP)": ("#0072B2", "-"),
-    "C-IQP (SP)": ("#0072B2", "-"),
     "C-IQP (P)": ("#56B4E9", "--"),
     "rbm": ("#E69F00", "-."),
     "transformer": ("#117733", ":"),
@@ -678,3 +676,89 @@ def paper_artifacts(classical_root, iqp_root, output):
         ),
     )
     return [table, settings, *paths, provenance]
+
+
+def comparison(classical_root, iqp_root, output):
+    """comparison.{json,csv}: both capacities, the C-IQP references and paired
+    bootstrap intervals of each classical model against the main C-IQP model."""
+    classical_root, iqp_root, out = Path(classical_root), Path(iqp_root), Path(output)
+    iqp = load_iqp(iqp_root)
+    variant, references = _iqp_references(iqp)
+    reference_rows, per_fits = [], {}
+    for family, label in references:
+        row, per_fits[label] = _summary(
+            label,
+            iqp["families"][family],
+            parameters=136,
+            generation_parameters=136,
+            probability_kind="exact",
+        )
+        reference_rows.append(dict(capacity="reference", **row))
+    seed = classical_stream("report", "paired-bootstrap")["seed"]
+    rows, paired, architectures = {}, {}, {}
+    for capacity in CAPACITIES:
+        data = json.loads((classical_root / capacity / "figure_data.json").read_text())
+        if _validate(data) or data["capacity"] != capacity:
+            raise ValueError("comparison requires full final bundles")
+        if tuple(data["families"]["rbm"]["beta"]) != tuple(
+            iqp["families"][references[0][0]]["beta"]
+        ):
+            raise ValueError("IQP/classical reporting grids differ")
+        rows[capacity], paired[capacity], architectures[capacity] = [], {}, {}
+        for family in FAMILIES:
+            architecture = data["families"][family]["architecture"]
+            row, per_fit = _summary(
+                family,
+                data["families"][family],
+                parameters=architecture["parameter_count"],
+                generation_parameters=architecture.get(
+                    "generation_parameter_count", architecture["parameter_count"]
+                ),
+                probability_kind="numerically integrated"
+                if family == "vae"
+                else "exact",
+            )
+            rows[capacity].append(dict(capacity=capacity, **row))
+            architectures[capacity][family] = architecture
+            paired[capacity][family] = {
+                key: _bootstrap(
+                    [fit[key] for fit in per_fit],
+                    [fit[key] for fit in per_fits[references[0][1]]],
+                    seed,
+                )
+                for key in ("J", "mean_tvd")
+            }
+    table = [
+        {k: v for k, v in row.items() if k not in ("tvd_curve", "tvd_sd")}
+        for row in rows["small"] + reference_rows + rows["large"]
+    ]
+    write_json(
+        out / "comparison.json",
+        {
+            "rows": table,
+            f"paired_against_{variant}_iqp": paired,
+            "paired_difference_direction": (
+                f"classical minus {references[0][1]}; "
+                "positive means larger classical error"
+            ),
+            "architectures": architectures,
+            "uncertainty": (
+                "mean and sample SD across ten final repeats, three starts per repeat"
+            ),
+            "sources": [
+                *(f"{capacity}/figure_data.json" for capacity in CAPACITIES),
+                *(
+                    str(path.relative_to(iqp_root.parent))
+                    for path in (
+                        iqp_root / "figure_data.json",
+                        main_bundle(iqp_root)[1],
+                    )
+                ),
+            ],
+        },
+    )
+    with (out / "comparison.csv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(table[0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(table)
+    return [out / "comparison.json", out / "comparison.csv"]

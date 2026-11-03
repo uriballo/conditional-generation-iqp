@@ -241,3 +241,18 @@ def test_paper_artifacts_compare_against_main_encoder(tmp_path):
     )
     table = paths[0].read_text()
     assert table.count("C-IQP (TP)") == 1 and "C-IQP (SP)" not in table
+
+
+def test_comparison_reproduces_stored_files(tmp_path):
+    paths = report.comparison(
+        DATA / "curie-weiss-classical", DATA / "curie-weiss-followup", tmp_path
+    )
+    for path in paths:
+        assert (
+            path.read_text() == (DATA / "curie-weiss-classical" / path.name).read_text()
+        )
+    rows = json.loads(paths[0].read_text())["rows"]
+    assert [r["model"] for r in rows if r["capacity"] == "reference"] == [
+        "C-IQP (TP)",
+        "C-IQP (P)",
+    ]
